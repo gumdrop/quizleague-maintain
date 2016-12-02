@@ -2,16 +2,20 @@ package org.chilternquizleague.maintain.venue
 
 
 import angulate2.std._
-import angularmaterial.MaterialModule
+import angular.material.MaterialModule
 import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
 
 object routes{
   val routes = js.Array(
-     Route(
+      Route(
         path = "venue/:id",
         component = %%[VenueComponent]
+      ),
+      Route(
+        path = "venue",
+        component = %%[VenueListComponent]
       )
   )
 }

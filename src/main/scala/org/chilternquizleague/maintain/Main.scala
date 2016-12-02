@@ -43,7 +43,7 @@ class AppModule {
     </md-toolbar>
     <md-sidenav-layout>
       <md-sidenav #sidenav mode="side" opened="true">
-        <a md-button href="venue/1">Venues</a>
+        <a routerLink="/venue" md-button >Venues</a>
         
       </md-sidenav>
       <router-outlet></router-outlet>
