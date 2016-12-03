@@ -18,8 +18,7 @@ import scala.scalajs.js
 )
 class VenueListComponent {
   
-  var values:js.Array[Venue] = _
-  
+  var values:js.Array[Venue] = js.Array()
   def addNew():Unit = {values.push(Venue("1","new Venue"))}
   
 }
