@@ -9,6 +9,7 @@ import angulate2.common.Location
   selector = "ql-venue",
   template = """
   <div>
+    <h2>{{item.name}}</h2>
     <form>
     <md-input placeholder="Name" type="text" id="name"
          required
@@ -24,7 +25,7 @@ class VenueComponent(
     route: ActivatedRoute,
     location:Location) extends OnInit { 
   
-  var item:Venue = Venue("", "dummy")
+  var item:Venue = Venue(null,null)
   
   def save(): Unit = location.back()
   

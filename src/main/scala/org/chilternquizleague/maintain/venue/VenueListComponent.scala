@@ -21,7 +21,7 @@ import org.chilternquizleague.util.UUID
 class VenueListComponent(service:VenueService) 
    extends OnInit {
   
-  var values:js.Array[Venue] = js.Array()
+  var values:js.Array[Venue] = _
   
   def addNew():Unit = {
     service.put(Venue(UUID.randomUUID.toString, "new Venue"))
