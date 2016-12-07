@@ -6,28 +6,29 @@ import org.chilternquizleague.maintain.model.Venue
 import scala.scalajs.js
 import js.JSConverters._
 import org.chilternquizleague.util.UUID
+import angulate2.router.Router
+import org.chilternquizleague.maintain.component.ListComponent
+import org.chilternquizleague.util.UUID
+import org.chilternquizleague.maintain.model.Venue
 
 @Component(
   selector = "ql-venue-list",
   template = """
   <div>
-  <div *ngFor="let item of values">
+  <div *ngFor="let item of items">
   <a routerLink="/venue/{{item.id}}" md-button>{{item.name}}</a>
   </div>
     <button md-button (click)="addNew()">Add</button>
   </div>
   """    
 )
-class VenueListComponent(service:VenueService) 
-   extends OnInit {
+class VenueListComponent(
+    override val service:VenueService,
+    override val router: Router) 
+   extends ListComponent[Venue]{
   
-  var values:js.Array[Venue] = _
-  
-  def addNew():Unit = {
-    service.put(Venue(UUID.randomUUID.toString, "new Venue"))
-    values = service.list.toJSArray
-  }
-  
-  override def ngOnInit() = values = service.list.toJSArray
-  
+   override def instance() = { 
+     val id = UUID.randomUUID.toString;
+     (id, Venue(id, "","","",""))
+   }
 }

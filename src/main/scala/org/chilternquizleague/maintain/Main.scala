@@ -21,8 +21,7 @@ import org.chilternquizleague.maintain.venue.VenuesModule
       component = %%[RootComponent]
   ))),
   declarations = @@[AppComponent,RootComponent],
-  bootstrap = @@[AppComponent],
-  providers = @@[EntityService]
+  bootstrap = @@[AppComponent]
 )
 class AppModule {
 
@@ -51,7 +50,7 @@ class AppModule {
   </div>
   """
 )
-class AppComponent(entityService:EntityService) {
+class AppComponent() {
 	var text = "No Text Yet"
 	
 	def changeText() = text = "Some Text Now"

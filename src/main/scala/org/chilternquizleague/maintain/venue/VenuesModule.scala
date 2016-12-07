@@ -8,8 +8,9 @@ import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
 import org.chilternquizleague.maintain.model.Venue
-import rxjs.core.Promise
-import rxjs.RxPromise
+import angulate2.http.Http
+import org.chilternquizleague.maintain.service.EntityService
+
 
 @NgModule(
   imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule],
@@ -22,10 +23,7 @@ class VenuesModule {
 }
 
 @Injectable
-class VenueService {
-  var venues:Map[String,Venue] = Map()
-  
-  def put(venue:Venue):Venue = {venues = venues + ((venue.id, venue));venue}
-  def get(id:String) = RxPromise.resolve(venues(id))
-  def list() = venues.values
+class VenueService(override val http:Http) extends EntityService[Venue]{
+  override val name = "venue"
 }
+
