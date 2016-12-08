@@ -7,8 +7,7 @@ import scala.scalajs.js
 import js.JSConverters._
 import scala.scalajs.js.annotation.ScalaJSDefined
 
-@ScalaJSDefined
-abstract class EntityService[T] extends js.Object{
+abstract class EntityService[T]{
   
   val http:Http
   val name:String

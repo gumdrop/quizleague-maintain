@@ -7,17 +7,19 @@ import scala.scalajs.js
 import js.annotation.ScalaJSDefined
 import angulate2.core.OnInit
 
-@ScalaJSDefined
-abstract class ItemComponent[T] extends OnInit{
+
+abstract class ItemComponent[T]{
   val service:EntityService[T]
   val route:ActivatedRoute
   val location:Location
   
-  var item:T = _
+
+  var item:T
+  def save():Unit
   
-  def save(): Unit = location.back()
+  protected def saveIt(): Unit = location.back()
   
-  override def ngOnInit(): Unit = route.params
+  def onInit(): Unit = route.params
     .switchMap( (params,i) => service.get(params("id")) )
     .subscribe(this.item = _)
 }

@@ -9,14 +9,14 @@ import angulate2.router.Router
 import js.annotation.ScalaJSDefined
 
 
-@ScalaJSDefined
-abstract class ListComponent[T] extends OnInit{
+trait ListComponent[T]{
   
   val service:EntityService[T]
   val router:Router
-  var items:js.Array[T] = _
+  var items:js.Array[T]
   
-  def addNew():Unit = {
+
+  def addNewItem():Unit = {
     for(
       (id,item) <-Some(instance())
     )
@@ -26,7 +26,7 @@ abstract class ListComponent[T] extends OnInit{
     }
   }
   
-  override def ngOnInit() = service.list.subscribe(this.items = _)
+  def onInit() = service.list.subscribe(this.items = _)
   
   def instance():(String,T)
   

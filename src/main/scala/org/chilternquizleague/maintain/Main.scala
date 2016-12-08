@@ -23,9 +23,7 @@ import org.chilternquizleague.maintain.venue.VenuesModule
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
 )
-class AppModule {
-
-}
+class AppModule 
 
 @Component(
   selector = "ql-app",
@@ -43,24 +41,23 @@ class AppModule {
     <md-sidenav-layout>
       <md-sidenav #sidenav mode="side" opened="true">
         <a routerLink="/venue" md-button >Venues</a>
-        
       </md-sidenav>
-      <router-outlet></router-outlet>
+      <div class="layout-padding">
+        <router-outlet></router-outlet>
+      </div>
     </md-sidenav-layout>
   </div>
   """
 )
-class AppComponent() {
-	var text = "No Text Yet"
-	
-	def changeText() = text = "Some Text Now"
-}
+class AppComponent()
 
 @Component(
   selector = "ql-root",
   template = """
   <div>
-  Hello World
+    <md-card>
+      <md-card-title>Quiz League Maintenance App</md-card-title>
+    </md-card>
   </div>
   """
 )

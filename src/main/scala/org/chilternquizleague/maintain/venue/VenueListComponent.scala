@@ -15,20 +15,29 @@ import org.chilternquizleague.maintain.model.Venue
   selector = "ql-venue-list",
   template = """
   <div>
-  <div *ngFor="let item of items">
-  <a routerLink="/venue/{{item.id}}" md-button>{{item.name}}</a>
-  </div>
-    <button md-button (click)="addNew()">Add</button>
+    <h2>Venues</h2>
+      <button md-button (click)="addNew()">Add</button>
+    <div *ngFor="let item of items">
+      <a routerLink="/venue/{{item.id}}" md-button>{{item.name}}</a>
+    </div>
   </div>
   """    
 )
-class VenueListComponent(
+class VenueListComponent (
     override val service:VenueService,
     override val router: Router) 
-   extends ListComponent[Venue]{
+   extends ListComponent[Venue] with OnInit{
+  
+   override var items:js.Array[Venue] = _
   
    override def instance() = { 
      val id = UUID.randomUUID.toString;
      (id, Venue(id, "","","",""))
    }
+  
+   override def ngOnInit() = onInit()
+   
+   def addNew() = addNewItem()
+   
+   
 }
