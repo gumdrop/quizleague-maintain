@@ -22,9 +22,7 @@ object routes{
 
 
 @NgModule(
-  imports = @@[VenuesModule] :+ RouterModule.forRoot(routes.routes),
+  imports = @@[VenueModule] :+ RouterModule.forRoot(routes.routes),
   exports = @@[RouterModule]
 )
-class VenueRoutesModule {
-  
-}
+class VenueRoutesModule 

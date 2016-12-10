@@ -9,17 +9,16 @@ import org.chilternquizleague.maintain.venue.VenueRoutesModule
 
 
 import scala.scalajs.js
-import org.chilternquizleague.maintain.venue.VenuesModule
-
-
 
 @NgModule(
-  imports = @@[BrowserModule,MaterialModule,VenueRoutesModule] :+
+  imports = @@[BrowserModule,VenueRoutesModule] :+
    RouterModule.forRoot(js.Array(
     Route(
       path = "",
       component = %%[RootComponent]
-  ))),
+  ))) :+
+  MaterialModule.forRoot()
+  ,
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
 )
@@ -49,7 +48,7 @@ class AppModule
   </div>
   """
 )
-class AppComponent()
+class AppComponent
 
 @Component(
   selector = "ql-root",
@@ -61,4 +60,4 @@ class AppComponent()
   </div>
   """
 )
-class RootComponent() 
+class RootComponent 

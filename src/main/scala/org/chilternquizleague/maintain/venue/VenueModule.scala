@@ -18,9 +18,7 @@ import org.chilternquizleague.maintain.service.EntityService
   providers = @@[VenueService]
    
 )
-class VenuesModule {
-  
-}
+class VenueModule
 
 @Injectable
 class VenueService(override val http:Http) extends EntityService[Venue]{
