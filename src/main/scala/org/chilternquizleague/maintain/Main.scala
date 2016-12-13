@@ -9,6 +9,7 @@ import org.chilternquizleague.maintain.venue.VenueRoutesModule
 
 
 import scala.scalajs.js
+import angular.flexlayout.FlexLayoutModule
 
 @NgModule(
   imports = @@[BrowserModule,VenueRoutesModule] :+
@@ -17,7 +18,8 @@ import scala.scalajs.js
       path = "",
       component = %%[RootComponent]
   ))) :+
-  MaterialModule.forRoot()
+  MaterialModule.forRoot() /*:+
+  FlexLayoutModule.forRoot()*/
   ,
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
