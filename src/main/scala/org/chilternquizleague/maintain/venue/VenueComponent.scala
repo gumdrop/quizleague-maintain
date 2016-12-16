@@ -12,7 +12,7 @@ import org.chilternquizleague.maintain.component.ItemComponent
   <div>
     <h2>Venue Detail</h2>
     <form>
-      <div class="layout-column">
+      <div fx-layout="column">
         <md-input placeholder="Name" type="text" id="name"
              required
              [(ngModel)]="item.name" name="name">
@@ -26,7 +26,7 @@ import org.chilternquizleague.maintain.component.ItemComponent
              [(ngModel)]="item.email" name="email">
         </md-input>
         <md-input placeholder="Website" type="url" id="website"
-    
+    fx-layout
              [(ngModel)]="item.website" name="website">
         </md-input>
       </div>

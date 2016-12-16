@@ -10,10 +10,11 @@ import scala.scalajs.js
 import org.chilternquizleague.maintain.model.Venue
 import angulate2.http.Http
 import org.chilternquizleague.maintain.service.EntityService
+import angular.flexlayout.FlexLayoutModule
 
 
 @NgModule(
-  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule],
+  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
   declarations = @@[VenueComponent,VenueListComponent],
   providers = @@[VenueService]
    

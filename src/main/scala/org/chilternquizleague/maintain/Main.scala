@@ -18,8 +18,8 @@ import angular.flexlayout.FlexLayoutModule
       path = "",
       component = %%[RootComponent]
   ))) :+
-  MaterialModule.forRoot() /*:+
-  FlexLayoutModule.forRoot()*/
+  MaterialModule.forRoot() :+
+  FlexLayoutModule.forRoot()
   ,
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
@@ -43,7 +43,7 @@ class AppModule
       <md-sidenav #sidenav mode="side" opened="true">
         <a routerLink="/venue" md-button >Venues</a>
       </md-sidenav>
-      <div class="layout-padding">
+      <div style="padding:1em;">
         <router-outlet></router-outlet>
       </div>
     </md-sidenav-layout>
