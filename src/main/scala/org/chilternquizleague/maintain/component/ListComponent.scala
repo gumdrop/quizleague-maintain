@@ -7,16 +7,20 @@ import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.service.EntityService
 import angulate2.router.Router
 import js.annotation.ScalaJSDefined
+import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.JSExport
 
 
-trait ListComponent[T]{
+trait ListComponent[T] extends OnInit{
   
   val service:EntityService[T]
   val router:Router
-  var items:js.Array[T]
   
-
-  def addNewItem():Unit = {
+  @JSExport
+  var items:js.Array[T] = _
+  
+  @JSExport
+  def addNew():Unit = {
     for(
       (id,item) <-Some(instance())
     )
@@ -26,7 +30,8 @@ trait ListComponent[T]{
     }
   }
   
-  def onInit() = service.list.subscribe(this.items = _)
+  @JSExport
+  override def ngOnInit() = service.list.subscribe(this.items = _)
   
   def instance():(String,T)
   

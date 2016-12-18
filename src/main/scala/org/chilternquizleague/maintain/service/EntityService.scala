@@ -16,5 +16,6 @@ abstract class EntityService[T]{
   def put(id:String,item:T):T = {items = items + ((id, item));item}
   def get(id:String) = Observable.of(items(id))
   def list() = Observable.of(items.values.toJSArray)
-  
+  def delete(id:String) = {items = items - id} 
+   
 }

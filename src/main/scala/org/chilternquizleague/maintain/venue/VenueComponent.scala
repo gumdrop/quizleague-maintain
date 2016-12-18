@@ -38,13 +38,4 @@ import org.chilternquizleague.maintain.component.ItemComponent
 class VenueComponent(
     override val service:VenueService,
     override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[Venue] with OnInit {
-  
-  override var item:Venue = _
-  
-  override def save() = saveIt()
-  
-  override def ngOnInit() = onInit()
-
-
-}
+    override val location:Location) extends ItemComponent[Venue] 

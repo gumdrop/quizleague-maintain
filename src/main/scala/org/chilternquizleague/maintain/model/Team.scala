@@ -1,9 +1,10 @@
 package org.chilternquizleague.maintain.model
 
-import org.chilternquizleague.maintain.domain.Ref
 import angulate2.std.Data
 
 @Data
 case class Team(
+    id:String,
     name:String,
-    shortName:String)
+    shortName:String,
+    venue:Venue)

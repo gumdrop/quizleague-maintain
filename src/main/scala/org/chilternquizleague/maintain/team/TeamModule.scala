@@ -1,4 +1,4 @@
-package org.chilternquizleague.maintain.venue
+package org.chilternquizleague.maintain.team
 
 import angulate2.std._
 import angular.material.MaterialModule
@@ -7,25 +7,22 @@ import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
-import org.chilternquizleague.maintain.model.Venue
+import org.chilternquizleague.maintain.model._
 import angulate2.http.Http
 import org.chilternquizleague.maintain.service.EntityService
 import angular.flexlayout.FlexLayoutModule
-import org.chilternquizleague.util.UUID
 
 
 @NgModule(
   imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
-  declarations = @@[VenueComponent,VenueListComponent],
-  providers = @@[VenueService]
+  declarations = @@[TeamComponent,TeamListComponent],
+  providers = @@[TeamService]
    
 )
-class VenueModule
+class TeamModule
 
 @Injectable
-class VenueService(override val http:Http) extends EntityService[Venue]{
-  override val name = "venue"
-  val id  = UUID.randomUUID.toString
-  put(id, Venue(id,"wibble","","",""))
+class TeamService(override val http:Http) extends EntityService[Team]{
+  override val name = "team"
 }
 
