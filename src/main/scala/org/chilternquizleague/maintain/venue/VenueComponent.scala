@@ -12,7 +12,7 @@ import org.chilternquizleague.maintain.component.ItemComponent
   <div>
     <h2>Venue Detail</h2>
     <form>
-      <div fx-layout="column">
+      <div fxLayout="column">
         <md-input placeholder="Name" type="text" id="name"
              required
              [(ngModel)]="item.name" name="name">
@@ -30,7 +30,10 @@ import org.chilternquizleague.maintain.component.ItemComponent
              [(ngModel)]="item.website" name="website">
         </md-input>
       </div>
-    <button md-button (click)="save()">Save</button>
+      <div fxLayout="row">
+        <button md-button (click)="save()" submit>Save</button>
+        <button md-button (click)="cancel()" submit>Cancel</button>
+      </div>
     </form>
   </div>
   """    

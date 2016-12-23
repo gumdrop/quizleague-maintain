@@ -38,9 +38,9 @@ class AppModule
       </button>
       Quiz League website maintenance
     </md-toolbar>
-    <md-sidenav-layout>
+    <md-sidenav-container>
       <md-sidenav #sidenav mode="side" opened="true">
-        <div  fx-layout="column">
+        <div  fxLayout="column">
           <a routerLink="/team" md-button >Teams</a>
           <a routerLink="/venue" md-button >Venues</a>
         </div>
@@ -48,7 +48,7 @@ class AppModule
       <div style="padding:1em;">
         <router-outlet></router-outlet>
       </div>
-    </md-sidenav-layout>
+    </md-sidenav-container>
   </div>
   """
 )

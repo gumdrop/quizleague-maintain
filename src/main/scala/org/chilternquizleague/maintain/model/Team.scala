@@ -1,6 +1,7 @@
 package org.chilternquizleague.maintain.model
 
 import angulate2.std.Data
+import scala.scalajs.js.annotation.JSExport
 
 @Data
 case class Team(

@@ -16,9 +16,13 @@ import org.chilternquizleague.maintain.model.Venue
   template = """
   <div>
     <h2>Venues</h2>
-      <button md-button (click)="addNew()">Add</button>
     <div *ngFor="let item of items">
       <a routerLink="/venue/{{item.id}}" md-button>{{item.name}}</a>
+    </div>
+    <div style="position:absolute;right:1em;bottom:5em;">
+      <button md-fab (click)="addNew()">
+          <md-icon class="md-24">add</md-icon>
+      </button>
     </div>
   </div>
   """    
@@ -26,10 +30,8 @@ import org.chilternquizleague.maintain.model.Venue
 class VenueListComponent (
     override val service:VenueService,
     override val router: Router) 
-   extends ListComponent[Venue] with OnInit{
+   extends ListComponent[Venue] with OnInit with VenueNames with VenueId{
   
-   override def instance() = { 
-     val id = UUID.randomUUID.toString;
-     (id, Venue(id, "","","",""))
-   }
+   override def instance() = Venue(newId, "","","","")
+
 }

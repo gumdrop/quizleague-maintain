@@ -11,6 +11,8 @@ import org.chilternquizleague.maintain.model._
 import angulate2.http.Http
 import org.chilternquizleague.maintain.service.EntityService
 import angular.flexlayout.FlexLayoutModule
+import org.chilternquizleague.maintain.component.ComponentNames
+import org.chilternquizleague.maintain.component.IdStuff
 
 
 @NgModule(
@@ -22,7 +24,15 @@ import angular.flexlayout.FlexLayoutModule
 class TeamModule
 
 @Injectable
-class TeamService(override val http:Http) extends EntityService[Team]{
-  override val name = "team"
+class TeamService(override val http:Http) extends EntityService[Team] with TeamId
+
+trait TeamNames extends ComponentNames{
+  override val typeName = "team"
 }
+
+trait TeamId extends IdStuff[Team]{
+  override def getId(team:Team):String = team.id
+}
+
+
 

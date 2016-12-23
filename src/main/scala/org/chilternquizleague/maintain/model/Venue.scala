@@ -1,6 +1,7 @@
 package org.chilternquizleague.maintain.model
 
 import angulate2.std._
+import scala.scalajs.js.annotation.JSExport
 
 @Data
 case class Venue(
@@ -10,3 +11,4 @@ case class Venue(
     email:String,
     website:String
 )
+

@@ -1,6 +1,5 @@
 package org.chilternquizleague.maintain.component
 
-import org.chilternquizleague.maintain.model.Ref
 import org.chilternquizleague.maintain.venue.VenueService
 import rxjs.Operators
 import org.chilternquizleague.maintain.model.Venue

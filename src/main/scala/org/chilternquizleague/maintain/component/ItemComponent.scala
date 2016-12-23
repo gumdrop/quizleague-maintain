@@ -6,9 +6,7 @@ import angulate2.common.Location
 import scala.scalajs.js
 import js.annotation.ScalaJSDefined
 import angulate2.core.OnInit
-import scala.scalajs.js.annotation.JSExport
-import scala.scalajs.js.annotation.JSExport
-
+import js.annotation.JSExport
 
 trait ItemComponent[T] extends OnInit{
   val service:EntityService[T]
@@ -20,7 +18,10 @@ trait ItemComponent[T] extends OnInit{
   var item:T = _
   
   @JSExport
-  def save():Unit = location.back()
+  def save():Unit = {service.save(item);location.back()}
+  
+  @JSExport
+  def cancel():Unit = {service.flush();location.back()}
 
   @JSExport
   def ngOnInit() = init()

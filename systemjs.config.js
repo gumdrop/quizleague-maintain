@@ -25,8 +25,8 @@
             // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      '@angular/material': 'npm:@angular/material/material.umd.js',
-      '@angular/flex-layout': 'npm:@angular/flex-layout/flex-layout.umd.js',
+      '@angular/material': 'npm:@angular/material/bundles/material.umd.js',
+      '@angular/flex-layout': 'npm:@angular/flex-layout/bundles/flex-layout.umd.js',
       'es-module-loader' : 'npm:es-module-loader'
     	  
     },
