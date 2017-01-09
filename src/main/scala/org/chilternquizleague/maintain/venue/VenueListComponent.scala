@@ -10,6 +10,7 @@ import angulate2.router.Router
 import org.chilternquizleague.maintain.component.ListComponent
 import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.model.Venue
+import angulate2.ext.classModeScala
 
 @Component(
   selector = "ql-venue-list",
@@ -27,6 +28,7 @@ import org.chilternquizleague.maintain.model.Venue
   </div>
   """    
 )
+@classModeScala
 class VenueListComponent (
     override val service:VenueService,
     override val router: Router) 

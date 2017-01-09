@@ -5,6 +5,8 @@ import angulate2.router.ActivatedRoute
 import org.chilternquizleague.maintain.model.Venue
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component.ItemComponent
+import scalajs.js
+import angulate2.ext.classModeScala
 
 @Component(
   selector = "ql-venue",
@@ -38,6 +40,7 @@ import org.chilternquizleague.maintain.component.ItemComponent
   </div>
   """    
 )
+@classModeScala
 class VenueComponent(
     override val service:VenueService,
     override val route: ActivatedRoute,

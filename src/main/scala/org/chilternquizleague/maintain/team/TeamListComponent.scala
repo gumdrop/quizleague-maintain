@@ -9,6 +9,7 @@ import angulate2.router.Router
 import org.chilternquizleague.maintain.component.ListComponent
 import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.model._
+import angulate2.ext.classModeScala
 
 @Component(
   selector = "ql-team-list",
@@ -26,6 +27,7 @@ import org.chilternquizleague.maintain.model._
   </div>
   """    
 )
+@classModeScala
 class TeamListComponent (
     override val service:TeamService,
     override val router: Router) 

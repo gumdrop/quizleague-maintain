@@ -13,6 +13,7 @@ import org.chilternquizleague.maintain.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.component.IdStuff
+import angulate2.ext.classModeScala
 
 
 @NgModule(
@@ -24,6 +25,7 @@ import org.chilternquizleague.maintain.component.IdStuff
 class TeamModule
 
 @Injectable
+@classModeScala
 class TeamService(override val http:Http) extends EntityService[Team] with TeamId
 
 trait TeamNames extends ComponentNames{
