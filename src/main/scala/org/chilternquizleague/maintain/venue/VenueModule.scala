@@ -15,10 +15,11 @@ import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.component.IdStuff
 import angulate2.ext.classModeScala
+import angulate2.common.CommonModule
 
 
 @NgModule(
-  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
   declarations = @@[VenueComponent,VenueListComponent],
   providers = @@[VenueService]
    
