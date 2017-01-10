@@ -18,7 +18,7 @@ import angulate2.ext.classModeScala
 
 
 @NgModule(
-  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
+  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
   declarations = @@[VenueComponent,VenueListComponent],
   providers = @@[VenueService]
    

@@ -5,21 +5,16 @@ import angulate2.router.{Route, RouterModule}
 import angulate2.platformBrowser.BrowserModule
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
-import org.chilternquizleague.maintain.venue.VenueRoutesModule
+import org.chilternquizleague.maintain.venue.VenueModule
 
 
 import scala.scalajs.js
 import angular.flexlayout.FlexLayoutModule
-import org.chilternquizleague.maintain.team.TeamRoutesModule
+import org.chilternquizleague.maintain.team.TeamModule
 import angular.flexlayout.FlexLayoutModule
 
 @NgModule(
-  imports = @@[BrowserModule,VenueRoutesModule, TeamRoutesModule, FlexLayoutModule] :+
-   RouterModule.forRoot(js.Array(
-    Route(
-      path = "",
-      component = %%[RootComponent]
-  ))) :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, FlexLayoutModule, AppRoutingModule] :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
   ,
@@ -27,6 +22,12 @@ import angular.flexlayout.FlexLayoutModule
   bootstrap = @@[AppComponent]
 )
 class AppModule 
+
+@Routes(
+  root = true,
+  Route(path = "", component = %%[RootComponent])
+)
+class AppRoutingModule
 
 @Component(
   selector = "ql-app",

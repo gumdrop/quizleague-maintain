@@ -7,9 +7,9 @@ import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
 
-object routes{
-  val routes = js.Array(
-      Route(
+@Routes(
+  root = false,
+       Route(
         path = "team/:id",
         component = %%[TeamComponent]
       ),
@@ -17,12 +17,5 @@ object routes{
         path = "team",
         component = %%[TeamListComponent]
       )
-  )
-}
-
-
-@NgModule(
-  imports = @@[TeamModule] :+ RouterModule.forRoot(routes.routes),
-  exports = @@[RouterModule]
 )
 class TeamRoutesModule 
