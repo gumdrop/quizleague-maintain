@@ -14,10 +14,12 @@ import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.component.IdStuff
+import angulate2.ext.classModeScala
+import angulate2.common.CommonModule
 
 
 @NgModule(
-  imports = @@[BrowserModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
   declarations = @@[VenueComponent,VenueListComponent],
   providers = @@[VenueService]
    
@@ -25,6 +27,7 @@ import org.chilternquizleague.maintain.component.IdStuff
 class VenueModule
 
 @Injectable
+@classModeScala
 class VenueService(override val http:Http) extends EntityService[Venue] with VenueId{
   add(Venue(newId,"wibble","","",""))
 }

@@ -7,8 +7,8 @@ import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
 
-object routes{
-  val routes = js.Array(
+@Routes(
+  root = false,
       Route(
         path = "venue/:id",
         component = %%[VenueComponent]
@@ -18,11 +18,4 @@ object routes{
         component = %%[VenueListComponent]
       )
   )
-}
-
-
-@NgModule(
-  imports = @@[VenueModule] :+ RouterModule.forRoot(routes.routes),
-  exports = @@[RouterModule]
-)
 class VenueRoutesModule 

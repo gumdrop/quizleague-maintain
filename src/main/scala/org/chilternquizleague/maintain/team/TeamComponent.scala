@@ -8,6 +8,7 @@ import org.chilternquizleague.maintain.component._
 import org.chilternquizleague.maintain.model._
 import scala.scalajs.js
 import org.chilternquizleague.maintain.venue.VenueService
+import angulate2.ext.classModeScala
 
 @Component(
   selector = "ql-team",
@@ -37,6 +38,7 @@ import org.chilternquizleague.maintain.venue.VenueService
   </div>
   """    
 )
+@classModeScala
 class TeamComponent(
     override val venueService:VenueService,
     override val service:TeamService,
