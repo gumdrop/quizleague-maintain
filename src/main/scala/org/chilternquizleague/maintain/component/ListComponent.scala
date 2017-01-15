@@ -11,10 +11,8 @@ import scala.scalajs.js.annotation.JSExport
 import js.Dynamic.{ global => g }
 
 
-
-
 trait ListComponent[T] extends OnInit{
-  this:ComponentNames with IdStuff[T] =>
+  this:ComponentNames =>
   val service:EntityService[T]
   val router:Router
   
@@ -23,17 +21,11 @@ trait ListComponent[T] extends OnInit{
   
   @JSExport
   def addNew():Unit = {
-    
-    val item = instance()
-    
-    service.add(item)
-    router.navigateTo(s"/$typeName",getId(item))
+    router.navigateTo(s"/$typeName",service.getId(service.instance()))
   }
   
   @JSExport
   override def ngOnInit() = service.list.subscribe(this.items = _)
-  
-  def instance():T
   
   
 }

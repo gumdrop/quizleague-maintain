@@ -16,6 +16,7 @@ import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.component.IdStuff
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
+import rxjs.Observable
 
 
 @NgModule(
@@ -26,16 +27,21 @@ import angulate2.common.CommonModule
 )
 class VenueModule
 
-@Injectable
-@classModeScala
-class VenueService(override val http:Http) extends EntityService[Venue] with VenueId{
-  add(Venue(newId,"wibble","","",""))
-}
+@Routes(
+  root = false,
+  Route(
+    path = "venue/:id",
+    component = %%[VenueComponent]
+  ),
+  Route(
+    path = "venue",
+    component = %%[VenueListComponent]
+  )
+)
+class VenueRoutesModule 
+
 
 trait VenueNames extends ComponentNames{
   override val typeName = "venue"
 }
 
-trait VenueId extends IdStuff[Venue]{
-  override def getId(venue:Venue):String = venue.id
-}

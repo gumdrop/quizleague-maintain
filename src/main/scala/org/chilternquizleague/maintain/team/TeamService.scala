@@ -1,0 +1,32 @@
+package org.chilternquizleague.maintain.team
+
+import angulate2.std.Injectable
+import angulate2.ext.classModeScala
+import angulate2.http.Http
+import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.maintain.domain.{Team => DomTeam}
+import org.chilternquizleague.maintain.venue.VenueService
+import org.chilternquizleague.maintain.domain.Ref
+import rxjs.Observable
+import org.chilternquizleague.maintain.component.ComponentNames
+
+@Injectable
+@classModeScala
+class TeamService(override val http:Http, venueService:VenueService) extends EntityService[Team] with TeamNames{
+
+  override type U = DomTeam
+   
+  override protected def mapIn(team:Team) = DomTeam(team.id, team.name, team.shortName, venueService.getRef(team.venue))
+  override protected def mapOutSparse(team:DomTeam) = Team(team.id, team.name, team.shortName, null)
+  override protected def make() = DomTeam(newId(), null, null, null)
+  override protected def mapOut(team:DomTeam) = {
+    Observable.zip(
+        Observable.of(team),
+        if(team.venue != null) venueService.get(team.venue.id) else Observable.of(null),
+        (team:DomTeam,venue:Venue) => Team(team.id,team.name,team.shortName,venue))
+
+  }
+  
+  def listVenues() = venueService.list()
+}

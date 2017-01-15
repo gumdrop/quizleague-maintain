@@ -32,8 +32,6 @@ import angulate2.ext.classModeScala
 class VenueListComponent (
     override val service:VenueService,
     override val router: Router) 
-   extends ListComponent[Venue] with OnInit with VenueNames with VenueId{
+   extends ListComponent[Venue] with OnInit with VenueNames{
   
-   override def instance() = Venue(newId, "","","","")
-
 }

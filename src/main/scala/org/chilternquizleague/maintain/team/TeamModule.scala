@@ -7,6 +7,7 @@ import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
 import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.maintain.domain.{Team => DomTeam}
 import angulate2.http.Http
 import org.chilternquizleague.maintain.service.EntityService
 import angular.flexlayout.FlexLayoutModule
@@ -24,17 +25,20 @@ import angulate2.common.CommonModule
 )
 class TeamModule
 
-@Injectable
-@classModeScala
-class TeamService(override val http:Http) extends EntityService[Team] with TeamId
+@Routes(
+  root = false,
+       Route(
+        path = "team/:id",
+        component = %%[TeamComponent]
+      ),
+      Route(
+        path = "team",
+        component = %%[TeamListComponent]
+      )
+)
+class TeamRoutesModule 
 
 trait TeamNames extends ComponentNames{
   override val typeName = "team"
 }
-
-trait TeamId extends IdStuff[Team]{
-  override def getId(team:Team):String = team.id
-}
-
-
 

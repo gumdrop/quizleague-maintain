@@ -6,4 +6,4 @@ case class Venue(
     phone:String,
     email:String,
     website:String
-)
+) extends Entity

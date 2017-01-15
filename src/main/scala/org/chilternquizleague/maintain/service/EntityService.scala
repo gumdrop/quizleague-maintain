@@ -7,19 +7,35 @@ import scala.scalajs.js
 import js.JSConverters._
 import scala.scalajs.js.annotation.ScalaJSDefined
 import org.chilternquizleague.maintain.component.IdStuff
+import org.chilternquizleague.maintain.domain.Entity
+import org.chilternquizleague.util.UUID
+import org.chilternquizleague.maintain.domain.Ref
+import org.chilternquizleague.maintain.component.ComponentNames
+
+import js.Dynamic.{ global => g }
 
 trait EntityService[T]{
-  
-  this:IdStuff[T] =>
+  this:ComponentNames =>
+  type U <: Entity
   
   val http:Http
-  private var items:Map[String,T] = Map()
+  private var items:Map[String,U] = Map()
   
-  def add(item:T):T = {items = items + ((getId(item), item));item}
-  def get(id:String) = Observable.of(items(id))
-  def list() = Observable.of(items.values.toJSArray)
-  def delete(item:T) = {items = items - getId(item)} 
-  def save(item:T) = {}
-  def flush() = {Observable.of(items.values.toJSArray)}
+  private def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
+  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(Observable.of())
+  def list():Observable[js.Array[T]] = Observable.of(items.values.map(mapOutSparse(_)).toJSArray)
+  def delete(item:T) = {items = items - mapIn(item).id} 
+  def save(item:T) = log(add(mapIn(item)))
+  def flush() = list()
+  def instance() = add(make())
+  def getId(item:T) = if (item != null ) mapIn(item).id else null
+  def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
+  protected def mapIn(model:T):U
+  protected def mapOut(domain:U):Observable[T]
+  protected def mapOutSparse(domain:U):T
+  protected def make():U
+  
+  protected final def newId() = UUID.randomUUID.toString()
+  protected final def log[A](i:A):A = {g.console.log(js.JSON.stringify(i.asInstanceOf[js.Any]));i}
    
 }

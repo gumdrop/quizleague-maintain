@@ -31,8 +31,6 @@ import angulate2.ext.classModeScala
 class TeamListComponent (
     override val service:TeamService,
     override val router: Router) 
-   extends ListComponent[Team] with OnInit with TeamNames with TeamId{
-  
-   override def instance() = Team(newId, "","",null)
+   extends ListComponent[Team] with OnInit with TeamNames{
       
 }

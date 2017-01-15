@@ -40,10 +40,15 @@ import angulate2.ext.classModeScala
 )
 @classModeScala
 class TeamComponent(
-    override val venueService:VenueService,
     override val service:TeamService,
     override val route: ActivatedRoute,
     override val location:Location) 
-    extends ItemComponent[Team] 
-    with VenueGetter
+    extends ItemComponent[Team] {
+  
+  var venues:js.Array[Venue] = _
+  
+  override def ngOnInit() = super.ngOnInit();initVenues()
+  
+  def initVenues() = service.listVenues().subscribe(this.venues = _)
+}
     
