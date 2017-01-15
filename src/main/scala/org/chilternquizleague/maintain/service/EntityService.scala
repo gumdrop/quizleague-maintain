@@ -25,7 +25,7 @@ trait EntityService[T]{
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(Observable.of())
   def list():Observable[js.Array[T]] = Observable.of(items.values.map(mapOutSparse(_)).toJSArray)
   def delete(item:T) = {items = items - mapIn(item).id} 
-  def save(item:T) = log(add(mapIn(item)))
+  def save(item:T) = add(mapIn(item))
   def flush() = list()
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
@@ -37,5 +37,6 @@ trait EntityService[T]{
   
   protected final def newId() = UUID.randomUUID.toString()
   protected final def log[A](i:A):A = {g.console.log(js.JSON.stringify(i.asInstanceOf[js.Any]));i}
+  final def refAsObsv(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
    
 }
