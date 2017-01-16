@@ -21,8 +21,8 @@ trait EntityService[T]{
   val http:Http
   private var items:Map[String,U] = Map()
   
-  private def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
-  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(Observable.of(null).asInstanceOf[Observable[T]])
+  private def add(item:U) = {items = items + ((item.id, item));g.localStorage.setItem(item.id, toJson(item));mapOutSparse(item)}
+  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(mapOut(fromJson(g.localStorage.getItem(id).toString)))
   def get(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = Observable.of(items.values.map(mapOutSparse(_)).toJSArray)
   def delete(item:T) = {items = items - mapIn(item).id} 
@@ -35,6 +35,8 @@ trait EntityService[T]{
   protected def mapOut(domain:U):Observable[T]
   protected def mapOutSparse(domain:U):T
   protected def make():U
+  protected def toJson(item:U):String
+  protected def fromJson(json:String):U = ???
   
   protected final def newId() = UUID.randomUUID.toString()
   protected final def log[A](i:A):A = {g.console.log(js.JSON.stringify(i.asInstanceOf[js.Any]));i}

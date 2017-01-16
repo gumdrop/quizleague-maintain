@@ -6,6 +6,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   resolvers += Resolver.sonatypeRepo("snapshots"),
   libraryDependencies ++= Seq(
+  	"io.circe" %%% "circe-core" % "0.6.1", "io.circe" %%% "circe-parser" % "0.6.1", "io.circe" %%% "circe-generic" % "0.6.1"
   ),
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
         val a = baseDirectory.value.toURI.toString.replaceFirst("[^/]+/?$", "")
