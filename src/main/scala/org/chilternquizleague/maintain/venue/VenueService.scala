@@ -12,7 +12,8 @@ import rxjs.Observable
 @classModeScala
 class VenueService(override val http:Http) extends EntityService[Venue] with VenueNames{
   override type U = DomVenue
-  instance()
+  val i = instance()
+  save(Venue(i.id, "wibble", null, null, null))
   
   override protected def mapIn(venue:Venue) = {
     DomVenue(venue.id, venue.name, venue.phone, venue.email, venue.website)

@@ -23,7 +23,7 @@ class TeamService(override val http:Http, venueService:VenueService) extends Ent
   override protected def mapOut(team:DomTeam) = {
     Observable.zip(
         Observable.of(team),
-        venueService.refAsObsv(team.venue),
+        venueService.get(team.venue),
         (team:DomTeam,venue:Venue) => log(Team(team.id,team.name,team.shortName,venue)))
 
   }
