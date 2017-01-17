@@ -1,6 +1,8 @@
 package org.chilternquizleague.maintain.domain
 
-case class Venue(
+import json.accessor
+
+@accessor case class Venue(
     id:String,
     name:String,
     phone:String,

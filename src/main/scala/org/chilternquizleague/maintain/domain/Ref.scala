@@ -1,3 +1,5 @@
 package org.chilternquizleague.maintain.domain
 
-case class Ref[T](typeName:String,id:String)
+import json.accessor
+
+@accessor case class Ref(typeName:String,id:String)

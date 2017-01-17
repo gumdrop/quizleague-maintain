@@ -25,20 +25,16 @@ class VenueService(override val http:Http) extends EntityService[Venue] with Ven
   }
   override protected def make():DomVenue = DomVenue(newId(), null,null,null,null)
   
-  override def toJson(venue:DomVenue) = {
-    import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+  override def toJson(team:DomVenue) = {
+    import json._
+    if(team != null) team.js.toString else null
 
-    if(venue != null) venue.asJson.noSpaces else null
   }
-  
-  override def fromJson(json:String):DomVenue = {
-    import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+  override def fromJson(jsonString:String):DomVenue = {
+    import json._
 
-    if(json == null) return null
+    if(jsonString == null) return null
     
-    decode[DomVenue](json) match {
-      case Right(x) => x
-      case Left(x) => throw x
-    }
+    JValue.fromString(jsonString).toObject[DomVenue]
   }
 }

@@ -22,15 +22,15 @@ trait EntityService[T]{
   private var items:Map[String,U] = Map()
   
   private def add(item:U) = {items = items + ((item.id, item));g.localStorage.setItem(item.id, toJson(item));mapOutSparse(item)}
-  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(mapOut(fromJson(g.localStorage.getItem(id).toString)))
-  def get(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
+  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(mapOut(fromJson("" + g.localStorage.getItem(id))))
+  def get(ref:Ref):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = Observable.of(items.values.map(mapOutSparse(_)).toJSArray)
   def delete(item:T) = {items = items - mapIn(item).id} 
   def save(item:T) = add(mapIn(item))
   def flush() = list()
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
-  def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
+  def getRef(item:T):Ref = Ref(typeName,getId(item))
   protected def mapIn(model:T):U
   protected def mapOut(domain:U):Observable[T]
   protected def mapOutSparse(domain:U):T
