@@ -12,9 +12,13 @@ import scala.scalajs.js
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.team.TeamModule
 import angular.flexlayout.FlexLayoutModule
+import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
+import org.chilternquizleague.maintain.venue.MockVenueData
+import angulate2.http.HttpModule
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, FlexLayoutModule, AppRoutingModule] :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  InMemoryWebApiModule.forRoot(%%[MockVenueData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
   ,

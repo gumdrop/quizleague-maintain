@@ -11,7 +11,6 @@ import org.chilternquizleague.maintain.venue.VenueService
 import org.chilternquizleague.maintain.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
-import json.JValue
 
 
 @Injectable
@@ -36,12 +35,12 @@ class TeamService(override val http:Http, venueService:VenueService) extends Ent
     if(team != null) team.js.toString else null
 
   }
-  override def fromJson(json:String):DomTeam = {
+  override def fromJson(jsonString:String):DomTeam = {
     import json._
 
-    if(json == null) return null
+    if(jsonString == null) return null
     
-    JValue.fromString(json).toObject[DomTeam]
+    JValue.fromString(jsonString).toObject[DomTeam]
   }
   
   def listVenues() = venueService.list()
