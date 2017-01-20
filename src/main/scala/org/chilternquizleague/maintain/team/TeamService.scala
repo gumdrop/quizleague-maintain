@@ -21,7 +21,7 @@ class TeamService(override val http:Http, venueService:VenueService) extends Ent
    
   override protected def mapIn(team:Team) = DomTeam(team.id, team.name, team.shortName, venueService.getRef(team.venue))
   override protected def mapOutSparse(team:DomTeam) = Team(team.id, team.name, team.shortName, null)
-  override protected def make() = DomTeam(newId(), null, null, null)
+  override protected def make() = DomTeam(newId(), "", "", null)
   override protected def mapOut(team:DomTeam) = {
     Observable.zip(
         Observable.of(team),

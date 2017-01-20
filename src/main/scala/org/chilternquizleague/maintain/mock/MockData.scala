@@ -7,6 +7,7 @@ import angulate2.ext.inMemoryWebApi.InMemoryDbService
 import org.chilternquizleague.maintain.domain.Venue
 import org.chilternquizleague.util.UUID
 import json.AnyValJSEx
+import js.Dynamic.literal
 
 
 @JSExport
@@ -15,8 +16,8 @@ class MockData extends InMemoryDbService {
   import json._
   override def createDb(): js.Any = js.Dictionary(
     "venue" -> js.Array(
-      Venue(UUID.randomUUID().toString(), "wibble", "", "", "").js.toString,
-      Venue(UUID.randomUUID().toString(), "wobble", "", "", "").js.toString
+        literal(id ="1", json =  Venue("1", "wibble", "", "", "").js.toString),
+        literal(id ="2", json =  Venue("2", "w0bble", "", "", "").js.toString)
     ),
     "team" -> js.Array()
   )

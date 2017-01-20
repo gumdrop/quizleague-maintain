@@ -21,7 +21,7 @@ class VenueService(override val http:Http) extends EntityService[Venue] with Ven
   override protected def mapOutSparse(venue:DomVenue):Venue = {
     Venue(venue.id, venue.name, venue.phone, venue.email, venue.website)
   }
-  override protected def make():DomVenue = DomVenue(newId(), null,null,null,null)
+  override protected def make():DomVenue = DomVenue(newId(), "","","","")
   
   override def toJson(team:DomVenue) = {
     import json._
