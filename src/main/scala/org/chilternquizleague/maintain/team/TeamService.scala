@@ -30,18 +30,10 @@ class TeamService(override val http:Http, venueService:VenueService) extends Ent
 
   }
   
-  override def toJson(team:DomTeam) = {
-    import json._
-    if(team != null) team.js.toString else null
+  import json._
+  override def ser(item:DomTeam) = item.js.toString
+  override def deser(jsonString:String) = JValue.fromString(jsonString).toObject[DomTeam]
 
-  }
-  override def fromJson(jsonString:String):DomTeam = {
-    import json._
-
-    if(jsonString == null) return null
-    
-    JValue.fromString(jsonString).toObject[DomTeam]
-  }
   
   def listVenues() = venueService.list()
 }

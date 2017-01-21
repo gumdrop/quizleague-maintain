@@ -24,7 +24,7 @@ import angulate2.ext.classModeScala
         <md-input placeholder="Short Name" type="text" id="shortName"
              [(ngModel)]="item.shortName" name="shortName">
         </md-input>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue">
+        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required>
           <md-option *ngFor="let venue of venues" [value]="venue" >
             {{venue.name}}
           </md-option>

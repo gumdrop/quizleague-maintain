@@ -14,25 +14,17 @@ class VenueService(override val http:Http) extends EntityService[Venue] with Ven
   override type U = DomVenue
   
   override protected def mapIn(venue:Venue) = {
-    DomVenue(venue.id, venue.name, venue.phone, venue.email, venue.website)
+    DomVenue(venue.id, venue.name, Option(venue.phone), Option(venue.email), Option(venue.website))
   }
   
   override protected def mapOut(venue:DomVenue):Observable[Venue] = Observable.of(mapOutSparse(venue))
   override protected def mapOutSparse(venue:DomVenue):Venue = {
-    Venue(venue.id, venue.name, venue.phone, venue.email, venue.website)
+    Venue(venue.id, venue.name, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null))
   }
-  override protected def make():DomVenue = DomVenue(newId(), "","","","")
+  override protected def make():DomVenue = DomVenue(newId(), "",None,None,None)
   
-  override def toJson(team:DomVenue) = {
-    import json._
-    if(team != null) team.js.toString else null
+  import json._
+  override def ser(item:DomVenue) = item.js.toString
+  override def deser(jsonString:String) = JValue.fromString(jsonString).toObject[DomVenue]
 
-  }
-  override def fromJson(jsonString:String):DomVenue = {
-    import json._
-
-    if(jsonString == null) return null
-    
-    JValue.fromString(jsonString).toObject[DomVenue]
-  }
 }
