@@ -24,7 +24,7 @@ class VenueService(override val http:Http) extends EntityService[Venue] with Ven
   override protected def make():DomVenue = DomVenue(newId(), "",None,None,None)
   
   import json._
-  override def ser(item:DomVenue) = item.js.toString
+  override def ser(item:DomVenue) = item.js.toJSONString
   override def deser(jsonString:String) = JValue.fromString(jsonString).toObject[DomVenue]
 
 }

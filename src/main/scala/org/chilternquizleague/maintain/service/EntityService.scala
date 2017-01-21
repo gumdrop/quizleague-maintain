@@ -28,12 +28,10 @@ trait EntityService[T]{
   private def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
   def get(ref:Ref):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
-  def list():Observable[js.Array[T]] = {
-    val aa = http.get(s"$uriRoot",requestOptions)
-    val bb = aa.map((r,i) => log(r.jsonData[js.Array[js.Dynamic]],"list-jsonData : ").toArray)
-    bb.map((a,i) => a.map(x => add(log(unwrap(log(x, "list-x : ")), "list-fromJson : "))).toJSArray)
+  def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
+    .map((r,i) => r.jsonData[js.Array[js.Dynamic]].toArray)
+    .map((a,i) => a.map(x => add(unwrap(x))).toJSArray)
 
-  }
   def delete(item:T) = {items = items - mapIn(item).id} 
   def save(item:T) = {
     val i = log(mapIn(item), "save - mapIn : ")
@@ -45,16 +43,16 @@ trait EntityService[T]{
   def getId(item:T) = if (item != null ) mapIn(item).id else null
   def getRef(item:T):Ref = Ref(typeName,getId(item))
   
-  protected final def getFromHttp(id:String) = {
+  protected final def getFromHttp(id:String) = 
     http.get(s"$uriRoot/$id",requestOptions).
-      map((r,i) => log(r.jsonData[js.Dynamic], "getFromHttp-jsonData : ")).
+      map((r,i) => r.jsonData[js.Dynamic]).
       switchMap((a,i) => {
         val u = unwrap(a)
         items = items + ((u.id, u))
-        mapOut(log(u, "getFromHttp-fromJson : "))
+        mapOut(u)
       }
     )
-  }
+  
   protected def mapIn(model:T):U
   protected def mapOut(domain:U):Observable[T]
   protected def mapOutSparse(domain:U):T
@@ -65,8 +63,8 @@ trait EntityService[T]{
   protected final def newId() = UUID.randomUUID.toString()
   protected final def log[A](i:A, message:String=""):A = {g.console.log(message + i.asInstanceOf[js.Any]);i}
 
-  def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
-  def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
+  private def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
+  private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
   
   private def toJson(item:U) = {
     import json._
