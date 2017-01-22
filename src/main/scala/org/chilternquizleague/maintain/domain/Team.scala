@@ -1,9 +1,7 @@
 package org.chilternquizleague.maintain.domain
 
-import json.accessor
-
-@accessor case class Team (
+case class Team (
     id:String,
     name:String,
     shortName:String,
-    venue:Ref) extends Entity
+    venue:Ref[Venue]) extends Entity

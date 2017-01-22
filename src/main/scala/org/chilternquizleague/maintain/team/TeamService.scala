@@ -30,10 +30,11 @@ class TeamService(override val http:Http, venueService:VenueService) extends Ent
 
   }
   
-  import json._
-  override def ser(item:DomTeam) = item.js.toJSONString
-  override def deser(jsonString:String) = JValue.fromString(jsonString).toObject[DomTeam]
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
+  override def ser(item:DomTeam) = item.asJson.noSpaces
+  override def deser(jsonString:String) = decode[DomTeam](jsonString).merge.asInstanceOf[DomTeam]
   
   def listVenues() = venueService.list()
 }
+

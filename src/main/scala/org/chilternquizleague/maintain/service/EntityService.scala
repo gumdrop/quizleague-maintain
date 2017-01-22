@@ -27,7 +27,7 @@ trait EntityService[T]{
   
   private def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
-  def get(ref:Ref):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
+  def get(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
     .map((r,i) => r.jsonData[js.Array[js.Dynamic]].toArray)
     .map((a,i) => a.map(x => add(unwrap(x))).toJSArray)
@@ -41,7 +41,7 @@ trait EntityService[T]{
   def flush() = items = Map()
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
-  def getRef(item:T):Ref = Ref(typeName,getId(item))
+  def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
   
   protected final def getFromHttp(id:String) = 
     http.get(s"$uriRoot/$id",requestOptions).
@@ -66,23 +66,10 @@ trait EntityService[T]{
   private def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
   private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
   
-  private def toJson(item:U) = {
-    import json._
-    if(item != null) ser(item) else null
+  private def toJson(item:U) = if(item != null) ser(item) else null
 
-  }
-  private def fromJson(jsonString:String):U = {
-    import json._
+  private def fromJson(jsonString:String):U = if(jsonString == null) null.asInstanceOf[U] else deser(jsonString)
 
-    if(jsonString == null) null.asInstanceOf[U] else deser(jsonString)
-
-  }
-  
-
-  
-  
-  
-   
 }
 
 
