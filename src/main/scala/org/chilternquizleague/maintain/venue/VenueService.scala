@@ -14,12 +14,12 @@ class VenueService(override val http:Http) extends EntityService[Venue] with Ven
   override type U = DomVenue
   
   override protected def mapIn(venue:Venue) = {
-    DomVenue(venue.id, venue.name, Option(venue.phone), Option(venue.email), Option(venue.website))
+    DomVenue(venue.id, venue.name, Option(venue.phone), Option(venue.email), Option(venue.website), venue.retired)
   }
   
   override protected def mapOut(venue:DomVenue):Observable[Venue] = Observable.of(mapOutSparse(venue))
   override protected def mapOutSparse(venue:DomVenue):Venue = {
-    Venue(venue.id, venue.name, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null))
+    Venue(venue.id, venue.name, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null), venue.retired)
   }
   override protected def make():DomVenue = DomVenue(newId(), "",None,None,None)
   

@@ -1,10 +1,8 @@
 package org.chilternquizleague.maintain.domain
 
-case class Venue(
+case class User(
     id:String,
     name:String,
-    phone:Option[String],
-    email:Option[String],
-    website:Option[String],
+    email:String,
     retired:Boolean = false
 ) extends Entity

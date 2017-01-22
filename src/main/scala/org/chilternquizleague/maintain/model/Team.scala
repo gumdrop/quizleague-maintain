@@ -8,4 +8,7 @@ case class Team(
     id:String,
     name:String,
     shortName:String,
-    venue:Venue)
+    venue:Venue,
+    users:List[User],
+    retired:Boolean = false
+)

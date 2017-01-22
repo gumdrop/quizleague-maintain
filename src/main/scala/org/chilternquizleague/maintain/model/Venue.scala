@@ -9,6 +9,7 @@ case class Venue(
     name:String,
     phone:String,
     email:String,
-    website:String
+    website:String,
+    retired:Boolean = false
 )
 

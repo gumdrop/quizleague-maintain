@@ -11,22 +11,24 @@ import org.chilternquizleague.maintain.venue.VenueService
 import org.chilternquizleague.maintain.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
+import org.chilternquizleague.maintain.user.UserService
 
 
 @Injectable
 @classModeScala
-class TeamService(override val http:Http, venueService:VenueService) extends EntityService[Team] with TeamNames{
+class TeamService(override val http:Http, venueService:VenueService, userService:UserService) extends EntityService[Team] with TeamNames{
 
   override type U = DomTeam
    
-  override protected def mapIn(team:Team) = DomTeam(team.id, team.name, team.shortName, venueService.getRef(team.venue))
-  override protected def mapOutSparse(team:DomTeam) = Team(team.id, team.name, team.shortName, null)
+  override protected def mapIn(team:Team) = DomTeam(team.id, team.name, team.shortName, venueService.getRef(team.venue), team.users.map(userService.getRef(_)), team.retired)
+  override protected def mapOutSparse(team:DomTeam) = Team(team.id, team.name, team.shortName, null, team.retired)
   override protected def make() = DomTeam(newId(), "", "", null)
   override protected def mapOut(team:DomTeam) = {
     Observable.zip(
         Observable.of(team),
         venueService.get(team.venue),
-        (team:DomTeam,venue:Venue) => log(Team(team.id,team.name,team.shortName,venue)))
+        Observable.zip(team.users.map(userService.get(_)):_*),
+        (team:DomTeam,venue:Venue, users:List[User]) => log(Team(team.id,team.name,team.shortName,venue,users,team.retired)))
 
   }
   
