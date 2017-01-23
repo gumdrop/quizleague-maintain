@@ -9,13 +9,14 @@ import org.chilternquizleague.maintain.model._
 import scala.scalajs.js
 import org.chilternquizleague.maintain.venue.VenueService
 import angulate2.ext.classModeScala
+import TemplateElements._
 
 @Component(
   selector = "ql-team",
-  template = """
+  template = s"""
   <div>
     <h2>Team Detail</h2>
-    <form #teamForm="ngForm">
+    <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
         <md-input placeholder="Name" type="text" id="name"
              required
@@ -33,11 +34,9 @@ import angulate2.ext.classModeScala
         <md-chip-list>
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
+        $chbxRetired
      </div>
-      <div fxLayout="row">
-        <button md-button (click)="save()" type="submit" [disabled]="!teamForm.form.valid">Save</button>
-        <button md-button (click)="cancel()" type="cancel">Cancel</button>
-      </div>
+     $formButtons
     </form>
   </div>
   """    

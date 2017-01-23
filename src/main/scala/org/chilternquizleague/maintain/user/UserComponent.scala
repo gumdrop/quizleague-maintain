@@ -4,13 +4,14 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import org.chilternquizleague.maintain.model._
 import angulate2.common.Location
-import org.chilternquizleague.maintain.component.ItemComponent
+import org.chilternquizleague.maintain.component._
 import scalajs.js
 import angulate2.ext.classModeScala
+import TemplateElements._
 
 @Component(
   selector = "ql-user",
-  template = """
+  template = s"""
   <div>
     <h2>User Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
@@ -22,11 +23,9 @@ import angulate2.ext.classModeScala
         <md-input placeholder="Email" type="email" id="email" required
              [(ngModel)]="item.email" name="email">
         </md-input>
-      </div>
-      <div fxLayout="row">
-        <button md-button type="submit" [disabled]="!fm.form.valid">Save</button>
-        <button md-button (click)="cancel()" >Cancel</button>
-      </div>
+        $chbxRetired
+     </div>
+     $formButtons
     </form>
   </div>
   """    
