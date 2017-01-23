@@ -48,6 +48,7 @@ class AppRoutingModule
       <md-sidenav #sidenav mode="side" opened="true">
         <div  fxLayout="column">
           <a routerLink="/team" md-button >Teams</a>
+          <a routerLink="/user" md-button >Users</a>
           <a routerLink="/venue" md-button >Venues</a>
         </div>
       </md-sidenav>

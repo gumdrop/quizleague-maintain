@@ -10,6 +10,7 @@ case class Venue(
     phone:String,
     email:String,
     website:String,
+    imageURL:String,
     retired:Boolean = false
 )
 

@@ -20,12 +20,25 @@ import rxjs.Observable
 import angulate2.router.RouterModule
 
 @NgModule(
-  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
-
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, UserRoutesModule],
+  declarations = @@[UserComponent,UserListComponent],
   providers = @@[UserService]
    
 )
 class UserModule
+
+@Routes(
+  root = false,
+  Route(
+    path = "user/:id",
+    component = %%[UserComponent]
+  ),
+  Route(
+    path = "user",
+    component = %%[UserListComponent]
+  )
+)
+class UserRoutesModule 
 
 
 trait UserNames extends ComponentNames{
