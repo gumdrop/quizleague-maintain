@@ -39,5 +39,6 @@ class TeamService(override val http:Http, venueService:VenueService, userService
   override def deser(jsonString:String) = decode[DomTeam](jsonString).merge.asInstanceOf[DomTeam]
   
   def listVenues() = venueService.list()
+  def listUsers() = userService.list()
 }
 
