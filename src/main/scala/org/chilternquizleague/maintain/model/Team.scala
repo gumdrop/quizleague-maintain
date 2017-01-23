@@ -1,7 +1,7 @@
 package org.chilternquizleague.maintain.model
 
 import angulate2.std.Data
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js
 
 @Data
 case class Team(
@@ -9,6 +9,6 @@ case class Team(
     name:String,
     shortName:String,
     venue:Venue,
-    users:List[User],
+    users:js.Array[User],
     retired:Boolean = false
 )
