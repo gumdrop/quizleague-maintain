@@ -23,7 +23,7 @@ import TemplateElements._
         <md-input placeholder="Email" type="email" id="email" required
              [(ngModel)]="item.email" name="email">
         </md-input>
-        $chbxRetired
+        $chbxRetired 
      </div>
      $formButtons
     </form>
