@@ -24,14 +24,12 @@ class TeamService(override val http:Http, venueService:VenueService, userService
   override protected def mapIn(team:Team) = DomTeam(team.id, team.name, team.shortName, venueService.getRef(team.venue), team.users.map(userService.getRef(_)).toList, team.retired)
   override protected def mapOutSparse(team:DomTeam) = Team(team.id, team.name, team.shortName, null, js.Array(),team.retired)
   override protected def make() = DomTeam(newId(), "", "", null)
-  override protected def mapOut(team:DomTeam) = {
+  override protected def mapOut(team:DomTeam) =
     Observable.zip(
         Observable.of(team),
         venueService.get(team.venue),
-        Observable.zip(team.users.map(userService.get(_)):_*),
+        mapOutList(team.users, userService),
         (team:DomTeam,venue:Venue, users:js.Array[User]) => log(Team(team.id,team.name,team.shortName,venue,users,team.retired)))
-
-  }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 

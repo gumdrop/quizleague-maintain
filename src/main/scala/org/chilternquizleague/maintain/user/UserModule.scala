@@ -17,6 +17,16 @@ import org.chilternquizleague.maintain.component.IdStuff
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
 import rxjs.Observable
+import angulate2.router.RouterModule
+
+@NgModule(
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
+
+  providers = @@[UserService]
+   
+)
+class UserModule
+
 
 trait UserNames extends ComponentNames{
   override val typeName = "user"

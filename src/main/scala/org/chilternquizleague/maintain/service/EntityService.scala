@@ -62,6 +62,8 @@ trait EntityService[T]{
   
   protected final def newId() = UUID.randomUUID.toString()
   protected final def log[A](i:A, message:String=""):A = {g.console.log(message + i.asInstanceOf[js.Any]);i}
+  protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:EntityService[B]):Observable[js.Array[B]] = 
+     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)):_*)
 
   private def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
   private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)

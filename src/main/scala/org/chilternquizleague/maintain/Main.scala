@@ -6,6 +6,7 @@ import angulate2.platformBrowser.BrowserModule
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
 import org.chilternquizleague.maintain.venue.VenueModule
+import org.chilternquizleague.maintain.user.UserModule
 
 
 import scala.scalajs.js
@@ -17,7 +18,7 @@ import angulate2.http.HttpModule
 import org.chilternquizleague.maintain.mock.MockData
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
