@@ -13,7 +13,7 @@ import angulate2.ext.classModeScala
   template = """
   <div>
     <h2>Venue Detail</h2>
-    <form>
+    <form #venueForm="ngForm">
       <div fxLayout="column">
         <md-input placeholder="Name" type="text" id="name"
              required
@@ -33,8 +33,8 @@ import angulate2.ext.classModeScala
         </md-input>
       </div>
       <div fxLayout="row">
-        <button md-button (click)="save()" submit>Save</button>
-        <button md-button (click)="cancel()" submit>Cancel</button>
+        <button md-button (click)="save()" type="submit" [disabled]="!venueForm.form.valid">Save</button>
+        <button md-button (click)="cancel()" type="cancel">Cancel</button>
       </div>
     </form>
   </div>

@@ -6,15 +6,20 @@ import angulate2.platformBrowser.BrowserModule
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
 import org.chilternquizleague.maintain.venue.VenueModule
+import org.chilternquizleague.maintain.user.UserModule
 
 
 import scala.scalajs.js
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.team.TeamModule
 import angular.flexlayout.FlexLayoutModule
+import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
+import angulate2.http.HttpModule
+import org.chilternquizleague.maintain.mock.MockData
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, FlexLayoutModule, AppRoutingModule] :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
   ,
@@ -43,6 +48,7 @@ class AppRoutingModule
       <md-sidenav #sidenav mode="side" opened="true">
         <div  fxLayout="column">
           <a routerLink="/team" md-button >Teams</a>
+          <a routerLink="/user" md-button >Users</a>
           <a routerLink="/venue" md-button >Venues</a>
         </div>
       </md-sidenav>

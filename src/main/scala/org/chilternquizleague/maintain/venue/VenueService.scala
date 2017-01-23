@@ -12,33 +12,19 @@ import rxjs.Observable
 @classModeScala
 class VenueService(override val http:Http) extends EntityService[Venue] with VenueNames{
   override type U = DomVenue
-  val i = instance()
-  save(Venue(i.id, "wibble", null, null, null))
   
   override protected def mapIn(venue:Venue) = {
-    DomVenue(venue.id, venue.name, venue.phone, venue.email, venue.website)
+    DomVenue(venue.id, venue.name, Option(venue.phone), Option(venue.email), Option(venue.website), Option(venue.imageURL), venue.retired)
   }
   
   override protected def mapOut(venue:DomVenue):Observable[Venue] = Observable.of(mapOutSparse(venue))
   override protected def mapOutSparse(venue:DomVenue):Venue = {
-    Venue(venue.id, venue.name, venue.phone, venue.email, venue.website)
+    Venue(venue.id, venue.name, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null), venue.imageURL.getOrElse(null), venue.retired)
   }
-  override protected def make():DomVenue = DomVenue(newId(), null,null,null,null)
+  override protected def make():DomVenue = DomVenue(newId(), "",None,None,None,None)
   
-  override def toJson(venue:DomVenue) = {
-    import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+  override def ser(item:DomVenue) = item.asJson.noSpaces
+  override def deser(jsonString:String) = decode[DomVenue](jsonString).merge.asInstanceOf[DomVenue]
 
-    if(venue != null) venue.asJson.noSpaces else null
-  }
-  
-  override def fromJson(json:String):DomVenue = {
-    import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-    if(json == null) return null
-    
-    decode[DomVenue](json) match {
-      case Right(x) => x
-      case Left(x) => throw x
-    }
-  }
 }

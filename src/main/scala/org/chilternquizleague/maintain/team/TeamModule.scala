@@ -18,7 +18,7 @@ import angulate2.common.CommonModule
 
 
 @NgModule(
-  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, TeamRoutesModule],
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule],
   declarations = @@[TeamComponent,TeamListComponent],
   providers = @@[TeamService]
    

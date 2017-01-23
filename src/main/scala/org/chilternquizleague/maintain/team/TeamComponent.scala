@@ -15,24 +15,28 @@ import angulate2.ext.classModeScala
   template = """
   <div>
     <h2>Team Detail</h2>
-    <form>
+    <form #teamForm="ngForm">
       <div fxLayout="column">
         <md-input placeholder="Name" type="text" id="name"
              required
              [(ngModel)]="item.name" name="name">
         </md-input>
-        <md-input placeholder="Short Name" type="text" id="shortName"
+        <md-input placeholder="Short Name" type="text" id="shortName" required
              [(ngModel)]="item.shortName" name="shortName">
         </md-input>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue">
+        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required>
           <md-option *ngFor="let venue of venues" [value]="venue" >
             {{venue.name}}
           </md-option>
-        </md-select> 
+        </md-select>
+        <label style="color: rgba(0,0,0,.38);">Users</label>
+        <md-chip-list>
+          <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
+        </md-chip-list>
      </div>
       <div fxLayout="row">
-        <button md-button (click)="save()" submit>Save</button>
-        <button md-button (click)="cancel()" submit>Cancel</button>
+        <button md-button (click)="save()" type="submit" [disabled]="!teamForm.form.valid">Save</button>
+        <button md-button (click)="cancel()" type="cancel">Cancel</button>
       </div>
     </form>
   </div>
