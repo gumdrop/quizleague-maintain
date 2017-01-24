@@ -9,6 +9,7 @@ case class Team(
     name:String,
     shortName:String,
     venue:Venue,
+    text:Text,
     users:js.Array[User],
-    retired:Boolean = false
+    retired:Boolean
 )

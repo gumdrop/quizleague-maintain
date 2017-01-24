@@ -34,6 +34,7 @@ import TemplateElements._
         <md-chip-list>
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
+        <a [routerLink]="['/text',item.text.id]" md-button >Edit Text</a>
         $chbxRetired
      </div>
      $formButtons
@@ -49,9 +50,11 @@ class TeamComponent(
     extends ItemComponent[Team] {
   
   var venues:js.Array[Venue] = _
+  var users:js.Array[User] = _
   
-  override def ngOnInit() = super.ngOnInit();initVenues()
+  override def ngOnInit() = super.ngOnInit();initVenues;initUsers
   
-  def initVenues() = service.listVenues().subscribe(this.venues = _)
+  def initVenues() = service.listVenues.subscribe(this.venues = _)
+  def initUsers() = service.listUsers.subscribe(this.users = _)
 }
     

@@ -16,9 +16,10 @@ import angular.flexlayout.FlexLayoutModule
 import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
 import angulate2.http.HttpModule
 import org.chilternquizleague.maintain.mock.MockData
+import org.chilternquizleague.maintain.text.TextModule
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, TextModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
