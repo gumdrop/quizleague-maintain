@@ -7,17 +7,22 @@ import org.chilternquizleague.maintain.service.EntityService
 import org.chilternquizleague.maintain.model.Text
 import org.chilternquizleague.maintain.domain.{Text => Dom}
 import rxjs.Observable
+import shapeless._
 
 @Injectable
 @classModeScala
 class TextService(override val http:Http) extends EntityService[Text] with TextNames{
   override type U = Dom
   
-  override protected def mapIn(text:Text) = Dom(text.id, text.text)
-  override protected def mapOut(text:Dom):Observable[Text] = Observable.of(mapOutSparse(text))
-  override protected def mapOutSparse(text:Dom):Text = Text(text.id, text.text)
+  val mimeLens = lens[Dom].mimeType
   
-  override protected def make():Dom = Dom(newId(), "")
+  def instance(mimeType:String) = mapOutSparse(mimeLens.set(make())("text/html"))
+  
+  override protected def mapIn(text:Text) = Dom(text.id, text.text, text.mimeType)
+  override protected def mapOut(text:Dom):Observable[Text] = Observable.of(mapOutSparse(text))
+  override protected def mapOutSparse(text:Dom):Text = Text(text.id, text.text, text.mimeType)
+  
+  override protected def make():Dom = Dom(newId(), "", "")
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   override def ser(item:Dom) = item.asJson.noSpaces

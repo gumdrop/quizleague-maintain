@@ -10,6 +10,7 @@ import scala.scalajs.js
 import org.chilternquizleague.maintain.venue.VenueService
 import angulate2.ext.classModeScala
 import TemplateElements._
+import org.chilternquizleague.maintain.text.TextService
 
 @Component(
   selector = "ql-team",
@@ -46,15 +47,21 @@ import TemplateElements._
 class TeamComponent(
     override val service:TeamService,
     override val route: ActivatedRoute,
-    override val location:Location) 
+    override val location:Location,
+    val textService:TextService)
     extends ItemComponent[Team] {
   
   var venues:js.Array[Venue] = _
   var users:js.Array[User] = _
   
+  def toTextPage(team:Team) = {
+    val text = if(team.text != null) team.text else textService.instance("text/html")
+
+  }
+  
   override def ngOnInit() = super.ngOnInit();initVenues;initUsers
   
-  def initVenues() = service.listVenues.subscribe(this.venues = _)
-  def initUsers() = service.listUsers.subscribe(this.users = _)
+  private def initVenues() = service.listVenues.subscribe(this.venues = _)
+  private def initUsers() = service.listUsers.subscribe(this.users = _)
 }
     

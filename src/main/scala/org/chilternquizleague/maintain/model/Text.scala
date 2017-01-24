@@ -5,5 +5,6 @@ import angulate2.std.Data
 @Data
 case class Text(
     id:String,
-    text:String
+    text:String,
+    mimeType:String
 )
