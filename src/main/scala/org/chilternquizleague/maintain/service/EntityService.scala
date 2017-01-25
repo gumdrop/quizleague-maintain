@@ -27,7 +27,7 @@ trait EntityService[T]{
   
   protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
-  def get(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
+  def get(ref:Ref[U]):Observable[T] = if(ref != null && ref.id != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
     .map((r,i) => r.jsonData[js.Array[js.Dynamic]].toArray)
     .map((a,i) => a.map(x => add(unwrap(x))).toJSArray)

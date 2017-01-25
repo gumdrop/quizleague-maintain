@@ -30,4 +30,7 @@ import TemplateElements._
 class TextComponent(
     override val service:TextService,
     override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[Text] 
+    override val location:Location) extends ItemComponent[Text]{
+  
+  override def save() = {service.cache(item);location.back()}
+}
