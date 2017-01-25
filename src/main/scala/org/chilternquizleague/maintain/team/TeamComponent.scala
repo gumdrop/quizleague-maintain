@@ -57,10 +57,8 @@ class TeamComponent(
   var users:js.Array[User] = _
   
   def editText(team:Team) = {
-    
-    val text = if(team.text != null) team.text else textService.instance("text/html")
     service.cache(team)
-    router.navigate(js.Array("/text", text.id))
+    router.navigateTo("/text", team.text.id)
   }
   
   override def ngOnInit() = super.ngOnInit();initVenues;initUsers
