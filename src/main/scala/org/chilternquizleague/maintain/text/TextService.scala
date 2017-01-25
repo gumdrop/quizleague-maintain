@@ -16,7 +16,7 @@ class TextService(override val http:Http) extends EntityService[Text] with TextN
   
   val mimeLens = lens[Dom].mimeType
   
-  def instance(mimeType:String) = mapOutSparse(mimeLens.set(make())("text/html"))
+  def instance(mimeType:String) = add(mimeLens.set(make())("text/html"))
   
   override protected def mapIn(text:Text) = Dom(text.id, text.text, text.mimeType)
   override protected def mapOut(text:Dom):Observable[Text] = Observable.of(mapOutSparse(text))

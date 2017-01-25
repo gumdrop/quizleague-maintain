@@ -11,6 +11,7 @@ import org.chilternquizleague.maintain.venue.VenueService
 import angulate2.ext.classModeScala
 import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
+import angulate2.router.Router
 
 @Component(
   selector = "ql-team",
@@ -35,7 +36,7 @@ import org.chilternquizleague.maintain.text.TextService
         <md-chip-list>
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
-        <a [routerLink]="['/text',item.text.id]" md-button >Edit Text</a>
+        <button (click)="editText(item)" md-button >Edit Text</button>
         $chbxRetired
      </div>
      $formButtons
@@ -48,15 +49,18 @@ class TeamComponent(
     override val service:TeamService,
     override val route: ActivatedRoute,
     override val location:Location,
+    val router:Router,
     val textService:TextService)
     extends ItemComponent[Team] {
   
   var venues:js.Array[Venue] = _
   var users:js.Array[User] = _
   
-  def toTextPage(team:Team) = {
+  def editText(team:Team) = {
+    
     val text = if(team.text != null) team.text else textService.instance("text/html")
-
+    service.cache(team)
+    router.navigate(js.Array("/text", text.id))
   }
   
   override def ngOnInit() = super.ngOnInit();initVenues;initUsers

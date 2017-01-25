@@ -25,7 +25,7 @@ trait EntityService[T]{
   private var items:Map[String,U] = Map()
   private val requestOptions = js.Dynamic.literal(responseType = "Text")
   
-  private def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
+  protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
   def get(ref:Ref[U]):Observable[T] = if(ref != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
@@ -33,6 +33,7 @@ trait EntityService[T]{
     .map((a,i) => a.map(x => add(unwrap(x))).toJSArray)
 
   def delete(item:T) = {items = items - mapIn(item).id} 
+  def cache(item:T) = add(mapIn(item))
   def save(item:T) = {
     val i = log(mapIn(item), "save - mapIn : ")
     http.put(s"$uriRoot/${i.id}",log(js.JSON.stringify(wrap(i)), "save - toJson : "),requestOptions)
