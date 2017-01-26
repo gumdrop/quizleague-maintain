@@ -36,7 +36,7 @@ import angulate2.router.Router
         <md-chip-list>
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
-        <button (click)="editText(item)" md-button >Edit Text</button>
+        <div fxLayout="row"><button (click)="editText(item)" md-button type="button" >Edit Text...</button></div>
         $chbxRetired
      </div>
      $formButtons
@@ -61,9 +61,10 @@ class TeamComponent(
     router.navigateTo("/text", team.text.id)
   }
   
+  
   override def ngOnInit() = super.ngOnInit();initVenues;initUsers
   
-  private def initVenues() = service.listVenues.subscribe(this.venues = _)
-  private def initUsers() = service.listUsers.subscribe(this.users = _)
+  private def initVenues() = service.listVenues.subscribe(venues = _)
+  private def initUsers() = service.listUsers.subscribe(users = _)
 }
     
