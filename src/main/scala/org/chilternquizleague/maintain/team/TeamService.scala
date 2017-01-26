@@ -42,4 +42,3 @@ class TeamService(override val http:Http, venueService:VenueService, userService
   def listVenues() = venueService.list()
   def listUsers() = userService.list()
 }
-

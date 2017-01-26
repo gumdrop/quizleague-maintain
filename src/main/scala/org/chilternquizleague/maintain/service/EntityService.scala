@@ -54,13 +54,6 @@ trait EntityService[T]{
       }
     )
   
-  protected def mapIn(model:T):U
-  protected def mapOut(domain:U):Observable[T]
-  protected def mapOutSparse(domain:U):T
-  protected def make():U
-  protected def ser(item:U):String
-  protected def deser(json:String):U
-  
   protected final def newId() = UUID.randomUUID.toString()
   protected final def log[A](i:A, message:String=""):A = {g.console.log(message + i.asInstanceOf[js.Any]);i}
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:EntityService[B]):Observable[js.Array[B]] = 
@@ -72,6 +65,14 @@ trait EntityService[T]{
   private def toJson(item:U) = if(item != null) ser(item) else null
 
   private def fromJson(jsonString:String):U = if(jsonString == null) null.asInstanceOf[U] else deser(jsonString)
+  
+    
+  protected def mapIn(model:T):U
+  protected def mapOut(domain:U):Observable[T]
+  protected def mapOutSparse(domain:U):T
+  protected def make():U
+  protected def ser(item:U):String
+  protected def deser(json:String):U
 
 }
 

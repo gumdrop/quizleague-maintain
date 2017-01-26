@@ -25,11 +25,13 @@ lazy val root = project.in(file(".")).
   settings( 
     name := "chilternquizleague-maintain",
     ngBootstrap := Some("org.chilternquizleague.maintain.AppModule"),
-      	libraryDependencies ++= Seq(
+    libraryDependencies ++= Seq(
 	  "io.circe" %%% "circe-core",
 	  "io.circe" %%% "circe-generic",
 	  "io.circe" %%% "circe-parser"
 	).map(_ % circeVersion),
+	
+	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
 
     resolvers += Resolver.sonatypeRepo("releases")
 
