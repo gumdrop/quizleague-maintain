@@ -33,7 +33,8 @@ class TeamService(override val http:Http, venueService:VenueService, userService
         (venue:Venue, text:Text, users:js.Array[User]) => log(Team(team.id,team.name,team.shortName,venue,text,users,team.retired)))
   
   override def save(team:Team) = {textService.save(team.text);super.save(team)}
-        
+  override def flush() = {textService.flush();super.flush()}
+  
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
   override def ser(item:DomTeam) = item.asJson.noSpaces
