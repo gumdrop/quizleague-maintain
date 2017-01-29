@@ -12,6 +12,7 @@ import angulate2.ext.classModeScala
 import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
+import js.Dynamic.{ global => g }
 
 @Component(
   selector = "ql-team",
@@ -27,7 +28,7 @@ import angulate2.router.Router
         <md-input placeholder="Short Name" type="text" id="shortName" required
              [(ngModel)]="item.shortName" name="shortName">
         </md-input>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required>
+        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required >
           <md-option *ngFor="let venue of venues" [value]="venue" >
             {{venue.name}}
           </md-option>
@@ -49,8 +50,7 @@ class TeamComponent(
     override val service:TeamService,
     override val route: ActivatedRoute,
     override val location:Location,
-    val router:Router,
-    val textService:TextService)
+    val router:Router)
     extends ItemComponent[Team] {
   
   var venues:js.Array[Venue] = _
@@ -61,7 +61,7 @@ class TeamComponent(
     router.navigateTo("/text", team.text.id)
   }
   
-  
+  def trackVenue(item1:Venue, item2:Venue) = item1.id == item2.id
   override def ngOnInit() = super.ngOnInit();initVenues;initUsers
   
   private def initVenues() = service.listVenues.subscribe(venues = _)

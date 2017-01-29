@@ -15,7 +15,7 @@ import angulate2.ext.classModeScala
   <div>
     <h2>Global Text</h2>
     <div *ngFor="let item of items">
-      <a routerLink="/user/{{item.id}}" md-button>{{item.name}}</a>
+      <a routerLink="/globalText/{{item.id}}" md-button>{{item.name}}</a>
     </div>
     <div style="position:absolute;right:1em;bottom:5em;">
       <button md-fab (click)="addNew()">

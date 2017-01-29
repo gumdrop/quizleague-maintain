@@ -8,6 +8,8 @@ import org.chilternquizleague.maintain.component._
 import scalajs.js
 import angulate2.ext.classModeScala
 import TemplateElements._
+import angulate2.router.Router
+import org.chilternquizleague.util.Logging
 
 @Component(
   selector = "ql-user",
@@ -20,9 +22,7 @@ import TemplateElements._
              required
              [(ngModel)]="item.name" name="name">
         </md-input>
-        <md-input placeholder="Email" type="email" id="email" required
-             [(ngModel)]="item.email" name="email">
-        </md-input>
+        <div *ngFor="let text of item.text" fxLayout="row"><button (click)="editText(text)" md-button type="button" >{{text.name}}</button></div>
         $chbxRetired 
      </div>
      $formButtons
@@ -34,4 +34,12 @@ import TemplateElements._
 class GlobalTextComponent(
     override val service:GlobalTextService,
     override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[GlobalText] 
+    override val location:Location,
+    val router:Router) extends ItemComponent[GlobalText] with Logging {
+  
+    def editText(text:TextEntry) = {
+      service.cache(item)
+      log(text, "Text Entry : ")
+      router.navigateTo("/text", text.text.id)
+  }
+}

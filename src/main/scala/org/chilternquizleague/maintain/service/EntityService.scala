@@ -9,13 +9,11 @@ import js.ArrayOps
 import scala.scalajs.js.annotation.ScalaJSDefined
 import org.chilternquizleague.maintain.component.IdStuff
 import org.chilternquizleague.maintain.domain.Entity
-import org.chilternquizleague.util.UUID
+import org.chilternquizleague.util._
 import org.chilternquizleague.maintain.domain.Ref
 import org.chilternquizleague.maintain.component.ComponentNames
 
-import js.Dynamic.{ global => g }
-
-trait EntityService[T]{
+trait EntityService[T] extends Logging{
   this:ComponentNames =>
   type U <: Entity
   
@@ -25,7 +23,6 @@ trait EntityService[T]{
   private var items:Map[String,U] = Map()
   private val requestOptions = js.Dynamic.literal(responseType = "Text")
   
-  protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
   def get(ref:Ref[U]):Observable[T] = if(ref != null && ref.id != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
@@ -39,6 +36,10 @@ trait EntityService[T]{
     http.put(s"$uriRoot/${i.id}",log(js.JSON.stringify(wrap(i)), "save - toJson : "),requestOptions)
     flush()
   }
+  
+  protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
+
+  
   def flush() = items = Map()
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
@@ -55,7 +56,6 @@ trait EntityService[T]{
     )
   
   protected final def newId() = UUID.randomUUID.toString()
-  protected final def log[A](i:A, message:String=""):A = {g.console.log(message + i.asInstanceOf[js.Any]);i}
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:EntityService[B]):Observable[js.Array[B]] = 
      if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)):_*)
 

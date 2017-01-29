@@ -30,11 +30,11 @@ class GlobalTextModule
 @Routes(
   root = false,
   Route(
-    path = "user/:id",
+    path = "globalText/:id",
     component = %%[GlobalTextComponent]
   ),
   Route(
-    path = "user",
+    path = "globalText",
     component = %%[GlobalTextListComponent]
   )
 )
