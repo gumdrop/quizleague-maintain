@@ -28,12 +28,12 @@ class MockData extends InMemoryDbService {
     ),
     "text" -> js.Array(
         literal(id ="1", json =  Text("1", "some text here", "text/plain").asJson.noSpaces),
-        literal(id ="2", json =  Text("1", "global text here", "text/plain").asJson.noSpaces)
+        literal(id ="2", json =  Text("2", "global text here", "text/html").asJson.noSpaces)
 
     ),
     "globalText" -> js.Array(
         literal(id ="1", json =  GlobalText("1", "default global text", Map(
-        "a text entry" -> Ref("text", "1")    
+        "a text entry" -> Ref("text", "2")    
         )).asJson.noSpaces)
 
     )

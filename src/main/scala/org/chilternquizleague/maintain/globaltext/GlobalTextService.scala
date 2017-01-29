@@ -18,18 +18,24 @@ import js.JSConverters._
 class GlobalTextService(override val http:Http, val textService:TextService) extends EntityService[GlobalText] with GlobalTextNames{
   override type U = Dom
   
-  override protected def mapIn(globalText:GlobalText) = Dom(globalText.id, globalText.name, globalText.text.map(_.name).zip(globalText.text.map(te =>DomRef[DomText](te.text.id, te.text.typeName))).toMap, globalText.retired)
+  override protected def mapIn(globalText:GlobalText) = Dom(globalText.id, globalText.name, globalText.text.map(_.name).zip(globalText.text.map(te =>DomRef[DomText](te.text.typeName, te.text.id))).toMap, globalText.retired)
   override protected def mapOut(globalText:Dom):Observable[GlobalText] = Observable.of(mapOutSparse(globalText))
 
   override protected def mapOutSparse(globalText:Dom):GlobalText =
-   GlobalText(globalText.id, globalText.name, globalText.text.map {case (k,v) => TextEntry(k, Ref(v.id, v.typeName))}.toJSArray, globalText.retired)
+   GlobalText(globalText.id, globalText.name, globalText.text.map {case (k,v) => TextEntry(k, Ref(v.typeName, v.id))}.toJSArray, globalText.retired)
   
   override protected def make():Dom = Dom(newId(),"", Map())
 
-  def addEntry(globalText:GlobalText) = {
+  override def save(globalText:GlobalText) = {
+    textService.saveAllDirty
+    super.save(globalText)
+  }
+  
+  override def flush() = {textService.flush();super.flush()}
+  
+  def entryInstance() = {
     val text = textService.getRef(textService.instance())
-    globalText.text.push(TextEntry(null, Ref(text.id, text.typeName)))
-    text
+    TextEntry("", Ref(text.typeName, text.id))
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

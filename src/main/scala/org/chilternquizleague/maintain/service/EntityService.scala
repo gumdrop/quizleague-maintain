@@ -13,7 +13,7 @@ import org.chilternquizleague.util._
 import org.chilternquizleague.maintain.domain.Ref
 import org.chilternquizleague.maintain.component.ComponentNames
 
-trait EntityService[T] extends Logging{
+trait EntityService[T] extends EntitySave[T] with Logging{
   this:ComponentNames =>
   type U <: Entity
   
@@ -21,7 +21,7 @@ trait EntityService[T] extends Logging{
   
   val http:Http
   private var items:Map[String,U] = Map()
-  private val requestOptions = js.Dynamic.literal(responseType = "Text")
+  val requestOptions = js.Dynamic.literal(responseType = "Text")
   
   def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
   def get(ref:Ref[U]):Observable[T] = if(ref != null && ref.id != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
@@ -30,12 +30,6 @@ trait EntityService[T] extends Logging{
     .map((a,i) => a.map(x => add(unwrap(x))).toJSArray)
 
   def delete(item:T) = {items = items - mapIn(item).id} 
-  def cache(item:T) = add(mapIn(item))
-  def save(item:T) = {
-    val i = log(mapIn(item), "save - mapIn : ")
-    http.put(s"$uriRoot/${i.id}",log(js.JSON.stringify(wrap(i)), "save - toJson : "),requestOptions)
-    flush()
-  }
   
   protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
 
@@ -59,7 +53,9 @@ trait EntityService[T] extends Logging{
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:EntityService[B]):Observable[js.Array[B]] = 
      if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)):_*)
 
-  private def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
+  private[service] def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
+  private[service] def getDom(id:String) = items(id)
+  private[service] def deCache(item:U) = items = items - item.id
   private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
   
   private def toJson(item:U) = if(item != null) ser(item) else null

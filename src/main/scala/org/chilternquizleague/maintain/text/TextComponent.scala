@@ -16,7 +16,7 @@ import TemplateElements._
     <h2>Text Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
       <div fxLayout="column" fxFlex="100">
-        <md-textarea placeholder="Text" fxFill 
+        <md-textarea placeholder="Text" 
              required
              [(ngModel)]="item.text" name="text">
         </md-textarea>

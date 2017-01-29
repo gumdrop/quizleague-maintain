@@ -21,7 +21,7 @@ import angulate2.router.RouterModule
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, TextRoutesModule],
-  declarations = @@[TextComponent],
+  declarations = @@[TextComponent,TextEditor],
   providers = @@[TextService]
    
 )

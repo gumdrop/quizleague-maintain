@@ -3,15 +3,19 @@ package org.chilternquizleague.maintain.text
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.maintain.service._
 import org.chilternquizleague.maintain.model.Text
 import org.chilternquizleague.maintain.domain.{Text => Dom}
 import rxjs.Observable
 import shapeless._
 
+
 @Injectable
 @classModeScala
-class TextService(override val http:Http) extends EntityService[Text] with TextNames{
+class TextService(override val http:Http) 
+  extends EntityService[Text] 
+  with DirtyList[Text] with TextNames{
+  
   override type U = Dom
   
   val mimeLens = lens[Dom].mimeType
