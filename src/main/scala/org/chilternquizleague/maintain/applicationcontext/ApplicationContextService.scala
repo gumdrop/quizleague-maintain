@@ -30,7 +30,7 @@ class ApplicationContextService(override val http:Http, userService:UserService,
   override protected def mapOut(context:Dom) =
     Observable.zip(
         globalTextService.get(context.textSet),
-        context.emailAliases.map(Observable.of(e:DomEmailAlias => Observable.zip(Observable.of(e.alias), userService.get(e.user),(e:String,u:User) => EmailAlias(e,u))):_*).toJSArray,
+        context.emailAliases.map(e:DomEmailAlias => Observable.zip(Observable.of(e.alias), userService.get(e.user),(e:String,u:User) => EmailAlias(e,u)):_*).toJSArray,
         (textSet:GlobalText, emailAliases:js.Array[EmailAlias]) => ApplicationContext(context.id,context.leagueName,textSet,context.senderEmail,emailAliases))
   
   
