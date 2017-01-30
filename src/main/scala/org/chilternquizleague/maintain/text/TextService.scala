@@ -14,7 +14,7 @@ import shapeless._
 @classModeScala
 class TextService(override val http:Http) 
   extends EntityService[Text] 
-  with DirtyList[Text] with TextNames{
+  with DirtyListService[Text] with TextNames{
   
   override type U = Dom
   

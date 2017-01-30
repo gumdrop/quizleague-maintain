@@ -1,7 +1,9 @@
 package org.chilternquizleague.maintain.service
 
-trait DirtyList[T] extends EntitySave[T]{
-  this:EntityService[T] =>
+import org.chilternquizleague.maintain.component.ComponentNames
+
+trait DirtyListService[T] extends PutService[T]{
+  this:GetService[T] with ComponentNames =>
 
   var dirtyIds = Set[String]()
   
@@ -13,6 +15,17 @@ trait DirtyList[T] extends EntitySave[T]{
   override def save(item: T) = {
     dirtyIds = dirtyIds - getId(item)
     super.save(item)
+  }
+  
+  override def flush() = {
+    dirtyIds = Set()
+    items = Map()
+  }
+  
+  override def instance() = {
+    val item = super.instance()
+    dirtyIds = dirtyIds + getId(item)
+    item
   }
   
   def saveAllDirty() = {
