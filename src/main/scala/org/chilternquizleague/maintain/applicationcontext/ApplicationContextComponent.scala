@@ -13,32 +13,32 @@ import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
+import org.chilternquizleague.maintain.model.GlobalText
 
 @Component(
   selector = "ql-application-context",
   template = s"""
   <div>
-    <h2>Team Detail</h2>
+    <h2>Application Context</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="Name" type="text" id="name"
+        <md-input placeholder="League Name" type="text"
              required
-             [(ngModel)]="item.name" name="name">
+             [(ngModel)]="item.leagueName" name="leagueName">
         </md-input>
-        <md-input placeholder="Short Name" type="text" id="shortName" required
-             [(ngModel)]="item.shortName" name="shortName">
-        </md-input>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required >
-          <md-option *ngFor="let venue of venues" [value]="venue" >
-            {{venue.name}}
+        <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.testSet" required >
+          <md-option *ngFor="let textSet of textSets" [value]="textSet" >
+            {{textSet.name}}
           </md-option>
         </md-select>
-        <label style="color: rgba(0,0,0,.38);">Users</label>
+        <md-input placeholder="Sender Email" type="text"
+             required
+             [(ngModel)]="item.senderEmail" name="senderEmail">
+        </md-input>
+        <label style="color: rgba(0,0,0,.38);">Email Aliases</label>
         <md-chip-list>
-          <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
+          <md-chip *ngFor="let alias of item.emailAliases">{{alias.alias}} : {{alias.user.name}}</md-chip> 
         </md-chip-list>
-        <div fxLayout="row"><button (click)="editText(item)" md-button type="button" >Edit Text...</button></div>
-        $chbxRetired
      </div>
      $formButtons
     </form>
@@ -52,6 +52,13 @@ class ApplicationContextComponent(
     override val location:Location,
     val router:Router)
     extends ItemComponent[ApplicationContext] {
+  
+  var textSets:js.Array[GlobalText] = _
+  
+  override def ngOnInit() = {super.ngOnInit();initTextSets}
+  
+  private def initTextSets() = service.listTextSets.subscribe(textSets = _)
+  
  
 }
     

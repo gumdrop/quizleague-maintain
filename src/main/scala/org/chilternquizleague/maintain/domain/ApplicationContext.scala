@@ -3,7 +3,7 @@ package org.chilternquizleague.maintain.domain
 case class ApplicationContext (
   id:String,
   leagueName:String,
-  textSet:GlobalText,
+  textSet:Ref[GlobalText],
   //currentSeason:Season,
   senderEmail:String,
   emailAliases:List[EmailAlias],

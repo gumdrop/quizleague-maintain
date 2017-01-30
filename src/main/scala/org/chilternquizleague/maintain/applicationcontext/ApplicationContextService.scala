@@ -24,16 +24,20 @@ class ApplicationContextService(override val http:Http, userService:UserService,
 
   override type U = Dom
    
-  override protected def mapIn(context:ApplicationContext) = Dom(context.id, context.leagueName, globalTextService.getRef(context.textSet), context.senderEmail, context.emailAliases.map(e => DomEmailAlias(ea.alias, userService.getRef(ea.user))).toList)
+  override protected def mapIn(context:ApplicationContext) = Dom(context.id, context.leagueName, globalTextService.getRef(context.textSet), context.senderEmail, context.emailAliases.map(ea => DomEmailAlias(ea.alias, userService.getRef(ea.user))).toList)
   override protected def mapOutSparse(context:Dom) = ApplicationContext(context.id, context.leagueName, null, context.senderEmail, js.Array())
   override protected def make() = Dom(newId(), "", null, "",List())
   override protected def mapOut(context:Dom) =
     Observable.zip(
         globalTextService.get(context.textSet),
-        context.emailAliases.map(e:DomEmailAlias => Observable.zip(Observable.of(e.alias), userService.get(e.user),(e:String,u:User) => EmailAlias(e,u)):_*).toJSArray,
+        mapOutAliases(context.emailAliases),
         (textSet:GlobalText, emailAliases:js.Array[EmailAlias]) => ApplicationContext(context.id,context.leagueName,textSet,context.senderEmail,emailAliases))
   
-  
+  def mapOutAliases(list:List[DomEmailAlias]):Observable[js.Array[EmailAlias]] = 
+    Observable.zip(list.map((e:DomEmailAlias) => userService.get(e.user).map((u:User,i:Int) => EmailAlias(e.alias, u))):_*)
+
+  def listTextSets() = globalTextService.list()
+        
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
   override def ser(item:Dom) = item.asJson.noSpaces

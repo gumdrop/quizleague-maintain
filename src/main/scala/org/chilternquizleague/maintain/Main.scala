@@ -18,9 +18,10 @@ import angulate2.http.HttpModule
 import org.chilternquizleague.maintain.mock.MockData
 import org.chilternquizleague.maintain.text.TextModule
 import org.chilternquizleague.maintain.globaltext.GlobalTextModule
+import org.chilternquizleague.maintain.applicationcontext.ApplicationContextModule
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, TextModule,GlobalTextModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, TextModule,GlobalTextModule, ApplicationContextModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()
@@ -49,6 +50,7 @@ class AppRoutingModule
     <md-sidenav-container>
       <md-sidenav #sidenav mode="side" opened="true">
         <div  fxLayout="column">
+          <a routerLink="/applicationContext" md-button >Application Context</a>
           <a routerLink="/globalText" md-button >Global Text</a>
           <a routerLink="/team" md-button >Teams</a>
           <a routerLink="/user" md-button >Users</a>

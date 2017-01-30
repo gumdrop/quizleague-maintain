@@ -62,7 +62,7 @@ class TeamComponent(
   }
   
   def trackVenue(item1:Venue, item2:Venue) = item1.id == item2.id
-  override def ngOnInit() = super.ngOnInit();initVenues;initUsers
+  override def ngOnInit() = {super.ngOnInit();initVenues;initUsers}
   
   private def initVenues() = service.listVenues.subscribe(venues = _)
   private def initUsers() = service.listUsers.subscribe(users = _)

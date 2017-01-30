@@ -29,7 +29,7 @@ class ApplicationContextModule
   root = false,
       Route(
         path = "applicationContext",
-        component = %%[TeamListComponent]
+        component = %%[ApplicationContextComponent]
       )
 )
 class ApplicationContextRoutesModule 
