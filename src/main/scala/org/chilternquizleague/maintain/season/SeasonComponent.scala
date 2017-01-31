@@ -44,9 +44,6 @@ class SeasonComponent(
     val router:Router)
     extends ItemComponent[Season] {
   
-  var venues:js.Array[Venue] = _
-  var users:js.Array[User] = _
-  
   def editText(season:Season) = {
     service.cache(season)
     router.navigateTo("/text", season.text.id)
