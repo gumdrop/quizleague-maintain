@@ -1,9 +1,12 @@
 package org.chilternquizleague.maintain.domain
 
+import java.time.Year
+
 case class Season(
     id:String,
-    startYear:Int,
-    endYear:Int,
+    startYear:Year,
+    endYear:Year,
     text:Ref[Text],
+    competitions:List[Ref[Competition]],
     retired:Boolean = false
 ) extends Entity

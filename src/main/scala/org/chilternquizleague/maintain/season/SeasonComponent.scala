@@ -15,30 +15,21 @@ import angulate2.router.Router
 import js.Dynamic.{ global => g }
 
 @Component(
-  selector = "ql-team",
+  selector = "ql-season",
   template = s"""
   <div>
     <h2>Season Detail</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="Name" type="text" id="name"
+        <md-input placeholder="Start Year" type="number"
              required
-             [(ngModel)]="item.name" name="name">
+             [(ngModel)]="item.startYear" name="startYear">
         </md-input>
-        <md-input placeholder="Short Name" type="text" id="shortName" required
-             [(ngModel)]="item.shortName" name="shortName">
+        <md-input placeholder="End Year" type="number"
+             required
+             [(ngModel)]="item.endYear" name="endYear">
         </md-input>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required >
-          <md-option *ngFor="let venue of venues" [value]="venue" >
-            {{venue.name}}
-          </md-option>
-        </md-select>
-        <label style="color: rgba(0,0,0,.38);">Users</label>
-        <md-chip-list>
-          <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
-        </md-chip-list>
         <div fxLayout="row"><button (click)="editText(item)" md-button type="button" >Edit Text...</button></div>
-        $chbxRetired
      </div>
      $formButtons
     </form>

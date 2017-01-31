@@ -12,17 +12,19 @@ import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
 import scala.scalajs.js
 import org.chilternquizleague.maintain.text.TextService
+import java.time.Year
+import org.chilternquizleague.util.DateTimeConverters._
+import scala.scalajs.js.Date
 
 
 @Injectable
 @classModeScala
 class SeasonService(override val http:Http, textService:TextService) extends EntityService[Season] with SeasonNames{
-
   override type U = Dom
-   
-  override protected def mapIn(season:Season) = Dom(season.id, season.startYear, season.endYear, textService.getRef(season.text))
+
+  override protected def mapIn(season:Season) = Dom(season.id, season.startYear, season.endYear, textService.getRef(season.text), List())
   override protected def mapOutSparse(season:Dom) = Season(season.id, season.startYear, season.endYear, null)
-  override protected def make() = Dom(newId(), 0, 0, textService.getRef(textService.instance()))
+  override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()),List())
   override protected def mapOut(season:Dom) =
     Observable.zip(
         Observable.of(season),
@@ -33,9 +35,11 @@ class SeasonService(override val http:Http, textService:TextService) extends Ent
   override def flush() = {textService.flush();super.flush()}
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
+  import org.chilternquizleague.util.json.codecs.YearCodec._
   override def ser(item:Dom) = item.asJson.noSpaces
   override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
  
 
 }
+
+

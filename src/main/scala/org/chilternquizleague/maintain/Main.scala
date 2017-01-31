@@ -55,6 +55,7 @@ class AppRoutingModule
           <a routerLink="/applicationContext" md-button >Application Context</a>
           <a routerLink="/globalText" md-button >Global Text</a>
           <a routerLink="/team" md-button >Teams</a>
+          <a routerLink="/season" md-button >Seasons</a>
           <a routerLink="/user" md-button >Users</a>
           <a routerLink="/venue" md-button >Venues</a>
         </div>

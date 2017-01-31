@@ -26,11 +26,11 @@ class SeasonModule
 @Routes(
   root = false,
        Route(
-        path = "team/:id",
+        path = "season/:id",
         component = %%[SeasonComponent]
       ),
       Route(
-        path = "team",
+        path = "season",
         component = %%[SeasonListComponent]
       )
 )

@@ -33,4 +33,5 @@ class TextComponent(
     override val location:Location) extends ItemComponent[Text]{
   
   override def save() = {service.cache(item);location.back()}
+  override def cancel():Unit = location.back()
 }

@@ -30,7 +30,7 @@ lazy val root = project.in(file(".")).
 	  "io.circe" %%% "circe-generic",
 	  "io.circe" %%% "circe-parser"
 	).map(_ % circeVersion),
-	
+	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M7",
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
 
     resolvers += Resolver.sonatypeRepo("releases")

@@ -17,7 +17,7 @@ import angulate2.ext.classModeScala
   <div>
     <h2>Seasons</h2>
     <div *ngFor="let item of items">
-      <a routerLink="/season/{{item.id}}" md-button>{{item.name}}</a>
+      <a routerLink="/season/{{item.id}}" md-button>{{item.startYear}}/{{item.endYear}}</a>
     </div>
     <div style="position:absolute;right:1em;bottom:5em;">
       <button md-fab (click)="addNew()">

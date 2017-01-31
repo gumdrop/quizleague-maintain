@@ -5,7 +5,7 @@ import angulate2.std.Data
 @Data
 case class Season(
     id:String,
-    startYear:Int,
-    endYear:Int,
+    startYear:String,
+    endYear:String,
     text:Text
 )
