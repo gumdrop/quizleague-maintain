@@ -19,9 +19,11 @@ import org.chilternquizleague.maintain.mock.MockData
 import org.chilternquizleague.maintain.text.TextModule
 import org.chilternquizleague.maintain.globaltext.GlobalTextModule
 import org.chilternquizleague.maintain.applicationcontext.ApplicationContextModule
+import org.chilternquizleague.maintain.season.SeasonModule
 
 @NgModule(
-  imports = @@[BrowserModule,VenueModule, TeamModule, UserModule, TextModule,GlobalTextModule, ApplicationContextModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  imports = @@[BrowserModule, FlexLayoutModule, AppRoutingModule , HttpModule,
+    VenueModule, TeamModule, UserModule, TextModule, GlobalTextModule, ApplicationContextModule, SeasonModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
   MaterialModule.forRoot() :+
   FlexLayoutModule.forRoot()

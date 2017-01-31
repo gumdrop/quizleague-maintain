@@ -26,7 +26,7 @@ import org.chilternquizleague.maintain.model.GlobalText
              required
              [(ngModel)]="item.leagueName" name="leagueName">
         </md-input>
-        <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.testSet" required >
+        <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required >
           <md-option *ngFor="let textSet of textSets" [value]="textSet" >
             {{textSet.name}}
           </md-option>
@@ -56,6 +56,8 @@ class ApplicationContextComponent(
   var textSets:js.Array[GlobalText] = _
   
   override def ngOnInit() = {super.ngOnInit();initTextSets}
+  
+  override def init() = service.get.subscribe(item = _)
   
   private def initTextSets() = service.listTextSets.subscribe(textSets = _)
   

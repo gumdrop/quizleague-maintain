@@ -36,6 +36,14 @@ class MockData extends InMemoryDbService {
         "a text entry" -> Ref("text", "2")    
         )).asJson.noSpaces)
 
+    ),
+    "applicationContext" -> js.Array(
+      literal(id="1", json = ApplicationContext(
+          "1",
+          "Chiltern Quiz League",
+          Ref[GlobalText]("globalText","1"), 
+          "a@b.c", 
+          List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
     )
         
   )
