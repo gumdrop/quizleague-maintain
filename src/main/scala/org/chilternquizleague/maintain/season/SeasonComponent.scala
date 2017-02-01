@@ -13,6 +13,8 @@ import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
+import org.chilternquizleague.maintain.text.TextEditMixin
+import org.chilternquizleague.util.Logging
 
 @Component(
   selector = "ql-season",
@@ -29,7 +31,7 @@ import js.Dynamic.{ global => g }
              required
              [(ngModel)]="item.endYear" name="endYear">
         </md-input>
-        <div fxLayout="row"><button (click)="editText(item)" md-button type="button" >Edit Text...</button></div>
+        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
      </div>
      $formButtons
     </form>
@@ -41,13 +43,9 @@ class SeasonComponent(
     override val service:SeasonService,
     override val route: ActivatedRoute,
     override val location:Location,
-    val router:Router)
-    extends ItemComponent[Season] {
+    override val router:Router)
+    extends ItemComponent[Season] with TextEditMixin[Season] with Logging{
   
-  def editText(season:Season) = {
-    service.cache(season)
-    router.navigateTo("/text", season.text.id)
-  }
   
 
 }

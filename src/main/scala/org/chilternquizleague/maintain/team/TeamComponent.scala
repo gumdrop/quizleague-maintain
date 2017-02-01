@@ -13,6 +13,7 @@ import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
+import org.chilternquizleague.maintain.text.TextEditMixin
 
 @Component(
   selector = "ql-team",
@@ -37,7 +38,7 @@ import js.Dynamic.{ global => g }
         <md-chip-list>
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
-        <div fxLayout="row"><button (click)="editText(item)" md-button type="button" >Edit Text...</button></div>
+        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
         $chbxRetired
      </div>
      $formButtons
@@ -50,16 +51,11 @@ class TeamComponent(
     override val service:TeamService,
     override val route: ActivatedRoute,
     override val location:Location,
-    val router:Router)
-    extends ItemComponent[Team] {
+    override val router:Router)
+    extends ItemComponent[Team] with TextEditMixin[Team]{
   
   var venues:js.Array[Venue] = _
   var users:js.Array[User] = _
-  
-  def editText(team:Team) = {
-    service.cache(team)
-    router.navigateTo("/text", team.text.id)
-  }
   
   def trackVenue(item1:Venue, item2:Venue) = item1.id == item2.id
   override def ngOnInit() = {super.ngOnInit();initVenues;initUsers}
