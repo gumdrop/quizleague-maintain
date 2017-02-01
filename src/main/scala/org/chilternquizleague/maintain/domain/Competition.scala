@@ -4,10 +4,12 @@ import java.util.Date
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Duration
+import io.circe.generic.JsonCodec
+import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
 
 
 
-sealed trait Competition extends Entity{
+@JsonCodec sealed trait Competition extends Entity{
   
   val name:String
   val text:Ref[Text]
@@ -15,43 +17,43 @@ sealed trait Competition extends Entity{
   
 }
 
-sealed trait SingletonCompetition extends Competition{
+ trait SingletonCompetition extends Competition{
     
   val date:LocalDate
   val startTime:LocalTime
   val duration:Duration
 }
 
-sealed trait ScheduledCompetition extends Competition{
+ trait ScheduledCompetition extends Competition{
 
   val startTime:LocalTime
   val duration:Duration
 }
 
-sealed trait ResultsCompetition extends Competition{
+ trait ResultsCompetition extends Competition{
    val results:List[Ref[Results]]
 }
 
-sealed trait FixturesCompetition extends Competition{
+ trait FixturesCompetition extends Competition{
   this:ResultsCompetition =>
   val fixtures:List[Ref[Fixtures]]
 }
 
-sealed trait TeamCompetition extends FixturesCompetition with ResultsCompetition
+ trait TeamCompetition extends FixturesCompetition with ResultsCompetition
 
-sealed trait CompetitionTables{
+ trait CompetitionTables extends Competition{
     val tables:List[Ref[LeagueTable]]
 }
 
-sealed trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables
+ trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables
 
-sealed trait MainLeagueCompetition extends BaseLeagueCompetition{
+ trait MainLeagueCompetition extends BaseLeagueCompetition{
   val subsidiary:SubsidiaryCompetition with ResultsCompetition
 }
 
-sealed trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
+ trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
 
-sealed trait SubsidiaryCompetition 
+ trait SubsidiaryCompetition extends Competition
 
 case class LeagueCompetition(
   id:String,
@@ -84,5 +86,11 @@ case class SubsidiaryLeagueCompetition(
   text:Ref[Text]
 ) extends SubsidiaryCompetition with ResultsCompetition with CompetitionTables
 
+
+
+object Competition
+
 case class LeagueTable(id:String,retired:Boolean=false) extends Entity
+
+
 
