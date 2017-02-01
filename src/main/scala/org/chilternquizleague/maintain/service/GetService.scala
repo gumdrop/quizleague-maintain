@@ -7,7 +7,7 @@ import scala.scalajs.js
 import js.JSConverters._
 import js.ArrayOps
 import scala.scalajs.js.annotation.ScalaJSDefined
-import org.chilternquizleague.maintain.component.IdStuff
+
 import org.chilternquizleague.maintain.domain.Entity
 import org.chilternquizleague.util._
 import org.chilternquizleague.maintain.domain.Ref

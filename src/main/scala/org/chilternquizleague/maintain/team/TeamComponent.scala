@@ -35,7 +35,7 @@ import org.chilternquizleague.maintain.text.TextEditMixin
           </md-option>
         </md-select>
         <label style="color: rgba(0,0,0,.38);">Users</label>
-        <md-chip-list>
+        <md-chip-list selectable="true">
           <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
         </md-chip-list>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>

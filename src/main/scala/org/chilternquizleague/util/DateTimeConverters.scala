@@ -7,7 +7,6 @@ object DateTimeConverters{
   import scala.language.implicitConversions
   
   implicit def yearToInt(year:Year):Int = year.toString.toInt
-  implicit def intToYear(int:Int):Year = if(int == null) null else Year parse int.toString
-
+  implicit def intToYear(int:Int):Year = Year parse int.toString
  
 }

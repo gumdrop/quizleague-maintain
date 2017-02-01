@@ -35,7 +35,7 @@ class SeasonService(override val http:Http, textService:TextService) extends Ent
   override def flush() = {textService.flush();super.flush()}
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import org.chilternquizleague.util.json.codecs.YearCodec._
+  import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
   override def ser(item:Dom) = item.asJson.noSpaces
   override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
  

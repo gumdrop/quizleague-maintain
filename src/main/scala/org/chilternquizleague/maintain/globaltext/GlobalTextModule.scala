@@ -13,7 +13,7 @@ import org.chilternquizleague.maintain.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.util.UUID
 import org.chilternquizleague.maintain.component.ComponentNames
-import org.chilternquizleague.maintain.component.IdStuff
+
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
 import rxjs.Observable
