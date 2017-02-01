@@ -29,12 +29,12 @@ sealed trait ScheduledCompetition extends Competition{
 }
 
 sealed trait ResultsCompetition extends Competition{
-   val results:List[Results]
+   val results:List[Ref[Results]]
 }
 
 sealed trait FixturesCompetition extends Competition{
   this:ResultsCompetition =>
-  val fixtures:List[Fixtures]
+  val fixtures:List[Ref[Fixtures]]
 }
 
 sealed trait TeamCompetition extends FixturesCompetition with ResultsCompetition
@@ -58,8 +58,8 @@ case class LeagueCompetition(
   name:String,
   startTime:LocalTime,
   duration:Duration,
-  fixtures:List[Fixtures],
-  results:List[Results],
+  fixtures:List[Ref[Fixtures]],
+  results:List[Ref[Results]],
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
   subsidiary:SubsidiaryCompetition with ResultsCompetition
@@ -71,15 +71,15 @@ case class CupCompetition(
   name:String,
   startTime:LocalTime,
   duration:Duration,
-  fixtures:List[Fixtures],
-  results:List[Results],
+  fixtures:List[Ref[Fixtures]],
+  results:List[Ref[Results]],
   text:Ref[Text]
 ) extends KnockoutCompetition
 
 case class SubsidiaryLeagueCompetition(
   id:String,
   name:String,
-  results:List[Results],
+  results:List[Ref[Results]],
   tables:List[Ref[LeagueTable]],
   text:Ref[Text]
 ) extends SubsidiaryCompetition with ResultsCompetition with CompetitionTables
