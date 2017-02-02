@@ -25,14 +25,16 @@ case class LeagueCompetition(
   id:String,
   name:String,
   startTime:LocalTime,
-  duration:Duration/*,
+  duration:Duration,
   fixtures:List[Ref[Fixtures]],
   results:List[Ref[Results]],
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Competition with SubsidiaryCompetition with ResultsCompetition*/
+  subsidiary:Competition //with SubsidiaryCompetition with ResultsCompetition
   
-) extends Competition// with MainLeagueCompetition
+) extends Competition/*
+* // with MainLeagueCompetition
+*/
 
 object Competition
 
