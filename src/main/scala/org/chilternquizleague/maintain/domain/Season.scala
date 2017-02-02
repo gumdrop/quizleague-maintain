@@ -7,6 +7,6 @@ case class Season(
     startYear:Year,
     endYear:Year,
     text:Ref[Text],
-    competitions:List[Ref[Competition]],
+    competitions:List[Ref[User]],
     retired:Boolean = false
 ) extends Entity

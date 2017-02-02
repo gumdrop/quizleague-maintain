@@ -30,8 +30,8 @@ class CompetitionService(override val http:Http, textService:TextService) extend
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
-  override def ser(item:Dom) = item.asJson.noSpaces
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+  override def ser(item:Dom) = ???//item.asJson.noSpaces
+  override def deser(jsonString:String) = ???//decode[Dom](jsonString).merge.asInstanceOf[Dom]
  
 
 }

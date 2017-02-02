@@ -1,5 +1,4 @@
 package org.chilternquizleague.maintain.domain
 
-trait Fixtures {
-  
-}
+
+case class Fixtures(id:String, retired:Boolean) extends Entity

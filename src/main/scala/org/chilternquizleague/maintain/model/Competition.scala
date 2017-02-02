@@ -1,15 +1,17 @@
 package org.chilternquizleague.maintain.model
 
-import scalajs.js
+import scala.scalajs.js
+import scala.scalajs.js.Any.fromBoolean
+import scala.scalajs.js.Any.fromString
+import scala.scalajs.js.annotation.JSExportAll
 import angulate2.std.Data
-import scala.scalajs.js.annotation.JSExport
 
 trait Competition {
   val id:String
   val name:String
 }
 
-@JSExport
+@JSExportAll
 trait LeagueCompetition extends Competition{
   val startTime:String
   val duration:Int
@@ -21,7 +23,7 @@ trait LeagueCompetition extends Competition{
   
 } 
 
-@JSExport
+@JSExportAll
 trait CupCompetition extends Competition{
   val startTime:String
   val duration:Int
@@ -30,7 +32,7 @@ trait CupCompetition extends Competition{
   val text:Text
 }
 
-@JSExport
+@JSExportAll
 trait SubsidiaryLeagueCompetition extends Competition{
   val startTime:String
   val results:js.Array[Results]

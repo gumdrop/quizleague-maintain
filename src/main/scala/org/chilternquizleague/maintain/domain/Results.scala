@@ -1,5 +1,3 @@
 package org.chilternquizleague.maintain.domain
 
-trait Results {
-  
-}
+case class Results(id:String, retired:Boolean) extends Entity
