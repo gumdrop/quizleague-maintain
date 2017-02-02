@@ -16,7 +16,7 @@ sealed trait Competition extends Entity
 
   
   val name:String
-  //val text:Ref[Text]
+  val text:Ref[Text]
   override val retired = false
   
 }
@@ -30,15 +30,11 @@ case class LeagueCompetition(
   results:List[Ref[Results]],
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Competition //with SubsidiaryCompetition with ResultsCompetition
+  subsidiary:Ref[Competition]
   
-) extends Competition/*
-* // with MainLeagueCompetition
-*/
+) extends Competition with MainLeagueCompetition
 
-object Competition
 
-/*
 case class CupCompetition(
   id:String,
   name:String,
@@ -47,18 +43,17 @@ case class CupCompetition(
   fixtures:List[Ref[Fixtures]],
   results:List[Ref[Results]],
   text:Ref[Text]
-) extends KnockoutCompetition
+) extends Competition with KnockoutCompetition
 
 case class SubsidiaryLeagueCompetition(
   id:String,
   name:String,
-  results:List[Ref[Results]],
+  results:List[Ref[Results]], 
   tables:List[Ref[LeagueTable]],
   text:Ref[Text]
-) extends SubsidiaryCompetition with ResultsCompetition with CompetitionTables
+) extends Competition with SubsidiaryCompetition with ResultsCompetition with CompetitionTables
 
-*/
-
+object Competition
 
 
 
@@ -75,7 +70,7 @@ case class SubsidiaryLeagueCompetition(
   val duration:Duration
 }
 
- trait ResultsCompetition{
+sealed trait ResultsCompetition{
    val results:List[Ref[Results]]
 }
 
@@ -93,16 +88,12 @@ case class SubsidiaryLeagueCompetition(
  trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables
 
  trait MainLeagueCompetition extends BaseLeagueCompetition{
-  val subsidiary:SubsidiaryCompetition with ResultsCompetition
+  val subsidiary:Ref[Competition]
 }
 
  trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
 
  trait SubsidiaryCompetition
-
-
-
-
 
 
 

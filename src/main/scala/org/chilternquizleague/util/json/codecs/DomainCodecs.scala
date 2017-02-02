@@ -12,4 +12,7 @@ object DomainCodecs{
   implicit val refTextEncoder: Encoder[Ref[Text]] = deriveEncoder
   implicit val refLeagueTableDecoder: Decoder[Ref[LeagueTable]] = deriveDecoder
   implicit val refLeagueTableEncoder: Encoder[Ref[LeagueTable]] = deriveEncoder  
+  implicit val refCompetitionDecoder: Decoder[Ref[Competition]] = deriveDecoder
+  implicit val refCompetitionEncoder: Encoder[Ref[Competition]] = deriveEncoder  
+
 }
