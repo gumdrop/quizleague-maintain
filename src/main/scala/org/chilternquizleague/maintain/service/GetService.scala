@@ -23,7 +23,8 @@ trait GetService[T] extends Logging{
   private[service] var items:Map[String,U] = Map()
   val requestOptions = js.Dynamic.literal(responseType = "Text")
   
-  def get(id:String) = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id))
+  def get(id:String):Observable[T] = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u,i) => mapOut(u)))
+  def getSparse(id:String):Observable[T] = items.get(id).map(u => Observable.of(mapOutSparse(u))).getOrElse(getFromHttp(id).map((u,i) => mapOutSparse(u)))
   def get(ref:Ref[U]):Observable[T] = if(ref != null && ref.id != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
     .map((r,i) => r.jsonData[js.Array[js.Dynamic]].toArray)
@@ -31,20 +32,20 @@ trait GetService[T] extends Logging{
   def flush() = items = Map()
   
   protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
-  protected final def getFromHttp(id:String) = 
+  protected final def getFromHttp(id:String):Observable[U] = 
     http.get(s"$uriRoot/$id",requestOptions).
       map((r,i) => r.jsonData[js.Dynamic]).
-      switchMap((a,i) => {
+      map((a,i) => {
         val u = unwrap(a)
         items = items + ((u.id, u))
-        mapOut(u)
+        u
       }
     )
   
     
 
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B]):Observable[js.Array[B]] = 
-     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)):_*)
+     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.getSparse(a.id)):_*)
 
   private[service] def getDom(id:String) = items(id)
 
