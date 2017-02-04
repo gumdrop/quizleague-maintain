@@ -22,22 +22,26 @@ import org.chilternquizleague.maintain.model.GlobalText
     <h2>Application Context</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="League Name" type="text"
+         <md-input-container>
+         <input md-input placeholder="League Name" type="text"
              required
              [(ngModel)]="item.leagueName" name="leagueName">
-        </md-input>
+        </md-input-container>
         <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required >
           <md-option *ngFor="let textSet of textSets" [value]="textSet" >
-            {{textSet.name}}
+           - {{textSet.name}}
           </md-option>
         </md-select>
-        <md-input placeholder="Sender Email" type="text"
+        <md-input-container>        
+          <input md-input placeholder="Sender Email" type="text"
              required
              [(ngModel)]="item.senderEmail" name="senderEmail">
-        </md-input>
+        </md-input-container>
         <label style="color: rgba(0,0,0,.38);">Email Aliases</label>
-        <md-chip-list>
-          <md-chip *ngFor="let alias of item.emailAliases">{{alias.alias}} : {{alias.user.name}}</md-chip> 
+        <md-chip-list selectable>
+          <md-chip *ngFor="let alias of item.emailAliases">{{alias.alias}} : {{alias.user.name}}
+            <button md-icon-button (click)="removeAlias(alias)" type="button"><md-icon>delete</md-icon></button>
+          </md-chip> 
         </md-chip-list>
      </div>
      $formButtons
@@ -60,6 +64,9 @@ class ApplicationContextComponent(
   override def init() = service.get.subscribe(item = _)
   
   private def initTextSets() = service.listTextSets.subscribe(textSets = _)
+  
+  def removeAlias(alias:EmailAlias) = item.emailAliases -= alias
+  
   
  
 }

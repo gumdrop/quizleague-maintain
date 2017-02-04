@@ -15,11 +15,12 @@ import TemplateElements._
   <div>
     <h2>Text Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
-      <div fxLayout="column" fxFlexFill>
-        <md-textarea placeholder="Text" 
+      <div fxFlexFill>
+        <md-input-container>
+        <textarea md-input md-textarea-autosize minRows="10"  placeholder="Text" 
              required
-             [(ngModel)]="item.text" name="text">
-        </md-textarea>
+             [(ngModel)]="item.text" name="text"></textarea>
+        </md-input-container>
      </div>
      $formButtons
     </form>

@@ -23,14 +23,16 @@ import org.chilternquizleague.util.Logging
     <h2>Season Detail</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="Start Year" type="number"
+        <md-input-container>
+            <input md-input placeholder="Start Year" type="number"
              required
              [(ngModel)]="item.startYear" name="startYear">
-        </md-input>
-        <md-input placeholder="End Year" type="number"
+        </md-input-container>
+        <md-input-container>        
+          <input md-input placeholder="End Year" type="number"
              required
              [(ngModel)]="item.endYear" name="endYear">
-        </md-input>
+        </md-input-container>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
      </div>
      $formButtons

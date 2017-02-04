@@ -36,7 +36,9 @@ import org.chilternquizleague.maintain.text.TextEditMixin
         </md-select>
         <label style="color: rgba(0,0,0,.38);">Users</label>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let user of item.users">{{user.name}}</md-chip> 
+          <md-chip *ngFor="let user of item.users">{{user.name}}
+            <button md-icon-button (click)="removeUser(user)" type="button"><md-icon>delete</md-icon></button>
+          </md-chip> 
         </md-chip-list>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
         $chbxRetired
@@ -62,5 +64,7 @@ class TeamComponent(
   
   private def initVenues() = service.listVenues.subscribe(venues = _)
   private def initUsers() = service.listUsers.subscribe(users = _)
+  
+  def removeUser(user:User) = item.users -= user
 }
     
