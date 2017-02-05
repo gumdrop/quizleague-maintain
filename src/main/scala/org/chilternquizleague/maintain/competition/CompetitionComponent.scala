@@ -15,22 +15,16 @@ import js.Dynamic.{ global => g }
 
 
 @Component(
-  selector = "ql-competition",
   template = s"""
   <div>
     <h2>Competition Detail</h2>
     <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-        <md-input placeholder="Start Year" type="number"
-             required
-             [(ngModel)]="item.startYear" name="startYear">
-        </md-input>
-        <md-input placeholder="End Year" type="number"
-             required
-             [(ngModel)]="item.endYear" name="endYear">
-        </md-input>
-        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-     </div>
+      <div [ngSwitch]="item.typeName">
+        <ql-league-competition *ngSwitchCase="league" item="item"></ql-league-competition>
+        <!--ql-cup-competition *ngSwitchCase="cup"></ql-cup-competition>
+        <ql-subsidiary-competition *ngSwitchCase="subsidiary"></ql-subsidiary-competition-->
+      </div>
+      <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
      $formButtons
     </form>
   </div>

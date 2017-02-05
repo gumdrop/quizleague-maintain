@@ -16,25 +16,25 @@ import angulate2.core.Input
 
 
 @Component(
-  selector = "ql-competition",
+  selector = "ql-league-competition",
   template = s"""
-  <div>
-    <h2>{{item.name}}</h2>
-    <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="Start Year" type="number"
+        <md-input-container>
+          <input md-input placeholder="Name" type="text"
              required
-             [(ngModel)]="item.startYear" name="startYear">
-        </md-input>
-        <md-input placeholder="End Year" type="number"
+             [(ngModel)]="item.name" name="name">
+        </md-input-container>
+        <md-input-container>
+          <input md-input placeholder="Start Time" type="localtime"
              required
-             [(ngModel)]="item.endYear" name="endYear">
-        </md-input>
-        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
+             [(ngModel)]="item.startTime" name="startTime">
+        </md-input-container>
+        <md-input-container>        
+          <input md-input placeholder="Duration (hours)" type="number"
+             required
+             [(ngModel)]="item.duration" name="duration">
+        </md-input-container>
      </div>
-     $formButtons
-    </form>
-  </div>
   """    
 )
 @classModeScala

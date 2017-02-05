@@ -1,4 +1,4 @@
-package org.chilterquizleague.maintain.fixtures
+package org.chilternquizleague.maintain.results
 
 
 import angulate2.std.Injectable
@@ -6,8 +6,8 @@ import angulate2.ext.classModeScala
 import angulate2.http.Http
 import org.chilternquizleague.maintain.service.EntityService
 import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.model.{Fixtures => Model}
-import org.chilternquizleague.maintain.domain.{Fixtures => Dom}
+import org.chilternquizleague.maintain.model.{Results => Model}
+import org.chilternquizleague.maintain.domain.{Results => Dom}
 import org.chilternquizleague.maintain.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
@@ -18,10 +18,9 @@ import org.chilternquizleague.util.DateTimeConverters._
 import scala.scalajs.js.Date
 
 
-
 @Injectable
 @classModeScala
-class FixturesService(override val http:Http) extends EntityService[Model] with FixturesNames{
+class ResultsService(override val http:Http) extends EntityService[Model] with ResultsNames{
   override type U = Dom
 
   override protected def mapIn(model:Model) = ???
@@ -37,10 +36,4 @@ class FixturesService(override val http:Http) extends EntityService[Model] with 
  
 
 }
-
-trait FixturesNames extends ComponentNames{
-  override val typeName = "fixtures"
-}
-
-
 

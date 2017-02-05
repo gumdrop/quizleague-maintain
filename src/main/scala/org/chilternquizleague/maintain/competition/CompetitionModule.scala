@@ -13,12 +13,14 @@ import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.component.ComponentNames
 
 import angulate2.common.CommonModule
+import org.chilternquizleague.maintain.results.ResultsModule
+import org.chilternquizleague.maintain.fixtures.FixturesModule
 
 @NgModule(
-  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule],
-  declarations = @@[CompetitionComponent],
+  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule,ResultsModule,FixturesModule],
+  declarations = @@[CompetitionComponent,LeagueCompetitionComponent],
   providers = @@[CompetitionService])
-class SeasonModule
+class CompetitionModule
 
 @Routes(
   root = false,

@@ -7,9 +7,17 @@ import scala.scalajs.js.Any.fromString
 import scala.scalajs.js.annotation.JSExportAll
 import angulate2.std.Data
 
+object CompetitionType extends Enumeration {
+  type CompetitionType = Value
+  val league, cup, subsidiary = Value
+}
+
+import CompetitionType._
+
 sealed trait Competition {
   val id:String
   val name:String
+  val typeName:CompetitionType
 }
 
 @JSExportAll
@@ -22,7 +30,9 @@ class LeagueCompetition(
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
       val text:Text,
-      val subsidiary:Competition) extends Competition
+      val subsidiary:Competition) extends Competition{
+  override val typeName = league
+}
 
 
 
@@ -35,7 +45,9 @@ class CupCompetition(
       val duration:Long,
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
-      val text:Text) extends Competition
+      val text:Text) extends Competition{
+  override val typeName = cup
+}
 
 @JSExportAll
 class SubsidiaryLeagueCompetition(     
@@ -43,7 +55,9 @@ class SubsidiaryLeagueCompetition(
       override val name:String,
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
-      val text:Text) extends Competition
+      val text:Text) extends Competition{
+  override val typeName = subsidiary
+}
 
 @Data
 case class LeagueTable(id:String,retired:Boolean=false)

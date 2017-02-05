@@ -12,8 +12,13 @@ import org.chilternquizleague.maintain.component.ComponentNames
 import scala.scalajs.js
 import org.chilternquizleague.maintain.text.TextService
 import org.chilternquizleague.util.DateTimeConverters._
-import org.chilterquizleague.maintain.fixtures.FixturesService
+import org.chilternquizleague.maintain.fixtures.FixturesService
 import org.chilternquizleague.maintain.results.ResultsService
+import org.chilternquizleague.maintain.model.CompetitionType.CompetitionType
+import java.time.LocalTime
+import java.time.Duration
+import org.chilternquizleague.maintain.model.CompetitionType
+import java.util.concurrent.TimeUnit
 
 @Injectable
 @classModeScala
@@ -29,13 +34,23 @@ class CompetitionService(
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
   override protected def make() = ???
-  override protected def mapOut(comp: Dom) = ???
+  override protected def mapOut(comp: Dom) = doMapOut(comp)
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   
   override def ser(item: Dom) = item.asJson.noSpaces
   override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
 
+  def instance[A <: Competition](compType:CompetitionType):A = {
+    val comp = compType match {
+      case CompetitionType.league => makeLeague
+      case CompetitionType.cup => makeCup
+      case CompetitionType.subsidiary => makeSubsidiary
+    }
+    
+    add(comp).asInstanceOf[A]
+  }
+  
   object Helpers {
     import org.chilternquizleague.util.DateTimeConverters
     import org.chilternquizleague.maintain.domain
@@ -43,6 +58,37 @@ class CompetitionService(
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }
 
+    def makeLeague = DLC(
+      newId(),
+      "League",
+      LocalTime.of(20, 30),
+      Duration.ofSeconds(5400),
+      List(),
+      List(),
+      List(),
+      textService.getRef(textService.instance()),
+      null
+    )
+    
+    def makeCup = DCC(
+      newId(),
+      "Cup",
+      LocalTime.of(20, 30),
+      Duration.ofSeconds(5400),
+      List(),
+      List(),
+      textService.getRef(textService.instance())
+    )
+    
+    def makeSubsidiary = DSC(
+      newId(),
+      "Subsidiary",
+      List(),
+      List(),
+      textService.getRef(textService.instance())
+    )
+    
+    
     def doMapOut(dom: Dom): Observable[Competition] = {
       dom match {
         case c: DLC => Observable.zip(

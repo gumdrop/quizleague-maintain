@@ -14,7 +14,7 @@ object DateTimeConverters{
   implicit def localDateToDate(date:LocalDate):js.Date = new js.Date(js.Date parse date.toString)
   implicit def dateToLocalTime(date:js.Date):LocalTime = LocalTime parse s"${date.getHours}:${date.getMinutes}"
   implicit def localTimeToDate(date:LocalTime):js.Date = new js.Date(js.Date parse date.toString)
-  implicit def longToDuration(duration:Long):Duration = Duration.ofHours(duration)
-  implicit def durationToLong(duration:Duration):Long = duration.get(ChronoUnit.HOURS)
+  implicit def longToDuration(duration:Long):Duration = Duration.ofSeconds(duration * 3600)
+  implicit def durationToLong(duration:Duration):Long = duration.get(ChronoUnit.SECONDS) / 3600
 
 }

@@ -20,6 +20,7 @@ import org.chilternquizleague.maintain.text.TextModule
 import org.chilternquizleague.maintain.globaltext.GlobalTextModule
 import org.chilternquizleague.maintain.applicationcontext.ApplicationContextModule
 import org.chilternquizleague.maintain.season.SeasonModule
+import org.chilternquizleague.maintain.competition.CompetitionModule
 
 @NgModule(
   imports = @@[BrowserModule, FlexLayoutModule, AppRoutingModule , HttpModule,
