@@ -13,15 +13,17 @@ object CompetitionType extends Enumeration {
 }
 
 import CompetitionType._
+import scala.scalajs.js.annotation.ScalaJSDefined
 
-sealed trait Competition {
+@ScalaJSDefined
+sealed trait Competition extends js.Object {
   val id:String
   val name:String
-  val typeName:CompetitionType
+  val typeName:String
 }
 
-@JSExportAll
-class LeagueCompetition(
+@ScalaJSDefined
+class LeagueCompetition (
       override val id:String,
       override val name:String,
       val startTime:Date,
@@ -31,13 +33,13 @@ class LeagueCompetition(
       val tables:js.Array[LeagueTable],
       val text:Text,
       val subsidiary:Competition) extends Competition{
-  override val typeName = league
+  override val typeName = league.toString()
 }
 
 
 
 
-@JSExportAll
+@ScalaJSDefined
 class CupCompetition(
       override val id:String,
       override val name:String,
@@ -46,17 +48,17 @@ class CupCompetition(
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
       val text:Text) extends Competition{
-  override val typeName = cup
+  override val typeName = cup.toString()
 }
 
-@JSExportAll
+@ScalaJSDefined
 class SubsidiaryLeagueCompetition(     
       override val id:String,
       override val name:String,
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
       val text:Text) extends Competition{
-  override val typeName = subsidiary
+  override val typeName = subsidiary.toString()
 }
 
 @Data

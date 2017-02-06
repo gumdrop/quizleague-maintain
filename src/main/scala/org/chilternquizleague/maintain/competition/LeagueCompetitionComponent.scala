@@ -13,6 +13,10 @@ import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import angulate2.core.Input
+import org.chilternquizleague.maintain.text.TextEditMixin
+import org.chilternquizleague.util.Logging
+import org.chilternquizleague.maintain.text.TextEditMixin
+import angulate2.router.Router
 
 
 @Component(
@@ -22,21 +26,8 @@ import angulate2.core.Input
     <h2>League Competition Detail</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input-container>
-          <input md-input placeholder="Name" type="text"
-             required
-             [(ngModel)]="item.name" name="name">
-        </md-input-container>
-        <md-input-container>
-          <input md-input placeholder="Start Time" type="localtime"
-             required
-             [(ngModel)]="item.startTime" name="startTime">
-        </md-input-container>
-        <md-input-container>        
-          <input md-input placeholder="Duration (hours)" type="number"
-             required
-             [(ngModel)]="item.duration" name="duration">
-        </md-input-container>
+
+ 
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
      $formButtons
@@ -48,8 +39,10 @@ import angulate2.core.Input
 @classModeScala
 class LeagueCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
-                                  override val route:ActivatedRoute) extends ItemComponent[Competition]{
+                                  override val route:ActivatedRoute,
+                                  override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
    
+    override def save() = {service.cache(item);location.back()}
 
 }
     

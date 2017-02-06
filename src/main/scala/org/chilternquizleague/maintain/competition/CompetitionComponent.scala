@@ -12,6 +12,7 @@ import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
+import org.chilternquizleague.util.Logging
 
 
 @Component(
@@ -37,9 +38,9 @@ class CompetitionComponent(
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
-    extends ItemComponent[Competition]{
+    extends ItemComponent[Competition] with Logging{
   
-  
+    override def save() = {log(item, "comp save");service.cache(item);location.back()}
 
 }
     

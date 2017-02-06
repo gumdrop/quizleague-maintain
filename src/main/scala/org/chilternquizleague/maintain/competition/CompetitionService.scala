@@ -19,6 +19,7 @@ import java.time.LocalTime
 import java.time.Duration
 import org.chilternquizleague.maintain.model.CompetitionType
 import java.util.concurrent.TimeUnit
+import org.chilternquizleague.maintain.service.DirtyListService
 
 @Injectable
 @classModeScala
@@ -26,7 +27,7 @@ class CompetitionService(
     override val http: Http,
     textService: TextService,
     resultsService: ResultsService,
-    fixturesService: FixturesService) extends EntityService[Competition] with CompetitionNames {
+    fixturesService: FixturesService) extends EntityService[Competition] with DirtyListService[Competition] with CompetitionNames {
   override type U = Dom
    
   import Helpers._
@@ -48,11 +49,13 @@ class CompetitionService(
       case CompetitionType.subsidiary => makeSubsidiary
     }
     
-    add(comp).asInstanceOf[A]
+     
+    
+    log(add(comp).asInstanceOf[A],"made competition")
   }
   
   object Helpers {
-    import org.chilternquizleague.util.DateTimeConverters
+    import org.chilternquizleague.util.DateTimeConverters._
     import org.chilternquizleague.maintain.domain
     import domain.{ LeagueCompetition => DLC }
     import domain.{ CupCompetition => DCC }
@@ -96,7 +99,7 @@ class CompetitionService(
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
           get(c.subsidiary),
-          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => (new LeagueCompetition(
+          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {new LeagueCompetition(
             c.id,
             c.name,
             c.startTime,
@@ -105,7 +108,7 @@ class CompetitionService(
             results,
             js.Array(),
             text,
-            subsidiary)))
+            subsidiary)})
         case c: DCC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),

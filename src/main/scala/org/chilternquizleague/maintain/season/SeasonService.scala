@@ -32,7 +32,7 @@ class SeasonService(override val http:Http, textService:TextService, competition
         mapOutList(season.competitions, competitionService),
         (text:Text, competitions:js.Array[Competition]) => log(Season(season.id, season.startYear, season.endYear,text, competitions)))
   
-  override def save(season:Season) = {textService.save(season.text);super.save(season)}
+  override def save(season:Season) = {textService.save(season.text);competitionService.saveAllDirty;super.save(season)}
   override def flush() = {textService.flush();super.flush()}
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
