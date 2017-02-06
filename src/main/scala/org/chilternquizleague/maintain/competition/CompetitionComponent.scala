@@ -19,10 +19,11 @@ import js.Dynamic.{ global => g }
   <div>
     <h2>Competition Detail</h2>
     <form #fm="ngForm" (submit)="save()">
-      <div [ngSwitch]="item.typeName">
+      <div [ngSwitch]="'league'">
         <ql-league-competition *ngSwitchCase="league" item="item"></ql-league-competition>
         <!--ql-cup-competition *ngSwitchCase="cup"></ql-cup-competition>
         <ql-subsidiary-competition *ngSwitchCase="subsidiary"></ql-subsidiary-competition-->
+        <div *ngSwitchDefault>No match Found</div>
       </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
      $formButtons

@@ -17,6 +17,7 @@ import angulate2.common.CommonModule
 import org.chilternquizleague.maintain.competition.CompetitionComponent
 import org.chilternquizleague.maintain.competition.CompetitionModule
 import org.chilternquizleague.maintain.competition.CompetitionService
+import org.chilternquizleague.maintain.competition.LeagueCompetitionComponent
 
 
 @NgModule(
@@ -29,10 +30,10 @@ class SeasonModule
 
 @Routes(
   root = false,
-//      Route(
-//        path = "season/:seasonId/competition/:id",
-//        component = %%[CompetitionComponent]
-//      ),
+      Route(
+        path = "season/:seasonId/competition/:id/league",
+        component = %%[LeagueCompetitionComponent]
+      ),
       Route(
         path = "season/:id",
         component = %%[SeasonComponent]
