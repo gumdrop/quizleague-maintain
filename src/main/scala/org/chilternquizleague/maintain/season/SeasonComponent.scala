@@ -62,6 +62,7 @@ class SeasonComponent(
     def addCompetition(typeName:String) = item.competitions += competitionService.instance(CompetitionType.withName(typeName))
   
     def editCompetition(comp: Competition) = {
+    log(item, "season")
     service.cache(item)
     router.navigateTo("competition", comp.id)
   }

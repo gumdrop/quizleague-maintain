@@ -26,8 +26,8 @@ sealed trait Competition extends js.Object {
 class LeagueCompetition (
       override val id:String,
       override val name:String,
-      val startTime:Date,
-      val duration:Long,
+      val startTime:String,
+      val duration:Float,
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
@@ -43,8 +43,8 @@ class LeagueCompetition (
 class CupCompetition(
       override val id:String,
       override val name:String,
-      val startTime:Date,
-      val duration:Long,
+      val startTime:String,
+      val duration:Float,
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
       val text:Text) extends Competition{
