@@ -38,7 +38,7 @@ import angulate2.router.Router
         </md-input-container>
         <md-input-container>        
           <input md-input placeholder="Duration (hours)" type="number"
-             required
+             required step=".1"
              [(ngModel)]="item.duration" name="duration">
         </md-input-container>
        </div>

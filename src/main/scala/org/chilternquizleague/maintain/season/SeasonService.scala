@@ -23,14 +23,14 @@ import org.chilternquizleague.maintain.competition.CompetitionService
 class SeasonService(override val http:Http, textService:TextService, competitionService:CompetitionService) extends EntityService[Season] with SeasonNames{
   override type U = Dom
 
-  override protected def mapIn(season:Season) = Dom(season.id, season.startYear, season.endYear, textService.getRef(season.text), List())
+  override protected def mapIn(season:Season) = Dom(season.id, season.startYear, season.endYear, textService.getRef(season.text), season.competitions.map(competitionService.getRef(_)).toList)
   override protected def mapOutSparse(season:Dom) = Season(season.id, season.startYear, season.endYear, null, js.Array())
   override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()),List())
   override protected def mapOut(season:Dom) =
     Observable.zip(
         textService.get(season.text),
         mapOutList(season.competitions, competitionService),
-        (text:Text, competitions:js.Array[Competition]) => log(Season(season.id, season.startYear, season.endYear,text, competitions)))
+        (text:Text, competitions:js.Array[Competition]) => Season(season.id, season.startYear, season.endYear,text, competitions))
   
   override def save(season:Season) = {textService.save(season.text);competitionService.saveAllDirty;super.save(season)}
   override def flush() = {textService.flush();super.flush()}

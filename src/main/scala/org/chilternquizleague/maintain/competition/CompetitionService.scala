@@ -71,7 +71,7 @@ class CompetitionService(
       List(),
       List(),
       textService.getRef(textService.instance()),
-      null
+      None
     )
     
     def makeCup = DCC(
@@ -99,7 +99,7 @@ class CompetitionService(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
-          get(c.subsidiary),
+          c.subsidiary.map(get(_)).getOrElse(null),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {new LeagueCompetition(
             c.id,
             c.name,
@@ -178,7 +178,7 @@ class CompetitionService(
           l.results.map(resultsService.getRef(_)).toList,
           List(),
           textService.getRef(l.text),
-          getRef(l.subsidiary))
+          Option(getRef(l.subsidiary)))
 
         case c: CupCompetition => DCC(
           c.id,

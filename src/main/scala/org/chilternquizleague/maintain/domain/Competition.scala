@@ -30,7 +30,7 @@ case class LeagueCompetition(
   results:List[Ref[Results]],
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Ref[Competition]
+  subsidiary:Option[Ref[Competition]]
   
 ) extends Competition with MainLeagueCompetition
 
@@ -88,7 +88,7 @@ sealed trait ResultsCompetition{
  trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables
 
  trait MainLeagueCompetition extends BaseLeagueCompetition{
-  val subsidiary:Ref[Competition]
+  val subsidiary:Option[Ref[Competition]]
 }
 
  trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
