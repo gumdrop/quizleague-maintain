@@ -39,7 +39,7 @@ import org.chilternquizleague.maintain.competition.CompetitionService
         <label style="color: rgba(0,0,0,.38);">Competitions</label>
         <button md-mini-fab (click)="addCompetition('league')" type="button"><md-icon>add</md-icon></button>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let comp of item.competitions" (select)="editCompetition(comp)"><a routerLink="competition/{{comp.id}}/league">{{comp.name}}</a>
+          <md-chip *ngFor="let comp of item.competitions" ><button (click)="editCompetition(comp)" type="button">{{comp.name}}</button>
           </md-chip>
         </md-chip-list>
 
@@ -64,7 +64,7 @@ class SeasonComponent(
     def editCompetition(comp: Competition) = {
     log(item, "season")
     service.cache(item)
-    router.navigateTo("competition", comp.id)
+    router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
   }
 }
     
