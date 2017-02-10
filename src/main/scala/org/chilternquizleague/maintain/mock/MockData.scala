@@ -45,7 +45,8 @@ class MockData extends InMemoryDbService {
           "a@b.c", 
           List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
     ),
-    "season" -> js.Array()
+    "season" -> js.Array(),
+    "competition" -> js.Array()
         
   )
 }

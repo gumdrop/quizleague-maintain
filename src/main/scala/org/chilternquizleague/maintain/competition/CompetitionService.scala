@@ -49,10 +49,7 @@ class CompetitionService(
       case CompetitionType.cup => makeCup
       case CompetitionType.subsidiary => makeSubsidiary
     }
-    
-     
-    
-    log(add(comp).asInstanceOf[A],"made competition")
+    add(comp).asInstanceOf[A]
   }
   
   object Helpers {
@@ -99,7 +96,7 @@ class CompetitionService(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
-          c.subsidiary.map(get(_)).getOrElse(Observable.of(null)),
+          c.subsidiary.map(x => getSparse(x.id)).getOrElse(Observable.of(null)),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {new LeagueCompetition(
             c.id,
             c.name,

@@ -32,16 +32,24 @@ trait GetService[T] extends Logging{
   def flush() = items = Map()
   
   protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
-  protected final def getFromHttp(id:String):Observable[U] = 
-    http.get(s"$uriRoot/$id",requestOptions).
+  protected final def getFromHttp(id:String):Observable[U] = {
+    
+   log(null,s"before $uriRoot/$id")
+    
+    val res = http.get(s"$uriRoot/$id",requestOptions).
       map((r,i) => r.jsonData[js.Dynamic]).
       map((a,i) => {
         val u = unwrap(a)
         items = items + ((u.id, u))
-        u
+        
+        log(u,s"after $uriRoot/$id")
       }
     )
-  
+    
+    
+    
+    res
+  }
     
 
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B]):Observable[js.Array[B]] = 
