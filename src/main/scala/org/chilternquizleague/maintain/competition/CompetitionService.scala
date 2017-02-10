@@ -99,7 +99,7 @@ class CompetitionService(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
-          c.subsidiary.map(get(_)).getOrElse(null),
+          c.subsidiary.map(get(_)).getOrElse(Observable.of(null)),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {new LeagueCompetition(
             c.id,
             c.name,
@@ -178,7 +178,8 @@ class CompetitionService(
           l.results.map(resultsService.getRef(_)).toList,
           List(),
           textService.getRef(l.text),
-          Option(getRef(l.subsidiary)))
+          if(l.subsidiary == null) None else Option(getRef(l.subsidiary))
+        )
 
         case c: CupCompetition => DCC(
           c.id,
@@ -187,14 +188,16 @@ class CompetitionService(
           c.duration,
           c.fixtures.map(fixturesService.getRef(_)).toList,
           c.results.map(resultsService.getRef(_)).toList,
-          textService.getRef(c.text))
+          textService.getRef(c.text)
+        )
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
           s.results.map(resultsService.getRef(_)).toList,
           List(),
-          textService.getRef(s.text))
+          textService.getRef(s.text)
+        )
       }
 
     }
