@@ -7,6 +7,7 @@ import org.chilternquizleague.maintain.component.ItemComponent
 import org.chilternquizleague.maintain.component._
 import org.chilternquizleague.maintain.model._
 import scala.scalajs.js
+import js.JSConverters._
 import org.chilternquizleague.maintain.venue.VenueService
 import angulate2.ext.classModeScala
 import TemplateElements._
@@ -36,8 +37,12 @@ import org.chilternquizleague.maintain.competition.CompetitionService
              [(ngModel)]="item.endYear" name="endYear">
         </md-input-container>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-        <label style="color: rgba(0,0,0,.38);">Competitions</label>
-        <button md-mini-fab (click)="addCompetition('league')" type="button"><md-icon>add</md-icon></button>
+        <div fxLayout="row">
+          <md-select placeholder="Competitions" [(ngModel)]="selectedType" name="selectedType">  
+            <md-option *ngFor="let type of competitionTypes" [value]="type">{{type}}</md-option>
+          </md-select>
+          <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
+        </div>
         <md-chip-list selectable="true">
           <md-chip *ngFor="let comp of item.competitions" ><button (click)="editCompetition(comp)" type="button">{{comp.name}}</button>
           </md-chip>
@@ -59,11 +64,18 @@ class SeasonComponent(
     extends ItemComponent[Season] with TextEditMixin[Season] with Logging{
   
   
-    def addCompetition(typeName:String) = item.competitions += competitionService.instance(CompetitionType.withName(typeName))
+    def addCompetition(typeName:String) = {
+      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
+      item.competitions += comp
+      editCompetition(comp)
+    }
   
     def editCompetition(comp: Competition) = {
-    service.cache(item)
-    router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
-  }
+      service.cache(item)
+      router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
+    }
+    
+    lazy val competitionTypes = CompetitionType.values.map(_.toString).toJSArray
+    var selectedType:String = _
 }
     
