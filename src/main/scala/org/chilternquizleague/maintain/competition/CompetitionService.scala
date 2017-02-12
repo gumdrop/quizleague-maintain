@@ -38,6 +38,9 @@ class CompetitionService(
   override protected def make() = ???
   override protected def mapOut(comp: Dom) = doMapOut(comp)
 
+  override def save(comp:Competition) = {textService.saveAllDirty;super.save(comp)}
+
+  
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   
   override def ser(item: Dom) = item.asJson.noSpaces

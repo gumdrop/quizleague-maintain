@@ -20,6 +20,7 @@ sealed trait Competition extends js.Object {
   val id:String
   val name:String
   val typeName:String
+  val text:Text
 }
 
 @ScalaJSDefined
@@ -31,7 +32,7 @@ class LeagueCompetition (
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
-      val text:Text,
+      override val text:Text,
       val subsidiary:Competition) extends Competition{
   override val typeName = league.toString()
 }
@@ -47,7 +48,7 @@ class CupCompetition(
       val duration:Float,
       val fixtures:js.Array[Fixtures],
       val results:js.Array[Results],
-      val text:Text) extends Competition{
+      override val text:Text) extends Competition{
   override val typeName = cup.toString()
 }
 
@@ -57,7 +58,7 @@ class SubsidiaryLeagueCompetition(
       override val name:String,
       val results:js.Array[Results],
       val tables:js.Array[LeagueTable],
-      val text:Text) extends Competition{
+      override val text:Text) extends Competition{
   override val typeName = subsidiary.toString()
 }
 

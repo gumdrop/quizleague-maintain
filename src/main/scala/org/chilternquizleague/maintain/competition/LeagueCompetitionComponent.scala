@@ -55,7 +55,5 @@ class LeagueCompetitionComponent( override val service:CompetitionService,
                                   override val route:ActivatedRoute,
                                   override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
    
-    override def save() = {service.cache(item);location.back()}
-
 }
     

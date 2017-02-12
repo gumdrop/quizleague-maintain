@@ -62,9 +62,7 @@ class SeasonComponent(
     def addCompetition(typeName:String) = item.competitions += competitionService.instance(CompetitionType.withName(typeName))
   
     def editCompetition(comp: Competition) = {
-    log(item, "season before cache")
     service.cache(item)
-    log(item, "season after cache")
     router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
   }
 }

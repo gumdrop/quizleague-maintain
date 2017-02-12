@@ -12,7 +12,7 @@ trait PutService[T] {
   
   def save(item: T) = saveDom(log(mapIn(item), "save - mapIn : "))
   
-  protected def saveDom(i:U) = {
+  private[service] def saveDom(i:U) = {
     http.put(s"$uriRoot/${i.id}", wrap(i), requestOptions)
     log(i,s"saved $uriRoot/${i.id} to http")
     deCache(i)

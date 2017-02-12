@@ -44,7 +44,7 @@ trait GetService[T] extends Logging{
         
         log(u,s"after $uriRoot/$id")
       }
-    )
+    ).onError((x,t) => Observable.of(null).asInstanceOf[Observable[U]])
     
     
     

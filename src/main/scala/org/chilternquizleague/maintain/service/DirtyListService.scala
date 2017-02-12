@@ -12,9 +12,9 @@ trait DirtyListService[T] extends PutService[T]{
     super.cache(item)
   }
   
-  override def save(item: T) = {
-    dirtyIds = dirtyIds - getId(item)
-    super.save(item)
+  override def deCache(item: U) = {
+    dirtyIds = dirtyIds - item.id
+    super.deCache(item)
   }
   
   override def flush() = {

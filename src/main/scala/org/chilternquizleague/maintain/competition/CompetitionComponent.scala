@@ -40,7 +40,6 @@ class CompetitionComponent(
     val router:Router)
     extends ItemComponent[Competition] with Logging{
   
-    override def save() = {log(item, "comp save");service.cache(item);location.back()}
-
+    override def cancel():Unit = location.back()
 }
     
