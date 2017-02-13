@@ -11,7 +11,7 @@ import scala.scalajs.js.annotation.ScalaJSDefined
 import org.chilternquizleague.domain.Entity
 import org.chilternquizleague.web.util._
 import org.chilternquizleague.domain.Ref
-import org.chilternquizleague.maintain.component.ComponentNames
+import org.chilternquizleague.web.maintain.component.ComponentNames
 
 trait EntityService[T] extends GetService[T] with PutService[T]{
     this:ComponentNames =>

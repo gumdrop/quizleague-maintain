@@ -1,6 +1,6 @@
 package org.chilternquizleague.web.service
 
-import org.chilternquizleague.maintain.component.ComponentNames
+import org.chilternquizleague.web.maintain.component.ComponentNames
 
 trait DirtyListService[T] extends PutService[T]{
   this:GetService[T] with ComponentNames =>

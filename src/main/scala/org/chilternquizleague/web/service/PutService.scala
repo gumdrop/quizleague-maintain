@@ -3,7 +3,7 @@ package org.chilternquizleague.web.service
 import scalajs.js
 import org.chilternquizleague.web.util.UUID
 import org.chilternquizleague.domain.Ref
-import org.chilternquizleague.maintain.component.ComponentNames
+import org.chilternquizleague.web.maintain.component.ComponentNames
 
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
