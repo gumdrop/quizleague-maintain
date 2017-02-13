@@ -11,6 +11,7 @@ import angulate2.http.Http
 import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.web.maintain.component.ComponentNames
+import org.chilternquizleague.web.service.season._
 
 
 import angulate2.common.CommonModule
@@ -18,6 +19,8 @@ import org.chilternquizleague.web.maintain.competition.CompetitionComponent
 import org.chilternquizleague.web.maintain.competition.CompetitionModule
 import org.chilternquizleague.web.maintain.competition.CompetitionService
 import org.chilternquizleague.web.maintain.competition.LeagueCompetitionComponent
+import angulate2.ext.classModeScala
+import org.chilternquizleague.web.maintain.text.TextService
 
 
 @NgModule(
@@ -48,4 +51,11 @@ class SeasonRoutesModule
 trait SeasonNames extends ComponentNames{
   override val typeName = "season"
 }
+
+@Injectable
+@classModeScala
+class SeasonService(override val http: Http, 
+    override val textService: TextService, 
+    override val competitionService: CompetitionService) extends SeasonGetService with SeasonPutService 
+
 

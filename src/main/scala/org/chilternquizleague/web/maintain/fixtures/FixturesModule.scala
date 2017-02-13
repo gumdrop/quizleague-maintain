@@ -16,8 +16,8 @@ import org.chilternquizleague.web.maintain.component.ComponentNames
 import angulate2.common.CommonModule
 import org.chilternquizleague.web.maintain.competition.CompetitionComponent
 import org.chilternquizleague.web.maintain.competition.CompetitionModule
-import org.chilternquizleague.web.maintain.competition.CompetitionService
-
+import org.chilternquizleague.web.service.fixtures._
+import angulate2.ext.classModeScala
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -39,4 +39,9 @@ class FixturesModule
 trait FixturesNames extends ComponentNames{
   override val typeName = "fixtures"
 }
+
+@Injectable
+@classModeScala
+class FixturesService(override val http:Http) extends FixturesGetService with FixturesPutService
+
 

@@ -8,15 +8,14 @@ import angulate2.router.{Route,RouterModule}
 import scala.scalajs.js
 
 import angulate2.http.Http
-import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.web.maintain.component.ComponentNames
 
 
 import angulate2.common.CommonModule
-import org.chilternquizleague.web.maintain.competition.CompetitionComponent
-import org.chilternquizleague.web.maintain.competition.CompetitionModule
-import org.chilternquizleague.web.maintain.competition.CompetitionService
+import org.chilternquizleague.web.service.results._
+
+import angulate2.ext.classModeScala
 
 
 @NgModule(
@@ -39,4 +38,9 @@ class ResultsModule
 trait ResultsNames extends ComponentNames{
   override val typeName = "results"
 }
+
+@Injectable
+@classModeScala
+class ResultsService(override val http: Http) extends ResultsGetService with ResultsPutService
+
 

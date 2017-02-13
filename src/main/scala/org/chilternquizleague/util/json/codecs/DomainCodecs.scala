@@ -1,4 +1,4 @@
-package org.chilternquizleague.web.util.json.codecs
+package org.chilternquizleague.util.json.codecs
 
 import org.chilternquizleague.domain._
 

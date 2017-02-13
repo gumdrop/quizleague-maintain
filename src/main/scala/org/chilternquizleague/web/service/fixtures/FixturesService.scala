@@ -1,4 +1,4 @@
-package org.chilternquizleague.web.maintain.fixtures
+package org.chilternquizleague.web.service.fixtures
 
 
 import angulate2.std.Injectable
@@ -16,25 +16,32 @@ import org.chilternquizleague.web.maintain.text.TextService
 import java.time.Year
 import org.chilternquizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
+import org.chilternquizleague.web.service._
+import org.chilternquizleague.web.maintain.fixtures.FixturesNames
 
 
 
-@Injectable
-@classModeScala
-class FixturesService(override val http:Http) extends EntityService[Model] with FixturesNames{
-  override type U = Dom
+trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
+    override type U = Dom
 
-  override protected def mapIn(model:Model) = ???
   override protected def mapOutSparse(dom:Dom) = ???
-  override protected def make() = ???
   override protected def mapOut(dom:Dom) = ???
   
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import org.chilternquizleague.web.util.json.codecs.ScalaTimeCodecs._
-  override def ser(item:Dom) = item.asJson.noSpaces
+  import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
   override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
  
+}
+
+trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
+    override protected def mapIn(model:Model) = ???
+  override protected def make() = ???
+  
+  
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+  import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
+  override def ser(item:Dom) = item.asJson.noSpaces
 
 }
 

@@ -6,8 +6,8 @@ import java.time.LocalTime
 import java.time.Duration
 import io.circe.generic.JsonCodec
 
-import org.chilternquizleague.web.util.json.codecs.ScalaTimeCodecs._
-import org.chilternquizleague.web.util.json.codecs.DomainCodecs._
+import org.chilternquizleague.util.json.codecs.ScalaTimeCodecs._
+import org.chilternquizleague.util.json.codecs.DomainCodecs._
 
 
 @JsonCodec

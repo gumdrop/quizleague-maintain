@@ -1,4 +1,4 @@
-package org.chilternquizleague.web.maintain.competition
+package org.chilternquizleague.web.service.competition
 
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
@@ -10,51 +10,34 @@ import org.chilternquizleague.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.web.maintain.component.ComponentNames
 import scala.scalajs.js
-import org.chilternquizleague.web.maintain.text.TextService
 import org.chilternquizleague.web.util.DateTimeConverters._
-import org.chilternquizleague.web.maintain.fixtures.FixturesService
-import org.chilternquizleague.web.maintain.results.ResultsService
+import org.chilternquizleague.web.service.fixtures._
+import org.chilternquizleague.web.service.results._
 import org.chilternquizleague.web.model.CompetitionType.CompetitionType
 import java.time.LocalTime
 import java.time.Duration
 import org.chilternquizleague.web.model.CompetitionType
 import java.util.concurrent.TimeUnit
-import org.chilternquizleague.web.service.DirtyListService
 import java.time.temporal.ChronoUnit
+import org.chilternquizleague.web.service._
+import org.chilternquizleague.web.service.text._
+import org.chilternquizleague.web.maintain.competition.CompetitionNames
 
-@Injectable
-@classModeScala
-class CompetitionService(
-    override val http: Http,
-    textService: TextService,
-    resultsService: ResultsService,
-    fixturesService: FixturesService) extends EntityService[Competition] with DirtyListService[Competition] with CompetitionNames {
+trait CompetitionGetService extends GetService[Competition] with CompetitionNames {
   override type U = Dom
-   
-  import Helpers._
 
-  override protected def mapIn(comp: Competition) = doMapIn(comp)
+  val textService: TextGetService
+  val resultsService: ResultsGetService
+  val fixturesService: FixturesGetService
+
+  import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
-  override protected def make() = ???
   override protected def mapOut(comp: Dom) = doMapOut(comp)
 
-  override def save(comp:Competition) = {textService.saveAllDirty;super.save(comp)}
-
-  
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  
-  override def ser(item: Dom) = item.asJson.noSpaces
+
   override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
 
-  def instance[A <: Competition](compType:CompetitionType):A = {
-    val comp = compType match {
-      case CompetitionType.league => makeLeague
-      case CompetitionType.cup => makeCup
-      case CompetitionType.subsidiary => makeSubsidiary
-    }
-    add(comp).asInstanceOf[A]
-  }
-  
   object Helpers {
     import org.chilternquizleague.web.util.DateTimeConverters._
     import org.chilternquizleague.domain
@@ -62,37 +45,6 @@ class CompetitionService(
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }
 
-    def makeLeague = DLC(
-      newId(),
-      "League",
-      LocalTime.of(20, 30),
-      Duration.ofSeconds(5400),
-      List(),
-      List(),
-      List(),
-      textService.getRef(textService.instance()),
-      None
-    )
-    
-    def makeCup = DCC(
-      newId(),
-      "Cup",
-      LocalTime.of(20, 30),
-      Duration.ofSeconds(5400),
-      List(),
-      List(),
-      textService.getRef(textService.instance())
-    )
-    
-    def makeSubsidiary = DSC(
-      newId(),
-      "Subsidiary",
-      List(),
-      List(),
-      textService.getRef(textService.instance())
-    )
-    
-    
     def doMapOut(dom: Dom): Observable[Competition] = {
       dom match {
         case c: DLC => Observable.zip(
@@ -100,16 +52,18 @@ class CompetitionService(
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
           c.subsidiary.map(x => getSparse(x.id)).getOrElse(Observable.of(null)),
-          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {new LeagueCompetition(
-            c.id,
-            c.name,
-            c.startTime,
-            c.duration,
-            fixtures,
-            results,
-            js.Array(),
-            text,
-            subsidiary)})
+          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {
+            new LeagueCompetition(
+              c.id,
+              c.name,
+              c.startTime,
+              c.duration,
+              fixtures,
+              results,
+              js.Array(),
+              text,
+              subsidiary)
+          })
         case c: DCC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
@@ -122,7 +76,7 @@ class CompetitionService(
             fixtures,
             results,
             text)))
-            
+
         case c: DSC => Observable.zip(
           mapOutList(c.results, resultsService),
           textService.get(c.text.id),
@@ -132,10 +86,9 @@ class CompetitionService(
             results,
             js.Array(),
             text)))
-      
+
       }
 
-      
     }
 
     def doMapOutSparse(dom: Dom) = {
@@ -167,6 +120,68 @@ class CompetitionService(
       }
     }
 
+  }
+
+}
+
+trait CompetitionPutService extends CompetitionGetService with DirtyListService[Competition] {
+  import PutHelpers._
+  override val textService: TextPutService
+  override val resultsService: ResultsPutService
+  override val fixturesService: FixturesPutService
+
+  override protected def mapIn(comp: Competition) = doMapIn(comp)
+  override protected def make() = ???
+
+  override def save(comp: Competition) = { textService.saveAllDirty; super.save(comp) }
+
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+
+  override def ser(item: Dom) = item.asJson.noSpaces
+
+  def instance[A <: Competition](compType: CompetitionType): A = {
+    val comp = compType match {
+      case CompetitionType.league => makeLeague
+      case CompetitionType.cup => makeCup
+      case CompetitionType.subsidiary => makeSubsidiary
+    }
+    add(comp).asInstanceOf[A]
+  }
+
+  object PutHelpers {
+    import org.chilternquizleague.web.util.DateTimeConverters._
+    import org.chilternquizleague.domain
+    import domain.{ LeagueCompetition => DLC }
+    import domain.{ CupCompetition => DCC }
+    import domain.{ SubsidiaryLeagueCompetition => DSC }
+
+    def makeLeague = DLC(
+      newId(),
+      "League",
+      LocalTime.of(20, 30),
+      Duration.ofSeconds(5400),
+      List(),
+      List(),
+      List(),
+      textService.getRef(textService.instance()),
+      None)
+
+    def makeCup = DCC(
+      newId(),
+      "Cup",
+      LocalTime.of(20, 30),
+      Duration.ofSeconds(5400),
+      List(),
+      List(),
+      textService.getRef(textService.instance()))
+
+    def makeSubsidiary = DSC(
+      newId(),
+      "Subsidiary",
+      List(),
+      List(),
+      textService.getRef(textService.instance()))
+
     def doMapIn(comp: Competition) = {
       comp match {
         case l: LeagueCompetition => DLC(
@@ -178,8 +193,7 @@ class CompetitionService(
           l.results.map(resultsService.getRef(_)).toList,
           List(),
           textService.getRef(l.text),
-          if(l.subsidiary == null) None else Option(getRef(l.subsidiary))
-        )
+          if (l.subsidiary == null) None else Option(getRef(l.subsidiary)))
 
         case c: CupCompetition => DCC(
           c.id,
@@ -188,22 +202,22 @@ class CompetitionService(
           c.duration,
           c.fixtures.map(fixturesService.getRef(_)).toList,
           c.results.map(resultsService.getRef(_)).toList,
-          textService.getRef(c.text)
-        )
+          textService.getRef(c.text))
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
           s.results.map(resultsService.getRef(_)).toList,
           List(),
-          textService.getRef(s.text)
-        )
+          textService.getRef(s.text))
       }
 
     }
 
   }
 }
+
+
 
 
 
