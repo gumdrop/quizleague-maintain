@@ -3,9 +3,9 @@ package org.chilternquizleague.maintain.user
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model.User
-import org.chilternquizleague.maintain.domain.{User => DomUser}
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model.User
+import org.chilternquizleague.domain.{User => DomUser}
 import rxjs.Observable
 
 @Injectable

@@ -4,19 +4,19 @@ package org.chilternquizleague.maintain.applicationcontext
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.domain.{ApplicationContext => Dom}
-import org.chilternquizleague.maintain.domain.{EmailAlias => DomEmailAlias}
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model._
+import org.chilternquizleague.domain.{ApplicationContext => Dom}
+import org.chilternquizleague.domain.{EmailAlias => DomEmailAlias}
 import org.chilternquizleague.maintain.venue.VenueService
-import org.chilternquizleague.maintain.domain.Ref
+import org.chilternquizleague.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.user.UserService
 import scala.scalajs.js
 import org.chilternquizleague.maintain.text.TextService
 import org.chilternquizleague.maintain.globaltext.GlobalTextService
-import org.chilternquizleague.util.Logging
+import org.chilternquizleague.web.util.Logging
 
 
 @Injectable

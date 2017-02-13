@@ -5,14 +5,14 @@ import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component.ItemComponent
 import org.chilternquizleague.maintain.component._
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import scala.scalajs.js
 import angulate2.ext.classModeScala
 import TemplateElements._
 import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
-import org.chilternquizleague.util.Logging
+import org.chilternquizleague.web.util.Logging
 
 
 @Component(

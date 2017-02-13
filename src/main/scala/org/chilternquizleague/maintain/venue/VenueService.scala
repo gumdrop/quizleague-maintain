@@ -3,9 +3,9 @@ package org.chilternquizleague.maintain.venue
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model.Venue
-import org.chilternquizleague.maintain.domain.{Venue => DomVenue}
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model.Venue
+import org.chilternquizleague.domain.{Venue => DomVenue}
 import rxjs.Observable
 
 @Injectable

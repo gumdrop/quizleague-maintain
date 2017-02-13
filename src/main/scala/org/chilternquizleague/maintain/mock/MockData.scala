@@ -4,8 +4,8 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.ScalaJSDefined
 import angulate2.ext.inMemoryWebApi.InMemoryDbService
-import org.chilternquizleague.maintain.domain._
-import org.chilternquizleague.util.UUID
+import org.chilternquizleague.domain._
+import org.chilternquizleague.web.util.UUID
 import js.Dynamic.literal
 
 

@@ -2,7 +2,7 @@ package org.chilternquizleague.maintain.venue
 
 import angulate2.std._
 import angulate2.router.ActivatedRoute
-import org.chilternquizleague.maintain.model.Venue
+import org.chilternquizleague.web.model.Venue
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component._
 import scalajs.js

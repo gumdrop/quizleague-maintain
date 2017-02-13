@@ -5,7 +5,7 @@ import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component.ItemComponent
 import org.chilternquizleague.maintain.component._
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import scala.scalajs.js
 import org.chilternquizleague.maintain.venue.VenueService
 import angulate2.ext.classModeScala

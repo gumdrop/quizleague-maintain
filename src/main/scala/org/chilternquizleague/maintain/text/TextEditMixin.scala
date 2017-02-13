@@ -1,8 +1,8 @@
 package org.chilternquizleague.maintain.text
 
 import org.chilternquizleague.maintain.component.ItemComponent
-import org.chilternquizleague.maintain.domain.Entity
-import org.chilternquizleague.maintain.model.Text
+import org.chilternquizleague.domain.Entity
+import org.chilternquizleague.web.model.Text
 import angulate2.router.Router
 import scala.scalajs.js.annotation.JSExport
 

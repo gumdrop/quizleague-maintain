@@ -8,7 +8,7 @@ import angulate2.router.{Route,RouterModule}
 import scala.scalajs.js
 
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.component.ComponentNames
 

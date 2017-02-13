@@ -1,6 +1,6 @@
 package org.chilternquizleague.maintain.component
 
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.web.service.EntityService
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import scala.scalajs.js

@@ -1,15 +1,15 @@
 package org.chilternquizleague.maintain.venue
 
 import angulate2.std._
-import org.chilternquizleague.maintain.model.Venue
+import org.chilternquizleague.web.model.Venue
 
 import scala.scalajs.js
 import js.JSConverters._
-import org.chilternquizleague.util.UUID
+import org.chilternquizleague.web.util.UUID
 import angulate2.router.Router
 import org.chilternquizleague.maintain.component.ListComponent
-import org.chilternquizleague.util.UUID
-import org.chilternquizleague.maintain.model.Venue
+import org.chilternquizleague.web.util.UUID
+import org.chilternquizleague.web.model.Venue
 import angulate2.ext.classModeScala
 
 @Component(

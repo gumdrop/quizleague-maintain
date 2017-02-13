@@ -4,11 +4,11 @@ import angulate2.std._
 
 import scala.scalajs.js
 import js.JSConverters._
-import org.chilternquizleague.util.UUID
+import org.chilternquizleague.web.util.UUID
 import angulate2.router.Router
 import org.chilternquizleague.maintain.component.ListComponent
-import org.chilternquizleague.util.UUID
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.util.UUID
+import org.chilternquizleague.web.model._
 import angulate2.ext.classModeScala
 
 @Component(

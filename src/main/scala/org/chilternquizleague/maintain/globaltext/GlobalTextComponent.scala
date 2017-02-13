@@ -2,14 +2,14 @@ package org.chilternquizleague.maintain.globaltext
 
 import angulate2.std._
 import angulate2.router.ActivatedRoute
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component._
 import scalajs.js
 import angulate2.ext.classModeScala
 import TemplateElements._
 import angulate2.router.Router
-import org.chilternquizleague.util.Logging
+import org.chilternquizleague.web.util.Logging
 
 @Component(
   selector = "ql-global-text",

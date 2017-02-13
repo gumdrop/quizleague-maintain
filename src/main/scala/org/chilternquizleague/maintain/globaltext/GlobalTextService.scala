@@ -3,11 +3,11 @@ package org.chilternquizleague.maintain.globaltext
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.domain.{GlobalText => Dom}
-import org.chilternquizleague.maintain.domain.{Ref => DomRef}
-import org.chilternquizleague.maintain.domain.{Text => DomText}
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model._
+import org.chilternquizleague.domain.{GlobalText => Dom}
+import org.chilternquizleague.domain.{Ref => DomRef}
+import org.chilternquizleague.domain.{Text => DomText}
 import rxjs.Observable
 import org.chilternquizleague.maintain.text.TextService
 import scalajs.js

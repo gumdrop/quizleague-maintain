@@ -2,7 +2,7 @@ package org.chilternquizleague.maintain.text
 
 import angulate2.std._
 import angulate2.router.ActivatedRoute
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component._
 import scalajs.js

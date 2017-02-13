@@ -4,11 +4,11 @@ package org.chilternquizleague.maintain.team
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.domain.{Team => DomTeam}
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model._
+import org.chilternquizleague.domain.{Team => DomTeam}
 import org.chilternquizleague.maintain.venue.VenueService
-import org.chilternquizleague.maintain.domain.Ref
+import org.chilternquizleague.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
 import org.chilternquizleague.maintain.user.UserService

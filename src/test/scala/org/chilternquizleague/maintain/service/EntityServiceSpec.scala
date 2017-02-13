@@ -1,4 +1,4 @@
-package org.chilternquizleague.maintain.service
+package org.chilternquizleague.web.service
 
 
 import collection.mutable.Stack

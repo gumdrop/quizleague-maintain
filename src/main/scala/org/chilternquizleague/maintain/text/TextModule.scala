@@ -7,11 +7,11 @@ import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
-import org.chilternquizleague.maintain.model.Venue
+import org.chilternquizleague.web.model.Venue
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
-import org.chilternquizleague.util.UUID
+import org.chilternquizleague.web.util.UUID
 import org.chilternquizleague.maintain.component.ComponentNames
 
 import angulate2.ext.classModeScala

@@ -1,6 +1,6 @@
 package org.chilternquizleague.maintain.text
 
-import org.chilternquizleague.maintain.model.Text
+import org.chilternquizleague.web.model.Text
 import angulate2.std.Input
 import angulate2.std.Component
 

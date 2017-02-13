@@ -3,23 +3,23 @@ package org.chilternquizleague.maintain.competition
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
-import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.domain.{ Competition => Dom }
-import org.chilternquizleague.maintain.domain.Ref
+import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.model._
+import org.chilternquizleague.domain.{ Competition => Dom }
+import org.chilternquizleague.domain.Ref
 import rxjs.Observable
 import org.chilternquizleague.maintain.component.ComponentNames
 import scala.scalajs.js
 import org.chilternquizleague.maintain.text.TextService
-import org.chilternquizleague.util.DateTimeConverters._
+import org.chilternquizleague.web.util.DateTimeConverters._
 import org.chilternquizleague.maintain.fixtures.FixturesService
 import org.chilternquizleague.maintain.results.ResultsService
-import org.chilternquizleague.maintain.model.CompetitionType.CompetitionType
+import org.chilternquizleague.web.model.CompetitionType.CompetitionType
 import java.time.LocalTime
 import java.time.Duration
-import org.chilternquizleague.maintain.model.CompetitionType
+import org.chilternquizleague.web.model.CompetitionType
 import java.util.concurrent.TimeUnit
-import org.chilternquizleague.maintain.service.DirtyListService
+import org.chilternquizleague.web.service.DirtyListService
 import java.time.temporal.ChronoUnit
 
 @Injectable
@@ -56,8 +56,8 @@ class CompetitionService(
   }
   
   object Helpers {
-    import org.chilternquizleague.util.DateTimeConverters._
-    import org.chilternquizleague.maintain.domain
+    import org.chilternquizleague.web.util.DateTimeConverters._
+    import org.chilternquizleague.domain
     import domain.{ LeagueCompetition => DLC }
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }

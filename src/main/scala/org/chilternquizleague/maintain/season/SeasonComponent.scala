@@ -5,7 +5,7 @@ import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import org.chilternquizleague.maintain.component.ItemComponent
 import org.chilternquizleague.maintain.component._
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import scala.scalajs.js
 import js.JSConverters._
 import org.chilternquizleague.maintain.venue.VenueService
@@ -15,8 +15,8 @@ import org.chilternquizleague.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import org.chilternquizleague.maintain.text.TextEditMixin
-import org.chilternquizleague.util.Logging
-import org.chilternquizleague.maintain.model.CompetitionType
+import org.chilternquizleague.web.util.Logging
+import org.chilternquizleague.web.model.CompetitionType
 import org.chilternquizleague.maintain.competition.CompetitionService
 
 @Component(

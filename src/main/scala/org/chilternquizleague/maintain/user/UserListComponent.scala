@@ -1,7 +1,7 @@
 package org.chilternquizleague.maintain.user
 
 import angulate2.std._
-import org.chilternquizleague.maintain.model._
+import org.chilternquizleague.web.model._
 import scala.scalajs.js
 import angulate2.router.Router
 import org.chilternquizleague.maintain.component.ListComponent

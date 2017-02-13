@@ -6,10 +6,10 @@ import angulate2.forms.FormsModule
 import angulate2.router.{Route,RouterModule}
 
 import scala.scalajs.js
-import org.chilternquizleague.maintain.model._
-import org.chilternquizleague.maintain.domain.{Team => DomTeam}
+import org.chilternquizleague.web.model._
+import org.chilternquizleague.domain.{Team => DomTeam}
 import angulate2.http.Http
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.maintain.component.ComponentNames
 

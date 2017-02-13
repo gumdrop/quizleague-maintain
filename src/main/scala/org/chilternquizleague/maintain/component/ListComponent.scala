@@ -3,8 +3,8 @@ package org.chilternquizleague.maintain.component
 import angulate2.core.OnInit
 import scala.scalajs.js
 import js.JSConverters._
-import org.chilternquizleague.util.UUID
-import org.chilternquizleague.maintain.service.EntityService
+import org.chilternquizleague.web.util.UUID
+import org.chilternquizleague.web.service.EntityService
 import angulate2.router.Router
 import js.annotation.ScalaJSDefined
 import scala.scalajs.js.annotation.JSExport
