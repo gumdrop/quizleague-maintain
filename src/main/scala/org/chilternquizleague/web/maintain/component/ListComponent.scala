@@ -9,11 +9,13 @@ import angulate2.router.Router
 import js.annotation.ScalaJSDefined
 import scala.scalajs.js.annotation.JSExport
 import js.Dynamic.{ global => g }
+import org.chilternquizleague.web.service.GetService
+import org.chilternquizleague.web.service.PutService
 
 
 trait ListComponent[T] extends OnInit{
   this:ComponentNames =>
-  val service:EntityService[T]
+  val service:GetService[T] with PutService[T]
   val router:Router
   
   @JSExport

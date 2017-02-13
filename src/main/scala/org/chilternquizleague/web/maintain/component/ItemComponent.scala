@@ -7,9 +7,11 @@ import scala.scalajs.js
 import js.annotation.ScalaJSDefined
 import angulate2.core.OnInit
 import js.annotation.JSExport
+import org.chilternquizleague.web.service.PutService
+import org.chilternquizleague.web.service.GetService
 
 trait ItemComponent[T] extends OnInit{
-  val service:EntityService[T]
+  val service:GetService[T] with PutService[T]
   val route:ActivatedRoute
   val location:Location
   
