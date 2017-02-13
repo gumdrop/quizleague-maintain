@@ -9,7 +9,7 @@ import angulate2.router.{Route,RouterModule}
 import scala.scalajs.js
 import org.chilternquizleague.web.model.Venue
 import angulate2.http.Http
-import org.chilternquizleague.web.service.EntityService
+import org.chilternquizleague.web.service.user._
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.web.util.UUID
 import org.chilternquizleague.web.maintain.component.ComponentNames
@@ -44,4 +44,8 @@ class UserRoutesModule
 trait UserNames extends ComponentNames{
   override val typeName = "user"
 }
+
+@Injectable
+@classModeScala
+class UserService(override val http:Http) extends UserGetService with UserPutService
 

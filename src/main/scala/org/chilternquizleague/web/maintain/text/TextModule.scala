@@ -18,6 +18,7 @@ import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
 import rxjs.Observable
 import angulate2.router.RouterModule
+import org.chilternquizleague.web.service.text._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, TextRoutesModule],
@@ -41,3 +42,6 @@ trait TextNames extends ComponentNames{
   override val typeName = "text"
 }
 
+@Injectable
+@classModeScala
+class TextService(override val http:Http) extends TextGetService with TextPutService

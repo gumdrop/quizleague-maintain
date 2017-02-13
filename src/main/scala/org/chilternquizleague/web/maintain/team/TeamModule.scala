@@ -15,6 +15,10 @@ import org.chilternquizleague.web.maintain.component.ComponentNames
 
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
+import org.chilternquizleague.web.service.team._
+import org.chilternquizleague.web.maintain.text.TextService
+import org.chilternquizleague.web.maintain.venue.VenueService
+import org.chilternquizleague.web.maintain.user.UserService
 
 
 @NgModule(
@@ -41,4 +45,11 @@ class TeamRoutesModule
 trait TeamNames extends ComponentNames{
   override val typeName = "team"
 }
+
+@Injectable
+@classModeScala
+class TeamService(override val http:Http, 
+    override val textService:TextService, 
+    override val venueService:VenueService,
+    override val userService:UserService) extends TeamGetService with TeamPutService
 

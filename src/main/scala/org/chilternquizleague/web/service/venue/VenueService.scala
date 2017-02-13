@@ -26,8 +26,8 @@ trait VenueGetService extends GetService[Venue] with VenueNames {
 
 }
 
-trait VenuePutService extends VenueGetService with PutService[Venue] {
-  override type U = DomVenue
+trait VenuePutService extends PutService[Venue] with VenueGetService {
+
   override protected def make(): DomVenue = DomVenue(newId(), "", None, None, None, None)
 
   override protected def mapIn(venue: Venue) = {
