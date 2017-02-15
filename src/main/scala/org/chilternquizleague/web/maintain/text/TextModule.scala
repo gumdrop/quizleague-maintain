@@ -1,6 +1,7 @@
 package org.chilternquizleague.web.maintain.text
 
 import angulate2.std._
+
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
 import angulate2.platformBrowser.BrowserModule
@@ -19,6 +20,7 @@ import angulate2.common.CommonModule
 import rxjs.Observable
 import angulate2.router.RouterModule
 import org.chilternquizleague.web.service.text._
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, TextRoutesModule],
@@ -44,4 +46,4 @@ trait TextNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class TextService(override val http:Http) extends TextGetService with TextPutService
+class TextService(override val http:Http) extends TextGetService with TextPutService with ServiceRoot

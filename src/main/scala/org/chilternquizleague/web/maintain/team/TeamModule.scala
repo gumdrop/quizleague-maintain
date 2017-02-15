@@ -1,6 +1,7 @@
 package org.chilternquizleague.web.maintain.team
 
 import angulate2.std._
+
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
 import angulate2.router.{Route,RouterModule}
@@ -19,7 +20,7 @@ import org.chilternquizleague.web.service.team._
 import org.chilternquizleague.web.maintain.text.TextService
 import org.chilternquizleague.web.maintain.venue.VenueService
 import org.chilternquizleague.web.maintain.user.UserService
-
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule],
@@ -51,5 +52,5 @@ trait TeamNames extends ComponentNames{
 class TeamService(override val http:Http, 
     override val textService:TextService, 
     override val venueService:VenueService,
-    override val userService:UserService) extends TeamGetService with TeamPutService
+    override val userService:UserService) extends TeamGetService with TeamPutService with ServiceRoot
 

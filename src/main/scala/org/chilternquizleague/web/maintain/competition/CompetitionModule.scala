@@ -13,6 +13,7 @@ import org.chilternquizleague.web.service.text._
 import org.chilternquizleague.web.service.competition._
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.web.maintain.component.ComponentNames
+import org.chilternquizleague.web.maintain._
 
 import angulate2.common.CommonModule
 import org.chilternquizleague.web.maintain.results.ResultsModule
@@ -46,6 +47,6 @@ class CompetitionService(
     override val http: Http,
     override val textService: TextService,
     override val resultsService: ResultsService,
-    override val fixturesService: FixturesService) extends CompetitionGetService with CompetitionPutService
+    override val fixturesService: FixturesService) extends CompetitionGetService with CompetitionPutService with ServiceRoot
 
 

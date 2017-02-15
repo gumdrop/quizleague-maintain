@@ -21,6 +21,7 @@ import rxjs.Observable
 import angulate2.router.RouterModule
 import angulate2.std.Injectable
 import angulate2.ext.classModeScala
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, GlobalTextRoutesModule],
@@ -50,6 +51,6 @@ trait GlobalTextNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class GlobalTextService(override val http:Http, val textService:TextService) extends GlobalTextGetService with GlobalTextPutService
+class GlobalTextService(override val http:Http, val textService:TextService) extends GlobalTextGetService with GlobalTextPutService  with ServiceRoot
 
 

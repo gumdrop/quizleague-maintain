@@ -18,7 +18,7 @@ import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
 import rxjs.Observable
 import org.chilternquizleague.web.service.venue.VenuePutService
-
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
@@ -48,5 +48,5 @@ trait VenueNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class VenueService(override val http: Http) extends VenuePutService
+class VenueService(override val http: Http) extends VenuePutService with ServiceRoot
 

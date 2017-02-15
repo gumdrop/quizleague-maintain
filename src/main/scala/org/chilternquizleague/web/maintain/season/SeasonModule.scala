@@ -21,6 +21,7 @@ import org.chilternquizleague.web.maintain.competition.CompetitionService
 import org.chilternquizleague.web.maintain.competition.LeagueCompetitionComponent
 import angulate2.ext.classModeScala
 import org.chilternquizleague.web.maintain.text.TextService
+import org.chilternquizleague.web.maintain._
 
 
 @NgModule(
@@ -56,6 +57,6 @@ trait SeasonNames extends ComponentNames{
 @classModeScala
 class SeasonService(override val http: Http, 
     override val textService: TextService, 
-    override val competitionService: CompetitionService) extends SeasonGetService with SeasonPutService 
+    override val competitionService: CompetitionService) extends SeasonGetService with SeasonPutService with ServiceRoot 
 
 

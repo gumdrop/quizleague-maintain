@@ -17,7 +17,9 @@ trait GetService[T] extends Logging{
   this:ComponentNames =>
   type U <: Entity
   
-  lazy val uriRoot = s"entities/$typeName"
+  val serviceRoot:String
+  
+  lazy val uriRoot = s"$serviceRoot/$typeName"
   
   val http:Http
   private[service] var items:Map[String,U] = Map()

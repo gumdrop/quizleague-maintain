@@ -18,6 +18,7 @@ import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
 import rxjs.Observable
 import angulate2.router.RouterModule
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, UserRoutesModule],
@@ -47,5 +48,5 @@ trait UserNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class UserService(override val http:Http) extends UserGetService with UserPutService
+class UserService(override val http:Http) extends UserGetService with UserPutService with ServiceRoot
 

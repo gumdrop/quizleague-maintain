@@ -16,7 +16,7 @@ import angulate2.common.CommonModule
 import org.chilternquizleague.web.service.results._
 
 import angulate2.ext.classModeScala
-
+import org.chilternquizleague.web.maintain._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -41,6 +41,6 @@ trait ResultsNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class ResultsService(override val http: Http) extends ResultsGetService with ResultsPutService
+class ResultsService(override val http: Http) extends ResultsGetService with ResultsPutService with ServiceRoot
 
 

@@ -12,7 +12,7 @@ import org.chilternquizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import org.chilternquizleague.web.maintain.component.ComponentNames
 
-
+import org.chilternquizleague.web.maintain._
 import angulate2.common.CommonModule
 import org.chilternquizleague.web.maintain.competition.CompetitionComponent
 import org.chilternquizleague.web.maintain.competition.CompetitionModule
@@ -42,6 +42,6 @@ trait FixturesNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class FixturesService(override val http:Http) extends FixturesGetService with FixturesPutService
+class FixturesService(override val http:Http) extends FixturesGetService with FixturesPutService with ServiceRoot
 
 

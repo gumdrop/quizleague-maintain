@@ -16,6 +16,7 @@ import org.chilternquizleague.web.maintain.component.ComponentNames
 
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
+import org.chilternquizleague.web.maintain._
 import org.chilternquizleague.web.maintain.user.UserService
 import org.chilternquizleague.web.maintain.globaltext.GlobalTextService
 
@@ -43,6 +44,8 @@ trait ApplicationContextNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class ApplicationContextService(override val http:Http, override val userService:UserService, override val globalTextService:GlobalTextService) extends ApplicationContextGetService with ApplicationContextPutService
+class ApplicationContextService(override val http:Http, override val userService:UserService, override val globalTextService:GlobalTextService) extends ApplicationContextGetService 
+with ApplicationContextPutService
+with ServiceRoot
 
 
