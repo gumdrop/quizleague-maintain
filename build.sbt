@@ -24,7 +24,7 @@ lazy val root = project.in(file(".")).
   settings(commonSettings: _*).
   settings( 
     name := "chilternquizleague-maintain",
-    ngBootstrap := Some("org.chilternquizleague.maintain.AppModule"),
+    ngBootstrap := Some("org.chilternquizleague.web.maintain.AppModule"),
     libraryDependencies ++= Seq(
 	  "io.circe" %%% "circe-core",
 	  "io.circe" %%% "circe-generic",
