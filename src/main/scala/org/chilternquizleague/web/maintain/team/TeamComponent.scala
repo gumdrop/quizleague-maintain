@@ -22,13 +22,15 @@ import org.chilternquizleague.web.maintain.text.TextEditMixin
     <h2>Team Detail</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input placeholder="Name" type="text" id="name"
+        <md-input-container>
+        <input mdInput placeholder="Name" type="text" id="name"
              required
              [(ngModel)]="item.name" name="name">
-        </md-input>
-        <md-input placeholder="Short Name" type="text" id="shortName" required
+        </md-input-container>
+        <md-input-container>
+        <input mdInput placeholder="Short Name" type="text" id="shortName" required
              [(ngModel)]="item.shortName" name="shortName">
-        </md-input>
+        </md-input-container>
         <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required >
           <md-option *ngFor="let venue of venues" [value]="venue" >
             {{venue.name}}

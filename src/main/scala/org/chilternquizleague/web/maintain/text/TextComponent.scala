@@ -17,7 +17,7 @@ import TemplateElements._
     <form #fm="ngForm" (submit)="save()" >
       <div fxFlexFill>
         <md-input-container>
-        <textarea md-input md-textarea-autosize minRows="10"  placeholder="Text" 
+        <textarea mdInput md-textarea-autosize minRows="10"  placeholder="Text" 
              required
              [(ngModel)]="item.text" name="text"></textarea>
         </md-input-container>

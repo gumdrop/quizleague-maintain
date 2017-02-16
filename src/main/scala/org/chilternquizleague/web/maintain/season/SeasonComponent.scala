@@ -27,12 +27,12 @@ import org.chilternquizleague.web.maintain.competition.CompetitionService
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
         <md-input-container>
-            <input md-input placeholder="Start Year" type="number"
+            <input mdInput placeholder="Start Year" type="number"
              required
              [(ngModel)]="item.startYear" name="startYear">
         </md-input-container>
         <md-input-container>        
-          <input md-input placeholder="End Year" type="number"
+          <input mdInput placeholder="End Year" type="number"
              required
              [(ngModel)]="item.endYear" name="endYear">
         </md-input-container>

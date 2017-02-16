@@ -18,15 +18,17 @@ import org.chilternquizleague.web.util.Logging
     <h2>Global Text Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
       <div fxLayout="column">
-        <md-input placeholder="Name" type="text" id="name"
+        <md-input-container>
+        <input mdInput placeholder="Name" type="text" id="name"
              required
              [(ngModel)]="item.name" name="name">
-        </md-input>
+        </md-input-container>
         <div *ngFor="let text of item.text;let i = index" fxLayout="row">
-         <md-input placeholder="Entry Name" type="text"
+         <md-input-container>
+          <input mdInput placeholder="Entry Name" type="text"
              required
              [(ngModel)]="text.name" name="textName{{i}}">
-          </md-input>
+          </md-input-container>
           <button (click)="editText(text)" md-button type="button" >Edit text...</button>
         </div>
         $chbxRetired 

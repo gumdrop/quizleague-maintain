@@ -16,13 +16,15 @@ import TemplateElements._
     <h2>User Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
       <div fxLayout="column">
-        <md-input placeholder="Name" type="text" id="name"
-             required
+        <md-input-container> 
+        <input mdInput placeholder="Name" type="text" id="name" 
+             required    
              [(ngModel)]="item.name" name="name">
-        </md-input>
-        <md-input placeholder="Email" type="email" id="email" required
+        </md-input-container>
+        <md-input-container>
+        <input mdInput placeholder="Email" type="email" id="email" required
              [(ngModel)]="item.email" name="email">
-        </md-input>
+        </md-input-container>
         $chbxRetired 
      </div>
      $formButtons

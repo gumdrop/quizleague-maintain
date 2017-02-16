@@ -27,17 +27,17 @@ import angulate2.router.Router
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
         <md-input-container>
-          <input md-input placeholder="Name" type="text"
+          <input mdInput placeholder="Name" type="text"
              required
              [(ngModel)]="item.name" name="name">
         </md-input-container>
         <md-input-container>
-          <input md-input placeholder="Start Time" type="time"
+          <input mdInput placeholder="Start Time" type="time"
              required
              [(ngModel)]="item.startTime" name="startTime">
         </md-input-container>
         <md-input-container>        
-          <input md-input placeholder="Duration (hours)" type="number"
+          <input mdInput placeholder="Duration (hours)" type="number"
              required step=".1"
              [(ngModel)]="item.duration" name="duration">
         </md-input-container>

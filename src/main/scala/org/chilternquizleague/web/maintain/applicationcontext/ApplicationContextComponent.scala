@@ -23,7 +23,7 @@ import org.chilternquizleague.web.model.GlobalText
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
          <md-input-container>
-         <input md-input placeholder="League Name" type="text"
+         <input mdInput placeholder="League Name" type="text"
              required
              [(ngModel)]="item.leagueName" name="leagueName">
         </md-input-container>
@@ -33,7 +33,7 @@ import org.chilternquizleague.web.model.GlobalText
           </md-option>
         </md-select>
         <md-input-container>        
-          <input md-input placeholder="Sender Email" type="text"
+          <input mdInput placeholder="Sender Email" type="text"
              required
              [(ngModel)]="item.senderEmail" name="senderEmail">
         </md-input-container>

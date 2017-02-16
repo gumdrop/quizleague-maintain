@@ -7,10 +7,12 @@ import angulate2.std.Component
 @Component(
   selector = "ql-text-editor",
   template = s"""
-  <md-textarea placeholder="Text" 
+  <md-input-container>
+  <textarea placeholder="Text" mdInput
        [required]="required"
        [(ngModel)]="text" name="text">
-  </md-textarea>
+  </textarea>
+  <md-input-container>
   """    
 )
 class TextEditor {
