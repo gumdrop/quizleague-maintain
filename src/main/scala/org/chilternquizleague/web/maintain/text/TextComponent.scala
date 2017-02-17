@@ -10,14 +10,13 @@ import angulate2.ext.classModeScala
 import TemplateElements._
 
 @Component(
-  selector = "ql-text",
   template = s"""
   <div>
     <h2>Text Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
-      <div fxFlexFill>
+      <div >
         <md-input-container>
-        <textarea mdInput md-textarea-autosize minRows="10"  placeholder="Text" 
+        <textarea mdInput mdTextareaAutosize placeholder="Text" 
              required
              [(ngModel)]="item.text" name="text"></textarea>
         </md-input-container>

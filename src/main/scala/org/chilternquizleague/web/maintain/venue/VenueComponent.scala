@@ -22,7 +22,8 @@ import TemplateElements._
              [(ngModel)]="item.name" name="name">
         </md-input-container>
         <md-input-container>
-        <input mdInput placeholder="Phone" type="phone"
+        <md-placeholder>Phone</md-placeholder>
+        <input mdInput  type="phone"
              [(ngModel)]="item.phone" name="phone">
         </md-input-container>
         <md-input-container>
