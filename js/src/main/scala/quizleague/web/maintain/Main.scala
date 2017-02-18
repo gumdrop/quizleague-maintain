@@ -23,12 +23,9 @@ import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.competition.CompetitionModule
 
 @NgModule(
-  imports = @@[BrowserModule, FlexLayoutModule, AppRoutingModule , HttpModule,
+  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule,
     VenueModule, TeamModule, UserModule, TextModule, GlobalTextModule, ApplicationContextModule, SeasonModule] :+
-  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)) :+
-  MaterialModule.forRoot() :+
-  FlexLayoutModule.forRoot()
-  ,
+  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
 )
