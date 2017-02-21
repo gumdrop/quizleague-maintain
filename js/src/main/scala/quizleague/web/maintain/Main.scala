@@ -47,7 +47,7 @@ class AppRoutingModule
       </button>
       Quiz League website maintenance
     </md-toolbar>
-    <md-sidenav-container>
+    <md-sidenav-container style="padding-top:1em;height:calc(100vh - 80px);overflow:hidden;">
       <md-sidenav #sidenav mode="side" opened="true">
         <div  fxLayout="column">
           <a routerLink="/applicationContext" md-button >Application Context</a>
@@ -58,7 +58,7 @@ class AppRoutingModule
           <a routerLink="/venue" md-button >Venues</a>
         </div>
       </md-sidenav>
-      <div style="padding:1em;">
+      <div style="padding-left:1em;height:100%;overflow:scroll;">
         <router-outlet></router-outlet>
       </div>
     </md-sidenav-container>
