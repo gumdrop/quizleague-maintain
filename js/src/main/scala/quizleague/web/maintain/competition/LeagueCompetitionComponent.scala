@@ -43,7 +43,8 @@ import angulate2.router.Router
         </md-input-container>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-     $formButtons
+      <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
+      $formButtons
     </form>
   </div>
 
@@ -54,6 +55,9 @@ class LeagueCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
                                   override val route:ActivatedRoute,
                                   override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
-   
+   def fixtures(comp:LeagueCompetition) = {
+     service.cache(item)
+     router.navigateRelativeTo(route, "fixtures")
+   }
 }
     

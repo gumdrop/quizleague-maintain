@@ -20,21 +20,21 @@ import quizleague.web.service.fixtures._
 import angulate2.ext.classModeScala
 
 @NgModule(
-  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
-//  declarations = @@[SeasonComponent,SeasonListComponent],
+  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, FixturesRoutesModule],
+  declarations = @@[FixturesListComponent],
   providers = @@[FixturesService]
    
 )
 class FixturesModule
 
-//@Routes(
-//  root = false,
-//      Route(
-//        path = "results/:id",
-//        component = %%[SeasonComponent]
-//      )
-//)
-//class ResultsRoutesModule 
+@Routes(
+  root = false,
+      Route(
+        path = "fixtures",
+        component = %%[FixturesListComponent]
+      )
+)
+class FixturesRoutesModule 
 
 trait FixturesNames extends ComponentNames{
   override val typeName = "fixtures"
