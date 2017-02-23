@@ -21,8 +21,8 @@ import angulate2.ext.classModeScala
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, FixturesRoutesModule],
-  declarations = @@[FixturesListComponent],
-  providers = @@[FixturesService]
+  declarations = @@[FixturesComponent,FixturesListComponent],
+  providers = @@[FixturesService, FixtureService]
    
 )
 class FixturesModule
@@ -30,7 +30,7 @@ class FixturesModule
 @Routes(
   root = false,
       Route(
-        path = "fixtures",
+        path = "_fixtures",
         component = %%[FixturesListComponent]
       )
 )
@@ -40,8 +40,16 @@ trait FixturesNames extends ComponentNames{
   override val typeName = "fixtures"
 }
 
+trait FixtureNames extends ComponentNames{
+  override val typeName = "fixture"
+}
+
 @Injectable
 @classModeScala
-class FixturesService(override val http:Http) extends FixturesGetService with FixturesPutService with ServiceRoot
+class FixturesService(override val http:Http, override val fixtureService:FixtureService) extends FixturesGetService with FixturesPutService with ServiceRoot
+
+@Injectable
+@classModeScala
+class FixtureService(override val http:Http) extends FixtureGetService with FixturePutService with ServiceRoot
 
 

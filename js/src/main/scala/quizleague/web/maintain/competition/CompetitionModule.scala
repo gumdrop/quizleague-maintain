@@ -33,7 +33,7 @@ class CompetitionModule
 @Routes(
   root = false,
   Route(
-    path = "competition/:id",
+    path = "_competition/:id",
     component = %%[CompetitionComponent]))
 class CompetitionRoutesModule
 

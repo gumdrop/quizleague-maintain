@@ -6,8 +6,8 @@ import angulate2.ext.classModeScala
 import angulate2.http.Http
 import quizleague.web.service.EntityService
 import quizleague.web.model._
-import quizleague.web.model.{Fixtures => Model}
-import quizleague.domain.{Fixtures => Dom}
+import quizleague.web.model.{Fixture => Model}
+import quizleague.domain.{Fixture => Dom}
 import quizleague.domain.Ref
 import rxjs.Observable
 import quizleague.web.maintain.component.ComponentNames
@@ -17,20 +17,15 @@ import java.time.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.service._
-import quizleague.web.maintain.fixtures.FixturesNames
-import java.time.LocalTime
-import java.time.Duration
+import quizleague.web.maintain.fixtures.FixtureNames
 
 
 
-trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
+trait FixtureGetService extends GetService[Fixture] with FixtureNames{
     override type U = Dom
-    
-  val fixtureService:FixtureGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.start, dom.duration,js.Array())
-  override protected def mapOut(dom:Dom) = mapOutList(dom.fixtures,fixtureService).
-    map((fixtures,i) => Model(dom.id,dom.description, dom.parentDescription,dom.start, dom.duration,fixtures))
+  override protected def mapOutSparse(dom:Dom) = ???
+  override protected def mapOut(dom:Dom) = ???
   
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
@@ -39,9 +34,9 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
  
 }
 
-trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
-    override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.start, model.duration, List())
-  override protected def make() = Dom(newId, "","",LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+trait FixturePutService extends PutService[Fixture] with FixtureGetService{
+    override protected def mapIn(model:Model) = ???
+  override protected def make() = ???
   
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

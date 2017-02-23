@@ -11,7 +11,7 @@ case class Fixtures(
     parentDescription:String,
     start:LocalTime,
     duration:Duration,
-    fixtures:List[Fixture],
+    fixtures:List[Ref[Fixture]],
     retired:Boolean = false) extends Entity
     
 case class Fixture(

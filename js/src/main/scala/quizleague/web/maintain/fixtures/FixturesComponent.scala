@@ -13,6 +13,7 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
+import quizleague.web.maintain.competition.CompetitionService
 
 
 @Component(
@@ -20,14 +21,12 @@ import quizleague.web.util.Logging
   <div>
     <h2>Fixtures</h2>
     <form #fm="ngForm" (submit)="save()">
-      <div [ngSwitch]="'league'">
-        <ql-league-competition *ngSwitchCase="league" item="item"></ql-league-competition>
-        <!--ql-cup-competition *ngSwitchCase="cup"></ql-cup-competition>
-        <ql-subsidiary-competition *ngSwitchCase="subsidiary"></ql-subsidiary-competition-->
-        <div *ngSwitchDefault>No match Found</div>
-      </div>
-      <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
+    <div fxLayout="column">
+      <md-input-container>
+        <input mdInput placeholder="Description" name="description" [(ngModel)]="item.description" type="text">
+      </md-input-container>
      $formButtons
+     </div>
     </form>
   </div>
   """    
@@ -37,9 +36,19 @@ class FixturesComponent(
     override val service:FixturesService,
     override val route: ActivatedRoute,
     override val location:Location,
-    val router:Router)
+    val router:Router,
+    val competitionService:CompetitionService)
     extends ItemComponent[Fixtures] with Logging{
   
     override def cancel():Unit = location.back()
+    var comp:Competition = _
+    
+    override def init(): Unit = {
+      route.params    
+      .switchMap( (params,i) => competitionService.get(params("competitionId")) )
+      .subscribe(comp = _)
+      super.init()
+    }
+
 }
     
