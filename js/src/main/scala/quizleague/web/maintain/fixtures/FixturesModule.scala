@@ -46,7 +46,9 @@ trait FixtureNames extends ComponentNames{
 
 @Injectable
 @classModeScala
-class FixturesService(override val http:Http, override val fixtureService:FixtureService) extends FixturesGetService with FixturesPutService with ServiceRoot
+class FixturesService(
+    override val http:Http, 
+    override val fixtureService:FixtureService) extends FixturesGetService with FixturesPutService with ServiceRoot
 
 @Injectable
 @classModeScala

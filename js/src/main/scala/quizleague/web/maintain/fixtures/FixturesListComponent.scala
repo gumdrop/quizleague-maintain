@@ -45,9 +45,9 @@ class FixturesListComponent(
     
   override def addNew():Unit = {
     val item = service.instance()
-    items.push(item)
+    comp.fixtures.push(item)
     competitionService.cache(comp)
-    router.navigateRelativeTo(route,service.getId(item))
+    //router.navigateRelativeTo(route,service.getId(item))
   }
 
 }

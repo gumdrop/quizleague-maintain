@@ -40,8 +40,10 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
 }
 
 trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
-    override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.start, model.duration, List())
-  override protected def make() = Dom(newId, "","",LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+  
+  override val fixtureService:FixturePutService
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.start, model.duration, model.fixtures.map(fixtureService.getRef(_)).toList)
+  override protected def make() = Dom(newId, "fixtures","",LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

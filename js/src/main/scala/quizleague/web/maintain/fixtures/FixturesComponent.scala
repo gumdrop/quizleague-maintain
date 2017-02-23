@@ -49,6 +49,8 @@ class FixturesComponent(
       .subscribe(comp = _)
       super.init()
     }
+    
+    override def save():Unit = {service.cache(item);location.back()}
 
 }
     

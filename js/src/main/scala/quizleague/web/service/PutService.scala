@@ -8,7 +8,7 @@ import quizleague.web.maintain.component.ComponentNames
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
 
-  def cache(item: T) = add(mapIn(item))
+  def cache(item: T) = add(log(mapIn(log(item," cache model")), "cache dom"))
   
   def save(item: T) = saveDom(log(mapIn(item), "save - mapIn : "))
   
