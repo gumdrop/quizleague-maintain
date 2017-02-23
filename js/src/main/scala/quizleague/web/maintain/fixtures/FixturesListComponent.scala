@@ -12,32 +12,36 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
+import quizleague.web.maintain.competition.CompetitionService
 
 
 @Component(
   template = s"""
   <div>
-    <h2>Fixtures List</h2>
+    <h2>{{comp.name}} Fixtures List</h2>
     <div *ngFor="let item of items">
       <a routerLink="fixtures/{{item.id}}" md-button>{{item.description}}</a>
     </div>
-    <div style="position:absolute;right:1em;bottom:5em;">
-      <button md-fab (click)="addNew()">
-          <md-icon class="md-24">add</md-icon>
-      </button>
-    </div>
+    $addFAB
   </div>
   """    
 )
 @classModeScala
 class FixturesListComponent(
     override val service:FixturesService,
+    val competitionService:CompetitionService,
     val route: ActivatedRoute,
     val location:Location,
     override val router:Router)
     extends ListComponent[Fixtures] with Logging with FixturesNames{
   
-  override def ngOnInit() = {items = js.Array[Fixtures]()}
+  override def ngOnInit() = init()
+  
+  var comp:Competition = _
+  
+  def init(): Unit = route.params
+    .switchMap( (params,i) => competitionService.get(params("competitionId")) )
+    .subscribe(x => {this.items = x.fixtures; comp = x})
 
 }
     

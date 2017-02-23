@@ -1,6 +1,7 @@
 package quizleague.web.maintain.team
 
 import angulate2.std._
+import quizleague.web.maintain.component.TemplateElements._
 
 import scala.scalajs.js
 import js.JSConverters._
@@ -13,17 +14,13 @@ import angulate2.ext.classModeScala
 
 @Component(
   selector = "ql-team-list",
-  template = """
+  template = s"""
   <div>
     <h2>Teams</h2>
     <div *ngFor="let item of items">
       <a routerLink="/team/{{item.id}}" md-button>{{item.name}}</a>
     </div>
-    <div style="position:absolute;right:1em;bottom:5em;">
-      <button md-fab (click)="addNew()">
-          <md-icon class="md-24">add</md-icon>
-      </button>
-    </div>
+$addFAB
   </div>
   """    
 )

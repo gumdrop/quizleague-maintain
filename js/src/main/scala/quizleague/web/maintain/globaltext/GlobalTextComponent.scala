@@ -35,11 +35,7 @@ import quizleague.web.util.Logging
      </div>
      $formButtons
     </form>
-    <div style="position:absolute;right:1em;bottom:5em;">
-      <button md-fab (click)="addNew()">
-          <md-icon class="md-24">add</md-icon>
-      </button>
-    </div>
+    $addFAB
   </div>
   """    
 )

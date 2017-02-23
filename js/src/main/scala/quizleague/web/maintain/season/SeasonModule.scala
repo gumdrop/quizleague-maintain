@@ -22,6 +22,7 @@ import quizleague.web.maintain.competition.LeagueCompetitionComponent
 import angulate2.ext.classModeScala
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain._
+import quizleague.web.maintain.fixtures.FixturesListComponent
 
 
 @NgModule(
@@ -34,6 +35,11 @@ class SeasonModule
 
 @Routes(
   root = false,
+      
+      Route(
+        path = "season/:seasonId/competition/:competitionId/:type/fixtures",
+        component = %%[FixturesListComponent]
+      ),
       Route(
         path = "season/:seasonId/competition/:id/league",
         component = %%[LeagueCompetitionComponent]
