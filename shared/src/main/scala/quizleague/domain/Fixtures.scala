@@ -9,6 +9,7 @@ case class Fixtures(
     id:String, 
     description:String,
     parentDescription:String,
+    date:LocalDate,
     start:LocalTime,
     duration:Duration,
     fixtures:List[Ref[Fixture]],

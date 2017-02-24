@@ -9,6 +9,7 @@ case class Fixtures(
     id:String, 
     description:String,
     parentDescription:String,
+    date:Date,
     start:String,
     duration:Float,
     fixtures:js.Array[Fixture])

@@ -20,9 +20,14 @@ import quizleague.web.maintain.competition.CompetitionService
   <div>
     <h2>{{comp.name}} Fixtures List</h2>
     <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" md-button>{{item.description}}</a>
+      <a routerLink="{{item.id}}" mdButton>{{item.date.toDateString()}}</a>
     </div>
     $addFAB
+   <div style="position:absolute;left:1em;bottom:5em;">
+      <button md-fab (click)="back()">
+          <md-icon class="md-24">arrow_back</md-icon>
+      </button>
+    </div>
   </div>
   """    
 )
@@ -43,11 +48,14 @@ class FixturesListComponent(
     .switchMap( (params,i) => competitionService.get(params("competitionId")) )
     .subscribe(x => {this.items = x.fixtures; comp = x})
     
+  def back() = location.back()
+    
+    
   override def addNew():Unit = {
     val item = service.instance()
     comp.fixtures.push(item)
     competitionService.cache(comp)
-    //router.navigateRelativeTo(route,service.getId(item))
+    router.navigateRelativeTo(route,service.getId(item))
   }
 
 }
