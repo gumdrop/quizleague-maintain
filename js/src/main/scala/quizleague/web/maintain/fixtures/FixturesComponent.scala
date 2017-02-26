@@ -59,7 +59,8 @@ import rxjs.Observable
           <button md-icon-button type="button" (click)="addFixture()" [disabled]="!(homeTeam && awayTeam && venue)"><md-icon class="md-24">add</md-icon></button>
          </div>
          <div fxLayout="column">
-          <div *ngFor="let fixture of item.fixtures">
+          <div *ngFor="let fixture of item.fixtures" fxLayout="row">
+            <button md-icon-button type="button" (click)="removeFixture(fixture)" ><md-icon class="md-24">delete</md-icon></button>
             <span>{{fixture.home.name}} - {{fixture.away.name}} @ {{fixture.venue.name}}</span>
           </div>
          </div>
@@ -95,26 +96,21 @@ class FixturesComponent(
       route.params    
       .switchMap( (params,i) => competitionService.get(params("competitionId")) )
       .subscribe(comp = _)
-      teamService.list().subscribe( x => teamManager = new TeamManager(x))
-    
+     
       venueService.list.subscribe(venues = _)
-      
-//       Observable.zip(
-//       loadItem,
-//       teamService.list(),
-//       (fix:Fixtures,teams:js.Array[Team]) => (fix,teams)).subscribe(
-//          (fix:Fixtures,teams:js.Array[Team]) =>        {
-//         log(fix, "Fixtures")
-//
-//         teamManager = new TeamManager(teams)
-//         fix.fixtures.foreach({x => {teamManager.take(x.away);teamManager.take(x.home)}})
-//         item = fix 
-//       } 
-//       )
- 
-
-      super.init()
-      
+  
+      Observable.zip(
+        loadItem,
+        teamService.list(),
+        (fix: Fixtures, teams: js.Array[Team]) => (fix, teams)).subscribe(
+          {
+            case (fix, teams) => {
+              teamManager = new TeamManager(teams)
+              fix.fixtures.foreach({ x => { teamManager.take(x.away); teamManager.take(x.home) } })
+              item = fix
+            }
+          })
+    
     }
     
     override def save():Unit = {
@@ -142,14 +138,20 @@ class FixturesComponent(
       venue = null
     }
     
+    def removeFixture(fx:Fixture) = {
+      item.fixtures -= fx
+      teamManager.untake(fx.home)
+      teamManager.untake(fx.away)
+    }
+    
     class TeamManager(teams:js.Array[Team]){
       
-      private val usedTeams = js.Array[Team]()
+      private var usedTeams = Map[String,Team]()
       
-      def unusedTeams = teams.diff(usedTeams)
+      def unusedTeams = teams.filter(x => !usedTeams.contains(x.id))
       
-      def take(team:Team) = {usedTeams += team; team}
-      def untake(team:Team) = usedTeams -= team
+      def take(team:Team) = {usedTeams = usedTeams + ((team.id,team)); team}
+      def untake(team:Team) = usedTeams = usedTeams - team.id
     }
 }
     
