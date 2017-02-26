@@ -4,13 +4,20 @@ object TemplateElements {
   val chbxRetired = """<md-checkbox [(ngModel)]="item.retired" name="retired">Retired</md-checkbox>"""
   
   val formButtons = """
-      <div fxLayout="row">
-        <button md-button type="submit" [disabled]="!fm.form.valid">Save</button>
-        <button md-button (click)="cancel()" type="button">Cancel</button>
-      </div>"""
+      <div style="position:absolute;left:1em;bottom:2em;">
+        <button md-fab type="submit" [disabled]="!fm.form.valid">
+            <md-icon class="md-24">save</md-icon>
+        </button>
+      </div>
+      <div style="position:absolute;right:1em;bottom:2em;">
+        <button md-fab (click)="cancel()" type="button">
+            <md-icon class="md-24">cancel</md-icon>
+        </button>
+      </div>
+"""
   
   val addFAB = """
-    <div style="position:absolute;right:1em;bottom:5em;">
+    <div style="position:absolute;right:1em;bottom:2em;">
       <button md-fab (click)="addNew()">
           <md-icon class="md-24">add</md-icon>
       </button>

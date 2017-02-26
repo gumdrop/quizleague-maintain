@@ -8,9 +8,11 @@ import quizleague.web.maintain.component.ComponentNames
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
 
-  def cache(item: T) = add(log(mapIn(log(item," cache model")), "cache dom"))
+  def cache(item: T) = add(mapIn(item))
   
-  def save(item: T) = saveDom(log(mapIn(item), "save - mapIn : "))
+  def save(item: T):Unit = save(mapIn(item))
+  
+  protected def save(item:U):Unit = saveDom(item)
   
   private[service] def saveDom(i:U) = {
     http.put(s"$uriRoot/${i.id}", wrap(i), requestOptions)

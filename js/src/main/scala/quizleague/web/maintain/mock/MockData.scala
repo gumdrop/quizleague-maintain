@@ -20,7 +20,8 @@ class MockData extends InMemoryDbService {
         literal(id ="2", json =  Venue("2", "w0bble", None, None, None, None).asJson.noSpaces)
     ),
     "team" -> js.Array(
-        literal(id ="1", json =  Team("1", "wibble arms", "wibble", Ref("venue","1"), Ref("text","1"), List(Ref("user","1"),Ref("user","2"))).asJson.noSpaces)
+        literal(id ="1", json =  Team("1", "wibble arms", "wibble", Ref("venue","1"), Ref("text","1"), List(Ref("user","1"),Ref("user","2"))).asJson.noSpaces),
+        literal(id ="2", json =  Team("2", "wobble villa", "wobble", Ref("venue","2"), Ref("text","1"), List()).asJson.noSpaces)
     ),
     "user" -> js.Array(
         literal(id ="1", json =  User("1", "me", "me@here.com").asJson.noSpaces),
@@ -46,7 +47,9 @@ class MockData extends InMemoryDbService {
           List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
     ),
     "season" -> js.Array(),
-    "competition" -> js.Array()
+    "competition" -> js.Array(),
+    "fixtures" -> js.Array(),
+    "fixture" -> js.Array()
         
   )
 }

@@ -18,6 +18,8 @@ import quizleague.web.maintain.competition.CompetitionComponent
 import quizleague.web.maintain.competition.CompetitionModule
 import quizleague.web.service.fixtures._
 import angulate2.ext.classModeScala
+import quizleague.web.maintain.team.TeamService
+import quizleague.web.maintain.venue.VenueService
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, FixturesRoutesModule],
@@ -52,6 +54,9 @@ class FixturesService(
 
 @Injectable
 @classModeScala
-class FixtureService(override val http:Http) extends FixtureGetService with FixturePutService with ServiceRoot
+class FixtureService(
+    override val http:Http,
+    override val venueService:VenueService,
+    override val teamService:TeamService) extends FixtureGetService with FixturePutService with ServiceRoot
 
 

@@ -133,7 +133,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def make() = ???
 
-  override def save(comp: Competition) = { textService.saveAllDirty; super.save(comp) }
+  override def save(comp: Dom) = { textService.saveAllDirty; fixturesService.saveAllDirty(); super.save(comp) }
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 

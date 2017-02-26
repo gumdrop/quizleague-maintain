@@ -16,8 +16,12 @@ case class Fixtures(
     retired:Boolean = false) extends Entity
     
 case class Fixture(
-  id:String, 
+  id:String,
+  description:String,
+  parentDescription:String,
   venue: Ref[Venue],
+  home: Ref[Team],
+  away:Ref[Team],
   date: LocalDate,
   time: LocalTime,
   duration : Duration,

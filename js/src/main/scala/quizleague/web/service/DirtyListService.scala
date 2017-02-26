@@ -8,8 +8,13 @@ trait DirtyListService[T] extends PutService[T]{
   var dirtyIds = Set[String]()
   
   override def cache(item:T) = {
-    dirtyIds = dirtyIds + getId(item)
+    cache(mapIn(item))
     super.cache(item)
+  }
+  
+  protected def cache(item:U) = {
+    dirtyIds = dirtyIds + item.id
+    item
   }
   
   override def deCache(item: U) = {
@@ -29,7 +34,7 @@ trait DirtyListService[T] extends PutService[T]{
   }
   
   def saveAllDirty() = {
-    dirtyIds.map(getDom(_)).foreach {saveDom(_)}
+    dirtyIds.map(getDom(_)).foreach {save(_)}
     dirtyIds = Set()
   }
     

@@ -10,7 +10,9 @@ object DateTimeConverters extends Logging{
   
   implicit def yearToInt(year:Year):Int = year.toString.toInt
   implicit def intToYear(int:Int):Year = Year parse int.toString
-  implicit def dateToLocalDate(date:js.Date):LocalDate = LocalDate parse s"${date.getFullYear}-${date.getMonth + 1}-${date.getDate}"
+  implicit def stringToLocalDate(date:String):LocalDate = LocalDate parse(date)
+  implicit def localDateToString(date:LocalDate):String = date.toString
+  implicit def dateToLocalDate(date:js.Date):LocalDate = LocalDate of(date.getFullYear,date.getMonth + 1,date.getDate)
   implicit def localDateToDate(date:LocalDate):js.Date = new js.Date(js.Date parse date.toString)
   implicit def dateToLocalTime(date:String):LocalTime = LocalTime parse date
   implicit def localTimeToDate(date:LocalTime):String = s"${date.getHour}:${date.getMinute}"

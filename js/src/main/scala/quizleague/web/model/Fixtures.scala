@@ -9,16 +9,20 @@ case class Fixtures(
     id:String, 
     description:String,
     parentDescription:String,
-    date:Date,
+    date:String,
     start:String,
     duration:Float,
     fixtures:js.Array[Fixture])
     
 @Data
 case class Fixture(
-  id:String, 
+  id:String,
+  description:String,
+  parentDescription:String,
   venue: Venue,
-  date: Date,
+  home:Team,
+  away:Team,
+  date: String,
   time: String,
   duration : Float
 )

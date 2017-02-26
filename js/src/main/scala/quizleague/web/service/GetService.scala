@@ -36,26 +36,20 @@ trait GetService[T] extends Logging{
   protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   protected final def getFromHttp(id:String):Observable[U] = {
     
-   log(null,s"before $uriRoot/$id")
-    
-    val res = http.get(s"$uriRoot/$id",requestOptions).
+    http.get(s"$uriRoot/$id",requestOptions).
       map((r,i) => r.jsonData[js.Dynamic]).
       map((a,i) => {
         val u = unwrap(a)
         items = items + ((u.id, u))
-        
-        log(u,s"after $uriRoot/$id")
+        u
       }
     ).onError((x,t) => Observable.of(null).asInstanceOf[Observable[U]])
-    
-    
-    
-    res
+
   }
     
 
-  protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B]):Observable[js.Array[B]] = 
-     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.getSparse(a.id)):_*)
+  protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B], sparse:Boolean=true):Observable[js.Array[B]] = 
+     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => if(sparse) service.getSparse(a.id) else service.get(a.id)):_*)
 
   private[service] def getDom(id:String) = items(id)
 

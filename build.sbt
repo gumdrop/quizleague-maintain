@@ -12,7 +12,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
         val a = baseDirectory.value.toURI.toString.replaceFirst("[^/]+/?$", "")
-        val g = "https://raw.githubusercontent.com/gumdrop/quizleague-maintain"
+        val g = "https://raw.githubusercontent.com/gumdrop/quizleague"
         s"-P:scalajs:mapSourceURI:$a->$g/v${version.value}/"
       })),
   resolvers += Resolver.sonatypeRepo("snapshots")

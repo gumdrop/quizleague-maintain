@@ -28,8 +28,9 @@ trait ItemComponent[T] extends OnInit{
   @JSExport
   def ngOnInit() = init()
   
-  def init(): Unit = route.params
+  def init(): Unit = loadItem.subscribe(this.item = _)
+    
+  protected def loadItem = route.params
     .switchMap( (params,i) => service.get(params("id")) )
-    .subscribe(this.item = _)
 }
 
