@@ -18,6 +18,10 @@ import quizleague.web.service.results._
 import angulate2.ext.classModeScala
 import quizleague.web.maintain._
 import quizleague.web.maintain.fixtures.FixturesService
+import quizleague.web.maintain.fixtures.FixtureService
+import quizleague.web.maintain.team.TeamService
+import quizleague.web.maintain.text.TextService
+import quizleague.web.maintain.user.UserService
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -45,6 +49,11 @@ class ResultsService(
 @Injectable
 @classModeScala
 class ResultService(
-    override val http: Http) extends ResultGetService with ResultPutService with ServiceRoot
+    override val http: Http,
+    override val fixtureService:FixtureService,
+    override val teamService:TeamService,
+    override val userService:UserService,
+    override val textService:TextService
+) extends ResultGetService with ResultPutService with ServiceRoot
 
 

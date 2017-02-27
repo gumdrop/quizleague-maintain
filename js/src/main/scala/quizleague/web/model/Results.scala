@@ -1,9 +1,11 @@
 package quizleague.web.model
 
+import scalajs.js.Array
+
 case class Results(
     id:String, 
     fixtures:Fixtures,
-    results:List[Result])
+    results:Array[Result])
     
 case class Result(
     id:String, 
@@ -11,7 +13,9 @@ case class Result(
     homeScore:Int,
     awayScore:Int,
     submitter:User,
-    reports:List[Report])
+    note:String,
+    hasReports:Boolean,
+    reports:Array[Report])
     
 case class Report(
     team:Team,

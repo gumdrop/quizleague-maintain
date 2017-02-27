@@ -10,12 +10,15 @@ import quizleague.domain.{ Results => Dom }
 import quizleague.domain.Ref
 import rxjs.Observable
 import scala.scalajs.js
+import js.JSConverters._
+import js.ArrayOps
 import quizleague.web.service._
 import java.time.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.maintain.results.ResultsNames
 import quizleague.web.service.fixtures.FixturesGetService
+import quizleague.web.service.fixtures.FixturesPutService
 
 
 trait ResultsGetService extends GetService[Results] with ResultsNames {
@@ -23,8 +26,12 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
   val resultService:ResultGetService
   val fixturesService:FixturesGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,List())
-  override protected def mapOut(dom: Dom) = ???
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,js.Array())
+  override protected def mapOut(dom: Dom) = Observable.zip(
+    fixturesService.get(dom.fixtures),
+    mapOutList(dom.results, resultService),
+    (fixtures:Fixtures, results:js.Array[Result]) => Model(dom.id,fixtures,results)
+  )
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
@@ -35,7 +42,8 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
 trait ResultsPutService extends PutService[Results] with ResultsGetService {
   
   override val resultService:ResultPutService
-  override protected def mapIn(model: Model) = ???
+  override val fixturesService:FixturesPutService
+  override protected def mapIn(model: Model) = Dom(model.id, fixturesService.getRef(model.fixtures), model.results.map(resultService.getRef(_)).toList)
 
   override protected def make() = ???
 

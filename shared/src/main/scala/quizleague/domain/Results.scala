@@ -12,6 +12,7 @@ case class Result(
     homeScore:Int,
     awayScore:Int,
     submitter:Ref[User],
+    note:String,
     reports:List[Report],
     retired:Boolean = false) extends Entity
     
