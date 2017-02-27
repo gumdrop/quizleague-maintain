@@ -1,3 +1,21 @@
 package quizleague.domain
 
-case class Results(id:String, retired:Boolean) extends Entity
+case class Results(
+    id:String, 
+    fixtures:Ref[Fixtures],
+    results:List[Ref[Result]],
+    retired:Boolean = false) extends Entity
+    
+case class Result(
+    id:String, 
+    fixture:Ref[Fixture],
+    homeScore:Int,
+    awayScore:Int,
+    submitter:Ref[User],
+    reports:List[Report],
+    retired:Boolean = false) extends Entity
+    
+case class Report(
+    team:Ref[Team],
+    text:Ref[Text])
+    

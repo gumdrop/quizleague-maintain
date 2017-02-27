@@ -17,6 +17,7 @@ import quizleague.web.service.results._
 
 import angulate2.ext.classModeScala
 import quizleague.web.maintain._
+import quizleague.web.maintain.fixtures.FixturesService
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -26,21 +27,24 @@ import quizleague.web.maintain._
 )
 class ResultsModule
 
-//@Routes(
-//  root = false,
-//      Route(
-//        path = "results/:id",
-//        component = %%[SeasonComponent]
-//      )
-//)
-//class ResultsRoutesModule 
-
 trait ResultsNames extends ComponentNames{
   override val typeName = "results"
 }
 
+trait ResultNames extends ComponentNames{
+  override val typeName = "result"
+}
+
 @Injectable
 @classModeScala
-class ResultsService(override val http: Http) extends ResultsGetService with ResultsPutService with ServiceRoot
+class ResultsService(
+    override val http: Http,
+    override val fixturesService:FixturesService,
+    override val resultService:ResultService) extends ResultsGetService with ResultsPutService with ServiceRoot
+    
+@Injectable
+@classModeScala
+class ResultService(
+    override val http: Http) extends ResultGetService with ResultPutService with ServiceRoot
 
 
