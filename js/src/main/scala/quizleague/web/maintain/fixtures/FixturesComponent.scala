@@ -48,10 +48,10 @@ import rxjs.Observable
         <h4>Fixture List</h4>
         <div fxLayout="row">          
           <md-select placeholder="Home" [(ngModel)]="homeTeam" name="homeTeam" (change)="setVenue(homeTeam)">  
-            <md-option *ngFor="let team of unusedTeams()" [value]="team">{{team.name}}</md-option>
+            <md-option *ngFor="let team of unusedTeams(awayTeam)" [value]="team">{{team.name}}</md-option>
           </md-select>
           <md-select placeholder="Away" [(ngModel)]="awayTeam" name="awayTeam">  
-            <md-option *ngFor="let team of unusedTeams()" [value]="team">{{team.name}}</md-option>
+            <md-option *ngFor="let team of unusedTeams(homeTeam)" [value]="team">{{team.name}}</md-option>
           </md-select>
           <md-select placeholder="Venue" [(ngModel)]="venue" name="venue">  
             <md-option *ngFor="let venue of venues" [value]="venue">{{venue.name}}</md-option>
@@ -110,7 +110,7 @@ class FixturesComponent(
               item = fix
             }
           })
-    
+
     }
     
     override def save():Unit = {
@@ -118,7 +118,7 @@ class FixturesComponent(
       item.fixtures.foreach({fixtureService.cache(_)})
       location.back()}
 
-    def unusedTeams() = teamManager.unusedTeams
+    def unusedTeams(other:Team) = teamManager.unusedTeams(other)
     
     def setVenue(team:Team) = {
       teamService.get(team.id).subscribe(x => venue = x.venue)
@@ -148,7 +148,7 @@ class FixturesComponent(
       
       private var usedTeams = Map[String,Team]()
       
-      def unusedTeams = teams.filter(x => !usedTeams.contains(x.id))
+      def unusedTeams(other:Team) = teams.filter(x => !usedTeams.contains(x.id) && (if (other != js.undefined && other != null) {x.id != other.id} else true))  
       
       def take(team:Team) = {usedTeams = usedTeams + ((team.id,team)); team}
       def untake(team:Team) = usedTeams = usedTeams - team.id

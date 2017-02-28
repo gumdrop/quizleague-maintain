@@ -25,7 +25,7 @@ import quizleague.web.maintain.text.TextService
 
 
 @NgModule(
-  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule,ResultsModule,FixturesModule],
+  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule,FixturesModule,ResultsModule],
   declarations = @@[CompetitionComponent,LeagueCompetitionComponent],
   providers = @@[CompetitionService])
 class CompetitionModule

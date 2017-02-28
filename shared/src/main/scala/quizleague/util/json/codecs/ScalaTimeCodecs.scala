@@ -11,13 +11,13 @@ object ScalaTimeCodecs {
   implicit val encodeLocalDate: Encoder[LocalDate] = Encoder.encodeString.contramap[LocalDate](_.toString)
 
   implicit val decodeLocalDate: Decoder[LocalDate] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(LocalDate.parse(str)).leftMap(t => "LocaDate")
+    Either.catchNonFatal(LocalDate.parse(str)).leftMap(t => "LocalDate")
   }
 
-  implicit val encodeYear: Encoder[Year] = Encoder.encodeString.contramap[Year](_.toString)
+  implicit val encodeYear: Encoder[Year] = Encoder.encodeInt.contramap[Year](_.getValue)
 
-  implicit val decodeYear: Decoder[Year] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(Year.parse(str)).leftMap(t => "Year")
+  implicit val decodeYear: Decoder[Year] = Decoder.decodeInt.emap { str =>
+    Either.catchNonFatal(Year.of(str)).leftMap(t => "Year")
   }
   
   implicit val encodeLocalTime: Encoder[LocalTime] = Encoder.encodeString.contramap[LocalTime](_.toString)
@@ -26,10 +26,10 @@ object ScalaTimeCodecs {
     Either.catchNonFatal(LocalTime.parse(str)).leftMap(t => "LocalTime")
   }
   
-  implicit val encodeDuration: Encoder[Duration] = Encoder.encodeString.contramap[Duration](_.toString)
+  implicit val encodeDuration: Encoder[Duration] = Encoder.encodeLong.contramap[Duration](_.getSeconds)
 
-  implicit val decodeDuration: Decoder[Duration] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(Duration.parse(str)).leftMap(t => "Duration")
+  implicit val decodeDuration: Decoder[Duration] = Decoder.decodeLong.emap { str =>
+    Either.catchNonFatal(Duration.ofSeconds(str)).leftMap(t => "Duration")
   }
 
 

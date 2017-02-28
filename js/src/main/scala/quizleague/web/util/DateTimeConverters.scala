@@ -8,8 +8,8 @@ import java.time.temporal.ChronoUnit
 object DateTimeConverters extends Logging{
   import scala.language.implicitConversions
   
-  implicit def yearToInt(year:Year):Int = year.toString.toInt
-  implicit def intToYear(int:Int):Year = Year parse int.toString
+  implicit def yearToInt(year:Year):Int = year.getValue()
+  implicit def intToYear(int:Int):Year = Year of int
   implicit def stringToLocalDate(date:String):LocalDate = LocalDate parse(date)
   implicit def localDateToString(date:LocalDate):String = date.toString
   implicit def dateToLocalDate(date:js.Date):LocalDate = LocalDate of(date.getFullYear,date.getMonth + 1,date.getDate)

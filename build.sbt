@@ -41,6 +41,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm"
+	
   ).
   jsSettings(
     name := "quizleague-js"
