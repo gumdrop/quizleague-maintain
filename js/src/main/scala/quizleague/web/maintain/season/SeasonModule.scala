@@ -24,6 +24,8 @@ import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain._
 import quizleague.web.maintain.fixtures.FixturesListComponent
 import quizleague.web.maintain.fixtures.FixturesComponent
+import quizleague.web.maintain.results.ResultsComponent
+import quizleague.web.maintain.results.ResultsListComponent
 
 
 @NgModule(
@@ -42,8 +44,16 @@ class SeasonModule
         component = %%[FixturesComponent]
       ),
       Route(
+        path = "season/:seasonId/competition/:competitionId/:type/results/:id",
+        component = %%[ResultsComponent]
+      ),
+      Route(
         path = "season/:seasonId/competition/:competitionId/:type/fixtures",
         component = %%[FixturesListComponent]
+      ),
+      Route(
+        path = "season/:seasonId/competition/:competitionId/:type/results",
+        component = %%[ResultsListComponent]
       ),
       Route(
         path = "season/:seasonId/competition/:id/league",

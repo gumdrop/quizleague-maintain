@@ -46,6 +46,8 @@ trait ResultsPutService extends PutService[Results] with ResultsGetService {
   override protected def mapIn(model: Model) = Dom(model.id, fixturesService.getRef(model.fixtures), model.results.map(resultService.getRef(_)).toList)
 
   override protected def make() = ???
+  
+  def instance(comp:Competition) = ???
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
