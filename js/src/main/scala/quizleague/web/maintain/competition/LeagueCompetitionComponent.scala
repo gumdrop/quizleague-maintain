@@ -44,6 +44,7 @@ import angulate2.router.Router
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
+      <div fxLayout="row"><button (click)="results(item)" md-button type="button" >Results...</button></div>
       $formButtons
     </form>
   </div>
@@ -58,6 +59,11 @@ class LeagueCompetitionComponent( override val service:CompetitionService,
    def fixtures(comp:LeagueCompetition) = {
      service.cache(item)
      router.navigateRelativeTo(route, "fixtures")
+   }
+   
+   def results(comp:LeagueCompetition) = {
+     service.cache(item)
+     router.navigateRelativeTo(route, "results")
    }
 }
     
