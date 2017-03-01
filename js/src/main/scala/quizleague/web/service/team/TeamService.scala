@@ -28,10 +28,10 @@ trait TeamGetService extends GetService[Team] with TeamNames {
   val userService: UserGetService
 
   override protected def mapOutSparse(team: DomTeam) = Team(team.id, team.name, team.shortName, null, null, js.Array(), team.retired)
-  override protected def mapOut(team: DomTeam) =
+  override protected def mapOut(team: DomTeam)(implicit depth:Int) =
     Observable.zip(
-      venueService.get(team.venue),
-      textService.get(team.text),
+      child(team.venue,venueService),
+      child(team.text, textService),
       mapOutList(team.users, userService),
       (venue: Venue, text: Text, users: js.Array[User]) => Team(team.id, team.name, team.shortName, venue, text, users, team.retired))
 

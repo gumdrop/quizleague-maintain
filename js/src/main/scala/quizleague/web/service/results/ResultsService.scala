@@ -27,8 +27,8 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
   val fixturesService:FixturesGetService
 
   override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,js.Array())
-  override protected def mapOut(dom: Dom) = Observable.zip(
-    fixturesService.get(dom.fixtures),
+  override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
+    child(dom.fixtures, fixturesService),
     mapOutList(dom.results, resultService),
     (fixtures:Fixtures, results:js.Array[Result]) => Model(dom.id,fixtures,results)
   )

@@ -32,11 +32,11 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val teamService:TeamGetService
 
   override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,null,null,null,dom.date,dom.time,dom.duration)
-  override protected def mapOut(dom: Dom) =
+  override protected def mapOut(dom: Dom)(implicit depth:Int) =
     Observable.zip(
-      venueService.get(dom.venue),
-      teamService.get(dom.home),
-      teamService.get(dom.away),
+      child(dom.venue,venueService),
+      child(dom.home,teamService),
+      child(dom.away, teamService),
       (venue: Venue, home: Team, away: Team) => Model(dom.id, dom.description, dom.parentDescription, venue, home, away, dom.date, dom.time, dom.duration))
 
   
@@ -55,7 +55,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   def instance(fx:Fixtures, home:Team, away:Team, venue:Venue) = {
     val dom = Dom(newId,fx.description, fx.parentDescription,venueService.getRef(venue),teamService.getRef(home),teamService.getRef(away),fx.date,fx.start,fx.duration)
-    mapOut(dom)
+    mapOut(dom)(1)
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

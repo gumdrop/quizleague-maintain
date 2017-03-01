@@ -32,7 +32,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
-  override protected def mapOut(comp: Dom) = doMapOut(comp)
+  override protected def mapOut(comp: Dom)(implicit depth:Int) = doMapOut(comp)
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
@@ -45,12 +45,12 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }
 
-    def doMapOut(dom: Dom): Observable[Competition] = {
+    def doMapOut(dom: Dom)(implicit depth:Int): Observable[Competition] = {
       dom match {
         case c: DLC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
-          textService.get(c.text.id),
+          child(c.text,textService),
           c.subsidiary.map(x => getSparse(x.id)).getOrElse(Observable.of(null)),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {
             new LeagueCompetition(
@@ -67,7 +67,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
         case c: DCC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
-          textService.get(c.text.id),
+          child(c.text,textService),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text) => (new CupCompetition(
             c.id,
             c.name,
@@ -79,7 +79,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
         case c: DSC => Observable.zip(
           mapOutList(c.results, resultsService),
-          textService.get(c.text.id),
+          child(c.text,textService),
           (results: js.Array[Results], text: Text) => (new SubsidiaryLeagueCompetition(
             c.id,
             c.name,

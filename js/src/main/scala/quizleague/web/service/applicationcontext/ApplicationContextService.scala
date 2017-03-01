@@ -23,14 +23,14 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
     val globalTextService:GlobalTextGetService
     val userService:UserGetService
   override protected def mapOutSparse(context:Dom) = ApplicationContext(context.id, context.leagueName, null, context.senderEmail, js.Array())
-  override protected def mapOut(context:Dom) =
+  override protected def mapOut(context:Dom)(implicit depth:Int) =
     Observable.zip(
-        globalTextService.get(context.textSet),
+        child(context.textSet,globalTextService),
         mapOutAliases(context.emailAliases),
         (textSet:GlobalText, emailAliases:js.Array[EmailAlias]) => log(ApplicationContext(context.id,context.leagueName,textSet,context.senderEmail,emailAliases), "mapOut ApplicationContext"))
   
-  def mapOutAliases(list:List[DomEmailAlias]):Observable[js.Array[EmailAlias]] = 
-    Observable.zip(list.map((e:DomEmailAlias) => userService.get(e.user).map((u:User,i:Int) => EmailAlias(e.alias, u))):_*)
+  def mapOutAliases(list:List[DomEmailAlias])(implicit depth:Int):Observable[js.Array[EmailAlias]] = 
+    Observable.zip(list.map((e:DomEmailAlias) => child(e.user, userService).map((u:User,i:Int) => EmailAlias(e.alias, u))):_*)
 
   def listTextSets() = globalTextService.list()
         

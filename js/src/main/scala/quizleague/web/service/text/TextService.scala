@@ -12,7 +12,7 @@ import quizleague.web.maintain.text.TextNames
 
 trait TextGetService extends GetService[Text] with TextNames {
   override type U = Dom
-  override protected def mapOut(text: Dom): Observable[Text] = Observable.of(mapOutSparse(text))
+  override protected def mapOut(text: Dom)(implicit depth:Int): Observable[Text] = Observable.of(mapOutSparse(text))
   override protected def mapOutSparse(text: Dom): Text = Text(text.id, text.text, text.mimeType)
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 

@@ -38,15 +38,15 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   val teamService:TeamGetService
 
   override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,dom.homeScore, dom.awayScore, null, dom.note, !dom.reports.isEmpty,js.Array())
-  override protected def mapOut(dom: Dom) = Observable.zip(
-    fixtureService.get(dom.fixture),
-    userService.get(dom.submitter),
+  override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
+    child(dom.fixture, fixtureService),
+    child(dom.submitter,userService),
     mapReports(dom.reports),
     (fixture:Fixture,submitter:User, reports:js.Array[Report]) => Model(dom.id, fixture, dom.homeScore, dom.awayScore, submitter, dom.note, !dom.reports.isEmpty, reports)
   )
 
-  private def mapReports(reports:List[DomReport]):Observable[js.Array[Report]] = {
-    Observable.zip(reports.map(r => Observable.zip(teamService.get(r.team), textService.get(r.text), (team:Team,text:Text) => Report(team,text))) : _*)
+  private def mapReports(reports:List[DomReport])(implicit depth:Int):Observable[js.Array[Report]] = {
+    Observable.zip(reports.map(r => Observable.zip(child(r.team, teamService), child(r.text,textService), (team:Team,text:Text) => Report(team,text))) : _*)
   }
   
   
