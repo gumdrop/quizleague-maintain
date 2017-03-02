@@ -22,8 +22,9 @@ import java.time.temporal.ChronoUnit
 import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.maintain.competition.CompetitionNames
+import quizleague.web.util.Logging
 
-trait CompetitionGetService extends GetService[Competition] with CompetitionNames {
+trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom
 
   val textService: TextGetService
@@ -91,7 +92,8 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
     }
 
-    def doMapOutSparse(dom: Dom) = {
+    def doMapOutSparse(dom: Dom):Competition = {
+      if (dom == null) return null
       dom match {
         case c: DLC => new LeagueCompetition(
           c.id,

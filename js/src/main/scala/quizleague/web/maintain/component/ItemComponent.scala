@@ -31,6 +31,6 @@ trait ItemComponent[T] extends OnInit{
   def init(): Unit = loadItem.subscribe(this.item = _)
     
   protected def loadItem = route.params
-    .switchMap( (params,i) => service.get(params("id")) )
+    .switchMap( (params,i) => service.get(params("id")))
 }
 

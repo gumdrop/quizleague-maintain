@@ -12,6 +12,7 @@ import quizleague.domain.Entity
 import quizleague.web.util._
 import quizleague.domain.Ref
 import quizleague.web.maintain.component.ComponentNames
+import scala.scalajs.js.JSON
 
 trait GetService[T] extends Logging{
   this:ComponentNames =>
@@ -25,7 +26,7 @@ trait GetService[T] extends Logging{
   private[service] var items:Map[String,U] = Map()
   val requestOptions = js.Dynamic.literal(responseType = "Text")
   
-  def get(id:String)(implicit depth:Int = 1):Observable[T] = if(depth==0) getSparse(id) else items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u,i) => mapOut(u)))
+  def get(id:String)(implicit depth:Int = 1):Observable[T] = if(depth<=0) getSparse(id) else items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u,i) => mapOut(u)))
   def getSparse(id:String):Observable[T] = items.get(id).map(u => Observable.of(mapOutSparse(u))).getOrElse(getFromHttp(id).map((u,i) => mapOutSparse(u)))
   def ref(ref:Ref[U])(implicit depth:Int = 1):Observable[T] = if(ref != null && ref.id != null) get(ref.id) else Observable.of(null).asInstanceOf[Observable[T]]
   def list():Observable[js.Array[T]] = http.get(s"$uriRoot",requestOptions)
@@ -36,7 +37,7 @@ trait GetService[T] extends Logging{
    protected final def add(item:U) = {items = items + ((item.id, item));mapOutSparse(item)}
   protected final def getFromHttp(id:String):Observable[U] = {
     
-    http.get(s"$uriRoot/$id",requestOptions).
+    http.get(log(s"$uriRoot/$id", "get path"),requestOptions).
       map((r,i) => r.jsonData[js.Dynamic]).
       map((a,i) => {
         val u = unwrap(a)
@@ -49,11 +50,11 @@ trait GetService[T] extends Logging{
     
   protected final def child[A <: Entity,B](ref:Ref[A], service:GetService[B])(implicit depth:Int):Observable[B] = service.get(ref.id)(depth-1)
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B])(implicit depth:Int):Observable[js.Array[B]] = 
-     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)(depth-1)):_*)
+     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => child(a,service)):_*)
 
   private[service] def getDom(id:String) = items(id)
 
-  private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
+  private def unwrap(obj:js.Dynamic) = fromJson(JSON.stringify(obj))
 
   private def fromJson(jsonString:String):U = if(jsonString == null) null.asInstanceOf[U] else deser(jsonString)
      

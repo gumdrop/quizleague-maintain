@@ -5,7 +5,7 @@ import scalajs.js
 import java.time.temporal.TemporalUnit
 import java.time.temporal.ChronoUnit
 
-object DateTimeConverters extends Logging{
+object DateTimeConverters{
   import scala.language.implicitConversions
   
   implicit def yearToInt(year:Year):Int = year.getValue()
