@@ -47,6 +47,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import domain.{ SubsidiaryLeagueCompetition => DSC }
 
     def doMapOut(dom: Dom)(implicit depth:Int): Observable[Competition] = {
+      if (dom == null) Observable.of(null)
       dom match {
         case c: DLC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
