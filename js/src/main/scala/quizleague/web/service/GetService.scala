@@ -49,7 +49,7 @@ trait GetService[T] extends Logging{
     
   protected final def child[A <: Entity,B](ref:Ref[A], service:GetService[B])(implicit depth:Int):Observable[B] = service.get(ref.id)(depth-1)
   protected final def mapOutList[A <: Entity,B](list:List[Ref[A]], service:GetService[B])(implicit depth:Int):Observable[js.Array[B]] = 
-     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)()):_*)
+     if(list.isEmpty) Observable.of(js.Array[B]()) else Observable.zip(list.map((a:Ref[A]) => service.get(a.id)(depth-1)):_*)
 
   private[service] def getDom(id:String) = items(id)
 
