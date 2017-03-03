@@ -7,6 +7,12 @@ import angulate2.ext.inMemoryWebApi.InMemoryDbService
 import quizleague.domain._
 import quizleague.web.util.UUID
 import js.Dynamic.literal
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.Duration
+import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.util.json.codecs.ScalaTimeCodecs._
+import java.time.Year
 
 
 @JSExport
@@ -46,10 +52,51 @@ class MockData extends InMemoryDbService {
           "a@b.c", 
           List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
     ),
-    "season" -> js.Array(),
-    "competition" -> js.Array(),
-    "fixtures" -> js.Array(),
-    "fixture" -> js.Array()
-        
-  )
+    "season" -> js.Array(literal(id="1", json = Season("1",
+            Year.of(2017), 
+            Year.of(2018),
+            Ref[Text]("text","1"), 
+            List(Ref[Competition]("competition","1"))).asJson.noSpaces)
+        ),
+      "competition" -> js.Array(literal(id="1", json=LeagueCompetition("1", 
+          "League", 
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90),
+          List()/*List(Ref[Fixtures]("fixtures","1"))*/,
+          List()/*List(Ref[Results]("results","1"))*/,
+          List(),
+          Ref[Text]("text","1"),
+          None).asInstanceOf[Competition].asJson.noSpaces)
+      ),
+      "fixtures" -> js.Array(literal(id="1", json=Fixtures("1",
+          "",
+          "League",
+          LocalDate.parse("2017-03-01"),
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90),
+          List(Ref[Fixture]("fixture","1"))).asJson.noSpaces)
+      ),
+      "fixture" -> js.Array(literal(id="1", json=Fixture("1",
+          "",
+          "League",
+          Ref[Venue]("venue","1"),
+          Ref[Team]("team", "1"),
+          Ref[Team]("team", "2"),
+          LocalDate.parse("2017-03-01"),
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90)).asJson.noSpaces)
+      ),
+      "results" -> js.Array(literal(id="1", json=Results("1",
+          Ref[Fixtures]("fixtures","1"),
+          List(Ref[Result]("result","1"))).asJson.noSpaces)
+      ),
+      "result" -> js.Array(literal(id="1", json=Result("1",
+          Ref[Fixture]("fixture","1"),
+          80,70,
+          Ref[User]("user", "1"),
+          "a note",
+          List(Report(Ref[Team]("team", "1"), Ref[Text]("text","3")))
+        ).asJson.noSpaces)
+      )
+      )
 }

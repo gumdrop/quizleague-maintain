@@ -55,7 +55,7 @@ trait GetService[T] extends Logging{
 
   private def unwrap(obj:js.Dynamic) = fromJson(obj.json.toString)
 
-  private def fromJson(jsonString:String):U = if(jsonString == null) null.asInstanceOf[U] else deser(jsonString)
+  private def fromJson(jsonString:String):U = if(log(jsonString,"incoming json") == null) null.asInstanceOf[U] else deser(jsonString)
      
 
   protected def mapOut(domain:U)(implicit depth:Int):Observable[T]
