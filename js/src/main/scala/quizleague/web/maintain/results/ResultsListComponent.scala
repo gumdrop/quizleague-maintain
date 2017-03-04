@@ -24,11 +24,7 @@ import quizleague.web.maintain.competition.CompetitionService
     <div *ngFor="let item of items">
       <a routerLink="{{item.id}}" mdButton>{{item.fixtures.date}}</a>
     </div>
-   <div style="position:absolute;left:1em;bottom:2em;">
-      <button md-fab (click)="back()">
-          <md-icon class="md-24">arrow_back</md-icon>
-      </button>
-    </div>
+   $backFAB
   </div>
   """    
 )
@@ -48,8 +44,8 @@ class ResultsListComponent(
   def sort(a:Results,b:Results) = a.fixtures.date compareTo b.fixtures.date
   
   def init(): Unit = route.params
-    .switchMap( (params,i) => competitionService.get(params("competitionId")) )
-    .subscribe(x => {items = x.results.sort(sort _); comp = x})
+    .switchMap( (params,i) => competitionService.get(params("competitionId"))(2))
+    .subscribe(x => {items = x.results.sort(sort _);comp = x})
     
   def back() = location.back()
    

@@ -27,6 +27,7 @@ import quizleague.web.service.user.UserPutService
 import quizleague.web.service.fixtures.FixturePutService
 import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
+import quizleague.web.service.DirtyListService
 
 
 trait ResultGetService extends GetService[Model] with ResultNames {
@@ -56,7 +57,7 @@ trait ResultGetService extends GetService[Model] with ResultNames {
 
 }
 
-trait ResultPutService extends PutService[Model] with ResultGetService {
+trait ResultPutService extends PutService[Model] with ResultGetService with DirtyListService[Model] {
   
   override val userService:UserPutService
   override val fixtureService:FixturePutService

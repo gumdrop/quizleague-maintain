@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
         val a = baseDirectory.value.toURI.toString.replaceFirst("[^/]+/?$", "")
         val g = "https://raw.githubusercontent.com/gumdrop/quizleague"
-        s"-P:scalajs:mapSourceURI:$a->$g/v${version.value}/"
+        s"-P:scalajs:mapSourceURI:$a->$g/master/"
       })),
   resolvers += Resolver.sonatypeRepo("snapshots")
   
@@ -37,7 +37,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	  "io.circe" %%% "circe-generic",
 	  "io.circe" %%% "circe-parser"
 	).map(_ % circeVersion),
-	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M7",
+	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M8",
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm"

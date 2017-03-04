@@ -23,4 +23,12 @@ object TemplateElements {
       </button>
     </div>
 """
+  
+  val backFAB = """    
+    <div style="position:absolute;left:1em;bottom:2em;">
+      <button md-fab (click)="back()">
+          <md-icon class="md-24">arrow_back</md-icon>
+      </button>
+    </div>
+"""
 }

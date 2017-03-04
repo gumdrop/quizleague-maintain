@@ -52,8 +52,8 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
         case c: DLC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
-          child(c.text,textService),
-          c.subsidiary.map(x => getSparse(x.id)).getOrElse(Observable.of(null)),
+          child(log(c.text,"text ref"),textService),
+          c.subsidiary.map(x => get(x.id)(0)).getOrElse(Observable.of(null)),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {
             new LeagueCompetition(
               c.id,
@@ -136,7 +136,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def make() = ???
 
-  override def save(comp: Dom) = { textService.saveAllDirty; fixturesService.saveAllDirty(); super.save(comp) }
+  override def save(comp: Dom) = { textService.saveAllDirty; fixturesService.saveAllDirty; resultsService.saveAllDirty; super.save(comp) }
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 

@@ -32,7 +32,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
   val fixtureService:FixtureGetService
 
   override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,js.Array())
-  override protected def mapOut(dom:Dom)(implicit depth:Int) = mapOutList(dom.fixtures,fixtureService)(1).
+  override protected def mapOut(dom:Dom)(implicit depth:Int) = mapOutList(dom.fixtures,fixtureService)(2).
     map((fixtures,i) => Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,fixtures))
   
   

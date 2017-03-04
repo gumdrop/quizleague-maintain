@@ -29,7 +29,7 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
   override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,js.Array())
   override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
     child(dom.fixtures, fixturesService),
-    mapOutList(dom.results, resultService),
+    mapOutList(dom.results, resultService)(3),
     (fixtures:Fixtures, results:js.Array[Result]) => Model(dom.id,fixtures,results)
   )
 
@@ -39,12 +39,15 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
 
 }
 
-trait ResultsPutService extends PutService[Results] with ResultsGetService {
+trait ResultsPutService extends PutService[Results] with ResultsGetService with DirtyListService[Model]{
   
   override val resultService:ResultPutService
   override val fixturesService:FixturesPutService
+
   override protected def mapIn(model: Model) = Dom(model.id, fixturesService.getRef(model.fixtures), model.results.map(resultService.getRef(_)).toList)
 
+  override def save(model:Model) = {resultService.saveAllDirty;super.save(model)}
+  
   override protected def make() = ???
   
   def instance(comp:Competition) = ???

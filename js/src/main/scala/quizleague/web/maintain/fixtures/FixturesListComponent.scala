@@ -23,11 +23,7 @@ import quizleague.web.maintain.competition.CompetitionService
       <a routerLink="{{item.id}}" mdButton>{{item.date}}</a>
     </div>
     $addFAB
-   <div style="position:absolute;left:1em;bottom:2em;">
-      <button md-fab (click)="back()">
-          <md-icon class="md-24">arrow_back</md-icon>
-      </button>
-    </div>
+    $backFAB
   </div>
   """    
 )
@@ -47,7 +43,7 @@ class FixturesListComponent(
   def sort(a:Fixtures,b:Fixtures) = a.date compareTo b.date
   
   def init(): Unit = route.params
-    .switchMap( (params,i) => competitionService.get(params("competitionId")) )
+    .switchMap( (params,i) => competitionService.get(params("competitionId"))(2) )
     .subscribe(x => {this.items = x.fixtures.sort(sort _); comp = x})
     
   def back() = location.back()

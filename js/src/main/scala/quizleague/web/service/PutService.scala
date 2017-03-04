@@ -4,7 +4,6 @@ import scalajs.js
 import quizleague.web.util.UUID
 import quizleague.domain.Ref
 import quizleague.web.maintain.component.ComponentNames
-import scala.scalajs.js.JSON
 
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
@@ -27,7 +26,7 @@ trait PutService[T] {
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
   protected final def newId() = UUID.randomUUID.toString()
-  private[service] def wrap(item:U) = JSON.parse(toJson(item))
+  private[service] def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
   private[service] def deCache(item:U) = items = items - item.id
   private def toJson(item:U) = if(item != null) ser(item) else null
 

@@ -27,10 +27,10 @@ import quizleague.web.util.Logging
           <div *ngFor="let result of item.results;let i = index" fxLayout="row">
             <button md-icon-button type="button" (click)="removeResult(result)" ><md-icon class="md-24">delete</md-icon></button>
               <md-input-container>
-                <input placeholder="{{result.fixture.home.name}}" [(ngModel)]="result.homeScore" name="home{{i}}">
+                <input mdInput placeholder="{{result.fixture.home.name}}" [(ngModel)]="result.homeScore" name="home{{i}}" type="number">
               </md-input-container>
               <md-input-container>
-                <input placeholder="{{result.fixture.away.name}}" [(ngModel)]="result.awayScore" name="away{{i}}">
+                <input mdInput placeholder="{{result.fixture.away.name}}" [(ngModel)]="result.awayScore" name="away{{i}}" type="number">
               </md-input-container>               
           </div>
          </div>
@@ -45,6 +45,7 @@ import quizleague.web.util.Logging
 @classModeScala
 class ResultsComponent(
     override val service:ResultsService,
+    val resultService:ResultService,
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
@@ -53,5 +54,11 @@ class ResultsComponent(
     override def cancel():Unit = location.back()
     
     def removeResult(result:Result) = item.results -= result
+    
+    override def save():Unit = {
+      service.cache(item)
+      item.results.foreach({resultService.cache(_)})
+      location.back()
+    }
 }
     

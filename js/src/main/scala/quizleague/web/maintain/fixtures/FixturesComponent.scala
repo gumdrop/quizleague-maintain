@@ -100,12 +100,15 @@ class FixturesComponent(
       venueService.list.subscribe(venues = _)
   
       Observable.zip(
-        loadItem,
+        loadItem(6),
         teamService.list(),
         (fix: Fixtures, teams: js.Array[Team]) => (fix, teams)).subscribe(
           {
             case (fix, teams) => {
+              log(fix,"fixtures")
+              log(teams,"teams")
               teamManager = new TeamManager(teams)
+              
               fix.fixtures.foreach({ x => { teamManager.take(x.away); teamManager.take(x.home) } })
               item = fix
             }
