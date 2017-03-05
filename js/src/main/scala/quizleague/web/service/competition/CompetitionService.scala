@@ -13,6 +13,7 @@ import scala.scalajs.js
 import quizleague.web.util.DateTimeConverters._
 import quizleague.web.service.fixtures._
 import quizleague.web.service.results._
+import quizleague.web.service.leaguetable._
 import quizleague.web.model.CompetitionType.CompetitionType
 import java.time.LocalTime
 import java.time.Duration
@@ -30,6 +31,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   val textService: TextGetService
   val resultsService: ResultsGetService
   val fixturesService: FixturesGetService
+  val leagueTableService: LeagueTableGetService
 
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
@@ -52,9 +54,10 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
         case c: DLC => Observable.zip(
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
+          mapOutList(c.tables, leagueTableService),
           child(log(c.text,"text ref"),textService),
           c.subsidiary.map(x => get(x.id)(0)).getOrElse(Observable.of(null)),
-          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text, subsidiary: Competition) => {
+          (fixtures: js.Array[Fixtures], results: js.Array[Results], tables:js.Array[LeagueTable],text: Text, subsidiary: Competition) => {
             new LeagueCompetition(
               c.id,
               c.name,
@@ -62,7 +65,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
               c.duration,
               fixtures,
               results,
-              js.Array(),
+              tables,
               text,
               subsidiary)
           })
@@ -81,12 +84,13 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
         case c: DSC => Observable.zip(
           mapOutList(c.results, resultsService),
+          mapOutList(c.tables, leagueTableService),
           child(c.text,textService),
-          (results: js.Array[Results], text: Text) => (new SubsidiaryLeagueCompetition(
+          (results: js.Array[Results], tables: js.Array[LeagueTable],text: Text) => (new SubsidiaryLeagueCompetition(
             c.id,
             c.name,
             results,
-            js.Array(),
+            tables,
             text)))
 
       }
@@ -132,6 +136,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
   override val textService: TextPutService
   override val resultsService: ResultsPutService
   override val fixturesService: FixturesPutService
+  override val leagueTableService:LeagueTablePutService
 
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def make() = ???
@@ -194,7 +199,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           l.duration,
           l.fixtures.map(fixturesService.getRef(_)).toList,
           l.results.map(resultsService.getRef(_)).toList,
-          List(),
+          l.tables.map(leagueTableService.getRef(_)).toList,
           textService.getRef(l.text),
           if (l.subsidiary == null) None else Option(getRef(l.subsidiary)))
 
@@ -211,7 +216,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           s.id,
           s.name,
           s.results.map(resultsService.getRef(_)).toList,
-          List(),
+          s.tables.map(leagueTableService.getRef(_)).toList,
           textService.getRef(s.text))
       }
 

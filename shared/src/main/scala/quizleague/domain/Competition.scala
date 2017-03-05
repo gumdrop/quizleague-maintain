@@ -97,7 +97,7 @@ sealed trait ResultsCompetition{
 
 
 
-case class LeagueTable(id:String,retired:Boolean=false) extends Entity
+
 
 
 

@@ -26,6 +26,8 @@ import quizleague.web.maintain.fixtures.FixturesListComponent
 import quizleague.web.maintain.fixtures.FixturesComponent
 import quizleague.web.maintain.results.ResultsComponent
 import quizleague.web.maintain.results.ResultsListComponent
+import quizleague.web.maintain.leaguetable.LeagueTableComponent
+import quizleague.web.maintain.leaguetable.LeagueTableListComponent
 
 
 @NgModule(
@@ -48,12 +50,20 @@ class SeasonModule
         component = %%[ResultsComponent]
       ),
       Route(
+        path = "season/:seasonId/competition/:competitionId/:type/leaguetable/:id",
+        component = %%[LeagueTableComponent]
+      ),
+      Route(
         path = "season/:seasonId/competition/:competitionId/:type/fixtures",
         component = %%[FixturesListComponent]
       ),
       Route(
         path = "season/:seasonId/competition/:competitionId/:type/results",
         component = %%[ResultsListComponent]
+      ),
+      Route(
+        path = "season/:seasonId/competition/:competitionId/:type/leaguetable",
+        component = %%[LeagueTableListComponent]
       ),
       Route(
         path = "season/:seasonId/competition/:id/league",

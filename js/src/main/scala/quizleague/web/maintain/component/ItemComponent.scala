@@ -9,8 +9,9 @@ import angulate2.core.OnInit
 import js.annotation.JSExport
 import quizleague.web.service.PutService
 import quizleague.web.service.GetService
+import quizleague.web.util.Logging
 
-trait ItemComponent[T] extends OnInit{
+trait ItemComponent[T] extends OnInit with Logging{
   val service:GetService[T] with PutService[T]
   val route:ActivatedRoute
   val location:Location
@@ -28,7 +29,7 @@ trait ItemComponent[T] extends OnInit{
   @JSExport
   def ngOnInit() = init()
   
-  def init(): Unit = loadItem().subscribe(this.item = _)
+  def init(): Unit = loadItem().subscribe( x=> {log(null, "before load item");this.item = x ; log(item,"loaded item")})
     
   protected def loadItem(depth:Int = 1) = route.params
     .switchMap( (params,i) => service.get(params("id"))(depth))

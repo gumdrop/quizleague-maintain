@@ -66,7 +66,7 @@ class MockData extends InMemoryDbService {
           Duration.ofMinutes(90),
           List(Ref[Fixtures]("fixtures","1")),
           List(Ref[Results]("results","1")),
-          List(),
+          List(Ref[LeagueTable]("leaguetable","1")),
           Ref[Text]("text","1"),
           None).asInstanceOf[Competition].asJson.noSpaces)
       ),
@@ -99,6 +99,7 @@ class MockData extends InMemoryDbService {
           "a note",
           List(Report(Ref[Team]("team", "1"), Ref[Text]("text","3")))
         ).asJson.noSpaces)
-      )
-      )
+      ),
+      "leaguetable" -> js.Array(literal(id="1", json=LeagueTable("1", "A Table", List()).asJson.noSpaces))
+   )
 }

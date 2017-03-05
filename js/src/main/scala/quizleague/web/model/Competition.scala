@@ -67,5 +67,3 @@ class SubsidiaryLeagueCompetition(
   override val fixtures = js.Array[Fixtures]()
 }
 
-@Data
-case class LeagueTable(id:String,retired:Boolean=false)

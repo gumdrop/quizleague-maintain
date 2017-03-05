@@ -19,6 +19,7 @@ import quizleague.web.model.Team
 import quizleague.web.maintain.venue.VenueService
 import rxjs.Observable
 import rxjs.Observable
+import quizleague.web.maintain.util.TeamManager
 
 
 @Component(
@@ -147,14 +148,6 @@ class FixturesComponent(
       teamManager.untake(fx.away)
     }
     
-    class TeamManager(teams:js.Array[Team]){
-      
-      private var usedTeams = Map[String,Team]()
-      
-      def unusedTeams(other:Team) = teams.filter(x => !usedTeams.contains(x.id) && (if (other != js.undefined && other != null) {x.id != other.id} else true))  
-      
-      def take(team:Team) = {usedTeams = usedTeams + ((team.id,team)); team}
-      def untake(team:Team) = usedTeams = usedTeams - team.id
-    }
+
 }
     
