@@ -37,12 +37,22 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
   val teamService:TeamGetService
 
   override protected def mapOutSparse(dom: Dom) = Model(dom.id,dom.description,js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth:Int) = 
-    mapRows(dom.rows).map((x,i) => Model(dom.id, dom.description, x))
+  override protected def mapOut(dom: Dom)(implicit depth:Int) = {
+   log(dom, "LeagueTableService map out")
+    Observable.zip(
+  
+    Observable.of(dom), mapRows(dom.rows),
+    (dom:Dom, rows:js.Array[LeagueTableRow]) => log(Model(dom.id,dom.description,rows),"lt model out")
+  )
+  }
+
  
   private def mapRows(rows:List[DomRow])(implicit depth:Int):Observable[js.Array[LeagueTableRow]] = {
-    Observable.zip(rows.map(x => child(x.team, teamService).map((y,i) => LeagueTableRow(y, x.position, x.played, x.won, x.lost,x.drawn, x.leaguePoints,x.matchPointsFor, x.matchPointsAgainst))) : _*)
+    if(rows.isEmpty) Observable.of(js.Array())
+    else
+    Observable.zip(rows.map(x => Observable.zip(child(x.team, teamService), Observable.of(x), (team:Team, x:DomRow) => LeagueTableRow(team, x.position, x.played, x.won, x.lost,x.drawn, x.leaguePoints,x.matchPointsFor, x.matchPointsAgainst))) : _*)
   }
+  
   
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

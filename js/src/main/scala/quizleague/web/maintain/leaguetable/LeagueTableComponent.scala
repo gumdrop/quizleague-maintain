@@ -18,7 +18,7 @@ import quizleague.web.maintain.util.TeamManager
 
 
 @Component(
-  template = s"""
+ template = s"""
  <div>
     <h2>League Tables</h2>
     <form #fm="ngForm" (submit)="save()">
@@ -88,7 +88,7 @@ import quizleague.web.maintain.util.TeamManager
     </form>
   </div>
 
-  """    
+  """ 
 )
 @classModeScala
 class LeagueTableComponent(
@@ -102,11 +102,14 @@ class LeagueTableComponent(
     var teamManager:TeamManager =_
   
     override def cancel():Unit = location.back()
-//    override def init() = {
-//      super.init()
-//      teamService.list().subscribe(x => teamManager = new TeamManager(x))
-//
-//    }
+    override def init() = {
+      
+      log(item, "start init")
+      
+      loadItem().subscribe(x => item = log(x, "in init"))
+      teamService.list().subscribe(x => teamManager = new TeamManager(x))
+
+    }
     
     def removeRow(row:LeagueTableRow) = {
       item.rows -= row
@@ -121,6 +124,8 @@ class LeagueTableComponent(
       service.cache(item)
       location.back()
     }
+    
+    def unusedTeams() = teamManager.unusedTeams(null)
     
 
   
