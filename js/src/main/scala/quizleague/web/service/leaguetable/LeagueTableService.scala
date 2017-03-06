@@ -29,6 +29,9 @@ import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.maintain.leaguetable.LeagueTableNames
+import quizleague.web.service.results.ResultsGetService
+
+
 
 trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
   override type U = Dom
@@ -36,15 +39,11 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
   val teamService: TeamGetService
 
   override protected def mapOutSparse(dom: Dom) = Model(dom.id, dom.description, js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth: Int) = {
-
+  override protected def mapOut(dom: Dom)(implicit depth: Int) = 
     Observable.zip(
-
       Observable.of(dom), mapRows(dom.rows),
-      (dom: Dom, rows: js.Array[LeagueTableRow]) => Model(dom.id, dom.description, rows)
-      )
+      (dom: Dom, rows: js.Array[LeagueTableRow]) => Model(dom.id, dom.description, rows))
 
-  }
 
   private def mapRows(rows: List[DomRow])(implicit depth: Int): Observable[js.Array[LeagueTableRow]] = {
     if (rows.isEmpty) Observable.of(js.Array())
@@ -62,6 +61,7 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
 trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService with DirtyListService[Model] {
 
   override val teamService: TeamPutService
+  val resultsService:ResultsGetService
 
   override protected def mapIn(model: Model) = Dom(
     model.id,
@@ -75,5 +75,12 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def ser(item: Dom) = item.asJson.noSpaces
+  
+  def recalculateTable(competition:Competition, table:Model) = {
+    val dom = mapIn(table)
+    Observable.zip(competition.results.map(x => resultsService.get(x.id)) :_*)   
+   /* implement recalculate in map() here*/   
+    
+  }
 
 }

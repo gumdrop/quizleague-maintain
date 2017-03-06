@@ -47,7 +47,10 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   )
 
   private def mapReports(reports:List[DomReport])(implicit depth:Int):Observable[js.Array[Report]] = {
-    Observable.zip(reports.map(r => Observable.zip(child(r.team, teamService), child(r.text,textService), (team:Team,text:Text) => Report(team,text))) : _*)
+    if(reports.isEmpty)
+      Observable.of(js.Array())
+    else
+      Observable.zip(reports.map(r => Observable.zip(child(r.team, teamService), child(r.text,textService), (team:Team,text:Text) => Report(team,text))) : _*)
   }
   
   

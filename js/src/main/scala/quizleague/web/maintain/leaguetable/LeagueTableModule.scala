@@ -22,6 +22,7 @@ import quizleague.web.maintain.fixtures.FixtureService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.user.UserService
+import quizleague.web.maintain.results.ResultsService
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -40,7 +41,8 @@ trait LeagueTableNames extends ComponentNames{
 @classModeScala
 class LeagueTableService(
     override val http: Http,
-    override val teamService:TeamService
+    override val teamService:TeamService,
+    override val resultsService:ResultsService
 ) extends LeagueTableGetService with LeagueTablePutService with ServiceRoot
 
 
