@@ -85,7 +85,11 @@ sealed trait ResultsCompetition{
     val tables:List[Ref[LeagueTable]]
 }
 
- trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables
+ trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables{
+   val win = 2
+   val draw = 1
+   val loss = 0
+ }
 
  trait MainLeagueCompetition extends BaseLeagueCompetition{
   val subsidiary:Option[Ref[Competition]]
