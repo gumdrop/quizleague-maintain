@@ -57,25 +57,37 @@ import quizleague.web.maintain.util.TeamManager
                 <td>{{row.team.name}}</td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text">
+                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.won" name="won{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.won" name="won{{i}}" type="number" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.lost" name="lost{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.lost" name="lost{{i}}" type="number" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.drawn" name="drawn{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.drawn" name="drawn{{i}}" type="number" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.matchPointsFor" name="matchPointsFor{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.matchPointsFor" name="matchPointsFor{{i}}" type="number" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.matchPointsAgainst" name="matchPointsAgainst{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.matchPointsAgainst" name="matchPointsAgainst{{i}}" type="number" length="4">
                   </md-input-container>
+                </td>
+                <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.leaguePoints" name="leaguePoints{{i}}" type="number">
+                    <input mdInput [(ngModel)]="row.leaguePoints" name="leaguePoints{{i}}" type="number" length="4">
                   </md-input-container>
                 </td>
               </tr>

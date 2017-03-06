@@ -30,51 +30,47 @@ import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.maintain.leaguetable.LeagueTableNames
 
-
 trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
   override type U = Dom
 
-  val teamService:TeamGetService
+  val teamService: TeamGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,dom.description,js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth:Int) = {
-   log(dom, "LeagueTableService map out")
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id, dom.description, js.Array())
+  override protected def mapOut(dom: Dom)(implicit depth: Int) = {
+
     Observable.zip(
-  
-    Observable.of(dom), mapRows(dom.rows),
-    (dom:Dom, rows:js.Array[LeagueTableRow]) => log(Model(dom.id,dom.description,rows),"lt model out")
-  )
+
+      Observable.of(dom), mapRows(dom.rows),
+      (dom: Dom, rows: js.Array[LeagueTableRow]) => Model(dom.id, dom.description, rows)
+      )
+
   }
 
- 
-  private def mapRows(rows:List[DomRow])(implicit depth:Int):Observable[js.Array[LeagueTableRow]] = {
-    if(rows.isEmpty) Observable.of(js.Array())
+  private def mapRows(rows: List[DomRow])(implicit depth: Int): Observable[js.Array[LeagueTableRow]] = {
+    if (rows.isEmpty) Observable.of(js.Array())
     else
-    Observable.zip(rows.map(x => Observable.zip(child(x.team, teamService), Observable.of(x), (team:Team, x:DomRow) => LeagueTableRow(team, x.position, x.played, x.won, x.lost,x.drawn, x.leaguePoints,x.matchPointsFor, x.matchPointsAgainst))) : _*)
+      Observable.zip(rows.map(x => Observable.zip(child(x.team, teamService), Observable.of(x), (team: Team, x: DomRow) => LeagueTableRow(team, x.position, x.played, x.won, x.lost, x.drawn, x.leaguePoints, x.matchPointsFor, x.matchPointsAgainst))): _*)
   }
-  
-  
-  
+
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  
+
   import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
 
 }
 
 trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService with DirtyListService[Model] {
-  
-  override val teamService:TeamPutService
-  
+
+  override val teamService: TeamPutService
+
   override protected def mapIn(model: Model) = Dom(
-      model.id, 
-      model.description,
-      model.rows.map(r => DomRow(teamService.getRef(r.team), r.position, r.played, r.won,r.lost,r.drawn,r.leaguePoints, r.matchPointsFor,r.matchPointsAgainst)).toList
-      )
+    model.id,
+    model.description,
+    model.rows.map(r => DomRow(teamService.getRef(r.team), r.position, r.played, r.won, r.lost, r.drawn, r.leaguePoints, r.matchPointsFor, r.matchPointsAgainst)).toList)
 
   override protected def make() = Dom(newId, "", List())
-  
-  def rowInstance(team:Team) = LeagueTableRow(team,"",0,0,0,0,0,0,0)
+
+  def rowInstance(team: Team) = LeagueTableRow(team, "", 0, 0, 0, 0, 0, 0, 0)
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
