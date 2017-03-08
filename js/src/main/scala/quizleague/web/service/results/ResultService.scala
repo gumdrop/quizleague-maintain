@@ -78,6 +78,8 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
       )
 
   override protected def make() = ???
+  
+  override def save(model:Model) = {textService.saveAllDirty; super.save(model)}
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._

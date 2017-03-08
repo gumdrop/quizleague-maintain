@@ -15,7 +15,7 @@ trait PutService[T] {
   protected def save(item:U):Unit = saveDom(item)
   
   private[service] def saveDom(i:U) = {
-    http.put(s"$uriRoot/${i.id}", wrap(i), requestOptions)
+    http.put(s"$uriRoot/${i.id}", wrap(i), requestOptions).subscribe(x=>x)
     log(i,s"saved $uriRoot/${i.id} to http")
     deCache(i)
   }

@@ -28,6 +28,7 @@ import quizleague.web.maintain.results.ResultsComponent
 import quizleague.web.maintain.results.ResultsListComponent
 import quizleague.web.maintain.leaguetable.LeagueTableComponent
 import quizleague.web.maintain.leaguetable.LeagueTableListComponent
+import quizleague.web.maintain.results.ReportListComponent
 
 
 @NgModule(
@@ -41,6 +42,11 @@ class SeasonModule
 @Routes(
   root = false,
       
+      
+      Route(
+        path = "season/:seasonId/competition/:competitionId/:type/results/:resultsId/result/:id/report",
+        component = %%[ReportListComponent]
+      ),
       Route(
         path = "season/:seasonId/competition/:competitionId/:type/fixtures/:id",
         component = %%[FixturesComponent]

@@ -71,6 +71,11 @@ class ResultsComponent(
     def toggleNote(result:Result) = if(showNotes.contains(result)) showNotes -= result else showNotes += result
      
     def showNote(result:Result) = showNotes.contains(result)
+    def showReports(result:Result) = {
+      service.cache(item)
+      item.results.foreach({resultService.cache(_)})
+      router.navigateRelativeTo(route,"result",result.id,"report")
+    }
     
     override def save():Unit = {
       service.cache(item)
