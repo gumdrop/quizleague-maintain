@@ -9,5 +9,6 @@ case class Season(
     startYear:Int,
     endYear:Int,
     text:Text,
-    competitions:js.Array[Competition]
+    competitions:js.Array[Competition],
+    calendar:js.Array[CalendarEvent]
 )

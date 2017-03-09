@@ -58,7 +58,8 @@ class MockData extends InMemoryDbService {
             Year.of(2017), 
             Year.of(2018),
             Ref[Text]("text","1"), 
-            List(Ref[Competition]("competition","1"))).asJson.noSpaces)
+            List(Ref[Competition]("competition","1")),
+            List[CalendarEvent]()).asJson.noSpaces)
         ),
       "competition" -> js.Array(literal(id="1", json=LeagueCompetition("1", 
           "League", 

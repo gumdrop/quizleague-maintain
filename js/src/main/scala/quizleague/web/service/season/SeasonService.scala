@@ -6,6 +6,7 @@ import angulate2.http.Http
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.domain.{ Season => Dom }
+import quizleague.domain.{ CalendarEvent => DomEvent }
 import quizleague.domain.Ref
 import rxjs.Observable
 import quizleague.web.maintain.component.ComponentNames
@@ -18,20 +19,32 @@ import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.service.competition._
 import quizleague.web.maintain.season.SeasonNames
+import quizleague.web.service.venue.VenueGetService
+import quizleague.web.service.venue.VenuePutService
 
 trait SeasonGetService extends GetService[Season] with SeasonNames {
   override type U = Dom
   val textService: TextGetService
   val competitionService: CompetitionGetService
+  val venueService: VenueGetService
 
-  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, null, js.Array())
+  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, null, js.Array(),js.Array())
   override protected def mapOut(season: Dom)(implicit depth:Int) =
     Observable.zip(
       child(season.text,textService),
       mapOutList(season.competitions, competitionService),
-      (text: Text, competitions: js.Array[Competition]) => Season(season.id, season.startYear, season.endYear, text, competitions))
+      mapEvents(season.calendar),
+      (text: Text, competitions: js.Array[Competition], calendar:js.Array[CalendarEvent]) => Season(season.id, season.startYear, season.endYear, text, competitions, calendar))
 
   override def flush() = { textService.flush(); super.flush() }
+  
+  private def mapEvents(events:List[DomEvent])(implicit depth:Int):Observable[js.Array[CalendarEvent]] = {
+  if(events.isEmpty)
+    Observable.of(js.Array())
+  else
+    Observable.zip(events.map(r => Observable.zip(child(r.venue, venueService),Observable.of(r), (venue:Venue,event:DomEvent) => CalendarEvent(
+        venue, event.date,event.time,event.duration,event.description))) : _*)
+  }
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
@@ -42,9 +55,17 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
 trait SeasonPutService extends PutService[Season] with SeasonGetService {
   override val textService: TextPutService
   override val competitionService: CompetitionPutService
+  override val venueService:VenuePutService
 
-  override protected def mapIn(season: Season) = Dom(season.id, season.startYear, season.endYear, textService.getRef(season.text), season.competitions.map(competitionService.getRef(_)).toList)
-  override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List())
+  override protected def mapIn(season: Season) = Dom(
+      season.id, 
+      season.startYear, 
+      season.endYear, 
+      textService.getRef(season.text), 
+      season.competitions.map(competitionService.getRef(_)).toList, 
+      season.calendar.map(e=>DomEvent(venueService.getRef(e.venue), e.date, e.time, e.duration, e.description)).toList
+  )
+  override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())
 
   override def save(season: Season) = { textService.save(season.text); super.save(season) }
   override def flush() = { textService.flush(); super.flush() }

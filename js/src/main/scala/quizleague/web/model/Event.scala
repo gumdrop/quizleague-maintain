@@ -6,13 +6,15 @@ import scala.scalajs.js.Date
 
 case class Event(
   venue: Venue,
-  date: Date,
-  time: Date)
+  date: String,
+  time: String,
+  duration : Float)
 
 case class CalendarEvent(
   venue: Venue,
-  date: Date,
-  time: Date,
+  date: String,
+  time: String,
+  duration : Float,
   description: String)
     
 

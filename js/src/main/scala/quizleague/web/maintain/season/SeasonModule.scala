@@ -29,6 +29,7 @@ import quizleague.web.maintain.results.ResultsListComponent
 import quizleague.web.maintain.leaguetable.LeagueTableComponent
 import quizleague.web.maintain.leaguetable.LeagueTableListComponent
 import quizleague.web.maintain.results.ReportListComponent
+import quizleague.web.maintain.venue.VenueService
 
 
 @NgModule(
@@ -94,6 +95,7 @@ trait SeasonNames extends ComponentNames{
 @classModeScala
 class SeasonService(override val http: Http, 
     override val textService: TextService, 
-    override val competitionService: CompetitionService) extends SeasonGetService with SeasonPutService with ServiceRoot 
+    override val competitionService: CompetitionService,
+    override val venueService:VenueService) extends SeasonGetService with SeasonPutService with ServiceRoot 
 
 
