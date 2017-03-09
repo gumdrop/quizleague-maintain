@@ -37,6 +37,7 @@ import quizleague.web.maintain.competition.CompetitionService
              [(ngModel)]="item.endYear" name="endYear">
         </md-input-container>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
+        <div fxLayout="row"><button (click)="calendar()" md-button type="button" >Calendar...</button></div>
         <div fxLayout="row">
           <md-select placeholder="Competitions" [(ngModel)]="selectedType" name="selectedType">  
             <md-option *ngFor="let type of competitionTypes" [value]="type">{{type}}</md-option>
@@ -73,6 +74,11 @@ class SeasonComponent(
     def editCompetition(comp: Competition) = {
       service.cache(item)
       router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
+    }
+    
+    def calendar() = {
+      service.cache(item)
+      router.navigateRelativeTo(route, "calendar")
     }
     
     lazy val competitionTypes = CompetitionType.values.map(_.toString).toJSArray

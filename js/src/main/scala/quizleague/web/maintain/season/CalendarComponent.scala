@@ -23,31 +23,45 @@ import quizleague.web.maintain.competition.CompetitionService
   selector = "ql-season",
   template = s"""
   <div>
-    <h2>Season Detail</h2>
+    <h2>Calendar {{item.startYear}}/{{item.endYear}}</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
-        <md-input-container>
-            <input mdInput placeholder="Start Year" type="number"
-             required
-             [(ngModel)]="item.startYear" name="startYear">
-        </md-input-container>
-        <md-input-container>        
-          <input mdInput placeholder="End Year" type="number"
-             required
-             [(ngModel)]="item.endYear" name="endYear">
-        </md-input-container>
-        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-        <div fxLayout="row">
-          <md-select placeholder="Competitions" [(ngModel)]="selectedType" name="selectedType">  
-            <md-option *ngFor="let type of competitionTypes" [value]="type">{{type}}</md-option>
-          </md-select>
-          <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
-        </div>
-        <md-chip-list selectable="true">
-          <md-chip *ngFor="let comp of item.competitions" ><button (click)="editCompetition(comp)" type="button">{{comp.name}}</button>
-          </md-chip>
-        </md-chip-list>
+        <button md-icon-button (click)="addEvent()" type="button"><md-icon>add</md-icon></button>
+        <div *ngFor="let event of items;let i = index" fxLayout="row">
+          <div fxLayout="column">
+            <button md-icon-button (click)="deleteEvent(event)" type="button"><md-icon>delete</md-icon></button>
+          </div>  
+          <div fxLayout="column">
+          <md-input-container>        
+            <input mdInput placeholder="Description" type="text" 
+            required
+               [(ngModel)]="event.description" name="description{{i}}">
+          </md-input-container>
 
+          <div fxLayout="row">
+            <md-input-container>        
+              <input mdInput placeholder="Date" type="date"
+                 required
+                 [(ngModel)]="event.date" name="date{{i}}">
+            </md-input-container>
+            <md-input-container>        
+              <input mdInput placeholder="Time" type="time"
+                 required
+                 [(ngModel)]="event.time" name="time{{i}}">
+            </md-input-container>
+            <md-input-container>        
+              <input mdInput placeholder="Duration" type="number" step="0.1"
+                 required
+                 [(ngModel)]="event.duration" name="duration{{i}}">
+            </md-input-container>
+          </div>
+            <md-select placeholder="Venue" name="venue{{i}}" [(ngModel)]="event.venue" required >
+              <md-option *ngFor="let venue of venues" [value]="venue" >
+                {{venue.name}}
+              </md-option>
+            </md-select>
+        </div>
+        </div>
       </div>
      $formButtons
     </form>
@@ -59,10 +73,24 @@ class CalendarComponent(
     override val service:SeasonService,
     override val route: ActivatedRoute,
     override val location:Location,
-    override val router:Router)
-    extends ItemComponent[Season] with TextEditMixin[Season] with Logging{
+    val venueService:VenueService)
+    extends ItemComponent[Season] with Logging{
   
+    var items:js.Array[CalendarEvent] = _
+    var venues:js.Array[Venue] = _
   
-
+    override def init() = {
+      loadItem().subscribe(x=> {items = x.calendar; item = x})
+      initVenues()
+    }
+    
+    private def initVenues() = venueService.list.subscribe(venues = _)
+    
+    def addEvent() = item.calendar += CalendarEvent(null,null,null,0,null)
+    def deleteEvent(event:CalendarEvent) = item.calendar -= event
+    
+    override def save() = {service.cache(item);location.back()}
+    override def cancel() = location.back()
+    
 }
     

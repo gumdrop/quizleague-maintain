@@ -63,7 +63,7 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
       season.endYear, 
       textService.getRef(season.text), 
       season.competitions.map(competitionService.getRef(_)).toList, 
-      season.calendar.map(e=>DomEvent(venueService.getRef(e.venue), e.date, e.time, e.duration, e.description)).toList
+      season.calendar.map(e=>{log(e,"incoming events");DomEvent(venueService.getRef(e.venue), e.date, e.time, e.duration, e.description)}).toList
   )
   override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())
 

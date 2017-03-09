@@ -34,7 +34,7 @@ import quizleague.web.maintain.venue.VenueService
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,SeasonRoutesModule,CompetitionModule],
-  declarations = @@[SeasonComponent,SeasonListComponent],
+  declarations = @@[SeasonComponent,SeasonListComponent, CalendarComponent],
   providers = @@[SeasonService]
    
 )
@@ -75,6 +75,10 @@ class SeasonModule
       Route(
         path = "season/:seasonId/competition/:id/league",
         component = %%[LeagueCompetitionComponent]
+      ),
+      Route(
+        path = "season/:id/calendar",
+        component = %%[CalendarComponent]
       ),
       Route(
         path = "season/:id",
