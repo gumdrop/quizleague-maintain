@@ -15,7 +15,6 @@ import quizleague.web.service.season._
 
 
 import angulate2.common.CommonModule
-import quizleague.web.maintain.competition.CompetitionComponent
 import quizleague.web.maintain.competition.CompetitionModule
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.maintain.competition.LeagueCompetitionComponent
@@ -30,6 +29,8 @@ import quizleague.web.maintain.leaguetable.LeagueTableComponent
 import quizleague.web.maintain.leaguetable.LeagueTableListComponent
 import quizleague.web.maintain.results.ReportListComponent
 import quizleague.web.maintain.venue.VenueService
+import quizleague.web.maintain.competition.CupCompetitionComponent
+import quizleague.web.maintain.competition.SubsidiaryCompetitionComponent
 
 
 @NgModule(
@@ -76,6 +77,14 @@ class SeasonModule
         path = "season/:seasonId/competition/:id/league",
         component = %%[LeagueCompetitionComponent]
       ),
+      Route(
+        path = "season/:seasonId/competition/:id/cup",
+        component = %%[CupCompetitionComponent]
+      ),
+      Route(
+        path = "season/:seasonId/competition/:id/subsidiary",
+        component = %%[SubsidiaryCompetitionComponent]
+      ),      
       Route(
         path = "season/:id/calendar",
         component = %%[CalendarComponent]

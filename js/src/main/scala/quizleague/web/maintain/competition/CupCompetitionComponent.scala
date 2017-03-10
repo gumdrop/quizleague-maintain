@@ -22,7 +22,7 @@ import angulate2.router.Router
 @Component(
   template = s"""
   <div>
-    <h2>League Competition Detail</h2>
+    <h2>Cup Competition Detail</h2>
     <form #fm="ngForm" (submit)="save()">
       <div fxLayout="column">
         <md-input-container>
@@ -44,7 +44,6 @@ import angulate2.router.Router
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
       <div fxLayout="row"><button (click)="results(item)" md-button type="button" >Results...</button></div>
-      <div fxLayout="row"><button (click)="tables(item)" md-button type="button" >Tables...</button></div>
       $formButtons
     </form>
   </div>
@@ -52,7 +51,7 @@ import angulate2.router.Router
   """    
 )
 @classModeScala
-class LeagueCompetitionComponent( override val service:CompetitionService,
+class CupCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
                                   override val route:ActivatedRoute,
                                   override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
@@ -65,10 +64,6 @@ class LeagueCompetitionComponent( override val service:CompetitionService,
      service.cache(item)
      router.navigateRelativeTo(route, "results")
    }
-   
-   def tables(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "leaguetable")
-   }
+
 }
     

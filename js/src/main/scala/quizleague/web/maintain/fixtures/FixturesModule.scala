@@ -14,7 +14,6 @@ import quizleague.web.maintain.component.ComponentNames
 
 import quizleague.web.maintain._
 import angulate2.common.CommonModule
-import quizleague.web.maintain.competition.CompetitionComponent
 import quizleague.web.maintain.competition.CompetitionModule
 import quizleague.web.service.fixtures._
 import angulate2.ext.classModeScala

@@ -27,17 +27,17 @@ import quizleague.web.maintain.leaguetable.LeagueTableService
 
 
 @NgModule(
-  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule,FixturesModule,ResultsModule,LeagueTableModule],
-  declarations = @@[CompetitionComponent,LeagueCompetitionComponent],
+  imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, FixturesModule,ResultsModule,LeagueTableModule],
+  declarations = @@[LeagueCompetitionComponent,CupCompetitionComponent, SubsidiaryCompetitionComponent],
   providers = @@[CompetitionService])
 class CompetitionModule
 
-@Routes(
-  root = false,
-  Route(
-    path = "_competition/:id",
-    component = %%[CompetitionComponent]))
-class CompetitionRoutesModule
+//@Routes(
+//  root = false,
+//  Route(
+//    path = "_competition/:id",
+//    component = %%[CompetitionComponent]))
+//class CompetitionRoutesModule
 
 trait CompetitionNames extends ComponentNames {
   override val typeName = "competition"
