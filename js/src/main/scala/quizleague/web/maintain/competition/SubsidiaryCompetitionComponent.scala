@@ -30,20 +30,10 @@ import angulate2.router.Router
              required
              [(ngModel)]="item.name" name="name">
         </md-input-container>
-        <md-input-container>
-          <input mdInput placeholder="Start Time" type="time"
-             required
-             [(ngModel)]="item.startTime" name="startTime">
-        </md-input-container>
-        <md-input-container>        
-          <input mdInput placeholder="Duration (hours)" type="number"
-             required step=".1"
-             [(ngModel)]="item.duration" name="duration">
-        </md-input-container>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-      <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
       <div fxLayout="row"><button (click)="results(item)" md-button type="button" >Results...</button></div>
+      <div fxLayout="row"><button (click)="tables(item)" md-button type="button" >Tables...</button></div>
       $formButtons
     </form>
   </div>
@@ -54,17 +44,4 @@ import angulate2.router.Router
 class SubsidiaryCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
                                   override val route:ActivatedRoute,
-                                  override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
-
-   
-   def results(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "results")
-   }
-   
-   def tables(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "leaguetable")
-   }
-}
-    
+                                  override val router:Router) extends CompetitionComponent

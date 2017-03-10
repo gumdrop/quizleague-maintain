@@ -57,6 +57,8 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
     add(
     competition match {
       case c:LeagueCompetition => Dom(newId, "", c.name, findNextDate(c), c.startTime, c.duration, List())
+      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now(),c.startTime,c.duration,List())
+      case _ => null
     })
   }
   override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}

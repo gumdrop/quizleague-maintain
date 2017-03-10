@@ -54,16 +54,5 @@ import angulate2.router.Router
 class CupCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
                                   override val route:ActivatedRoute,
-                                  override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
-   def fixtures(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "fixtures")
-   }
-   
-   def results(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "results")
-   }
-
-}
+                                  override val router:Router) extends CompetitionComponent
     

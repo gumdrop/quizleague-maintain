@@ -9,13 +9,10 @@ import quizleague.web.model._
 import scala.scalajs.js
 import angulate2.ext.classModeScala
 import TemplateElements._
-import quizleague.web.maintain.text.TextService
+import quizleague.web.maintain.season.SeasonService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import angulate2.core.Input
-import quizleague.web.maintain.text.TextEditMixin
-import quizleague.web.util.Logging
-import quizleague.web.maintain.text.TextEditMixin
 import angulate2.router.Router
 
 
@@ -40,6 +37,11 @@ import angulate2.router.Router
              required step=".1"
              [(ngModel)]="item.duration" name="duration">
         </md-input-container>
+        <md-select placeholder="Subsidiary Competition" name="subsidiary" [(ngModel)]="item.subsidiary"  >
+          <md-option *ngFor="let subsidiary of competitions" [value]="subsidiary" >
+            {{subsidiary.name}}
+          </md-option>
+        </md-select>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
@@ -55,20 +57,22 @@ import angulate2.router.Router
 class LeagueCompetitionComponent( override val service:CompetitionService,
                                   override val location:Location,
                                   override val route:ActivatedRoute,
-                                  override val router:Router) extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
-   def fixtures(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "fixtures")
-   }
-   
-   def results(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "results")
-   }
-   
-   def tables(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "leaguetable")
-   }
+                                  override val router:Router,
+                                  val seasonService:SeasonService) extends CompetitionComponent{
+  
+  var competitions:js.Array[Competition] = _
+  
+  def filterSubs(c:Competition) = {
+    c match {
+      case s:SubsidiaryLeagueCompetition => true
+      case _ => false
+    }
+  }
+  
+  override def init() = {
+    route.params
+    .switchMap((params,i) => seasonService.get(params("seasonId"))).subscribe((x:Season) => competitions = x.competitions.filter(filterSubs _))
+    super.init()}
+
 }
     
