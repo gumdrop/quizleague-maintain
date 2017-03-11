@@ -9,7 +9,7 @@ import angulate2.std.Data
 
 object CompetitionType extends Enumeration {
   type CompetitionType = Value
-  val league, cup, subsidiary = Value
+  val league, cup, subsidiary,singleton = Value
 }
 
 import CompetitionType._
@@ -66,4 +66,17 @@ class SubsidiaryLeagueCompetition(
   override val typeName = subsidiary.toString()
   override val fixtures = js.Array[Fixtures]()
 }
+
+@ScalaJSDefined
+class SingletonCompetition(     
+      override val id:String,
+      override val name:String,
+      override val text:Text,
+      val event:Event) extends Competition{
+  override val typeName = singleton.toString()
+  override val fixtures = js.Array[Fixtures]()
+  override val results = js.Array[Results]()
+  override val tables = js.Array[LeagueTable]()
+}
+    
 

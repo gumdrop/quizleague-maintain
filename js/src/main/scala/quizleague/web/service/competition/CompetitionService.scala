@@ -7,6 +7,7 @@ import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.domain.{ Competition => Dom }
 import quizleague.domain.Ref
+import quizleague.domain.{Event => DomEvent}
 import rxjs.Observable
 import quizleague.web.maintain.component.ComponentNames
 import scala.scalajs.js
@@ -24,6 +25,9 @@ import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.maintain.competition.CompetitionNames
 import quizleague.web.util.Logging
+import quizleague.web.service.venue.VenueGetService
+import quizleague.web.service.venue.VenuePutService
+import java.time.LocalDate
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom
@@ -32,6 +36,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   val resultsService: ResultsGetService
   val fixturesService: FixturesGetService
   val leagueTableService: LeagueTableGetService
+  val venueService: VenueGetService
 
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
@@ -47,6 +52,8 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import domain.{ LeagueCompetition => DLC }
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }
+    import domain.{ SingletonCompetition => DSiC }  
+   
 
     def doMapOut(dom: Dom)(implicit depth:Int): Observable[Competition] = {
       if (dom == null) Observable.of(null)
@@ -80,7 +87,9 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
             c.duration,
             fixtures,
             results,
-            text)))
+            text))
+            
+        )
 
         case c: DSC => Observable.zip(
           mapOutList(c.results, resultsService),
@@ -92,10 +101,17 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
             results,
             tables,
             text)))
+            
+        case c:DSiC => Observable.zip(
+            child(c.text,textService),
+            child(c.event.venue, venueService),
+            (text:Text, venue:Venue) => new SingletonCompetition(c.id,c.name,text,Event(venue,c.event.date, c.event.time, c.event.duration))
+        )
 
       }
 
     }
+
 
     def doMapOutSparse(dom: Dom):Competition = {
       if (dom == null) return null
@@ -124,6 +140,12 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           js.Array(),
           js.Array(),
           null)
+        case c : DSiC => new SingletonCompetition(
+          c.id,
+          c.name,
+          null,
+          Event(null,c.event.date,c.event.time,c.event.duration)
+        )
       }
     }
 
@@ -137,6 +159,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
   override val resultsService: ResultsPutService
   override val fixturesService: FixturesPutService
   override val leagueTableService:LeagueTablePutService
+  override val venueService:VenuePutService
 
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def make() = ???
@@ -152,6 +175,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       case CompetitionType.league => makeLeague
       case CompetitionType.cup => makeCup
       case CompetitionType.subsidiary => makeSubsidiary
+      case CompetitionType.singleton => makeSingleton
     }
     add(comp).asInstanceOf[A]
   }
@@ -162,6 +186,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
     import domain.{ LeagueCompetition => DLC }
     import domain.{ CupCompetition => DCC }
     import domain.{ SubsidiaryLeagueCompetition => DSC }
+    import domain.{ SingletonCompetition => DSiC }      
 
     def makeLeague = DLC(
       newId(),
@@ -189,6 +214,13 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       List(),
       List(),
       textService.getRef(textService.instance()))
+    
+    def makeSingleton = DSiC(
+      newId(),
+      "Singleton",
+      DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90)),
+      textService.getRef(textService.instance()))
+
 
     def doMapIn(comp: Competition) = {
       comp match {
@@ -217,6 +249,12 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           s.name,
           s.results.map(resultsService.getRef(_)).toList,
           s.tables.map(leagueTableService.getRef(_)).toList,
+          textService.getRef(s.text))
+        
+        case s: SingletonCompetition => DSiC(
+          s.id,
+          s.name,
+          DomEvent(venueService.getRef(s.event.venue), s.event.date, s.event.time, s.event.duration),
           textService.getRef(s.text))
       }
 

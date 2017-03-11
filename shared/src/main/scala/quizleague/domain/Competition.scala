@@ -53,15 +53,21 @@ case class SubsidiaryLeagueCompetition(
   text:Ref[Text]
 ) extends Competition with SubsidiaryCompetition with ResultsCompetition with CompetitionTables
 
+case class SingletonCompetition(
+  id:String,
+  name:String,
+  event:Event,
+  text:Ref[Text]    
+) extends Competition with BaseSingletonCompetition
+
 object Competition
 
 
 
- trait SingletonCompetition{
+ trait BaseSingletonCompetition{
     
-  val date:LocalDate
-  val startTime:LocalTime
-  val duration:Duration
+  val event:Event
+
 }
 
  trait ScheduledCompetition{

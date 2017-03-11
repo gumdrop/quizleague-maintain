@@ -1,6 +1,7 @@
 package quizleague.util.json.codecs
 
 import quizleague.domain._
+import ScalaTimeCodecs._
 
 object DomainCodecs{
   import io.circe._, io.circe.generic.semiauto._
@@ -14,5 +15,9 @@ object DomainCodecs{
   implicit val refLeagueTableEncoder: Encoder[Ref[LeagueTable]] = deriveEncoder  
   implicit val refCompetitionDecoder: Decoder[Ref[Competition]] = deriveDecoder
   implicit val refCompetitionEncoder: Encoder[Ref[Competition]] = deriveEncoder  
-
+  implicit val refVenueDecoder: Decoder[Ref[Venue]] = deriveDecoder
+  implicit val refVenueEncoder: Encoder[Ref[Venue]] = deriveEncoder
+  implicit val eventDecoder: Decoder[Event] = deriveDecoder
+  implicit val eventEncoder: Encoder[Event] = deriveEncoder
+  
 }

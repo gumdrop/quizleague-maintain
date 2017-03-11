@@ -24,11 +24,12 @@ import angulate2.ext.classModeScala
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.leaguetable.LeagueTableModule
 import quizleague.web.maintain.leaguetable.LeagueTableService
+import quizleague.web.maintain.venue.VenueService
 
 
 @NgModule(
   imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, FixturesModule,ResultsModule,LeagueTableModule],
-  declarations = @@[LeagueCompetitionComponent,CupCompetitionComponent, SubsidiaryCompetitionComponent],
+  declarations = @@[LeagueCompetitionComponent,CupCompetitionComponent, SubsidiaryCompetitionComponent, SingletonCompetitionComponent],
   providers = @@[CompetitionService])
 class CompetitionModule
 
@@ -50,6 +51,7 @@ class CompetitionService(
     override val textService: TextService,
     override val resultsService: ResultsService,
     override val fixturesService: FixturesService,
-    override val leagueTableService:LeagueTableService) extends CompetitionGetService with CompetitionPutService with ServiceRoot
+    override val leagueTableService:LeagueTableService,
+    override val venueService:VenueService) extends CompetitionGetService with CompetitionPutService with ServiceRoot
 
 

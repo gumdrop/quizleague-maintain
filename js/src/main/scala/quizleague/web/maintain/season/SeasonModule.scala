@@ -31,6 +31,7 @@ import quizleague.web.maintain.results.ReportListComponent
 import quizleague.web.maintain.venue.VenueService
 import quizleague.web.maintain.competition.CupCompetitionComponent
 import quizleague.web.maintain.competition.SubsidiaryCompetitionComponent
+import quizleague.web.maintain.competition.SingletonCompetitionComponent
 
 
 @NgModule(
@@ -84,7 +85,11 @@ class SeasonModule
       Route(
         path = "season/:seasonId/competition/:id/subsidiary",
         component = %%[SubsidiaryCompetitionComponent]
-      ),      
+      ),
+      Route(
+        path = "season/:seasonId/competition/:id/singleton",
+        component = %%[SingletonCompetitionComponent]
+      ),
       Route(
         path = "season/:id/calendar",
         component = %%[CalendarComponent]
