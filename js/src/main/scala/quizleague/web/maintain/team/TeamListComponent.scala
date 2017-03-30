@@ -11,6 +11,7 @@ import quizleague.web.maintain.component.ListComponent
 import quizleague.web.util.UUID
 import quizleague.web.model._
 import angulate2.ext.classModeScala
+import quizleague.web.names.TeamNames
 
 @Component(
   selector = "ql-team-list",

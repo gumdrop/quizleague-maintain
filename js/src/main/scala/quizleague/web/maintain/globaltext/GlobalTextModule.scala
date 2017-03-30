@@ -12,7 +12,7 @@ import angulate2.http.Http
 import quizleague.web.service.globaltext._
 import angular.flexlayout.FlexLayoutModule
 import quizleague.web.util.UUID
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import quizleague.web.maintain.text.TextService
 
 import angulate2.ext.classModeScala
@@ -45,9 +45,6 @@ class GlobalTextModule
 class GlobalTextRoutesModule 
 
 
-trait GlobalTextNames extends ComponentNames{
-  override val typeName = "globalText"
-}
 
 @Injectable
 @classModeScala

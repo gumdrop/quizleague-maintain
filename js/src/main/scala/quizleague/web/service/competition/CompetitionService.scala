@@ -9,7 +9,7 @@ import quizleague.domain.{ Competition => Dom }
 import quizleague.domain.Ref
 import quizleague.domain.{Event => DomEvent}
 import rxjs.Observable
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js
 import quizleague.web.util.DateTimeConverters._
 import quizleague.web.service.fixtures._
@@ -23,11 +23,11 @@ import java.util.concurrent.TimeUnit
 import java.time.temporal.ChronoUnit
 import quizleague.web.service._
 import quizleague.web.service.text._
-import quizleague.web.maintain.competition.CompetitionNames
 import quizleague.web.util.Logging
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
 import java.time.LocalDate
+import quizleague.web.names.CompetitionNames
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom

@@ -10,19 +10,18 @@ import quizleague.web.model.{Fixtures => Model}
 import quizleague.domain.{Fixtures => Dom}
 import quizleague.domain.Ref
 import rxjs.Observable
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js
-import quizleague.web.maintain.text.TextService
 import java.time.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.service._
-import quizleague.web.maintain.fixtures.FixturesNames
 import java.time.LocalTime
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDate
 import quizleague.web.service.DirtyListService
+import quizleague.web.names.FixturesNames
 
 
 

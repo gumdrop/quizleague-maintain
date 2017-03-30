@@ -11,6 +11,7 @@ import quizleague.web.maintain.component.ListComponent
 import quizleague.web.util.UUID
 import quizleague.web.model.Venue
 import angulate2.ext.classModeScala
+import quizleague.web.names.VenueNames
 
 @Component(
   selector = "ql-venue-list",

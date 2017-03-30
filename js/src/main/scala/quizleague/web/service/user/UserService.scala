@@ -7,7 +7,7 @@ import quizleague.web.service._
 import quizleague.web.model.User
 import quizleague.domain.{ User => DomUser }
 import rxjs.Observable
-import quizleague.web.maintain.user.UserNames
+import quizleague.web.names.UserNames
 
 
 

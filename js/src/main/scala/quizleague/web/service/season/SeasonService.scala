@@ -9,16 +9,16 @@ import quizleague.domain.{ Season => Dom }
 import quizleague.domain.{ CalendarEvent => DomEvent }
 import quizleague.domain.Ref
 import rxjs.Observable
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js
-import quizleague.web.maintain.text.TextService
+
 import java.time.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.service.competition._
-import quizleague.web.maintain.season.SeasonNames
+import quizleague.web.names.SeasonNames
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
 

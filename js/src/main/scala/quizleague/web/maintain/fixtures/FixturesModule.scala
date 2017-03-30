@@ -10,7 +10,7 @@ import scala.scalajs.js
 import angulate2.http.Http
 import quizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 
 import quizleague.web.maintain._
 import angulate2.common.CommonModule
@@ -37,13 +37,7 @@ class FixturesModule
 )
 class FixturesRoutesModule 
 
-trait FixturesNames extends ComponentNames{
-  override val typeName = "fixtures"
-}
 
-trait FixtureNames extends ComponentNames{
-  override val typeName = "fixture"
-}
 
 @Injectable
 @classModeScala

@@ -9,6 +9,7 @@ import quizleague.web.maintain.component.ListComponent
 
 
 import angulate2.ext.classModeScala
+import quizleague.web.names.GlobalTextNames
 
 @Component(
   selector = "ql-globaltext-list",

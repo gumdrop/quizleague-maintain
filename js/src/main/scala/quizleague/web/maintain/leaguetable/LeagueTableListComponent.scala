@@ -15,6 +15,7 @@ import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.model.LeagueCompetition
+import quizleague.web.names.LeagueTableNames
 
 
 

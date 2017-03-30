@@ -1,4 +1,4 @@
-package quizleague.web.maintain.component
+package quizleague.web.names
 
 trait ComponentNames {
   val typeName:String

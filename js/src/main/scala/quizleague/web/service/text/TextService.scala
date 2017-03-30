@@ -8,7 +8,7 @@ import quizleague.web.model.Text
 import quizleague.domain.{ Text => Dom }
 import rxjs.Observable
 import shapeless._
-import quizleague.web.maintain.text.TextNames
+import quizleague.web.names.TextNames
 
 trait TextGetService extends GetService[Text] with TextNames {
   override type U = Dom

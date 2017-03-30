@@ -9,7 +9,7 @@ import scala.scalajs.js
 
 import angulate2.http.Http
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 
 
 import angulate2.common.CommonModule
@@ -31,10 +31,6 @@ import quizleague.web.maintain.results.ResultsService
    
 )
 class LeagueTableModule
-
-trait LeagueTableNames extends ComponentNames{
-  override val typeName = "leaguetable"
-}
 
 
 @Injectable

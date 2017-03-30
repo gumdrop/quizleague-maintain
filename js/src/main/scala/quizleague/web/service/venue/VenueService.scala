@@ -8,7 +8,7 @@ import quizleague.web.model.Venue
 import quizleague.domain.{ Venue => DomVenue }
 import rxjs.Observable
 import quizleague.web.service.GetService
-import quizleague.web.maintain.venue.VenueNames
+import quizleague.web.names.VenueNames
 import quizleague.web.service.PutService
 
 

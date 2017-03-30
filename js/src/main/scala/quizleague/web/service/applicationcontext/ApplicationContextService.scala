@@ -7,13 +7,13 @@ import quizleague.domain.{EmailAlias => DomEmailAlias}
 
 import quizleague.domain.Ref
 import rxjs.Observable
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js
 import quizleague.web.service._
 import quizleague.web.service.globaltext._
 import quizleague.web.service.user._
-import quizleague.web.maintain.applicationcontext.ApplicationContextNames
 import quizleague.web.util.Logging
+import quizleague.web.names.ApplicationContextNames
 
 
 

@@ -13,7 +13,7 @@ import angulate2.http.Http
 import quizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
 import quizleague.web.util.UUID
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 
 import angulate2.ext.classModeScala
 import angulate2.common.CommonModule
@@ -40,9 +40,6 @@ class TextModule
 class TextRoutesModule 
 
 
-trait TextNames extends ComponentNames{
-  override val typeName = "text"
-}
 
 @Injectable
 @classModeScala

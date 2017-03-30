@@ -17,8 +17,6 @@ import quizleague.web.service._
 import java.time.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
-import quizleague.web.maintain.results.ResultsNames
-import quizleague.web.maintain.results.ResultNames
 import quizleague.web.service.user.UserGetService
 import quizleague.web.service.fixtures.FixtureGetService
 import quizleague.web.service.text.TextGetService
@@ -28,7 +26,7 @@ import quizleague.web.service.fixtures.FixturePutService
 import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
-import quizleague.web.maintain.leaguetable.LeagueTableNames
+import quizleague.web.names.LeagueTableNames
 import quizleague.web.service.results.ResultsGetService
 
 

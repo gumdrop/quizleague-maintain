@@ -12,7 +12,6 @@ import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.service.competition._
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.maintain.component.ComponentNames
 import quizleague.web.maintain._
 
 import angulate2.common.CommonModule
@@ -33,16 +32,7 @@ import quizleague.web.maintain.venue.VenueService
   providers = @@[CompetitionService])
 class CompetitionModule
 
-//@Routes(
-//  root = false,
-//  Route(
-//    path = "_competition/:id",
-//    component = %%[CompetitionComponent]))
-//class CompetitionRoutesModule
 
-trait CompetitionNames extends ComponentNames {
-  override val typeName = "competition"
-}
 
 @Injectable
 @classModeScala

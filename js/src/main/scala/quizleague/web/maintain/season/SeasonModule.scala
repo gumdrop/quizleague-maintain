@@ -10,7 +10,7 @@ import scala.scalajs.js
 import angulate2.http.Http
 import quizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import quizleague.web.service.season._
 
 
@@ -105,9 +105,6 @@ class SeasonModule
 )
 class SeasonRoutesModule 
 
-trait SeasonNames extends ComponentNames{
-  override val typeName = "season"
-}
 
 @Injectable
 @classModeScala

@@ -6,18 +6,15 @@ import angulate2.http.Http
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.domain.{ Team => DomTeam }
-import quizleague.web.maintain.venue.VenueService
 import quizleague.domain.Ref
 import rxjs.Observable
-import quizleague.web.maintain.component.ComponentNames
-import quizleague.web.maintain.user.UserService
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js
-import quizleague.web.maintain.text.TextService
 import quizleague.web.service._
 import quizleague.web.service.venue._
 import quizleague.web.service.text._
 import quizleague.web.service.user._
-import quizleague.web.maintain.team.TeamNames
+import quizleague.web.names.TeamNames
 
 trait TeamGetService extends GetService[Team] with TeamNames {
 

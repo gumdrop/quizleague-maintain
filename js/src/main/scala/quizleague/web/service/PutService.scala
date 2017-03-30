@@ -3,7 +3,7 @@ package quizleague.web.service
 import scalajs.js
 import quizleague.web.util.UUID
 import quizleague.domain.Ref
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>

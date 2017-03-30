@@ -11,7 +11,7 @@ import scala.scalajs.js.annotation.ScalaJSDefined
 import quizleague.domain.Entity
 import quizleague.web.util._
 import quizleague.domain.Ref
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 import scala.scalajs.js.JSON
 
 trait GetService[T] extends Logging{

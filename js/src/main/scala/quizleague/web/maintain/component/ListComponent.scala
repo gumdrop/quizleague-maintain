@@ -11,6 +11,7 @@ import scala.scalajs.js.annotation.JSExport
 import js.Dynamic.{ global => g }
 import quizleague.web.service.GetService
 import quizleague.web.service.PutService
+import quizleague.web.names.ComponentNames
 
 
 trait ListComponent[T] extends OnInit{

@@ -12,7 +12,7 @@ import quizleague.web.service.text._
 import quizleague.web.service._
 import scalajs.js
 import js.JSConverters._
-import quizleague.web.maintain.globaltext.GlobalTextNames
+import quizleague.web.names.GlobalTextNames
 
 
 trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{

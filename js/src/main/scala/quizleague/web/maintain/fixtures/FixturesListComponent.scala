@@ -13,6 +13,7 @@ import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
 import quizleague.web.maintain.competition.CompetitionService
+import quizleague.web.names.FixturesNames
 
 
 @Component(

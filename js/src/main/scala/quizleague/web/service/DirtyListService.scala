@@ -1,6 +1,6 @@
 package quizleague.web.service
 
-import quizleague.web.maintain.component.ComponentNames
+import quizleague.web.names.ComponentNames
 
 trait DirtyListService[T] extends PutService[T]{
   this:GetService[T] with ComponentNames =>
