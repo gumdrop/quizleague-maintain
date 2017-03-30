@@ -16,7 +16,6 @@ import js.Dynamic.{ global => g }
 import quizleague.web.model.GlobalText
 
 @Component(
-  selector = "ql-application-context",
   template = s"""
   <div>
     <h2>Application Context</h2>
