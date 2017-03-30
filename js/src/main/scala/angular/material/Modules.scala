@@ -13,3 +13,9 @@ class MaterialModule extends js.Object
 object MaterialModule extends js.Object {
   def forRoot(): ModuleWithProviders = js.native
 }
+
+
+
+@js.native
+@JSImport("@angular/platform-browser/animations","BrowserAnimationsModule")
+class BrowserAnimationsModule extends js.Object

@@ -17,20 +17,25 @@ import quizleague.web.maintain.text.TextEditMixin
 import quizleague.web.util.Logging
 import quizleague.web.maintain.text.TextEditMixin
 import angulate2.router.Router
+import scala.scalajs.js.annotation.JSExport
 
 
 trait CompetitionComponent extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
-   def fixtures(comp:Competition) = {
+  
+  @JSExport
+  def fixtures(comp:Competition) = {
      service.cache(item)
      router.navigateRelativeTo(route, "fixtures")
    }
    
-   def results(comp:Competition) = {
+  @JSExport 
+  def results(comp:Competition) = {
      service.cache(item)
      router.navigateRelativeTo(route, "results")
    }
    
-   def tables(comp:Competition) = {
+  @JSExport 
+  def tables(comp:Competition) = {
      service.cache(item)
      router.navigateRelativeTo(route, "leaguetable")
    }

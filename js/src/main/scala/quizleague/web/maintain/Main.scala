@@ -21,15 +21,20 @@ import quizleague.web.maintain.globaltext.GlobalTextModule
 import quizleague.web.maintain.applicationcontext.ApplicationContextModule
 import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.competition.CompetitionModule
+import angular.material.BrowserAnimationsModule
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule,
-    VenueModule, TeamModule, UserModule, TextModule, GlobalTextModule, ApplicationContextModule, SeasonModule] :+
+  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
 )
 class AppModule 
+
+@NgModule(
+  imports = @@[VenueModule, TeamModule, UserModule, TextModule, GlobalTextModule, ApplicationContextModule, SeasonModule]
+)
+class DepsModule
 
 @Routes(
   root = true,
@@ -58,7 +63,7 @@ class AppRoutingModule
           <a routerLink="/venue" md-button >Venues</a>
         </div>
       </md-sidenav>
-      <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 72px);" fxLayout="column">
+      <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 66px);" fxLayout="column">
         <router-outlet></router-outlet>
       </div>
     </md-sidenav-container>

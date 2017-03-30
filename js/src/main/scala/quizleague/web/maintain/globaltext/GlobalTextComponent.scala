@@ -12,7 +12,6 @@ import angulate2.router.Router
 import quizleague.web.util.Logging
 
 @Component(
-  selector = "ql-global-text",
   template = s"""
   <div>
     <h2>Global Text Detail</h2>
