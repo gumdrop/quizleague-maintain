@@ -45,7 +45,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   
   override val fixtureService:FixturePutService
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, model.fixtures.map(fixtureService.getRef(_)).toList)
-  override protected def make() = Dom(newId, "","",new Date(Date.now()),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+  override protected def make() = Dom(newId, "","",LocalDate.now(),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   def instance(competition:Competition) = {
     
