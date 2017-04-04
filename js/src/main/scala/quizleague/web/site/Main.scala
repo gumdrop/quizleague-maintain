@@ -5,75 +5,96 @@ import angulate2.router.{Route, RouterModule}
 import angulate2.platformBrowser.BrowserModule
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
-import quizleague.web.maintain.venue.VenueModule
-import quizleague.web.maintain.user.UserModule
-
 
 import scala.scalajs.js
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.maintain.team.TeamModule
 import angular.flexlayout.FlexLayoutModule
 import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
 import angulate2.http.HttpModule
-import quizleague.web.maintain.mock.MockData
-import quizleague.web.maintain.text.TextModule
-import quizleague.web.maintain.globaltext.GlobalTextModule
-import quizleague.web.maintain.applicationcontext.ApplicationContextModule
-import quizleague.web.maintain.season.SeasonModule
-import quizleague.web.maintain.competition.CompetitionModule
+import quizleague.web.mock.MockData
+import quizleague.web.site.text.NamedTextComponent
+import quizleague.web.site.global.ApplicationContextModule
+import quizleague.web.site.text.TextModule
+import quizleague.web.site.user.UserModule
+import quizleague.web.site.text.NamedTextComponent
+import quizleague.web.site.global.ApplicationContextService
+
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule] :+
+  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, ApplicationModules, TextModule ] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
-  declarations = @@[AppComponent,RootComponent],
+  declarations = @@[AppComponent,RootComponent,RootMenuComponent], 
   bootstrap = @@[AppComponent]
 )
 class AppModule 
 
+
+@NgModule(
+  imports = @@[ApplicationContextModule, UserModule]
+)
+class ApplicationModules
+
 @Routes(
   root = true,
-  Route(path = "", component = %%[RootComponent])
+  Route(path = "", component = %%[RootComponent]),
+  Route(path = "", component = %%[RootMenuComponent], outlet="sidemenu")
 )
 class AppRoutingModule
 
-@Component(
+@Component( 
   selector = "ql-app",
   template = """
   <div>
    <md-toolbar color='primary'>
-      <button md-icon-button (click)="sidenav.toggle()">
-        <i class='material-icons app-toolbar-menu'>menu</i>
-      </button>
-      Quiz League website 
-    </md-toolbar>
-    <md-sidenav-container>
-      <md-sidenav #sidenav mode="side" opened="true">
-        <div  fxLayout="column">
-          <a routerLink="/applicationContext" md-button >Application Context</a>
-          <a routerLink="/globalText" md-button >Global Text</a>
+      <span>
+        <button md-icon-button (click)="sidenav.toggle()">
+          <md-icon class="md-24">menu</md-icon>
+        </button>
+        <span>{{leagueName}}</span>
+      </span>
+      <md-toolbar-row>
+        <div fxLayout="row">
+          <a routerLink="/" md-button >Home</a>
           <a routerLink="/team" md-button >Teams</a>
-          <a routerLink="/season" md-button >Seasons</a>
-          <a routerLink="/user" md-button >Users</a>
+          <a routerLink="/competition" md-button >Competitions</a>
+          <a routerLink="/results" md-button >Results</a>
           <a routerLink="/venue" md-button >Venues</a>
         </div>
+      </md-toolbar-row>
+    </md-toolbar>
+    <md-sidenav-container>
+      <md-sidenav #sidenav mode="side" [opened]="showSidenav">
+        <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
-      <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 72px);" fxLayout="column">
+      <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
         <router-outlet></router-outlet>
       </div>
     </md-sidenav-container>
   </div>
   """
 )
-class AppComponent
+class AppComponent(service:ApplicationContextService) extends OnInit {
+  
+  var leagueName:String = _
+  
+  var showSidenav = false
+  
+  override def ngOnInit() = service.get.subscribe(appc => {leagueName = appc.leagueName})
+}
 
 @Component(
-  selector = "ql-root",
   template = """
-  <div>
+  <div fxLayout="row">
+    <div>League Tables here</div>
     <md-card>
-      <md-card-title>Quiz League Maintenance App</md-card-title>
+      <ql-named-text name="front_page_main"></ql-named-text>
     </md-card>
   </div>
   """
 )
-class RootComponent 
+class RootComponent
+
+@Component(
+  template = ""
+)
+class RootMenuComponent

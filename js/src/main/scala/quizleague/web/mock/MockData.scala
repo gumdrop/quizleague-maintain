@@ -1,4 +1,4 @@
-package quizleague.web.maintain.mock
+package quizleague.web.mock
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
@@ -35,14 +35,20 @@ class MockData extends InMemoryDbService {
     ),
     "text" -> js.Array(
         literal(id ="1", json =  Text("1", "some text here", "text/plain").asJson.noSpaces),
-        literal(id ="2", json =  Text("2", "global text here", "text/html").asJson.noSpaces),
-        literal(id ="3", json =  Text("3", "a match report", "text/html").asJson.noSpaces)
+        literal(id ="2", json =  Text("2", "<b>global text here</b>", "text/html").asJson.noSpaces),
+        literal(id ="3", json =  Text("3", "a match report", "text/html").asJson.noSpaces),
+        literal(id ="4", json =  Text("4","""<p>The Chiltern Quiz League is&nbsp;a friendly, local quiz league based in and around the Buckinghamshire towns of Amersham and Chesham (with an outpost in Farnham Common).</p>
+<p>We currently have 10 teams in a single <a href="competitions/LEAGUE">league</a>, with all&nbsp;teams playing each other twice, home and away. We also run two knockout competitions, the&nbsp;<a href="competitions/CUP">Cup</a> and the&nbsp;<a href="competitions/PLATE">Plate</a> (think of the Plate as the Europa League to the Champions League of the Cup), and the just-for-fun&nbsp;<a href="competitions/BEER">Beer Leg</a> each night after the main quiz.</p>
+<p>Our season normally runs from October to April; matches are played on Tuesday nights at 8:30pm, and generally last about 1&frac12; hours.</p>
+<p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text.html").asJson.noSpaces)
+        
 
 
     ),
     "globalText" -> js.Array(
         literal(id ="1", json =  GlobalText("1", "default global text", Map(
-        "a text entry" -> Ref("text", "2")    
+        "a text entry" -> Ref("text", "2"),
+        "front_page_main" -> Ref("text", "4")
         )).asJson.noSpaces)
 
     ),

@@ -15,7 +15,7 @@ import quizleague.web.maintain.team.TeamModule
 import angular.flexlayout.FlexLayoutModule
 import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
 import angulate2.http.HttpModule
-import quizleague.web.maintain.mock.MockData
+import quizleague.web.mock.MockData
 import quizleague.web.maintain.text.TextModule
 import quizleague.web.maintain.globaltext.GlobalTextModule
 import quizleague.web.maintain.applicationcontext.ApplicationContextModule

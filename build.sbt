@@ -31,7 +31,7 @@ lazy val quizleague = crossProject.in(file(".")).
   settings(commonSettings: _*).
   settings( 
     name := "quizleague",
-    ngBootstrap := Some("quizleague.web.maintain.AppModule"),
+    ngBootstrap := Some("quizleague.web.site.AppModule"),
     libraryDependencies ++= Seq(
 	  "io.circe" %%% "circe-core",
 	  "io.circe" %%% "circe-generic",
