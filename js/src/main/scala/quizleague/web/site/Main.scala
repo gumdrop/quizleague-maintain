@@ -46,13 +46,13 @@ class AppRoutingModule
   template = """
   <div>
    <md-toolbar color='primary'>
-      <span>
+      <span class="toolbar-medium">
         <button md-icon-button (click)="sidenav.toggle()">
           <md-icon class="md-24">menu</md-icon>
         </button>
         <span>{{leagueName}}</span>
       </span>
-      <md-toolbar-row>
+      <md-toolbar-row class="toolbar-medium">
         <div fxLayout="row">
           <a routerLink="/" md-button >Home</a>
           <a routerLink="/team" md-button >Teams</a>

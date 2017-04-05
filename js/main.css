@@ -8,3 +8,7 @@ html,body,ql-app{
 	flex:1;
 	overflow-y:scroll;
 }
+
+.mat-toolbar-row{
+	height:48px!important;
+}
