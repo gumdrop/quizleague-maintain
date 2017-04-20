@@ -2,10 +2,11 @@ package quizleague.web.site.common
 
 import angulate2.ext.classModeScala
 import angulate2.std.Injectable
+import rxjs.Subject
 
 @Injectable
 @classModeScala
 class SideMenuService {
-  var showMenu = false
+  val showMenu = new Subject[Boolean]
   
 }

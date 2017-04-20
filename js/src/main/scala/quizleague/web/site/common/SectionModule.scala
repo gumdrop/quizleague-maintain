@@ -6,11 +6,11 @@ trait SectionModule {
 
 trait NoMenuModule{
   this:SectionModule =>
-  def onInit() = sideMenuService.showMenu = false
+  def onInit() = sideMenuService.showMenu.next(false)
 }
 
 trait MenuModule {
   this:SectionModule =>
-  def onInit() = sideMenuService.showMenu = true
+  def onInit() = sideMenuService.showMenu.next(true)
   
 }

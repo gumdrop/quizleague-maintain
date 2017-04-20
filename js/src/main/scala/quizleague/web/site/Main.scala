@@ -24,6 +24,7 @@ import scala.scalajs.js
 import quizleague.web.util.Logging
 import angulate2.ext.classModeScala
 import quizleague.web.site.common.SideMenuService
+import rxjs.Observable
 
 
 @NgModule(
@@ -75,7 +76,7 @@ class AppRoutingModule
       </md-toolbar-row>
     </md-toolbar>
     <md-sidenav-container>
-      <md-sidenav #sidenav mode="side" [opened]="showSidenav">
+      <md-sidenav #sidenav mode="side" [opened]="showSidenav | async">
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
@@ -89,9 +90,12 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
   
   var leagueName:String = _
   
-  var showSidenav = sideMenuService.showMenu
+  var showSidenav:Observable[Boolean]  = _ 
   
-  override def ngOnInit() = service.get.subscribe(appc => {leagueName = appc.leagueName})
+  override def ngOnInit() = {
+    service.get.subscribe(appc => {leagueName = appc.leagueName})
+    showSidenav = sideMenuService.showMenu
+  }
 }
 
 @Component(
