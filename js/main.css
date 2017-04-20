@@ -12,3 +12,7 @@ html,body,ql-app{
 .mat-toolbar-row{
 	height:48px!important;
 }
+
+.active{
+	opacity:.5!important;
+}

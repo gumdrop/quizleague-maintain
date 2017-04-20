@@ -1,7 +1,7 @@
 package quizleague.web.site
 
 import angulate2.std._
-import angulate2.router.{Route, RouterModule}
+import angulate2.router.{Route, RouterModule, Router}
 import angulate2.platformBrowser.BrowserModule
 import angular.material.MaterialModule
 import angulate2.forms.FormsModule
@@ -18,27 +18,39 @@ import quizleague.web.site.text.TextModule
 import quizleague.web.site.user.UserModule
 import quizleague.web.site.text.NamedTextComponent
 import quizleague.web.site.global.ApplicationContextService
+import quizleague.web.site.team.TeamModule
+import quizleague.web.site.venue.VenueModule
+import scala.scalajs.js
+import quizleague.web.util.Logging
+import angulate2.ext.classModeScala
+import quizleague.web.site.common.SideMenuService
 
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, ApplicationModules, TextModule ] :+
+  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, HttpModule, TextModule, ApplicationModules, AppRoutingModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
   declarations = @@[AppComponent,RootComponent,RootMenuComponent], 
-  bootstrap = @@[AppComponent]
+  bootstrap = @@[AppComponent],
+  providers = @@[SideMenuService]
 )
-class AppModule 
+@classModeScala
+class AppModule (router:Router) extends Logging{
+  log(router.config, "Routes : ")
+}
 
 
 @NgModule(
-  imports = @@[ApplicationContextModule, UserModule]
+  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule]
 )
 class ApplicationModules
 
 @Routes(
   root = true,
-  Route(path = "", component = %%[RootComponent]),
-  Route(path = "", component = %%[RootMenuComponent], outlet="sidemenu")
-)
+  Route(path = "home", 
+      children = @@@(
+          Route(path="", component = %%[RootComponent]), 
+          Route(path="", component = %%[RootMenuComponent], outlet="sidemenu"))),
+  Route(path = "",   redirectTo = "/home", pathMatch = "full" ))
 class AppRoutingModule
 
 @Component( 
@@ -53,12 +65,12 @@ class AppRoutingModule
         <span>{{leagueName}}</span>
       </span>
       <md-toolbar-row>
-        <div fxLayout="row">
-          <a routerLink="/" md-button >Home</a>
-          <a routerLink="/team" md-button >Teams</a>
-          <a routerLink="/competition" md-button >Competitions</a>
-          <a routerLink="/results" md-button >Results</a>
-          <a routerLink="/venue" md-button >Venues</a>
+        <div fxLayout="row" >
+          <a routerLink="/home" md-button routerLinkActive="active">Home</a>
+          <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
+          <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
+          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
+          <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
         </div>
       </md-toolbar-row>
     </md-toolbar>
@@ -73,11 +85,11 @@ class AppRoutingModule
   </div>
   """
 )
-class AppComponent(service:ApplicationContextService) extends OnInit {
+class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuService) extends OnInit {
   
   var leagueName:String = _
   
-  var showSidenav = false
+  var showSidenav = sideMenuService.showMenu
   
   override def ngOnInit() = service.get.subscribe(appc => {leagueName = appc.leagueName})
 }
@@ -95,6 +107,6 @@ class AppComponent(service:ApplicationContextService) extends OnInit {
 class RootComponent
 
 @Component(
-  template = ""
+  template = "<div>Root Menu</div>"
 )
 class RootMenuComponent
