@@ -13,9 +13,7 @@ import quizleague.web.site.common._
   providers = @@[ApplicationContextService]       
 )
 @classModeScala
-class ApplicationContextModule(override val sideMenuService:SideMenuService) extends SectionModule with NoMenuModule{
-  onInit()
-}
+class ApplicationContextModule
 
 @Injectable
 @classModeScala

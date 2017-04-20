@@ -20,9 +20,6 @@ import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.site.user.UserService
 import quizleague.web.site._
-import quizleague.web.site.common.MenuModule
-import quizleague.web.site.common.SideMenuService
-import quizleague.web.site.common.SectionModule
 
 @NgModule(
   imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule],
@@ -43,9 +40,7 @@ class TeamModule
        ))
 )
 @classModeScala
-class TeamRoutesModule(override val sideMenuService:SideMenuService) extends SectionModule with MenuModule{
-  onInit()
-}
+class TeamRoutesModule
 
 
 @Injectable

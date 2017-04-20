@@ -25,6 +25,8 @@ import quizleague.web.util.Logging
 import angulate2.ext.classModeScala
 import quizleague.web.site.common.SideMenuService
 import rxjs.Observable
+import quizleague.web.site.common.NoMenuComponent
+import quizleague.web.site.common.SectionComponent
 
 
 @NgModule(
@@ -108,7 +110,8 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
   </div>
   """
 )
-class RootComponent
+@classModeScala
+class RootComponent(override val sideMenuService:SideMenuService) extends SectionComponent with NoMenuComponent
 
 @Component(
   template = "<div>Root Menu</div>"

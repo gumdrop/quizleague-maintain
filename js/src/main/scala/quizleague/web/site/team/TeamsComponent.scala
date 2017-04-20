@@ -2,6 +2,9 @@ package quizleague.web.site.team
 
 import angulate2.ext.classModeScala
 import angulate2.std.Component
+import quizleague.web.site.common.SideMenuService
+import quizleague.web.site.common.MenuComponent
+import quizleague.web.site.common.SectionComponent
 
 @Component(
   template = s"""
@@ -11,4 +14,4 @@ import angulate2.std.Component
   """    
 )
 @classModeScala
-class TeamsComponent
+class TeamsComponent(override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent

@@ -1,16 +1,16 @@
 package quizleague.web.site.common
 
-trait SectionModule {
+trait SectionComponent {
   val sideMenuService:SideMenuService
 }
 
-trait NoMenuModule{
-  this:SectionModule =>
-  def onInit() = sideMenuService.showMenu.next(false)
+trait NoMenuComponent{
+  this:SectionComponent =>
+  sideMenuService.showMenu.next(false)
 }
 
-trait MenuModule {
-  this:SectionModule =>
-  def onInit() = sideMenuService.showMenu.next(true)
+trait MenuComponent {
+  this:SectionComponent =>
+  sideMenuService.showMenu.next(true)
   
 }
