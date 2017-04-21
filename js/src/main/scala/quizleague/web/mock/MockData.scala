@@ -27,7 +27,7 @@ class MockData extends InMemoryDbService {
     ),
     "team" -> js.Array(
         literal(id ="1", json =  Team("1", "wibble arms", "wibble", Ref("venue","1"), Ref("text","1"), List(Ref("user","1"),Ref("user","2"))).asJson.noSpaces),
-        literal(id ="2", json =  Team("2", "wobble villa", "wobble", Ref("venue","2"), Ref("text","1"), List()).asJson.noSpaces)
+        literal(id ="2", json =  Team("2", "wobble villa", "wobble", Ref("venue","2"), Ref("text","5"), List()).asJson.noSpaces)
     ),
     "user" -> js.Array(
         literal(id ="1", json =  User("1", "me", "me@here.com").asJson.noSpaces),
@@ -40,7 +40,8 @@ class MockData extends InMemoryDbService {
         literal(id ="4", json =  Text("4","""<p>The Chiltern Quiz League is&nbsp;a friendly, local quiz league based in and around the Buckinghamshire towns of Amersham and Chesham (with an outpost in Farnham Common).</p>
 <p>We currently have 10 teams in a single <a href="competitions/LEAGUE">league</a>, with all&nbsp;teams playing each other twice, home and away. We also run two knockout competitions, the&nbsp;<a href="competitions/CUP">Cup</a> and the&nbsp;<a href="competitions/PLATE">Plate</a> (think of the Plate as the Europa League to the Champions League of the Cup), and the just-for-fun&nbsp;<a href="competitions/BEER">Beer Leg</a> each night after the main quiz.</p>
 <p>Our season normally runs from October to April; matches are played on Tuesday nights at 8:30pm, and generally last about 1&frac12; hours.</p>
-<p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text.html").asJson.noSpaces)
+<p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text.html").asJson.noSpaces),
+        literal(id ="5", json =  Text("5", "<b>Some bold team text here</b>", "text/html").asJson.noSpaces)
         
 
 

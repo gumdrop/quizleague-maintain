@@ -13,7 +13,7 @@ import angulate2.core.OnInit
 @Component(
   template = s"""
   <div *ngIf="itemObs | async as item; else loading">
-    {{item.name}}
+    <ql-text [textId]="item.text.id"></ql-text>
   </div>
   <ng-template #loading>Loading...</ng-template>
   """    
@@ -22,13 +22,10 @@ import angulate2.core.OnInit
 class TeamComponent(
     route:ActivatedRoute,
     service:TeamService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with OnInit{
+    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent{
   
   
-  var itemObs:Observable[Team] = _
+  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
   
-  override def ngOnInit() = {
-    itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-  }
   
 }

@@ -12,7 +12,6 @@ import angulate2.core.OnInit
 
 @Component(
   template = s"""
-  <div>Team</div> 
   <md-toolbar>
      <span *ngIf="itemObs | async as item; else loading">
       Team : {{item.name}}
@@ -24,14 +23,8 @@ import angulate2.core.OnInit
 @classModeScala
 class TeamTitleComponent(
     route:ActivatedRoute,
-    service:TeamService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with OnInit{
+    service:TeamService){  
   
-  
-  var itemObs:Observable[Team] = _
-  
-  override def ngOnInit() = {
-    itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-  }
+  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
   
 }

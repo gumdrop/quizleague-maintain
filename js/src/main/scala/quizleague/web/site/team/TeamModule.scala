@@ -20,9 +20,10 @@ import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.site.user.UserService
 import quizleague.web.site._
+import quizleague.web.site.text.TextModule
 
 @NgModule(
-  imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule],
+  imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule],
   declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent],
   providers = @@[TeamService]
    
@@ -34,8 +35,9 @@ class TeamModule
    Route(
        path = "team",
        children = @@@(
-         Route(path = ":id",component = %%[TeamComponent]),
-         Route(path = ":id",component = %%[TeamTitleComponent], outlet="title"), 
+         Route(path = ":id",children = @@@(
+             Route(path = "",component = %%[TeamComponent]),
+             Route(path = "",component = %%[TeamTitleComponent], outlet="title"))),
          Route(path = "",component = %%[TeamsComponent]),
          Route(path = "",component = %%[TeamMenuComponent], outlet="sidemenu")
 

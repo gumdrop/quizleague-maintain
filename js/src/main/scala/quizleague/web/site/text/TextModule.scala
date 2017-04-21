@@ -6,12 +6,14 @@ import angulate2.http._
 import angulate2.std._
 import angulate2.ext._
 import quizleague.web.service.globaltext._
+import angulate2.common.CommonModule
 
 
 @NgModule(
-  declarations = @@[NamedTextComponent],
+  imports = @@[CommonModule],
+  declarations = @@[TextComponent,NamedTextComponent],
   providers = @@[TextService,GlobalTextService],  
-  exports = @@[NamedTextComponent]
+  exports = @@[TextComponent,NamedTextComponent]
 )
 class TextModule 
 
