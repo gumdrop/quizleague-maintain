@@ -12,14 +12,17 @@ import angulate2.core.OnInit
 
 @Component(
   template = s"""
-  <div *ngIf="itemObs | async as item; else loading">
-    {{item.name}}
-  </div>
-  <ng-template #loading>Loading...</ng-template>
+  <div>Team</div> 
+  <md-toolbar>
+     <span *ngIf="itemObs | async as item; else loading">
+      Team : {{item.name}}
+    </span>
+    <ng-template #loading>Loading...</ng-template>
+  </md-toolbar>
   """    
 )
 @classModeScala
-class TeamComponent(
+class TeamTitleComponent(
     route:ActivatedRoute,
     service:TeamService,
     override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with OnInit{

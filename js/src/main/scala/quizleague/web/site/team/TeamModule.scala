@@ -23,7 +23,7 @@ import quizleague.web.site._
 
 @NgModule(
   imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent],
+  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent],
   providers = @@[TeamService]
    
 )
@@ -35,8 +35,10 @@ class TeamModule
        path = "team",
        children = @@@(
          Route(path = ":id",component = %%[TeamComponent]),
+         Route(path = ":id",component = %%[TeamTitleComponent], outlet="title"), 
          Route(path = "",component = %%[TeamsComponent]),
-         Route(path = "",component = %%[TeamMenuComponent], outlet="sidemenu")  
+         Route(path = "",component = %%[TeamMenuComponent], outlet="sidemenu")
+
        ))
 )
 @classModeScala

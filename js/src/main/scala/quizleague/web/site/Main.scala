@@ -62,7 +62,7 @@ class AppRoutingModule
   <div>
    <md-toolbar color='primary'>
       <span>
-        <button md-icon-button (click)="sidenav.toggle()">
+        <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
           <md-icon class="md-24">menu</md-icon>
         </button>
         <span>{{leagueName}}</span>
@@ -82,7 +82,10 @@ class AppRoutingModule
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
-        <router-outlet></router-outlet>
+        <div fxLayout="column">
+          <router-outlet name="title"></router-outlet>
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </md-sidenav-container>
   </div>
