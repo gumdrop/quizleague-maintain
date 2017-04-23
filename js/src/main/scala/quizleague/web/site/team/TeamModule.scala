@@ -24,7 +24,7 @@ import quizleague.web.site.text.TextModule
 
 @NgModule(
   imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent],
+  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent],
   providers = @@[TeamService]
    
 )
@@ -38,10 +38,16 @@ class TeamModule
          Route(path = ":id",children = @@@(
              Route(path = "",component = %%[TeamComponent]),
              Route(path = "",component = %%[TeamTitleComponent], outlet="title"))),
-         Route(path = "",component = %%[TeamsComponent]),
+         Route(path = "",children = @@@(
+             Route(path = "",component = %%[TeamsComponent]),
+             Route(path = "",component = %%[TeamsTitleComponent], outlet="title")
+             )),
          Route(path = "",component = %%[TeamMenuComponent], outlet="sidemenu")
+ 
+             ))
+      
 
-       ))
+       
 )
 @classModeScala
 class TeamRoutesModule

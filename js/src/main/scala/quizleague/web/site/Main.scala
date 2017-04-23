@@ -27,10 +27,11 @@ import quizleague.web.site.common.SideMenuService
 import rxjs.Observable
 import quizleague.web.site.common.NoMenuComponent
 import quizleague.web.site.common.SectionComponent
+import angular.material.BrowserAnimationsModule
 
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, HttpModule, TextModule, ApplicationModules, AppRoutingModule] :+
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, TextModule, ApplicationModules, AppRoutingModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
   declarations = @@[AppComponent,RootComponent,RootMenuComponent], 
   bootstrap = @@[AppComponent],
