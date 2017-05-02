@@ -1,26 +1,22 @@
 package quizleague.web.site.team
 
-import angulate2.std._
-
-import angular.material.MaterialModule
-import angulate2.router.{Route,RouterModule}
-
-import scala.scalajs.js
-import quizleague.web.model._
-import quizleague.domain.{Team => DomTeam}
-import angulate2.http.Http
-import quizleague.web.service.EntityService
 import angular.flexlayout.FlexLayoutModule
-import quizleague.web.names.ComponentNames
-
-import angulate2.ext.classModeScala
+import angular.material.MaterialModule
 import angulate2.common.CommonModule
-import quizleague.web.service.team._
-import quizleague.web.site.text.TextService
-import quizleague.web.site.venue.VenueService
-import quizleague.web.site.user.UserService
-import quizleague.web.site._
+import angulate2.ext.classModeScala
+import angulate2.http.Http
+import angulate2.router.Route
+import angulate2.router.RouterModule
+import angulate2.std._
+import quizleague.web.service.team.TeamGetService
+import quizleague.web.site.ServiceRoot
 import quizleague.web.site.text.TextModule
+import quizleague.web.site.text.TextService
+import quizleague.web.site.user.UserService
+import quizleague.web.site.venue.VenueService
+import quizleague.web.model.Team
+import quizleague.web.model.Season
+import quizleague.web.site.season.SeasonService
 
 @NgModule(
   imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule],
@@ -58,5 +54,9 @@ class TeamRoutesModule
 class TeamService(override val http:Http, 
     override val textService:TextService, 
     override val venueService:VenueService,
-    override val userService:UserService) extends TeamGetService with ServiceRoot
+    override val userService:UserService,
+    val seasonService:SeasonService) extends TeamGetService with ServiceRoot{
+  
+
+}
 
