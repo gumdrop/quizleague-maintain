@@ -58,6 +58,7 @@ class MockData extends InMemoryDbService {
           "1",
           "Chiltern Quiz League",
           Ref[GlobalText]("globalText","1"), 
+          Ref[Season]("season","1"),
           "a@b.c", 
           List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
     ),

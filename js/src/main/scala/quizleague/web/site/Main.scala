@@ -28,6 +28,7 @@ import rxjs.Observable
 import quizleague.web.site.common.NoMenuComponent
 import quizleague.web.site.common.SectionComponent
 import angular.material.BrowserAnimationsModule
+import quizleague.web.site.results.ResultsModule
 
 
 @NgModule(
@@ -44,7 +45,7 @@ class AppModule (router:Router) extends Logging{
 
 
 @NgModule(
-  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule]
+  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule, ResultsModule]
 )
 class ApplicationModules
 
@@ -73,7 +74,7 @@ class AppRoutingModule
           <a routerLink="/home" md-button routerLinkActive="active">Home</a>
           <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
           <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
-          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
+          <a routerLink="/results/all" md-button routerLinkActive="active">Results</a>
           <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
         </div>
       </md-toolbar-row>

@@ -8,7 +8,7 @@ case class ApplicationContext (
   id:String,
   leagueName:String,
   textSet:GlobalText,
-  //currentSeason:Season,
+  currentSeason:Season,
   senderEmail:String,
   emailAliases:js.Array[EmailAlias]
 )

@@ -54,8 +54,7 @@ class TeamRoutesModule
 class TeamService(override val http:Http, 
     override val textService:TextService, 
     override val venueService:VenueService,
-    override val userService:UserService,
-    val seasonService:SeasonService) extends TeamGetService with ServiceRoot{
+    override val userService:UserService) extends TeamGetService with ServiceRoot{
   
 
 }

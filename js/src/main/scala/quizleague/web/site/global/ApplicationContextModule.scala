@@ -8,6 +8,7 @@ import angulate2.http.Http
 import quizleague.web.site.text.GlobalTextService
 import quizleague.web.site.user.UserService
 import quizleague.web.site.common._
+import quizleague.web.site.season.SeasonService
 
 @NgModule(
   providers = @@[ApplicationContextService]       
@@ -20,5 +21,6 @@ class ApplicationContextModule
 class ApplicationContextService (
   override val http:Http,
   override val globalTextService:GlobalTextService,
-  override val userService:UserService
+  override val userService:UserService,
+  override val seasonService:SeasonService
 ) extends ApplicationContextGetService with ServiceRoot 

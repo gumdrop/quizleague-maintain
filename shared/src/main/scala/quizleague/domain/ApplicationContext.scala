@@ -4,7 +4,7 @@ case class ApplicationContext (
   id:String,
   leagueName:String,
   textSet:Ref[GlobalText],
-  //currentSeason:Season,
+  currentSeason:Ref[Season],
   senderEmail:String,
   emailAliases:List[EmailAlias],
   retired:Boolean = false  
