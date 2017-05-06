@@ -17,24 +17,24 @@ import scalajs.js
 @Component(
   template = s"""
     <md-card *ngFor="let item of items | async">
-      <md-card-title>{{item.fixtures.parentDescription}} {{item.fixtures.date}} {{item.fixtures.description}}</md-card-title>
-        <table>
-          <tr *ngFor="let result of item.results">
-            <td>{{result.fixture.home.name}}</td> <td>{{result.homeScore}}</td><td> - </td><td>{{result.awayScore}}</td><td>{{result.fixture.away.name}}</td> 
-          </tr>
-        </table>      
+      <md-card-title>{{item.parentDescription}} {{item.date}} {{item.description}}</md-card-title>
+      <table>
+        <tr *ngFor="let fixture of item.fixtures">
+          <td>{{fixture.home.name}}</td><td> - </td><td>{{fixture.away.name}}</td> 
+        </tr>
+      </table>      
     </md-card>
   """    
 )
 @classModeScala
-class AllResultsComponent(
+class AllFixturesComponent(
     route:ActivatedRoute,
     seasonService:SeasonService,
     applicationContextService:ApplicationContextService,
     override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent{
   
   
-  val items = applicationContextService.get().switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
+  val items = applicationContextService.get().switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
   
   
 }

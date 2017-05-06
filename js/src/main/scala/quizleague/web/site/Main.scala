@@ -29,6 +29,10 @@ import quizleague.web.site.common.NoMenuComponent
 import quizleague.web.site.common.SectionComponent
 import angular.material.BrowserAnimationsModule
 import quizleague.web.site.results.ResultsModule
+import quizleague.web.site.fixtures.FixturesModule
+import quizleague.web.site.competition.CompetitionModule
+import quizleague.web.site.leaguetable.LeagueTableModule
+import quizleague.web.site.season.SeasonModule
 
 
 @NgModule(
@@ -45,7 +49,7 @@ class AppModule (router:Router) extends Logging{
 
 
 @NgModule(
-  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule, ResultsModule]
+  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule, LeagueTableModule]
 )
 class ApplicationModules
 

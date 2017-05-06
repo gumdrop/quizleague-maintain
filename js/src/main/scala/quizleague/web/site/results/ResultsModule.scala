@@ -16,7 +16,7 @@ import quizleague.web.site.user.UserService
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule],
-  declarations = @@[AllResultsComponent, AllResultsTitleComponent],
+  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, AllFixturesComponent, AllFixturesTitleComponent],
   providers = @@[ResultsService, ResultService])
 class ResultsModule
 
@@ -28,6 +28,9 @@ class ResultsModule
       Route(path = "all", children = @@@(
         Route(path = "", component = %%[AllResultsComponent]),
         Route(path = "", component = %%[AllResultsTitleComponent], outlet = "title"))),
+      Route(path = "fixtures", children = @@@(
+        Route(path = "", component = %%[AllFixturesComponent]),
+        Route(path = "", component = %%[AllFixturesTitleComponent], outlet = "title"))),
       Route(path = "", component = %%[ResultsMenuComponent], outlet = "sidemenu"))))
 @classModeScala
 class ResultsRoutesModule
