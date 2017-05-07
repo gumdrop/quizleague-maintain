@@ -12,12 +12,12 @@ import angulate2.core.OnInit
 
 @Component(
   template = s"""
-  <md-toolbar>
+  <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
       Team : {{item.name}}
     </span>
     <ng-template #loading>Loading...</ng-template>
-  </md-toolbar>
+  </ql-section-title>
   """    
 )
 @classModeScala

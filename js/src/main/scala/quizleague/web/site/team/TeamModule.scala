@@ -17,9 +17,10 @@ import quizleague.web.site.venue.VenueService
 import quizleague.web.model.Team
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonService
+import quizleague.web.site.common.CommonAppModule
 
 @NgModule(
-  imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule],
+  imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule, CommonAppModule],
   declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent],
   providers = @@[TeamService]
    

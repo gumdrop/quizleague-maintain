@@ -13,9 +13,10 @@ import quizleague.web.site.fixtures.{ FixtureService, FixturesService }
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.user.UserService
+import quizleague.web.site.common.CommonAppModule
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule],
   declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, AllFixturesComponent, AllFixturesTitleComponent],
   providers = @@[ResultsService, ResultService])
 class ResultsModule

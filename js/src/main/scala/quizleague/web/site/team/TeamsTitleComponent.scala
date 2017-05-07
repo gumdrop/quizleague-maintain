@@ -12,9 +12,9 @@ import angulate2.core.OnInit
 
 @Component(
   template = s"""
-  <md-toolbar>
+  <ql-section-title>
      <span>Teams</span>
-  </md-toolbar>
+  </ql-section-title>
   """    
 )
 @classModeScala

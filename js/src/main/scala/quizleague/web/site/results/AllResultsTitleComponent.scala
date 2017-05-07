@@ -5,9 +5,9 @@ import angulate2.std.Component
 
 @Component(
   template = s"""
-  <md-toolbar>
+  <ql-section-title>
      <span>All Results</span>
-  </md-toolbar>
+  </ql-section-title>
   """    
 )
 @classModeScala
