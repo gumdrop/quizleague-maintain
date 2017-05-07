@@ -32,7 +32,10 @@ class ResultsModule
       Route(path = "fixtures", children = @@@(
         Route(path = "", component = %%[AllFixturesComponent]),
         Route(path = "", component = %%[AllFixturesTitleComponent], outlet = "title"))),
-      Route(path = "", component = %%[ResultsMenuComponent], outlet = "sidemenu"))))
+      Route(path = "", component = %%[ResultsMenuComponent], outlet = "sidemenu"),
+      Route(path = "",   redirectTo = "all", pathMatch = "full" )))
+ 
+)
 @classModeScala
 class ResultsRoutesModule
 

@@ -78,7 +78,7 @@ class AppRoutingModule
           <a routerLink="/home" md-button routerLinkActive="active">Home</a>
           <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
           <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
-          <a routerLink="/results/all" md-button routerLinkActive="active">Results</a>
+          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
           <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
         </div>
       </md-toolbar-row>
