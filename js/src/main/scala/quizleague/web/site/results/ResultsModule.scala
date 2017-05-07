@@ -17,7 +17,7 @@ import quizleague.web.site.common.CommonAppModule
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule],
-  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, AllFixturesComponent, AllFixturesTitleComponent],
+  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, AllFixturesComponent, AllFixturesTitleComponent,SimpleResultsComponent],
   providers = @@[ResultsService, ResultService])
 class ResultsModule
 
