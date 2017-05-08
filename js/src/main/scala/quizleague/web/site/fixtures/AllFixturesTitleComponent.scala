@@ -1,7 +1,7 @@
-package quizleague.web.site.results
+package quizleague.web.site.fixtures
 
-import angulate2.ext.classModeScala
 import angulate2.std.Component
+
 
 @Component(
   template = s"""
@@ -10,5 +10,4 @@ import angulate2.std.Component
   </ql-section-title>
   """    
 )
-@classModeScala
 class AllFixturesTitleComponent

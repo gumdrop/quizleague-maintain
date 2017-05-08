@@ -12,7 +12,7 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.season.SeasonService
 
 @Component(
-  selector = "ql-simple-results",
+  selector = "ql-results-simple",
   template = s"""
     <table>
       <tr *ngFor="let result of results">
