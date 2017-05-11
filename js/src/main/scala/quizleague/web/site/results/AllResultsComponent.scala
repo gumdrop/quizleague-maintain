@@ -16,7 +16,7 @@ import scalajs.js
 
 @Component(
   template = s"""
-    <div fxLayout="column" fxLayoutGap="10px" style="margin-right:1em;">  
+    <div fxLayout="column" fxLayoutGap="5px">  
     <md-card *ngFor="let item of items | async">
       <md-card-title>{{item.fixtures.parentDescription}} - {{item.fixtures.date | date:"d MMMM yyyy"}} : {{item.fixtures.description}}</md-card-title>
         <ql-results-simple [results]="item.results"></ql-results-simple>

@@ -19,8 +19,8 @@ import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.FixturesModule
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, FixturesModule],
-  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent,SimpleResultsComponent],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, FixturesModule, ResultsComponentsModule],
+  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent],
   providers = @@[ResultsService, ResultService])
 class ResultsModule
 
@@ -41,6 +41,13 @@ class ResultsModule
 )
 @classModeScala
 class ResultsRoutesModule
+
+@NgModule(
+  imports = @@[CommonModule],
+  declarations = @@[SimpleResultsComponent],
+  exports = @@[SimpleResultsComponent]
+  )
+class ResultsComponentsModule
 
 @Injectable
 @classModeScala

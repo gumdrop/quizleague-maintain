@@ -21,7 +21,7 @@ import quizleague.web.maintain.globaltext.GlobalTextModule
 import quizleague.web.maintain.applicationcontext.ApplicationContextModule
 import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.competition.CompetitionModule
-import angular.material.BrowserAnimationsModule
+import angular.core.BrowserAnimationsModule
 
 @NgModule(
   imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule] :+

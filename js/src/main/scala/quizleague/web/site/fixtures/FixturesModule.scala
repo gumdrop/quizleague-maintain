@@ -15,12 +15,19 @@ import quizleague.web.site.common.CommonAppModule
 
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, FlexLayoutModule, CommonAppModule],
-  declarations = @@[SimpleFixturesComponent, AllFixturesComponent, AllFixturesTitleComponent],
+  imports = @@[CommonModule, MaterialModule, FlexLayoutModule, CommonAppModule, FixturesComponentsModule],
+  declarations = @@[AllFixturesComponent, AllFixturesTitleComponent],
   providers = @@[FixturesService, FixtureService],
-  exports = @@[SimpleFixturesComponent,AllFixturesComponent, AllFixturesTitleComponent])
+  exports = @@[AllFixturesComponent, AllFixturesTitleComponent])
 class FixturesModule
 
+
+@NgModule(
+  imports = @@[CommonModule],
+  declarations = @@[SimpleFixturesComponent],
+  exports = @@[SimpleFixturesComponent]
+  )
+class FixturesComponentsModule
 
 
 @Injectable

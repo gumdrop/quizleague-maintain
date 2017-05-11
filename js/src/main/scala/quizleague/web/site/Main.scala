@@ -27,12 +27,12 @@ import quizleague.web.site.common.SideMenuService
 import rxjs.Observable
 import quizleague.web.site.common.NoMenuComponent
 import quizleague.web.site.common.SectionComponent
-import angular.material.BrowserAnimationsModule
 import quizleague.web.site.results.ResultsModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.site.season.SeasonModule
+import angular.core.BrowserAnimationsModule
 
 
 @NgModule(
@@ -66,7 +66,7 @@ class AppRoutingModule
   selector = "ql-app",
   template = """
   <div>
-   <md-toolbar color='primary'>
+   <md-toolbar color='primary' class="mat-elevation-z6">
       <span>
         <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
           <md-icon class="md-24">menu</md-icon>
@@ -88,14 +88,19 @@ class AppRoutingModule
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
-        <div fxLayout="column">
+        <div fxLayout="column" fxLayoutGap="5px">
           <router-outlet name="title"></router-outlet>
           <router-outlet></router-outlet>
         </div>
       </div>
     </md-sidenav-container>
   </div>
-  """
+  """,
+  styles = js.Array("""
+    md-sidenav-container{
+      margin-top:8px;
+    }
+  """)
 )
 class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuService) extends OnInit {
   

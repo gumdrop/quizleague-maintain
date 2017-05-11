@@ -129,7 +129,7 @@ class MockData extends InMemoryDbService {
         ).asJson.noSpaces),
         literal(id="2", json=Result("2",
           Ref[Fixture]("fixture","2"),
-          80,70,
+          70,80,
           Ref[User]("user", "1"),
           "",
           List()

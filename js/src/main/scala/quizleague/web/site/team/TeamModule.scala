@@ -18,45 +18,51 @@ import quizleague.web.model.Team
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.common.CommonAppModule
+import quizleague.web.site.season.SeasonService
+import quizleague.web.site.results.ResultsModule
+import quizleague.web.site.results.ResultsComponentsModule
+import quizleague.web.site.fixtures.FixturesComponentsModule
 
 @NgModule(
-  imports = @@[CommonModule,MaterialModule,RouterModule,FlexLayoutModule,TeamRoutesModule, TextModule, CommonAppModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule],
   declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent],
-  providers = @@[TeamService]
-   
-)
+  providers = @@[TeamService,TeamViewService])
 class TeamModule
 
 @Routes(
-   root = false,
-   Route(
-       path = "team",
-       children = @@@(
-         Route(path = ":id",children = @@@(
-             Route(path = "",component = %%[TeamComponent]),
-             Route(path = "",component = %%[TeamTitleComponent], outlet="title"))),
-         Route(path = "",children = @@@(
-             Route(path = "",component = %%[TeamsComponent]),
-             Route(path = "",component = %%[TeamsTitleComponent], outlet="title")
-             )),
-         Route(path = "",component = %%[TeamMenuComponent], outlet="sidemenu")
- 
-             ))
-      
-
-       
-)
+  root = false,
+  Route(
+    path = "team",
+    children = @@@(
+      Route(path = ":id", children = @@@(
+        Route(path = "", component = %%[TeamComponent]),
+        Route(path = "", component = %%[TeamTitleComponent], outlet = "title"))),
+      Route(path = "", children = @@@(
+        Route(path = "", component = %%[TeamsComponent]),
+        Route(path = "", component = %%[TeamsTitleComponent], outlet = "title"))),
+      Route(path = "", component = %%[TeamMenuComponent], outlet = "sidemenu"))))
 @classModeScala
 class TeamRoutesModule
 
-
 @Injectable
 @classModeScala
-class TeamService(override val http:Http, 
-    override val textService:TextService, 
-    override val venueService:VenueService,
-    override val userService:UserService) extends TeamGetService with ServiceRoot{
-  
+class TeamService(override val http: Http,
+    override val textService: TextService,
+    override val venueService: VenueService,
+    override val userService: UserService) extends TeamGetService with ServiceRoot
 
+@Injectable
+class TeamViewService(
+    service:TeamService,
+    seasonService:SeasonService){
+  
+    def getResults( team: Team, season: Season) = seasonService.getResults(season).map(
+    (r, i) => r.flatMap(_.results)
+      .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id))
+      
+    def getFixtures( team: Team, season: Season) = seasonService.getFixtures(season).map(
+    (r, i) => r.flatMap(_.fixtures)
+      .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id))
+  
 }
 

@@ -5,6 +5,8 @@ import angulate2.std.Component
 import quizleague.web.site.common.SideMenuService
 import quizleague.web.site.common.MenuComponent
 import quizleague.web.site.common.SectionComponent
+import quizleague.web.site.common.TitleService
+import quizleague.web.site.common.TitledComponent
 
 @Component(
   template = s"""
@@ -14,4 +16,10 @@ import quizleague.web.site.common.SectionComponent
   """    
 )
 @classModeScala
-class TeamsComponent(override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent
+class TeamsComponent(
+    override val sideMenuService:SideMenuService,
+    override val titleService:TitleService
+    ) extends SectionComponent with MenuComponent with TitledComponent{
+  
+  setTitle("Teams")
+}

@@ -9,6 +9,7 @@ import quizleague.web.site.ServiceRoot
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
+import quizleague.web.model.Team
 
 
 @NgModule(
@@ -26,5 +27,7 @@ class SeasonService(override val http: Http,
     def getResults(season:Season) = get(season.id)(3).map((s,i) => s.competitions.flatMap(_.results))
     
     def getFixtures(season:Season) = get(season.id)(3).map((s,i) => s.competitions.flatMap(_.fixtures))
+    
+    
     
 }
