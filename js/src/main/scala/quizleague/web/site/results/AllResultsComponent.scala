@@ -13,6 +13,8 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.model.Results
 import scalajs.js
+import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.TitleService
 
 @Component(
   template = s"""
@@ -29,8 +31,10 @@ class AllResultsComponent(
     route:ActivatedRoute,
     seasonService:SeasonService,
     applicationContextService:ApplicationContextService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent{
+    override val sideMenuService:SideMenuService,
+    override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
+  setTitle("All Results")
   
   val items = applicationContextService.get().switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
   

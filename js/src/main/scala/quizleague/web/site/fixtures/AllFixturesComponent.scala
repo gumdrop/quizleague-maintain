@@ -10,6 +10,8 @@ import quizleague.web.site.common.SideMenuService
 import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.MenuComponent
 import angulate2.ext.classModeScala
+import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.TitleService
 
 @Component(
   template = s"""
@@ -26,8 +28,10 @@ class AllFixturesComponent(
     route:ActivatedRoute,
     seasonService:SeasonService,
     applicationContextService:ApplicationContextService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent{
+    override val sideMenuService:SideMenuService,
+    override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
+  setTitle("All Fixtures")
   
   val items = applicationContextService.get().switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
   

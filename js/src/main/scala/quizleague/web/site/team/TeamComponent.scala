@@ -20,11 +20,17 @@ import quizleague.web.site.common.TitledComponent
     <ql-text [textId]="item.text.id"></ql-text>
     <md-card>
       <md-card-title>Results</md-card-title>
-      <ql-results-simple [results]="results | async"></ql-results-simple>
+      <md-card-subtitle>Last few results</md-card-subtitle>
+      <md-card-content>
+        <ql-results-simple [results]="results | async"></ql-results-simple>
+      </md-card-content>
     </md-card>
     <md-card>
       <md-card-title>Fixtures</md-card-title>
-      <ql-fixtures-simple [fixtures]="fixtures | async"></ql-fixtures-simple>
+      <md-card-subtitle>Next few fixtures</md-card-subtitle>
+      <md-card-content>
+        <ql-fixtures-simple [fixtures]="fixtures | async"></ql-fixtures-simple>
+      </md-card-content>
     </md-card>
   </div>
   <ng-template #loading>Loading...</ng-template>

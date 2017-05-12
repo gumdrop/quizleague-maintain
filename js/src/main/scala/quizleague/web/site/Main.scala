@@ -33,6 +33,10 @@ import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.site.season.SeasonModule
 import angular.core.BrowserAnimationsModule
+import quizleague.web.site.common.CommonAppModule
+import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.TitleService
+
 
 
 @NgModule(
@@ -49,7 +53,7 @@ class AppModule (router:Router) extends Logging{
 
 
 @NgModule(
-  imports = @@[ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule, LeagueTableModule]
+  imports = @@[CommonAppModule, ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule, LeagueTableModule]
 )
 class ApplicationModules
 
@@ -125,7 +129,12 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
   """
 )
 @classModeScala
-class RootComponent(override val sideMenuService:SideMenuService) extends SectionComponent with NoMenuComponent
+class RootComponent(
+    override val sideMenuService:SideMenuService,
+    override val titleService:TitleService) extends SectionComponent with NoMenuComponent with TitledComponent{
+  
+  setTitle("Home")
+}
 
 @Component(
   template = "<div>Root Menu</div>"
