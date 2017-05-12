@@ -22,14 +22,14 @@ import quizleague.web.site.common.TitledComponent
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Last few results</md-card-subtitle>
       <md-card-content>
-        <ql-results-simple [results]="results | async"></ql-results-simple>
+        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
       </md-card-content>
     </md-card>
     <md-card>
       <md-card-title>Fixtures</md-card-title>
       <md-card-subtitle>Next few fixtures</md-card-subtitle>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures | async"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
     </md-card>
   </div>
