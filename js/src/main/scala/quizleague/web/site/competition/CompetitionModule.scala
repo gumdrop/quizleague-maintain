@@ -26,7 +26,7 @@ import quizleague.web.model.ApplicationContext
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent],
+  declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent, CompetitionResultsComponent],
   providers = @@[CompetitionService, CompetitionViewService])
 class CompetitionModule
 
@@ -39,7 +39,10 @@ class CompetitionModule
           Route(
             path = ":id",
             children = @@@(
-              Route("league", component = %%[LeagueCompetitionComponent]),
+              Route("league", children = @@@(
+                Route("", component = %%[LeagueCompetitionComponent]),
+                Route("results", component = %%[CompetitionResultsComponent])
+              )),
               Route(path = "", component = %%[CompetitionTitleComponent], outlet = "title")
             )
             
