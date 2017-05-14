@@ -17,33 +17,18 @@ import quizleague.web.site.common.TitledComponent
 @Component(
   template = s"""
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <ql-text [textId]="item.text.id"></ql-text>
     <md-card>
-      <md-card-title>Results</md-card-title>
-      <md-card-subtitle>Last few results</md-card-subtitle>
-      <md-card-content>
-        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
-      </md-card-content>
-      <md-card-actions>
-        <a md-button routerLink="results">Show All</a>
-      </md-card-actions>
-    </md-card>
-    <md-card>
-      <md-card-title>Fixtures</md-card-title>
-      <md-card-subtitle>Next few fixtures</md-card-subtitle>
+      <md-card-title>All Fixtures</md-card-title>
       <md-card-content>
         <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
-      <md-card-actions>
-        <a md-button routerLink="fixtures">Show All</a>
-      </md-card-actions>
     </md-card>
   </div>
   <ng-template #loading>Loading...</ng-template>
   """    
 )
 @classModeScala
-class TeamComponent(
+class TeamFixturesComponent(
     route:ActivatedRoute,
     service:TeamService,
     viewService:TeamViewService,
@@ -55,11 +40,29 @@ class TeamComponent(
   
   val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
   
-  itemObs.subscribe(t => setTitle(t.name))
-  
-  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getResults(t, ac.currentSeason))) 
+  itemObs.subscribe(t => setTitle(s"${t.name} - Fixtures"))
   
   val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getFixtures(t, ac.currentSeason))) 
   
+  
+}
+
+@Component(
+  template = s"""
+  <ql-section-title>
+     <span *ngIf="itemObs | async as item; else loading">
+      {{item.name}} - Fixtures
+    </span>
+    <md-select placeholder="Season"></md-select>
+    <ng-template #loading>Loading...</ng-template>
+  </ql-section-title>
+  """    
+)
+@classModeScala
+class TeamFixturesTitleComponent(
+    route:ActivatedRoute,
+    service:TeamService){  
+  
+  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
   
 }

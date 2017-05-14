@@ -1,4 +1,4 @@
-package quizleague.web.site.team
+package quizleague.web.site.competition
 
 import angulate2.ext.classModeScala
 import angulate2.std.Component
@@ -21,9 +21,9 @@ import angulate2.core.OnInit
   """    
 )
 @classModeScala
-class TeamTitleComponent(
+class CompetitionTitleComponent(
     route:ActivatedRoute,
-    service:TeamService){  
+    service:CompetitionService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
   

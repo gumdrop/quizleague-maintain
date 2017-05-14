@@ -25,7 +25,9 @@ import quizleague.web.site.fixtures.FixturesComponentsModule
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent],
+  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, 
+    TeamTitleComponent, TeamsTitleComponent, TeamResultsComponent, TeamResultsTitleComponent,
+    TeamFixturesComponent, TeamFixturesTitleComponent],
   providers = @@[TeamService,TeamViewService])
 class TeamModule
 
@@ -35,8 +37,18 @@ class TeamModule
     path = "team",
     children = @@@(
       Route(path = ":id", children = @@@(
-        Route(path = "", component = %%[TeamComponent]),
-        Route(path = "", component = %%[TeamTitleComponent], outlet = "title"))),
+        Route(path = "", children = @@@(
+          Route(path = "", component = %%[TeamComponent]),
+          Route(path = "", component = %%[TeamTitleComponent], outlet = "title"))),
+        Route(path = "results", children = @@@(        
+          Route(path = "", component = %%[TeamResultsComponent]),
+          Route(path = "", component = %%[TeamResultsTitleComponent], outlet = "title"))
+      ),
+        Route(path = "fixtures", children = @@@(        
+          Route(path = "", component = %%[TeamFixturesComponent]),
+          Route(path = "", component = %%[TeamFixturesTitleComponent], outlet = "title"))
+      )
+      )),
       Route(path = "", children = @@@(
         Route(path = "", component = %%[TeamsComponent]),
         Route(path = "", component = %%[TeamsTitleComponent], outlet = "title"))),
