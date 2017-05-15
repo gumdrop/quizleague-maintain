@@ -11,16 +11,12 @@ import scala.scalajs.js.annotation.JSExport
 trait TeamCompetitionComponent{
   
   @JSExport
-  def latestResults(results:js.Array[Results]) = firstElement(results.sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date))
+  def latestResults(results:js.Array[Results]) = results.sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date).take(1)
   
   @JSExport
   def nextFixtures(fixtures:js.Array[Fixtures]) = {
     val now = LocalDate.now().toString()
-    firstElement(fixtures.filter((f:Fixtures) => f.date > now).sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date))
+    fixtures.filter((f:Fixtures) => f.date > now).sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date).take(1)
   }
   
-  protected def firstElement[T](arr:js.Array[T]):js.Array[T] = {
-    if(arr.isEmpty) js.Array() else @@@(arr.head)
-  }
-   
 }

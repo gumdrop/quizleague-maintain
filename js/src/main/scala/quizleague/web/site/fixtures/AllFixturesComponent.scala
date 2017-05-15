@@ -18,7 +18,9 @@ import quizleague.web.site.common.TitleService
   <div fxLayout="column" fxLayoutGap="10px" style="margin-right:1em;">  
     <md-card *ngFor="let item of items | async">
       <md-card-title>{{item.parentDescription}} - {{item.date | date:"d MMMM yyyy"}} : {{item.description}}</md-card-title>
-      <ql-fixtures-simple [fixtures]="item.fixtures"></ql-fixtures-simple>      
+      <md-card-content>
+        <ql-fixtures-simple [fixtures]="item.fixtures"></ql-fixtures-simple>
+      </md-card-content>      
     </md-card>
   </div>
   """    

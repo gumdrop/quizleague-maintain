@@ -42,7 +42,7 @@ class TeamFixturesComponent(
   
   itemObs.subscribe(t => setTitle(s"${t.name} - Fixtures"))
   
-  val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getFixtures(t, ac.currentSeason))) 
+  val fixtures = itemObs.switchMap((t,i) => viewService.season.switchMap((s,j) => viewService.getFixtures(t, s))) 
   
   
 }

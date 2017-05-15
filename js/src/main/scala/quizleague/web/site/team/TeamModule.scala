@@ -22,13 +22,17 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsModule
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
+import quizleague.web.model.Result
+import quizleague.web.model.Fixture
+import java.time.LocalDate
+import quizleague.web.site.global.ApplicationContextService
+import rxjs.Subject
+import quizleague.web.site.global.ApplicationContextService
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, 
-    TeamTitleComponent, TeamsTitleComponent, TeamResultsComponent, TeamResultsTitleComponent,
-    TeamFixturesComponent, TeamFixturesTitleComponent],
-  providers = @@[TeamService,TeamViewService])
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule],
+  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent, TeamResultsComponent, TeamResultsTitleComponent, TeamFixturesComponent, TeamFixturesTitleComponent],
+  providers = @@[TeamService, TeamViewService])
 class TeamModule
 
 @Routes(
@@ -40,15 +44,12 @@ class TeamModule
         Route(path = "", children = @@@(
           Route(path = "", component = %%[TeamComponent]),
           Route(path = "", component = %%[TeamTitleComponent], outlet = "title"))),
-        Route(path = "results", children = @@@(        
+        Route(path = "results", children = @@@(
           Route(path = "", component = %%[TeamResultsComponent]),
-          Route(path = "", component = %%[TeamResultsTitleComponent], outlet = "title"))
-      ),
-        Route(path = "fixtures", children = @@@(        
+          Route(path = "", component = %%[TeamResultsTitleComponent], outlet = "title"))),
+        Route(path = "fixtures", children = @@@(
           Route(path = "", component = %%[TeamFixturesComponent]),
-          Route(path = "", component = %%[TeamFixturesTitleComponent], outlet = "title"))
-      )
-      )),
+          Route(path = "", component = %%[TeamFixturesTitleComponent], outlet = "title"))))),
       Route(path = "", children = @@@(
         Route(path = "", component = %%[TeamsComponent]),
         Route(path = "", component = %%[TeamsTitleComponent], outlet = "title"))),
@@ -59,22 +60,37 @@ class TeamRoutesModule
 @Injectable
 @classModeScala
 class TeamService(override val http: Http,
-    override val textService: TextService,
-    override val venueService: VenueService,
-    override val userService: UserService) extends TeamGetService with ServiceRoot
+  override val textService: TextService,
+  override val venueService: VenueService,
+  override val userService: UserService) extends TeamGetService with ServiceRoot
 
 @Injectable
 class TeamViewService(
-    service:TeamService,
-    seasonService:SeasonService){
+    service: TeamService,
+    seasonService: SeasonService,
+    applicationContextService:ApplicationContextService) {
+
+  val season = new Subject[Season]
   
-    def getResults( team: Team, season: Season) = seasonService.getResults(season).map(
+  applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
+  
+  
+  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = seasonService.getResults(season).map(
     (r, i) => r.flatMap(_.results)
-      .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id))
-      
-    def getFixtures( team: Team, season: Season) = seasonService.getFixtures(season).map(
-    (r, i) => r.flatMap(_.fixtures)
-      .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id))
-  
+      .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)
+      .sort((r1: Result, r2: Result) => r2.fixture.date compareTo r1.fixture.date)
+      .take(take))
+
+  def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
+
+    var now = LocalDate.now.toString()
+
+    seasonService.getFixtures(season).map(
+      (r, i) => r.flatMap(_.fixtures)
+        .filter(fixture => fixture.date >= now)
+        .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id)
+        .sort((f1: Fixture, f2: Fixture) => f1.date compareTo f2.date)
+        .take(take))
+  }
 }
 

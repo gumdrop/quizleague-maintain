@@ -42,7 +42,7 @@ class TeamResultsComponent(
   
   itemObs.subscribe(t => setTitle(s"${t.name} - Results"))
   
-  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getResults(t, ac.currentSeason))) 
+  val results = itemObs.switchMap((t,i) => viewService.season.switchMap((s,j) => viewService.getResults(t, s))) 
   
   
 }

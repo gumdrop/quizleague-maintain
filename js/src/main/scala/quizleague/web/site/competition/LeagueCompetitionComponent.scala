@@ -46,17 +46,16 @@ class LeagueCompetitionComponent(
   service: CompetitionService,
   viewService: CompetitionViewService,
   applicationContextService: ApplicationContextService,
-  override val titleService: TitleService,
-  override val sideMenuService: SideMenuService)
-    extends SectionComponent
-    with MenuComponent
-    with TitledComponent
-    with TeamCompetitionComponent {
-  
-  val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
-
-  itemObs.subscribe(t => setTitle(t.name))
-
-}
+  titleService: TitleService,
+  sideMenuService: SideMenuService)
+    extends BaseCompetitionComponent(
+      route,
+      service,
+      viewService,
+      applicationContextService,
+      titleService,
+      sideMenuService
+    )
+    with TeamCompetitionComponent 
 
    
