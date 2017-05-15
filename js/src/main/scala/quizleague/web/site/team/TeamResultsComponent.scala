@@ -13,6 +13,10 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.util.Logging
+import rxjs.Subject
+import quizleague.web.model.Result
+import scalajs.js
 
 @Component(
   template = s"""
@@ -34,7 +38,7 @@ class TeamResultsComponent(
     viewService:TeamViewService,
     applicationContextService:ApplicationContextService,
     override val titleService:TitleService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{
+    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent with Logging{
   
   
   
@@ -42,7 +46,9 @@ class TeamResultsComponent(
   
   itemObs.subscribe(t => setTitle(s"${t.name} - Results"))
   
-  val results = itemObs.switchMap((t,i) => viewService.season.switchMap((s,j) => viewService.getResults(t, s))) 
+  val results = viewService.season.switchMap((s,j) => itemObs.switchMap((t,i) => viewService.getResults(t, s)))
+    
+  results.subscribe(r => log(r, "Results"))
   
   
 }

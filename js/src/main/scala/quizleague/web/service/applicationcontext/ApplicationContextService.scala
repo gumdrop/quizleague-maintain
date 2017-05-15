@@ -24,7 +24,7 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
       child(context.textSet, globalTextService),
       child(context.currentSeason, seasonService),
       mapOutAliases(context.emailAliases),
-      (textSet: GlobalText, currentSeason: Season, emailAliases: js.Array[EmailAlias]) => log(ApplicationContext(context.id, context.leagueName, textSet, currentSeason, context.senderEmail, emailAliases), "mapOut ApplicationContext"))
+      (textSet: GlobalText, currentSeason: Season, emailAliases: js.Array[EmailAlias]) => ApplicationContext(context.id, context.leagueName, textSet, currentSeason, context.senderEmail, emailAliases))
 
   def mapOutAliases(list: List[DomEmailAlias])(implicit depth: Int): Observable[js.Array[EmailAlias]] =
     Observable.zip(list.map((e: DomEmailAlias) => child(e.user, userService).map((u: User, i: Int) => EmailAlias(e.alias, u))): _*)

@@ -28,6 +28,8 @@ import java.time.LocalDate
 import quizleague.web.site.global.ApplicationContextService
 import rxjs.Subject
 import quizleague.web.site.global.ApplicationContextService
+import quizleague.web.util.Logging
+import rxjs.BehaviorSubject
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule],
@@ -65,12 +67,13 @@ class TeamService(override val http: Http,
   override val userService: UserService) extends TeamGetService with ServiceRoot
 
 @Injectable
+@classModeScala
 class TeamViewService(
     service: TeamService,
     seasonService: SeasonService,
-    applicationContextService:ApplicationContextService) {
+    applicationContextService:ApplicationContextService) extends Logging{
 
-  val season = new Subject[Season]
+  val season = new BehaviorSubject[Season](null)
   
   applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
   
