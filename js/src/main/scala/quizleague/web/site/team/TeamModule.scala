@@ -30,6 +30,8 @@ import rxjs.Subject
 import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.util.Logging
 import rxjs.BehaviorSubject
+import angulate2.forms.FormsModule
+import angulate2.platformBrowser.BrowserModule
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
@@ -75,6 +77,8 @@ class TeamViewService(
 
   val season = new BehaviorSubject[Season](null)
   
+  season.subscribe(s => log(s, "viewService"))
+  
   applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
   
   
@@ -86,7 +90,7 @@ class TeamViewService(
 
   def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
 
-    var now = LocalDate.now.toString()
+    val now = LocalDate.now.toString()
 
     seasonService.getFixtures(season).map(
       (r, i) => r.flatMap(_.fixtures)

@@ -12,13 +12,14 @@ import quizleague.web.site.venue.VenueService
 import quizleague.web.model.Team
 import angulate2.common.CommonModule
 import angulate2.forms.FormsModule
+import angular.material.MaterialModule
 
 
 @NgModule(
-  imports = @@[CommonModule,FormsModule],
-  declarations = @@[SeasonDropdownComponent],
+  imports = @@[CommonModule,FormsModule,MaterialModule],
+  declarations = @@[SeasonSelectComponent],
   providers = @@[SeasonService],
-  exports = @@[SeasonDropdownComponent]
+  exports = @@[SeasonSelectComponent]
 )
 class SeasonModule
 

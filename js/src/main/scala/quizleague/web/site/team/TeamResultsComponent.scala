@@ -17,6 +17,7 @@ import quizleague.web.util.Logging
 import rxjs.Subject
 import quizleague.web.model.Result
 import scalajs.js
+import quizleague.web.model.Season
 
 @Component(
   template = s"""
@@ -54,12 +55,12 @@ class TeamResultsComponent(
 }
 
 @Component(
-  template = s"""
+  template = """
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} - Results
     </span>
-    <ql-season-select></ql-season-select>
+    <ql-season-select [currentSeason]="season"></ql-season-select>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
   """    
@@ -67,8 +68,11 @@ class TeamResultsComponent(
 @classModeScala
 class TeamResultsTitleComponent(
     route:ActivatedRoute,
-    service:TeamService){  
+    service:TeamService,
+    viewService:TeamViewService) extends Logging{  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+  
+  val season = viewService.season
   
 }
