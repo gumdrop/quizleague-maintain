@@ -10,10 +10,16 @@ import quizleague.web.site.competition.CompetitionService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.model.Team
+import angulate2.common.CommonModule
+import angulate2.forms.FormsModule
 
 
 @NgModule(
-  providers = @@[SeasonService])
+  imports = @@[CommonModule,FormsModule],
+  declarations = @@[SeasonDropdownComponent],
+  providers = @@[SeasonService],
+  exports = @@[SeasonDropdownComponent]
+)
 class SeasonModule
 
 

@@ -16,7 +16,7 @@ import quizleague.web.site.user.UserService
 import quizleague.web.site.venue.VenueService
 import quizleague.web.model.Team
 import quizleague.web.model.Season
-import quizleague.web.site.season.SeasonService
+import quizleague.web.site.season._
 import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsModule
@@ -32,7 +32,7 @@ import quizleague.web.util.Logging
 import rxjs.BehaviorSubject
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
   declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent, TeamResultsComponent, TeamResultsTitleComponent, TeamFixturesComponent, TeamFixturesTitleComponent],
   providers = @@[TeamService, TeamViewService])
 class TeamModule

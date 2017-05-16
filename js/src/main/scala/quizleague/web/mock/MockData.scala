@@ -41,7 +41,8 @@ class MockData extends InMemoryDbService {
 <p>We currently have 10 teams in a single <a href="competitions/LEAGUE">league</a>, with all&nbsp;teams playing each other twice, home and away. We also run two knockout competitions, the&nbsp;<a href="competitions/CUP">Cup</a> and the&nbsp;<a href="competitions/PLATE">Plate</a> (think of the Plate as the Europa League to the Champions League of the Cup), and the just-for-fun&nbsp;<a href="competitions/BEER">Beer Leg</a> each night after the main quiz.</p>
 <p>Our season normally runs from October to April; matches are played on Tuesday nights at 8:30pm, and generally last about 1&frac12; hours.</p>
 <p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text.html").asJson.noSpaces),
-        literal(id ="5", json =  Text("5", "<b>Some bold team text here</b>", "text/html").asJson.noSpaces)
+        literal(id ="5", json =  Text("5", "<b>Some bold team text here</b>", "text/html").asJson.noSpaces),
+        literal(id ="6", json =  Text("6", "Season text 2", "text/plain").asJson.noSpaces)
         
 
 
@@ -67,7 +68,13 @@ class MockData extends InMemoryDbService {
             Year.of(2018),
             Ref[Text]("text","1"), 
             List(Ref[Competition]("competition","1")),
-            List[CalendarEvent]()).asJson.noSpaces)
+            List[CalendarEvent]()).asJson.noSpaces),
+            literal(id="2", json = Season("2",
+            Year.of(2016), 
+            Year.of(2017),
+            Ref[Text]("text","6"), 
+            List(),
+            List()).asJson.noSpaces)
         ),
       "competition" -> js.Array(literal(id="1", json=LeagueCompetition("1", 
           "League", 

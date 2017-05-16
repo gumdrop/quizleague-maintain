@@ -59,7 +59,7 @@ class TeamResultsComponent(
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} - Results
     </span>
-    <md-select placeholder="Season"></md-select>
+    <ql-season-select></ql-season-select>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
   """    
