@@ -31,5 +31,8 @@ class CompetitionsComponent(
   </ql-section-title>
   """    
 )
-@classModeScala
-class CompetitionsTitleComponent
+class CompetitionsTitleComponent(
+  viewService:CompetitionViewService    
+){
+  val service = viewService.service
+}

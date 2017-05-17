@@ -44,7 +44,7 @@ class CompetitionResultsComponent(
   template = s"""
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}}
+      {{item.name}} Results 
     </span>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
@@ -56,6 +56,7 @@ class CompetitionResultsTitleComponent(
     service:CompetitionService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+
   
 }
 

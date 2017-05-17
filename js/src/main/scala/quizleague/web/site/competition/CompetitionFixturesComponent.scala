@@ -48,7 +48,7 @@ class CompetitionFixturesComponent(
   template = s"""
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}} Fixtures <ql-season-select [currentSeason]="season"></ql-season-select>
+      {{item.name}} Fixtures 
     </span>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
@@ -57,13 +57,11 @@ class CompetitionFixturesComponent(
 @classModeScala
 class CompetitionFixturesTitleComponent(
     route:ActivatedRoute,
-    service:CompetitionService,
-    viewService:CompetitionViewService){  
+    service:CompetitionService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
   
-  val season = viewService.season
-  
+
 }
 
    

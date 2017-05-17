@@ -9,6 +9,7 @@ import scalajs.js
 
 @Component(
   template = s"""
+<div>Menu</div>  
   <div *ngFor="let competition of competitions | async">
     <a routerLink="/competition/{{competition.id}}/{{competition.typeName}}"  md-button routerLinkActive="active" >{{competition.name}}</a>
   </div>
