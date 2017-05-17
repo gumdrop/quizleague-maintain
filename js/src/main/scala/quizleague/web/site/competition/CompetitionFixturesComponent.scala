@@ -44,4 +44,26 @@ class CompetitionFixturesComponent(
   }
 }
 
+@Component(
+  template = s"""
+  <ql-section-title>
+     <span *ngIf="itemObs | async as item; else loading">
+      {{item.name}} Fixtures <ql-season-select [currentSeason]="season"></ql-season-select>
+    </span>
+    <ng-template #loading>Loading...</ng-template>
+  </ql-section-title>
+  """    
+)
+@classModeScala
+class CompetitionFixturesTitleComponent(
+    route:ActivatedRoute,
+    service:CompetitionService,
+    viewService:CompetitionViewService){  
+  
+  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+  
+  val season = viewService.season
+  
+}
+
    

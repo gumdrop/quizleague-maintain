@@ -53,7 +53,7 @@ class TeamFixturesComponent(
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} - Fixtures
     </span>
-    <md-select placeholder="Season"></md-select>
+    <ql-season-select [currentSeason]="season" ></ql-season-select>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
   """    
@@ -61,8 +61,11 @@ class TeamFixturesComponent(
 @classModeScala
 class TeamFixturesTitleComponent(
     route:ActivatedRoute,
-    service:TeamService){  
+    service:TeamService,
+    viewService:TeamViewService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+  
+  val season = viewService.season
   
 }

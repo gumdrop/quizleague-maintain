@@ -40,4 +40,23 @@ class CompetitionResultsComponent(
 
 }
 
+@Component(
+  template = s"""
+  <ql-section-title>
+     <span *ngIf="itemObs | async as item; else loading">
+      {{item.name}}
+    </span>
+    <ng-template #loading>Loading...</ng-template>
+  </ql-section-title>
+  """    
+)
+@classModeScala
+class CompetitionResultsTitleComponent(
+    route:ActivatedRoute,
+    service:CompetitionService){  
+  
+  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+  
+}
+
    

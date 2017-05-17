@@ -19,14 +19,16 @@ import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.site.season.SeasonService
+import quizleague.web.site.season._
 import quizleague.web.model.ApplicationContext
+import rxjs.BehaviorSubject
+import quizleague.web.model._
 
 
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent, CompetitionResultsComponent, CompetitionFixturesComponent],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
+  declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent, CompetitionResultsComponent, CompetitionFixturesComponent, CompetitionResultsTitleComponent, CompetitionFixturesTitleComponent],
   providers = @@[CompetitionService, CompetitionViewService])
 class CompetitionModule
 
@@ -40,11 +42,20 @@ class CompetitionModule
             path = ":id",
             children = @@@(
               Route("league", children = @@@(
-                Route("", component = %%[LeagueCompetitionComponent]),
-                Route("results", component = %%[CompetitionResultsComponent]),
-                Route("fixtures", component = %%[CompetitionFixturesComponent])
-              )),
-              Route(path = "", component = %%[CompetitionTitleComponent], outlet = "title")
+                  Route("", children = @@@(
+                    Route("", component = %%[LeagueCompetitionComponent]),
+                    Route("", component = %%[CompetitionTitleComponent], outlet = "title"))
+                ),
+                Route("results", children = @@@(
+                    Route("", component = %%[CompetitionResultsComponent]),
+                    Route("", component = %%[CompetitionResultsTitleComponent], outlet = "title"))
+                ),
+                Route("fixtures", children = @@@(
+                    Route("", component = %%[CompetitionFixturesComponent]),
+                    Route("", component = %%[CompetitionFixturesTitleComponent], outlet = "title"))
+                )
+              ))
+              
             )
             
           ) ,
@@ -76,7 +87,10 @@ class CompetitionViewService(
     val applicationContextService:ApplicationContextService,
     val seasonService:SeasonService){
   
-    var season = applicationContextService.get().switchMap((ac,i) => seasonService.get(ac.currentSeason.id))
+    val season = new BehaviorSubject[Season](null)
+
+  
+    applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
 
     
 }
