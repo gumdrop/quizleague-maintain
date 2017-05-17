@@ -6,10 +6,15 @@ import angulate2.std._
 import quizleague.web.service.leaguetable.LeagueTableGetService
 import quizleague.web.site.ServiceRoot
 import quizleague.web.site.team.TeamService
+import angulate2.common.CommonModule
 
 
 @NgModule(
-  providers = @@[LeagueTableService])
+  imports = @@[CommonModule],
+  declarations = @@[LeagueTableComponent],
+  providers = @@[LeagueTableService],
+  exports = @@[LeagueTableComponent]
+  )
 class LeagueTableModule
 
 

@@ -11,6 +11,12 @@ import quizleague.web.site.global.ApplicationContextService
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
     <ql-text [textId]="item.text.id"></ql-text>
     <md-card>
+      <md-card-title>League Table</md-card-title>
+      <md-card-content>
+        <ql-league-table *ngFor="let table of item.tables" [table]="table"></ql-league-table>
+      </md-card-content>
+    </md-card>
+    <md-card>
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Latest results</md-card-subtitle>
       <md-card-content>

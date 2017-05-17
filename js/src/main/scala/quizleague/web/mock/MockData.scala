@@ -142,6 +142,7 @@ class MockData extends InMemoryDbService {
           List()
         ).asJson.noSpaces)
       ),
-      "leaguetable" -> js.Array(literal(id="1", json=LeagueTable("1", "A Table", List()).asJson.noSpaces))
+      "leaguetable" -> js.Array(literal(id="1", json=LeagueTable("1", "A Table", 
+          List(LeagueTableRow(Ref[Team]("team","1"),"1",0,0,0,0,0,0,0))).asJson.noSpaces))
    )
 }

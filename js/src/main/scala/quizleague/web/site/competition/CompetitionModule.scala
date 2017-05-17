@@ -23,11 +23,13 @@ import quizleague.web.site.season._
 import quizleague.web.model.ApplicationContext
 import rxjs.BehaviorSubject
 import quizleague.web.model._
+import quizleague.web.site.leaguetable.LeagueTableComponent
+import quizleague.web.site.leaguetable.LeagueTableModule
 
 
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule, SeasonModule,LeagueTableModule],
   declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent, CompetitionResultsComponent, CompetitionFixturesComponent, CompetitionResultsTitleComponent, CompetitionFixturesTitleComponent],
   providers = @@[CompetitionService, CompetitionViewService])
 class CompetitionModule
