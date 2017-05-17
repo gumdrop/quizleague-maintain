@@ -12,6 +12,8 @@ import quizleague.web.site.common.MenuComponent
 import angulate2.ext.classModeScala
 import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
+import quizleague.web.site.results.ResultsViewService
+import quizleague.web.site.results.ResultsViewService
 
 @Component(
   template = s"""
@@ -29,13 +31,25 @@ import quizleague.web.site.common.TitleService
 class AllFixturesComponent(
     route:ActivatedRoute,
     seasonService:SeasonService,
-    applicationContextService:ApplicationContextService,
+    viewService:ResultsViewService,
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
   setTitle("All Fixtures")
   
-  val items = applicationContextService.get().switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
+  val items = viewService.season.switchMap((s,i) => seasonService.getFixtures(s))
   
-  
+}
+
+@Component(
+  template = """
+  <ql-section-title>
+     <span>All Fixtures</span><ql-season-select [currentSeason]="season"></ql-season-select>
+  </ql-section-title>
+  """    
+)
+class AllFixturesTitleComponent(
+  viewService:ResultsViewService
+){
+  val season = viewService.season
 }

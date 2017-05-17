@@ -17,11 +17,15 @@ import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.fixtures.AllFixturesComponent
 import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.FixturesModule
+import quizleague.web.site.global.ApplicationContextService
+import rxjs.BehaviorSubject
+import quizleague.web.model.Season
+import quizleague.web.site.season.SeasonModule
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, FixturesModule, ResultsComponentsModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, FixturesModule, ResultsComponentsModule, SeasonModule],
   declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent],
-  providers = @@[ResultsService, ResultService])
+  providers = @@[ResultsService, ResultService, ResultsViewService])
 class ResultsModule
 
 @Routes(
@@ -65,5 +69,14 @@ class ResultService(override val http: Http,
     val textService: TextService,
     val teamService: TeamService) extends ResultGetService with ServiceRoot {
 
+}
+
+@Injectable
+class ResultsViewService(
+  applicationContextService:ApplicationContextService 
+){
+  val season = new BehaviorSubject[Season](null)
+  
+  applicationContextService.get.subscribe(ac => season.next(ac.currentSeason))
 }
 

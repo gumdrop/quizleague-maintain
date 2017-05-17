@@ -7,32 +7,32 @@ import quizleague.web.site.common.MenuComponent
 import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.global.ApplicationContextService
 
 @Component(
-  template = s"""
+  template = """
   <div>
     <h2>Competitions Home</h2>
   </div>
-  """    
+  """
 )
 @classModeScala
 class CompetitionsComponent(
-    override val sideMenuService:SideMenuService,
-    override val titleService:TitleService
-    ) extends SectionComponent with MenuComponent with TitledComponent{
-  
+    override val sideMenuService: SideMenuService,
+    override val titleService: TitleService) extends SectionComponent with MenuComponent with TitledComponent {
+
   setTitle("Competitions")
 }
 
 @Component(
-  template = s"""
+  template = """
   <ql-section-title>
-     <span>Competitions</span>
+     <span>Competitions</span><ql-season-select [currentSeason]="season"></ql-season-select>
   </ql-section-title>
-  """    
+  """
 )
 class CompetitionsTitleComponent(
-  viewService:CompetitionViewService    
-){
-  val service = viewService.service
+    viewService: CompetitionViewService) {
+  val season = viewService.season
+
 }

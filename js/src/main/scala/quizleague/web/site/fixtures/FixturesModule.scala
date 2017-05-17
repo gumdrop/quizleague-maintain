@@ -12,10 +12,11 @@ import angulate2.common.CommonModule
 import angular.material.MaterialModule
 import angular.flexlayout.FlexLayoutModule
 import quizleague.web.site.common.CommonAppModule
+import quizleague.web.site.season.SeasonModule
 
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, FlexLayoutModule, CommonAppModule, FixturesComponentsModule],
+  imports = @@[CommonModule, MaterialModule, FlexLayoutModule, CommonAppModule, FixturesComponentsModule,SeasonModule],
   declarations = @@[AllFixturesComponent, AllFixturesTitleComponent],
   providers = @@[FixturesService, FixtureService],
   exports = @@[AllFixturesComponent, AllFixturesTitleComponent])

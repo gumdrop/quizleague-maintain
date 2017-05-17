@@ -4,7 +4,6 @@ import java.time.LocalDate
 
 import scala.scalajs.js
 
-import angulate2.std._
 import quizleague.web.model.{ Fixtures, Results }
 import scala.scalajs.js.annotation.JSExport
 

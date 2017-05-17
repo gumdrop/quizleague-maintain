@@ -32,13 +32,24 @@ import quizleague.web.site.common.TitleService
 class AllResultsComponent(
     route:ActivatedRoute,
     seasonService:SeasonService,
-    applicationContextService:ApplicationContextService,
+    viewService:ResultsViewService,
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
   setTitle("All Results")
   
-  val items = applicationContextService.get().switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
-  
-  
+  val items = viewService.season.switchMap((s,i) => seasonService.getResults(s))
+}
+
+@Component(
+  template = """
+  <ql-section-title>
+     <span>All Results</span><ql-season-select [currentSeason]="season"></ql-season-select>
+  </ql-section-title>
+  """    
+)
+class AllResultsTitleComponent(
+  viewService:ResultsViewService
+){
+  val season = viewService.season
 }
