@@ -25,13 +25,17 @@ import quizleague.web.site.user.UserModule
 import quizleague.web.site.venue.VenueModule
 import quizleague.web.util.Logging
 import rxjs.Observable
+import quizleague.web.site.season.SeasonService
+import angulate2.common.CommonModule
+import quizleague.web.site.leaguetable.LeagueTableModule
+
 
 
 
 @NgModule(
-  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, TextModule, ApplicationModules, AppRoutingModule] :+
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, AppRoutingModule] :+
   InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
-  declarations = @@[AppComponent,RootComponent,RootMenuComponent], 
+  declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],
   providers = @@[SideMenuService]
 )
@@ -42,8 +46,8 @@ class AppModule (router:Router) extends Logging{
 
 
 @NgModule(
-  imports = @@[CommonAppModule, ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule, LeagueTableModule]
-)
+  imports = @@[CommonAppModule, ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule]
+ )
 class ApplicationModules
 
 @Routes(
@@ -103,10 +107,29 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
   
 }
 
+@NgModule(
+  imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule],
+  declarations = @@[RootComponent, RootMenuComponent],
+  exports = @@[RootComponent, RootMenuComponent]
+)
+class RootModule
+
 @Component(
   template = """
-  <div fxLayout="row">
-    <div>League Tables here</div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div>
+    <md-tab-group>
+      <md-tab label="League Tables">
+          <ql-league-table *ngFor="let table of (league | async).tables" [table]="table"></ql-league-table>
+      </md-tab>
+      <md-tab label="Last Results">
+        
+      </md-tab>
+      <md-tab label="Next Fixtures">
+        
+      </md-tab>
+    </md-tab-group>
+    </div>
     <md-card>
       <ql-named-text name="front_page_main"></ql-named-text>
     </md-card>
@@ -116,9 +139,12 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
 @classModeScala
 class RootComponent(
     override val sideMenuService:SideMenuService,
-    override val titleService:TitleService) extends SectionComponent with NoMenuComponent with TitledComponent{
+    override val titleService:TitleService,
+    val applicationContextService:ApplicationContextService,
+    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent{
   
   setTitle("Home")
+  val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
 }
 
 @Component(

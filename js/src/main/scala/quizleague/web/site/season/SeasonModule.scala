@@ -35,6 +35,12 @@ class SeasonService(override val http: Http,
     
     def getFixtures(season:Season) = get(season.id)(3).map((s,i) => s.competitions.flatMap(_.fixtures))
     
+    def getLeagueCompetition(season:Season) = get(season.id)
+      .map((s,i) => s.competitions)
+      .map((cs,i) => cs.filter(_.typeName == "league").head)
+      .switchMap((c,i) => competitionService.get(c.id)(3))
+      
+    
     
     
 }
