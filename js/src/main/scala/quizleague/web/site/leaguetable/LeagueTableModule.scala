@@ -7,10 +7,11 @@ import quizleague.web.service.leaguetable.LeagueTableGetService
 import quizleague.web.site.ServiceRoot
 import quizleague.web.site.team.TeamService
 import angulate2.common.CommonModule
+import angulate2.router.RouterModule
 
 
 @NgModule(
-  imports = @@[CommonModule],
+  imports = @@[CommonModule, RouterModule],
   declarations = @@[LeagueTableComponent],
   providers = @@[LeagueTableService],
   exports = @@[LeagueTableComponent]

@@ -15,7 +15,21 @@ import angulate2.core.ElementRef
     <select (change)="seasonChanged($event.target.value)" [value]="(currentSeason | async).id">
       <option  *ngFor="let season of seasons | async" [value]="season.id">{{season.startYear}} / {{season.endYear}}</option>
     </select>
-"""
+""",
+styles = @@@("""
+  select {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    background-color: transparent;
+    border: none;
+    color:  rgba(255,255,255,.87);
+    padding-left: .25em;
+  }
+  option {
+    color:black;
+  }
+""")
 
 )  
 class SeasonSelectComponent(
