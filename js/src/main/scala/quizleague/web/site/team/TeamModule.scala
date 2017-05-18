@@ -77,8 +77,6 @@ class TeamViewService(
 
   val season = new BehaviorSubject[Season](null)
   
-  season.subscribe(s => log(s, "viewService"))
-  
   applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
   
   

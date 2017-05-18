@@ -62,7 +62,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           mapOutList(c.fixtures, fixturesService),
           mapOutList(c.results, resultsService),
           mapOutList(c.tables, leagueTableService),
-          child(log(c.text,"text ref"),textService),
+          child(c.text,textService),
           c.subsidiary.map(x => get(x.id)(0)).getOrElse(Observable.of(null)),
           (fixtures: js.Array[Fixtures], results: js.Array[Results], tables:js.Array[LeagueTable],text: Text, subsidiary: Competition) => {
             new LeagueCompetition(

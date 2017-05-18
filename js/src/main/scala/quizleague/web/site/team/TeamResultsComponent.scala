@@ -1,23 +1,12 @@
 package quizleague.web.site.team
 
 import angulate2.ext.classModeScala
-import angulate2.std.Component
-import quizleague.web.site.common.MenuComponent
-import quizleague.web.site.common.SideMenuService
-import quizleague.web.site.common.SectionComponent
 import angulate2.router.ActivatedRoute
-import rxjs.Observable
-import quizleague.web.model.Team
-import angulate2.core.OnInit
+import angulate2.std.Component
+import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.site.season.SeasonService
-import quizleague.web.site.common.TitleService
-import quizleague.web.site.common.TitledComponent
 import quizleague.web.util.Logging
-import rxjs.Subject
-import quizleague.web.model.Result
-import scalajs.js
-import quizleague.web.model.Season
+
 
 @Component(
   template = s"""
@@ -48,8 +37,7 @@ class TeamResultsComponent(
   itemObs.subscribe(t => setTitle(s"${t.name} - Results"))
   
   val results = viewService.season.switchMap((s,j) => itemObs.switchMap((t,i) => viewService.getResults(t, s)))
-    
-  results.subscribe(r => log(r, "Results"))
+
   
   
 }

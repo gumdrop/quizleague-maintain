@@ -1,41 +1,30 @@
 package quizleague.web.site
 
-import angulate2.std._
-import angulate2.router.{Route, RouterModule, Router}
-import angulate2.platformBrowser.BrowserModule
-import angular.material.MaterialModule
-import angulate2.forms.FormsModule
-
 import scala.scalajs.js
+
+import angular.core.BrowserAnimationsModule
 import angular.flexlayout.FlexLayoutModule
-import angular.flexlayout.FlexLayoutModule
-import angulate2.ext.inMemoryWebApi.{InMemoryWebApiModule,InMemoryBackendConfigArgs}
+import angular.material.MaterialModule
+import angulate2.ext.classModeScala
+import angulate2.ext.inMemoryWebApi.{ InMemoryBackendConfigArgs, InMemoryWebApiModule }
 import angulate2.http.HttpModule
+import angulate2.platformBrowser.BrowserModule
+import angulate2.router.{ Route, Router }
+import angulate2.std._
 import quizleague.web.mock.MockData
-import quizleague.web.site.text.NamedTextComponent
-import quizleague.web.site.global.ApplicationContextModule
+import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
+import quizleague.web.site.competition.CompetitionModule
+import quizleague.web.site.fixtures.FixturesModule
+import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
+import quizleague.web.site.leaguetable.LeagueTableModule
+import quizleague.web.site.results.ResultsModule
+import quizleague.web.site.season.SeasonModule
+import quizleague.web.site.team.TeamModule
 import quizleague.web.site.text.TextModule
 import quizleague.web.site.user.UserModule
-import quizleague.web.site.text.NamedTextComponent
-import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.site.team.TeamModule
 import quizleague.web.site.venue.VenueModule
-import scala.scalajs.js
 import quizleague.web.util.Logging
-import angulate2.ext.classModeScala
-import quizleague.web.site.common.SideMenuService
 import rxjs.Observable
-import quizleague.web.site.common.NoMenuComponent
-import quizleague.web.site.common.SectionComponent
-import quizleague.web.site.results.ResultsModule
-import quizleague.web.site.fixtures.FixturesModule
-import quizleague.web.site.competition.CompetitionModule
-import quizleague.web.site.leaguetable.LeagueTableModule
-import quizleague.web.site.season.SeasonModule
-import angular.core.BrowserAnimationsModule
-import quizleague.web.site.common.CommonAppModule
-import quizleague.web.site.common.TitledComponent
-import quizleague.web.site.common.TitleService
 
 
 
@@ -75,7 +64,7 @@ class AppRoutingModule
         <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
           <md-icon class="md-24">menu</md-icon>
         </button>
-        <span>{{leagueName}}</span>
+        <span>{{(context | async).leagueName}}</span>
       </span>
       <md-toolbar-row>
         <div fxLayout="row" >
@@ -106,16 +95,12 @@ class AppRoutingModule
     }
   """)
 )
-class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuService) extends OnInit {
+class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuService){
   
-  var leagueName:String = _
+  val context = service.get
   
-  var showSidenav:Observable[Boolean]  = _ 
+  val showSidenav:Observable[Boolean]  = sideMenuService.showMenu 
   
-  override def ngOnInit() = {
-    service.get.subscribe(appc => {leagueName = appc.leagueName})
-    showSidenav = sideMenuService.showMenu
-  }
 }
 
 @Component(

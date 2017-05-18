@@ -26,12 +26,14 @@ import rxjs.Observable
       }
       caption{
         text-align:left;
-        font-style: bold;
+        font-size: 16px;
+        font-weight: 500;
+        font-family: Roboto,"Helvetica Neue",sans-serif;
       }""",
       """
        td,th {
-        border-bottom: 1px solid rgba(0,0,0,.5);
-        border-right: 1px solid rgba(0,0,0,.5);
+        border-bottom: 0.5px solid rgba(0,0,0,.5);
+        border-right: 0.5px solid rgba(0,0,0,.5);
       }""",
       """
       .num{
