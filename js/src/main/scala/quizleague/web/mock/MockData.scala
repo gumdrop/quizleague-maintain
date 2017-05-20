@@ -22,7 +22,7 @@ class MockData extends InMemoryDbService {
 
   override def createDb(): js.Any = js.Dictionary(
     "venue" -> js.Array(
-        literal(id ="1", json =  Venue("1", "wibble", None, None, None, None).asJson.noSpaces),
+        literal(id ="1", json =  Venue("1", "wibble", Option("12345"), Option("here@there.com"), Option("http://chilternquizleague.uk"), Option("http://storage.googleapis.com/seismic-bonfire-602.appspot.com/venue/5649391675244544/squirrel.jpg")).asJson.noSpaces),
         literal(id ="2", json =  Venue("2", "w0bble", None, None, None, None).asJson.noSpaces)
     ),
     "team" -> js.Array(

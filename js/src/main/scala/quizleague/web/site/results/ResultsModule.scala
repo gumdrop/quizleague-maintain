@@ -21,10 +21,11 @@ import quizleague.web.site.global.ApplicationContextService
 import rxjs.BehaviorSubject
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonModule
+import quizleague.web.site.text.TextModule
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, FixturesModule, ResultsComponentsModule, SeasonModule],
-  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
+  declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, ReportComponent, ReportTitleComponent],
   providers = @@[ResultsService, ResultService, ResultsViewService])
 class ResultsModule
 
@@ -40,14 +41,20 @@ class ResultsModule
         Route(path = "", component = %%[AllFixturesComponent]),
         Route(path = "", component = %%[AllFixturesTitleComponent], outlet = "title"))),
       Route(path = "", component = %%[ResultsMenuComponent], outlet = "sidemenu"),
-      Route(path = "",   redirectTo = "all", pathMatch = "full" )))
+      Route(path = ":id", children = @@@(
+          Route("reports", children = @@@(
+            Route("", component = %%[ReportComponent]),
+            Route("", component = %%[ReportTitleComponent], outlet="title")
+          )))),
+      Route(path = "",   redirectTo = "all", pathMatch = "full" )  
+    ))
  
 )
 @classModeScala
 class ResultsRoutesModule
 
 @NgModule(
-  imports = @@[CommonModule],
+  imports = @@[CommonModule,RouterModule,MaterialModule],
   declarations = @@[SimpleResultsComponent],
   exports = @@[SimpleResultsComponent]
   )
@@ -78,5 +85,6 @@ class ResultsViewService(
   val season = new BehaviorSubject[Season](null)
   
   applicationContextService.get.subscribe(ac => season.next(ac.currentSeason))
+  
 }
 

@@ -23,6 +23,7 @@ import rxjs.Observable
     styles = @@@("""
       table {
         border : 1.5px solid black;
+        font-size:14px;
       }
       caption{
         text-align:left;
@@ -31,10 +32,15 @@ import rxjs.Observable
         font-family: Roboto,"Helvetica Neue",sans-serif;
       }""",
       """
-       td,th {
+      td{
         border-bottom: 0.5px solid rgba(0,0,0,.5);
         border-right: 0.5px solid rgba(0,0,0,.5);
-      }""",
+      }
+      th{
+        border-bottom: 0.5px solid rgba(0,0,0,1);
+        border-right: 0.5px solid rgba(0,0,0,1);
+      }
+      """,
       """
       .num{
         min-width:3em;

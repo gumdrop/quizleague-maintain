@@ -120,6 +120,7 @@ class RootModule
     <div>
     <md-tab-group>
       <md-tab label="League Tables">
+          <div class="pad"></div>
           <ql-league-table *ngFor="let table of (league | async).tables" [table]="table"></ql-league-table>
       </md-tab>
       <md-tab label="Last Results">
@@ -134,7 +135,10 @@ class RootModule
       <ql-named-text name="front_page_main"></ql-named-text>
     </md-card>
   </div>
-  """
+  """,
+  styles = @@@("""
+    .pad {padding-top:1em;}
+  """)
 )
 @classModeScala
 class RootComponent(
