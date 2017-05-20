@@ -83,7 +83,6 @@ class TeamViewService(
   def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = seasonService.getResults(season).map(
     (r, i) => r.flatMap(_.results)
       .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)
-      .sort((r1: Result, r2: Result) => r2.fixture.date compareTo r1.fixture.date)
       .take(take))
 
   def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
@@ -94,7 +93,6 @@ class TeamViewService(
       (r, i) => r.flatMap(_.fixtures)
         .filter(fixture => fixture.date >= now)
         .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id)
-        .sort((f1: Fixture, f2: Fixture) => f1.date compareTo f2.date)
         .take(take))
   }
 }
