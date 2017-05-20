@@ -28,6 +28,10 @@ import rxjs.Observable
 import quizleague.web.site.season.SeasonService
 import angulate2.common.CommonModule
 import quizleague.web.site.leaguetable.LeagueTableModule
+import quizleague.web.site.season.SeasonService
+import quizleague.web.site.results.ResultsComponentsModule
+import quizleague.web.site.fixtures.FixturesComponentsModule
+import java.time.LocalDate
 
 
 
@@ -108,7 +112,7 @@ class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuSe
 }
 
 @NgModule(
-  imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule],
+  imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule, ResultsComponentsModule, FixturesComponentsModule],
   declarations = @@[RootComponent, RootMenuComponent],
   exports = @@[RootComponent, RootMenuComponent]
 )
@@ -123,10 +127,25 @@ class RootModule
           <div class="pad"></div>
           <ql-league-table *ngFor="let table of (league | async).tables" [table]="table"></ql-league-table>
       </md-tab>
-      <md-tab label="Last Results">
-        
+      <md-tab label="Latest Results">
+        <md-card *ngFor="let res of results | async">
+          <md-card-title>{{res.fixtures.parentDescription}} : {{res.fixtures.date | date:"dd MMM yyyy"}} - {{res.fixtures.description}}</md-card-title>
+          <md-card-content>
+            <ql-results-simple [results]="res.results" ></ql-results-simple>
+          </md-card-content>
+          
+        </md-card>
+        <ng-template #loading>Loading...</ng-template>  
       </md-tab>
       <md-tab label="Next Fixtures">
+       <md-card *ngFor="let item of fixtures | async">
+          <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
+          <md-card-content>
+            <ql-fixtures-simple [fixtures]="item.fixtures" ></ql-fixtures-simple>
+          </md-card-content>
+        
+        </md-card>
+        <ng-template #loading>Loading...</ng-template>  
         
       </md-tab>
     </md-tab-group>
@@ -149,6 +168,13 @@ class RootComponent(
   
   setTitle("Home")
   val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
+  val results = applicationContextService.get
+    .switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
+    .map((r,i) => r.take(1))
+  val fixtures = applicationContextService.get
+    .switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
+    .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
+    .map((f,i) => f.take(1))
 }
 
 @Component(
