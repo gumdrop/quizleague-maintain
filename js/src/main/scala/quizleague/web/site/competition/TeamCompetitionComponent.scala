@@ -10,6 +10,9 @@ import scala.scalajs.js.annotation.JSExport
 trait TeamCompetitionComponent{
   
   @JSExport
+  val textName:String
+  
+  @JSExport
   def latestResults(results:js.Array[Results]) = results.sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date).take(1)
   
   @JSExport

@@ -30,7 +30,18 @@ import quizleague.web.site.leaguetable.LeagueTableModule
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CompetitionRoutesModule, TextModule, CommonAppModule,ResultsComponentsModule, FixturesComponentsModule, SeasonModule,LeagueTableModule],
-  declarations = @@[LeagueCompetitionComponent, CompetitionTitleComponent ,CompetitionMenuComponent, CompetitionsComponent, CompetitionsTitleComponent, CompetitionResultsComponent, CompetitionFixturesComponent, CompetitionResultsTitleComponent, CompetitionFixturesTitleComponent],
+  declarations = @@[LeagueCompetitionComponent, 
+    CompetitionTitleComponent ,
+    CompetitionMenuComponent, 
+    CompetitionsComponent, 
+    CompetitionsTitleComponent, 
+    CompetitionResultsComponent, 
+    CompetitionFixturesComponent, 
+    CompetitionResultsTitleComponent, 
+    CompetitionFixturesTitleComponent,
+    CupCompetitionComponent,
+    PlateCompetitionComponent,
+    BeerCompetitionComponent],
   providers = @@[CompetitionService, CompetitionViewService])
 class CompetitionModule
 
@@ -43,34 +54,38 @@ class CompetitionModule
           Route(
             path = ":id",
             children = @@@(
-              Route("league", children = @@@(
-                  Route("", children = @@@(
-                    Route("", component = %%[LeagueCompetitionComponent]),
-                    Route("", component = %%[CompetitionTitleComponent], outlet = "title"))
-                ),
+              Route("", children = @@@(
+               Route("league", component = %%[LeagueCompetitionComponent]),
+               Route("cup", component = %%[CupCompetitionComponent]),
+               Route("plate", component = %%[PlateCompetitionComponent]),
+               Route("beer", component = %%[BeerCompetitionComponent]),
+               Route("", component = %%[CompetitionTitleComponent], outlet = "title")
+               )
+              ),
+              Route(":name", children = @@@(
                 Route("results", children = @@@(
                     Route("", component = %%[CompetitionResultsComponent]),
-                    Route("", component = %%[CompetitionResultsTitleComponent], outlet = "title"))
+                    Route("", component = %%[CompetitionResultsTitleComponent], outlet = "title")
+                    )
                 ),
                 Route("fixtures", children = @@@(
                     Route("", component = %%[CompetitionFixturesComponent]),
                     Route("", component = %%[CompetitionFixturesTitleComponent], outlet = "title"))
                 )
-              ))
-              
+               )
+              )
             )
-            
           ) ,
           Route(path = "", children = @@@(
             Route(path = "", component = %%[CompetitionsComponent]),
             Route(path = "", component = %%[CompetitionsTitleComponent], outlet = "title")
-          ))
-          ,
-          Route(path = "", component = %%[CompetitionMenuComponent], outlet = "sidemenu")
+          )
+         ),
+         Route(path = "", component = %%[CompetitionMenuComponent], outlet = "sidemenu")
         )
         
    )
-    )
+ )
 class CompetitionRoutesModule
 
 
