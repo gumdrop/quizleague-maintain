@@ -7,6 +7,7 @@ import scala.scalajs.js.annotation.JSExport
 case class Venue(
     id:String,
     name:String,
+    address:String,
     phone:String,
     email:String,
     website:String,

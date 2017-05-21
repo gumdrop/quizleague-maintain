@@ -6,8 +6,8 @@ import angular.material.MaterialModule
 
 @NgModule(
   imports = @@[MaterialModule],
-  declarations = @@[SectionTitleComponent],
-  providers = @@[TitleService],
-  exports = @@[SectionTitleComponent]
+  declarations = @@[SectionTitleComponent,LineBreakPipe],
+  providers = @@[TitleService, LineBreakPipe],
+  exports = @@[SectionTitleComponent,LineBreakPipe]
 )
 class CommonAppModule
