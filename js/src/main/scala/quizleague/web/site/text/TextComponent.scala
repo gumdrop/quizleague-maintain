@@ -9,8 +9,13 @@ import angulate2.core.OnChanges
 @Component(
     selector="ql-text",
     template="""
-      <div [innerHTML]="(text | async).text" style="font-family:Roboto"></div>
-"""
+      <div *ngIf="text | async as te; else loading">
+        <div *ngIf="te.mimeType=='text/html'" [innerHTML]="te.text"></div>
+        <div *ngIf="te.mimeType=='text/plain'" [innerText]="te.text"></div>
+      </div>
+      <ng-template #loading>Loading...</ng-template>
+""",
+    styles = @@@("*{font-family:Roboto;}") 
 )
 class TextComponent (
   textService:TextService

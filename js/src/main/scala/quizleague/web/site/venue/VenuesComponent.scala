@@ -5,7 +5,7 @@ import quizleague.web.site.common._
 import angulate2.ext.classModeScala
 
 @Component(
-  template = """Venues"""    
+  template = """<ql-named-text name="venues-front-page"></ql-named-text>"""    
 )
 @classModeScala
 class VenuesComponent(

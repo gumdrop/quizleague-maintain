@@ -7,7 +7,10 @@ import rxjs.Observable
 
 @Component(
     selector="ql-named-text",
-    template="""<ql-text [textId]="textId | async"></ql-text>"""
+    template="""
+        <ql-text *ngIf="textId | async as id;else loading" [textId]="id"></ql-text>
+        <ng-template #loading>{{name}}</ng-template>
+    """
 )
 class NamedTextComponent (
   applicationContextService:ApplicationContextService
@@ -22,7 +25,7 @@ class NamedTextComponent (
     
     def get(name:String, globalText:GlobalText):Option[TextEntry] = globalText.text.find(e => e.name == name)
     
-    textId = applicationContextService.get.map((apc,i) => get(name,apc.textSet).map(e => e.text.id).get)
+    textId = applicationContextService.get.map((apc,i) => get(name,apc.textSet).map(e => e.text.id).getOrElse(null))
 
   }
   

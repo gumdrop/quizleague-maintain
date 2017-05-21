@@ -11,9 +11,7 @@ import quizleague.web.site.global.ApplicationContextService
 
 @Component(
   template = """
-  <div>
-    <h2>Competitions Home</h2>
-  </div>
+    <ql-named-text name="competitions-front-page"></ql-named-text>
   """
 )
 @classModeScala

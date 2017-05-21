@@ -40,7 +40,7 @@ class MockData extends InMemoryDbService {
         literal(id ="4", json =  Text("4","""<p>The Chiltern Quiz League is&nbsp;a friendly, local quiz league based in and around the Buckinghamshire towns of Amersham and Chesham (with an outpost in Farnham Common).</p>
 <p>We currently have 10 teams in a single <a href="competitions/LEAGUE">league</a>, with all&nbsp;teams playing each other twice, home and away. We also run two knockout competitions, the&nbsp;<a href="competitions/CUP">Cup</a> and the&nbsp;<a href="competitions/PLATE">Plate</a> (think of the Plate as the Europa League to the Champions League of the Cup), and the just-for-fun&nbsp;<a href="competitions/BEER">Beer Leg</a> each night after the main quiz.</p>
 <p>Our season normally runs from October to April; matches are played on Tuesday nights at 8:30pm, and generally last about 1&frac12; hours.</p>
-<p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text.html").asJson.noSpaces),
+<p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text/html").asJson.noSpaces),
         literal(id ="5", json =  Text("5", "<b>Some bold team text here</b>", "text/html").asJson.noSpaces),
         literal(id ="6", json =  Text("6", "Season text 2", "text/plain").asJson.noSpaces)
         
@@ -80,7 +80,7 @@ class MockData extends InMemoryDbService {
           "League", 
           LocalTime.of(20,30), 
           Duration.ofMinutes(90),
-          List(Ref[Fixtures]("fixtures","1"),Ref[Fixtures]("fixtures","2")),
+          List(Ref[Fixtures]("fixtures","1"),Ref[Fixtures]("fixtures","2"),Ref[Fixtures]("fixtures","3")),
           List(Ref[Results]("results","1"),Ref[Results]("results","2")),
           List(Ref[LeagueTable]("leaguetable","1")),
           Ref[Text]("text","1"),
@@ -99,7 +99,14 @@ class MockData extends InMemoryDbService {
           LocalDate.parse("2017-03-08"),
           LocalTime.of(20,30), 
           Duration.ofMinutes(90),
-          List(Ref[Fixture]("fixture","2"))).asJson.noSpaces)
+          List(Ref[Fixture]("fixture","2"))).asJson.noSpaces),
+          literal(id="3", json=Fixtures("3",
+          "Week 3",
+          "League",
+          LocalDate.parse("2017-11-08"),
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90),
+          List(Ref[Fixture]("fixture","3"))).asJson.noSpaces)
       ),
       "fixture" -> js.Array(literal(id="1", json=Fixture("1",
           "",
@@ -117,6 +124,15 @@ class MockData extends InMemoryDbService {
           Ref[Team]("team", "2"),
           Ref[Team]("team", "1"),
           LocalDate.parse("2017-03-08"),
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90)).asJson.noSpaces),
+          literal(id="3", json=Fixture("3",
+          "",
+          "League",
+          Ref[Venue]("venue","2"),
+          Ref[Team]("team", "2"),
+          Ref[Team]("team", "1"),
+          LocalDate.parse("2017-11-08"),
           LocalTime.of(20,30), 
           Duration.ofMinutes(90)).asJson.noSpaces)
       ),

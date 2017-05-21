@@ -10,9 +10,7 @@ import quizleague.web.site.common.TitledComponent
 
 @Component(
   template = s"""
-  <div>
-    <h2>Teams Home</h2>
-  </div>
+<ql-named-text name="teams-front-page"></ql-named-text>
   """    
 )
 @classModeScala

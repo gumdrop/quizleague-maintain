@@ -12,10 +12,12 @@ import angulate2.core.OnInit
 
 @Component(
   template = s"""
-  <ql-section-title>
-     <span *ngIf="itemObs | async as item; else loading">
+  <ql-section-title *ngIf="itemObs | async as item; else loading">
+     <span>
       {{item.name}}
     </span>
+    <span style="flex:1 1 0;"></span>
+    <span><a md-icon-button routerLink="/venue/{{item.venue.id}}" mdTooltip="Venue"><md-icon class="md-24">location_on</md-icon></a></span>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
   """    

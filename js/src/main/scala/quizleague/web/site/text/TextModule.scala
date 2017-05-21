@@ -7,10 +7,11 @@ import angulate2.std._
 import angulate2.ext._
 import quizleague.web.service.globaltext._
 import angulate2.common.CommonModule
+import angulate2.platformBrowser.BrowserModule
 
 
 @NgModule(
-  imports = @@[CommonModule],
+  imports = @@[CommonModule, BrowserModule],
   declarations = @@[TextComponent,NamedTextComponent],
   providers = @@[TextService,GlobalTextService],  
   exports = @@[TextComponent,NamedTextComponent]

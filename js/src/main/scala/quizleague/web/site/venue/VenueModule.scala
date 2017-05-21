@@ -19,9 +19,10 @@ import rxjs.Observable
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.site._
 import quizleague.web.site.common.CommonAppModule
+import quizleague.web.site.text.TextModule
 
 @NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, VenueRoutesModule, CommonAppModule],
+  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, VenueRoutesModule, CommonAppModule, TextModule],
   declarations = @@[VenueComponent, VenueTitleComponent, VenueMenuComponent, VenuesComponent, VenuesTitleComponent],
   providers = @@[VenueService])
 class VenueModule
