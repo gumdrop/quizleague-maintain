@@ -68,13 +68,19 @@ class AppRoutingModule
   template = """
   <div>
    <md-toolbar color='primary' class="mat-elevation-z6">
-      <span>
-        <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
-          <md-icon class="md-24">menu</md-icon>
-        </button>
-        <span>{{(context | async).leagueName}}</span>
-      </span>
-      <md-toolbar-row>
+        <span>
+          <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
+            <md-icon class="md-24">menu</md-icon>
+          </button>
+          <span>{{(context | async).leagueName}}</span>
+        </span>
+        <span style="flex:1 1 0;"></span>
+        <span fxHide fxShow.xs="true">
+          <button md-icon-button [mdMenuTriggerFor]="appMenu">
+            <md-icon class="md-24">more_vert</md-icon>
+          </button>
+        </span>
+      <md-toolbar-row fxShow fxHide.xs="true">
         <div fxLayout="row" >
           <a routerLink="/home" md-button routerLinkActive="active">Home</a>
           <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
@@ -85,7 +91,7 @@ class AppRoutingModule
       </md-toolbar-row>
     </md-toolbar>
     <md-sidenav-container>
-      <md-sidenav #sidenav mode="side" [opened]="showSidenav | async">
+      <md-sidenav #sidenav [mode]="menuMode()" [opened]="showByDefault() && (showSidenav | async)">
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
@@ -96,6 +102,15 @@ class AppRoutingModule
       </div>
     </md-sidenav-container>
   </div>
+  <md-menu #appMenu="mdMenu">
+       <div fxLayout="column" >
+          <a routerLink="/home" md-button routerLinkActive="active">Home</a>
+          <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
+          <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
+          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
+          <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
+        </div>
+  </md-menu>
   """,
   styles = js.Array("""
     md-sidenav-container{
@@ -103,11 +118,17 @@ class AppRoutingModule
     }
   """)
 )
-class AppComponent(service:ApplicationContextService, sideMenuService:SideMenuService){
+class AppComponent(
+    service:ApplicationContextService, 
+    sideMenuService:SideMenuService){
   
   val context = service.get
   
-  val showSidenav:Observable[Boolean]  = sideMenuService.showMenu 
+  val showSidenav = sideMenuService.showMenu 
+  
+  def menuMode() = sideMenuService.menuMode
+  
+  def showByDefault() = sideMenuService.showByDefault
   
 }
 
