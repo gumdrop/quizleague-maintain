@@ -81,13 +81,7 @@ class AppRoutingModule
           </button>
         </span>
       <md-toolbar-row fxShow fxHide.xs="true">
-        <div fxLayout="row" >
-          <a routerLink="/home" md-button routerLinkActive="active">Home</a>
-          <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
-          <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
-          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
-          <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
-        </div>
+         <div *ngTemplateOutlet="menu"></div>
       </md-toolbar-row>
     </md-toolbar>
     <md-sidenav-container>
@@ -103,14 +97,17 @@ class AppRoutingModule
     </md-sidenav-container>
   </div>
   <md-menu #appMenu="mdMenu">
-       <div fxLayout="column" >
-          <a routerLink="/home" md-button routerLinkActive="active">Home</a>
-          <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
-          <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
-          <a routerLink="/results" md-button routerLinkActive="active">Results</a>
-          <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
-        </div>
+     <div *ngTemplateOutlet="menu"></div>
   </md-menu>
+  <ng-template #menu>
+     <div fxLayout="row" fxLayout.xs="column">
+        <a routerLink="/home" md-button routerLinkActive="active">Home</a>
+        <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
+        <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
+        <a routerLink="/results" md-button routerLinkActive="active">Results</a>
+        <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
+     </div>
+  </ng-template>
   """,
   styles = js.Array("""
     md-sidenav-container{
