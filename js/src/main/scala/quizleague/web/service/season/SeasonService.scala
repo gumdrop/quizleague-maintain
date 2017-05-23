@@ -28,13 +28,12 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
   val competitionService: CompetitionGetService
   val venueService: VenueGetService
 
-  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, null, js.Array(),js.Array())
+  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), js.Array(),js.Array())
   override protected def mapOut(season: Dom)(implicit depth:Int) =
     Observable.zip(
-      child(season.text,textService),
       mapOutList(season.competitions, competitionService),
       mapEvents(season.calendar),
-      (text: Text, competitions: js.Array[Competition], calendar:js.Array[CalendarEvent]) => Season(season.id, season.startYear, season.endYear, text, competitions, calendar))
+      (competitions: js.Array[Competition], calendar:js.Array[CalendarEvent]) => Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), competitions, calendar))
 
   override def flush() = { textService.flush(); super.flush() }
   

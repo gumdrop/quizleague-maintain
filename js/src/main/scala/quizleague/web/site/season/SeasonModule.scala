@@ -19,9 +19,9 @@ import quizleague.web.model.Fixtures
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule],
-  declarations = @@[SeasonSelectComponent],
+  declarations = @@[SeasonSelectComponent,SeasonNameComponent],
   providers = @@[SeasonService],
-  exports = @@[SeasonSelectComponent]
+  exports = @@[SeasonSelectComponent,SeasonNameComponent]
 )
 class SeasonModule
 

@@ -26,6 +26,6 @@ class TextComponent (
   
   var text:Observable[Text] = _
   
-  override def ngOnChanges(changes: OnChanges.SimpleChanges) = text = textService.get(textId)
+  override def ngOnChanges(changes: OnChanges.SimpleChanges) = if(textId != null) text = textService.get(textId)
 
 }

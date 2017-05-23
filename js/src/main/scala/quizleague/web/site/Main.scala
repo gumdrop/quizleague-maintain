@@ -72,7 +72,7 @@ class AppRoutingModule
           <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
             <md-icon class="md-24">menu</md-icon>
           </button>
-          <span>{{(context | async).leagueName}}</span>
+          <span>{{(context | async)?.leagueName}}</span>
         </span>
         <span style="flex:1 1 0;"></span>
         <span fxHide fxShow.xs="true">
@@ -113,7 +113,8 @@ class AppRoutingModule
     md-sidenav-container{
       margin-top:8px;
     }
-  """)
+  """,
+  """[md-icon-button]{top:-3px;}""")
 )
 class AppComponent(
     service:ApplicationContextService, 
@@ -143,7 +144,7 @@ class RootModule
     <md-tab-group>
       <md-tab label="League Tables">
           <div class="pad"></div>
-          <ql-league-table *ngFor="let table of (league | async).tables" [table]="table"></ql-league-table>
+          <ql-league-table *ngFor="let table of (league | async)?.tables" [table]="table"></ql-league-table>
       </md-tab>
       <md-tab label="Latest Results">
         <md-card *ngFor="let res of results | async">
@@ -161,21 +162,24 @@ class RootModule
           <md-card-content>
             <ql-fixtures-simple [fixtures]="item.fixtures" ></ql-fixtures-simple>
           </md-card-content>
-        
+    
         </md-card>
         <ng-template #loading>Loading...</ng-template>  
         
       </md-tab>
     </md-tab-group>
     </div>
-    <md-card>
-      <ql-named-text name="front_page_main"></ql-named-text>
-    </md-card>
+      <div class="text_area">
+        <ql-named-text name="front_page_main"></ql-named-text>
+        <br>
+        <ql-text [textId]="(currentSeason | async)?.text.id"></ql-text>
+      </div>
   </div>
   """,
   styles = @@@("""
     .pad {padding-top:1em;}
-  """)
+  """,
+  """.text_area{margin-left:1em;}""")
 )
 @classModeScala
 class RootComponent(
@@ -193,6 +197,8 @@ class RootComponent(
     .switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
     .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
     .map((f,i) => f.take(1))
+    
+  val currentSeason = applicationContextService.get.map((ac,i) => ac.currentSeason)
 }
 
 @Component(

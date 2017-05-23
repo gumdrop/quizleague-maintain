@@ -14,7 +14,7 @@ import angulate2.core.OnInit
   template = s"""
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}}
+      {{item.name}} <ql-season-name [season]="season"></ql-season-name>
     </span>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
@@ -23,8 +23,10 @@ import angulate2.core.OnInit
 @classModeScala
 class CompetitionTitleComponent(
     route:ActivatedRoute,
-    service:CompetitionService){  
+    service:CompetitionService,
+    viewService:CompetitionViewService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
+  val season = viewService.season
   
 }
