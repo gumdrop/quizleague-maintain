@@ -91,7 +91,7 @@ class AppRoutingModule
       </md-toolbar-row>
     </md-toolbar>
     <md-sidenav-container>
-      <md-sidenav #sidenav [mode]="menuMode()" [opened]="showByDefault() && (showSidenav | async)">
+      <md-sidenav #sidenav [mode]="menuMode()" [opened]="showByDefault() && (showSidenav | async)" (click)="!showByDefault() && sidenav.toggle()">
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
@@ -141,7 +141,7 @@ class RootModule
 
 @Component(
   template = """
-  <div fxLayout="row" fxLayoutGap="10px">
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
     <div>
     <md-tab-group>
       <md-tab label="League Tables">

@@ -19,14 +19,15 @@ import quizleague.web.util.Logging
          <div fxLayout="row" fxLayoutAlign="space-between start">
            <div fxLayout="column">
              <div [innerText]="item.address" ></div>
-             <div class="map">
+             <div class="map" fxHide.xs="true">
                <iframe [src]="embeddedUrl(item)" width="400" height="300" frameborder="0" style="border: 0"></iframe>
              </div>
+             <div><a [href]="linkUrl(item)" target="_blank">map</a></div>
              <div>email : <a href="mailto:{{item.email}}">{{item.email}}</a></div>
              <div>website : <a href="{{item.website}}" target="_blank">{{item.website}}</a></div>
              <div>phone : {{item.phone}}</div>
            </div>
-           <div>
+           <div fxHide="true" fxShow.gt-sm="true">
               <img md-card-img-sm src="{{item.imageURL}}">
            </div>
          </div>
@@ -55,6 +56,8 @@ class VenueComponent(
   itemObs.subscribe(v => setTitle(v.name))
   
   def embeddedUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).join(""))
+  
+  def linkUrl(venue:Venue) = sanitiser.bypassSecurityTrustResourceUrl(makeParts(venue).take(2).join(""))
     
   private def makeParts(venue:Venue) = {
     js.Array("https://maps.google.com/maps?&q=",js.URIUtils.encodeURIComponent(s"${venue.name} ${venue.address}".replaceAll("\\s", "+")), "&output=embed")
