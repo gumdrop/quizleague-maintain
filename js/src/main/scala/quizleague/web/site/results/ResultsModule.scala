@@ -18,10 +18,11 @@ import quizleague.web.site.fixtures.AllFixturesComponent
 import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.ApplicationContextService
-import rxjs.ReplaySubject
+import rxjs._
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.site.text.TextModule
+import quizleague.web.util.Logging._
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
@@ -83,6 +84,8 @@ class ResultsViewService(
   applicationContextService:ApplicationContextService 
 ){
   val season = new ReplaySubject[Season](1)
+  
+  season.subscribe(s => log(s,"Season in ResultsViewService"))
   
   applicationContextService.get.subscribe(ac => season.next(ac.currentSeason))
   

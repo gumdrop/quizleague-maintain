@@ -9,3 +9,5 @@ trait Logging {
     i
   }
 }
+
+object Logging extends Logging

@@ -9,11 +9,12 @@ import rxjs.Subject
 import scala.scalajs.js.annotation.JSExport
 import angulate2.core.ElementRef
 import rxjs.Observable
+import quizleague.web.util.Logging._
 
 @Component(
   selector = "ql-season-select",
   template = """
-    <select (change)="seasonChanged($event.target.value)" [value]="(currentSeason | async)?.id">
+    <select #select (change)="seasonChanged($event.target.value)" [value]="(currentSeason | async).id">
       <option  *ngFor="let season of seasons | async" [value]="season.id"><ql-season-name [season]="asObs(season)"></ql-season-name></option>
     </select>
 """,
@@ -34,7 +35,9 @@ styles = @@@("""
 
 )  
 class SeasonSelectComponent(
-    seasonService:SeasonService){
+    seasonService:SeasonService) extends OnInit{
+  
+  
   
   val seasons = seasonService.list
   
@@ -44,5 +47,8 @@ class SeasonSelectComponent(
   def seasonChanged(id:String) = seasonService.get(id).subscribe(s => currentSeason.next(s))
   
   def asObs(s:Season) = Observable.of(s)
- 
+  
+  override def ngOnInit() = currentSeason.subscribe(logit _)
+  
+  private def logit(s:Season):Unit = log(s,"Season Select") 
 }

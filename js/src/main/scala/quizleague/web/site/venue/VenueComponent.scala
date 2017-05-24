@@ -22,7 +22,7 @@ import quizleague.web.util.Logging
              <div class="map" fxHide.xs="true">
                <iframe [src]="embeddedUrl(item)" width="400" height="300" frameborder="0" style="border: 0"></iframe>
              </div>
-             <div><a [href]="linkUrl(item)" target="_blank">map</a></div>
+             <div fxHide="true" fxShow.xs="true"><a [href]="linkUrl(item)" target="_blank">map</a></div>
              <div>email : <a href="mailto:{{item.email}}">{{item.email}}</a></div>
              <div>website : <a href="{{item.website}}" target="_blank">{{item.website}}</a></div>
              <div>phone : {{item.phone}}</div>
