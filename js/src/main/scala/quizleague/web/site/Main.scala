@@ -38,7 +38,7 @@ import java.time.LocalDate
 
 @NgModule(
   imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, AppRoutingModule] :+
-  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
+  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
   declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],
   providers = @@[SideMenuService]

@@ -18,7 +18,7 @@ import quizleague.web.site.fixtures.AllFixturesComponent
 import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.ApplicationContextService
-import rxjs.BehaviorSubject
+import rxjs.ReplaySubject
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.site.text.TextModule
@@ -82,7 +82,7 @@ class ResultService(override val http: Http,
 class ResultsViewService(
   applicationContextService:ApplicationContextService 
 ){
-  val season = new BehaviorSubject[Season](null)
+  val season = new ReplaySubject[Season](1)
   
   applicationContextService.get.subscribe(ac => season.next(ac.currentSeason))
   
