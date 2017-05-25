@@ -8,6 +8,7 @@ import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.global.ApplicationContextService
+import quizleague.web.model.Season
 
 @Component(
   template = """
@@ -25,12 +26,14 @@ class CompetitionsComponent(
 @Component(
   template = """
   <ql-section-title>
-     <span>Competitions</span><ql-season-select [currentSeason]="season"></ql-season-select>
+     <span>Competitions</span><ql-season-select [currentSeason]="season | async" (change)="seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """
 )
 class CompetitionsTitleComponent(
     viewService: CompetitionViewService) {
   val season = viewService.season
+  
+  def seasonChanged(s:Season) = season.next(s)
 
 }
