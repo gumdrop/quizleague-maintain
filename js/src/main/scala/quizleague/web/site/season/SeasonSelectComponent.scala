@@ -14,7 +14,7 @@ import quizleague.web.util.Logging._
 @Component(
   selector = "ql-season-select",
   template = """
-    <select #select (change)="seasonChanged($event.target.value)" [value]="(currentSeason | async).id">
+    <select #select (change)="seasonChanged($event.target.value)" [(value)]="currentSeasonId">
       <option  *ngFor="let season of seasons | async" [value]="season.id"><ql-season-name [season]="asObs(season)"></ql-season-name></option>
     </select>
 """,
@@ -42,13 +42,14 @@ class SeasonSelectComponent(
   val seasons = seasonService.list
   
   @Input
-  var currentSeason:Subject[Season] = _
+  var currentSeason:Subject[Season] = null
+  
+  var currentSeasonId:String = null
   
   def seasonChanged(id:String) = seasonService.get(id).subscribe(s => currentSeason.next(s))
   
   def asObs(s:Season) = Observable.of(s)
   
-  override def ngOnInit() = currentSeason.subscribe(logit _)
+  override def ngOnInit() = currentSeason.subscribe(s => currentSeasonId = s.id)
   
-  private def logit(s:Season):Unit = log(s,"Season Select") 
 }
