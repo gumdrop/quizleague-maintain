@@ -14,6 +14,8 @@ import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.results.ResultsViewService
 import quizleague.web.site.results.ResultsViewService
+import quizleague.web.model.Season
+import rxjs.Observable
 
 @Component(
   template = s"""
@@ -37,19 +39,25 @@ class AllFixturesComponent(
   
   setTitle("All Fixtures")
   
-  val items = viewService.season.switchMap((s,i) => seasonService.getFixtures(s))
+  val items = Observable.of(viewService.season).filter((s,i) => s != null).switchMap((s,i) => seasonService.getFixtures(s))
   
 }
 
 @Component(
   template = """
   <ql-section-title>
-     <span>All Fixtures</span><ql-season-select [currentSeason]="season"></ql-season-select>
+     <span>All Fixtures</span><ql-season-select [currentSeason]="viewService.season" (onchange)="seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """    
 )
 class AllFixturesTitleComponent(
-  viewService:ResultsViewService
+  val viewService:ResultsViewService
 ){
-  val season = viewService.season
+  
+  def seasonChanged(s:Season) = {
+    //import scala.language.reflectiveCalls
+    //log(s, "season changed");
+    viewService.season = s
+    
+  }
 }

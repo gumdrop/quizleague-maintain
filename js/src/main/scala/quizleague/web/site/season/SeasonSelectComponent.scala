@@ -42,10 +42,16 @@ class SeasonSelectComponent(
   @Input
   var currentSeason:Season = _
   
-  def seasonChanged(id:String) = seasonService.get(id).subscribe(s => {currentSeason = s; change.emit(s)})
+  def seasonChanged(id:String) = {
+    log(id,"season id")
+    if(id != null){
+      seasonService.get(id).subscribe(s => {log(s,"incoming season");currentSeason = s; onchange.emit(s)})
+    }
+
+  }
   
   @Output
-  val change = new EventEmitter[Season]()
+  val onchange = new EventEmitter[Season]()
   
   def asObs(s:Season) = Observable.of(s)
  

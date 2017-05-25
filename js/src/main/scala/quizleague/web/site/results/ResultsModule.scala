@@ -83,11 +83,12 @@ class ResultService(override val http: Http,
 class ResultsViewService(
   applicationContextService:ApplicationContextService 
 ){
-  val season = new ReplaySubject[Season](1)
   
-  season.subscribe(s => log(s,"Season in ResultsViewService"))
+  var season:Season = _
+    
+  //season.subscribe(s => log(s,"Season in ResultsViewService"))
   
-  applicationContextService.get.subscribe(ac => season.next(ac.currentSeason))
+  applicationContextService.get.subscribe(ac => season = ac.currentSeason)
   
 }
 
