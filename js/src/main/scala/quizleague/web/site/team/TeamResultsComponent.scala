@@ -2,10 +2,12 @@ package quizleague.web.site.team
 
 import angulate2.ext.classModeScala
 import angulate2.router.ActivatedRoute
-import angulate2.std.Component
+import angulate2.std._
 import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.util.Logging
+import angulate2.core.Input
+import scala.scalajs.js.annotation.JSExport
 
 
 @Component(
@@ -43,24 +45,31 @@ class TeamResultsComponent(
 }
 
 @Component(
+  template = """<ql-team-sub-title text="Results"></ql-team-sub-title>"""
+)
+class TeamResultsTitleComponent
+
+
+@Component(
+  selector = "ql-team-sub-title",
   template = """
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}} - Results
+      {{item.name}} - {{text}}
     </span>
-    <ql-season-select [currentSeason]="season"></ql-season-select>
+    <ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
     <ng-template #loading>Loading...</ng-template>
   </ql-section-title>
-  """    
+  """
 )
-@classModeScala
-class TeamResultsTitleComponent(
+class TeamSubTitleComponent(
     route:ActivatedRoute,
     service:TeamService,
-    viewService:TeamViewService) extends Logging{  
+    val viewService:TeamViewService){  
+  
+  @Input
+  var text:String = _
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
-  
-  val season = viewService.season
   
 }

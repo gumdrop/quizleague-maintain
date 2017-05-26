@@ -1,7 +1,7 @@
 package quizleague.web.site.fixtures
 
 import rxjs.Observable.RichIObservable
-import scala.scalajs.js.Any.fromString
+import scala.scalajs.js
 import angulate2.router.ActivatedRoute
 import angulate2.std._
 import quizleague.web.site.season.SeasonService
@@ -16,6 +16,7 @@ import quizleague.web.site.results.ResultsViewService
 import quizleague.web.site.results.ResultsViewService
 import quizleague.web.model.Season
 import rxjs.Observable
+import quizleague.web.util.Logging._
 
 @Component(
   template = s"""
@@ -39,25 +40,17 @@ class AllFixturesComponent(
   
   setTitle("All Fixtures")
   
-  val items = Observable.of(viewService.season).filter((s,i) => s != null).switchMap((s,i) => seasonService.getFixtures(s))
+  val items = viewService.season.switchMap((s,i) => seasonService.getFixtures(s))
   
 }
 
 @Component(
   template = """
   <ql-section-title>
-     <span>All Fixtures</span><ql-season-select [currentSeason]="viewService.season" (onchange)="seasonChanged($event)"></ql-season-select>
+     <span>All Fixtures</span><ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """    
 )
 class AllFixturesTitleComponent(
   val viewService:ResultsViewService
-){
-  
-  def seasonChanged(s:Season) = {
-    //import scala.language.reflectiveCalls
-    //log(s, "season changed");
-    viewService.season = s
-    
-  }
-}
+)

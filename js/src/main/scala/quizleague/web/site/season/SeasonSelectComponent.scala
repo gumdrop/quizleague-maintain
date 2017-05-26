@@ -6,7 +6,7 @@ import angulate2.core.EventEmitter
 import angulate2.ext.classModeScala
 import quizleague.web.util.Logging
 import rxjs.Subject
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js
 import angulate2.core.ElementRef
 import rxjs.Observable
 import quizleague.web.util.Logging._
@@ -14,8 +14,8 @@ import quizleague.web.util.Logging._
 @Component(
   selector = "ql-season-select",
   template = """
-    <select #select (change)="seasonChanged($event.target.value)" [value]="currentSeason?.id">
-      <option  *ngFor="let season of seasons | async" [value]="season.id"><ql-season-name [season]="asObs(season)"></ql-season-name></option>
+    <select (change)="seasonChanged()" [(ngModel)]="currentSeason" [compareWith]="compare">
+      <option  *ngFor="let season of seasons | async" [ngValue]="season"><ql-season-name [season]="obs(season)"></ql-season-name></option>
     </select>
 """,
 styles = @@@("""
@@ -42,18 +42,14 @@ class SeasonSelectComponent(
   @Input
   var currentSeason:Season = _
   
-  def seasonChanged(id:String) = {
-    log(id,"season id")
-    if(id != null){
-      seasonService.get(id).subscribe(s => {log(s,"incoming season");currentSeason = s; onchange.emit(s)})
-    }
-
-  }
-  
+  def seasonChanged() = onchange.emit(currentSeason)
+    
   @Output
   val onchange = new EventEmitter[Season]()
   
-  def asObs(s:Season) = Observable.of(s)
+  def obs(s:Season) = Observable.of(s)
+  
+  def compare(s1:js.Dynamic,s2:js.Dynamic) = s1 == s2 || ((s1 != null && s2 != null) && s1.id == s2.id)
  
 }
 

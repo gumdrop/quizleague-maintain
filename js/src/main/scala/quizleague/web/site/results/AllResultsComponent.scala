@@ -22,7 +22,7 @@ import quizleague.web.util.Logging._
 @Component(
   template = s"""
     <div fxLayout="column" fxLayoutGap="5px">  
-    <md-card *ngFor="let item of items() | async">
+    <md-card *ngFor="let item of items | async">
       <md-card-title>{{item.fixtures.parentDescription}} - {{item.fixtures.date | date:"d MMMM yyyy"}} : {{item.fixtures.description}}</md-card-title>
       <md-card-content>
         <ql-results-simple [results]="item.results"></ql-results-simple>
@@ -41,24 +41,16 @@ class AllResultsComponent(
   
   setTitle("All Results")
   
-  def items() = Observable.of(viewService.season).filter((s,i) => s != null).switchMap((s,i) => seasonService.getResults(s))
+  val items = viewService.season.switchMap((s,i) => seasonService.getResults(s))
 }
 
 @Component(
   template = """
   <ql-section-title>
-     <span>All Results</span><ql-season-select [currentSeason]="viewService.season" (onchange)="seasonChanged($event)"></ql-season-select>
+     <span>All Results</span><ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """    
 )
 class AllResultsTitleComponent(
   val viewService:ResultsViewService
-){
-
-  def seasonChanged(s:Season) = {
-    //import scala.language.reflectiveCalls
-    log(s, "season changed");
-    viewService.season = s
-    
-  }
-}
+)

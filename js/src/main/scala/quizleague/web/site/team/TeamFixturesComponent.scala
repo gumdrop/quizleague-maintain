@@ -48,24 +48,6 @@ class TeamFixturesComponent(
 }
 
 @Component(
-  template = s"""
-  <ql-section-title>
-     <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}} - Fixtures
-    </span>
-    <ql-season-select [currentSeason]="season" ></ql-season-select>
-    <ng-template #loading>Loading...</ng-template>
-  </ql-section-title>
-  """    
+  template = """<ql-team-sub-title text="Fixtures"></ql-team-sub-title>"""
 )
-@classModeScala
-class TeamFixturesTitleComponent(
-    route:ActivatedRoute,
-    service:TeamService,
-    viewService:TeamViewService){  
-  
-  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
-  
-  val season = viewService.season
-  
-}
+class TeamFixturesTitleComponent

@@ -23,6 +23,8 @@ import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.site.text.TextModule
 import quizleague.web.util.Logging._
+import quizleague.web.site.common.SeasonSelectService
+import angulate2.ext.classModeJS
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
@@ -80,15 +82,8 @@ class ResultService(override val http: Http,
 }
 
 @Injectable
-class ResultsViewService(
-  applicationContextService:ApplicationContextService 
-){
-  
-  var season:Season = _
-    
-  //season.subscribe(s => log(s,"Season in ResultsViewService"))
-  
-  applicationContextService.get.subscribe(ac => season = ac.currentSeason)
-  
-}
+@classModeScala
+class ResultsViewService (
+  override val applicationContextService:ApplicationContextService 
+)extends SeasonSelectService
 
