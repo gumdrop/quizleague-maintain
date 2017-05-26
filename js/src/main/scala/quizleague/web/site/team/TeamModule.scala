@@ -32,10 +32,11 @@ import quizleague.web.util.Logging
 import rxjs.BehaviorSubject
 import angulate2.forms.FormsModule
 import angulate2.platformBrowser.BrowserModule
+import quizleague.web.site.common.SeasonSelectService
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent, TeamResultsComponent, TeamResultsTitleComponent, TeamFixturesComponent, TeamFixturesTitleComponent],
+  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent, TeamSubTitleComponent, TeamResultsComponent, TeamResultsTitleComponent, TeamFixturesComponent, TeamFixturesTitleComponent],
   providers = @@[TeamService, TeamViewService])
 class TeamModule
 
@@ -73,13 +74,9 @@ class TeamService(override val http: Http,
 class TeamViewService(
     service: TeamService,
     seasonService: SeasonService,
-    applicationContextService:ApplicationContextService) extends Logging{
+    override val applicationContextService:ApplicationContextService) extends SeasonSelectService{
 
-  val season = new BehaviorSubject[Season](null)
-  
-  applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
-  
-  
+
   def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = seasonService.getResults(season).map(
     (r, i) => r.flatMap(_.results)
       .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)

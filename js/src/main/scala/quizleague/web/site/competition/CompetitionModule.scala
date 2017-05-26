@@ -25,6 +25,7 @@ import rxjs.ReplaySubject
 import quizleague.web.model._
 import quizleague.web.site.leaguetable.LeagueTableComponent
 import quizleague.web.site.leaguetable.LeagueTableModule
+import quizleague.web.site.common.SeasonSelectService
 
 
 
@@ -99,15 +100,10 @@ class CompetitionService(override val http: Http,
     override val venueService: VenueService) extends CompetitionGetService with ServiceRoot
     
 @Injectable
+@classModeScala
 class CompetitionViewService(
-    val service:CompetitionService,
-    val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService){
-  
-    val season = new ReplaySubject[Season](1)
+    override val applicationContextService:ApplicationContextService) extends SeasonSelectService
 
-  
-    applicationContextService.get().subscribe(ac => season.next(ac.currentSeason))
 
     
-}
+

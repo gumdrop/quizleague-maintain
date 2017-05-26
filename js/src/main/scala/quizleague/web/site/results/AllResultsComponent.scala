@@ -12,9 +12,12 @@ import angulate2.core.OnInit
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.model.Results
+import quizleague.web.model.Season
 import scalajs.js
 import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
+import quizleague.web.util.Logging._
+
 
 @Component(
   template = s"""
@@ -44,12 +47,10 @@ class AllResultsComponent(
 @Component(
   template = """
   <ql-section-title>
-     <span>All Results</span><ql-season-select [currentSeason]="season"></ql-season-select>
+     <span>All Results</span><ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """    
 )
 class AllResultsTitleComponent(
-  viewService:ResultsViewService
-){
-  val season = viewService.season
-}
+  val viewService:ResultsViewService
+)

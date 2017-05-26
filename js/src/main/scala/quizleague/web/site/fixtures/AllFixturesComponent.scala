@@ -1,7 +1,7 @@
 package quizleague.web.site.fixtures
 
 import rxjs.Observable.RichIObservable
-import scala.scalajs.js.Any.fromString
+import scala.scalajs.js
 import angulate2.router.ActivatedRoute
 import angulate2.std._
 import quizleague.web.site.season.SeasonService
@@ -14,6 +14,9 @@ import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.results.ResultsViewService
 import quizleague.web.site.results.ResultsViewService
+import quizleague.web.model.Season
+import rxjs.Observable
+import quizleague.web.util.Logging._
 
 @Component(
   template = s"""
@@ -44,12 +47,10 @@ class AllFixturesComponent(
 @Component(
   template = """
   <ql-section-title>
-     <span>All Fixtures</span><ql-season-select [currentSeason]="season"></ql-season-select>
+     <span>All Fixtures</span><ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
   </ql-section-title>
   """    
 )
 class AllFixturesTitleComponent(
-  viewService:ResultsViewService
-){
-  val season = viewService.season
-}
+  val viewService:ResultsViewService
+)
