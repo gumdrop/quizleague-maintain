@@ -33,6 +33,7 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import java.time.LocalDate
+import quizleague.web.site.calendar.CalendarModule
 
 
 
@@ -51,7 +52,7 @@ class AppModule (router:Router) extends Logging{
 
 
 @NgModule(
-  imports = @@[CommonAppModule, ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule]
+  imports = @@[CommonAppModule, ApplicationContextModule, UserModule, VenueModule, TeamModule, SeasonModule, ResultsModule, FixturesModule, CompetitionModule, CalendarModule]
  )
 class ApplicationModules
 
@@ -107,6 +108,7 @@ class AppRoutingModule
         <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
         <a routerLink="/results" md-button routerLinkActive="active">Results</a>
         <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
+        <a routerLink="/calendar" md-button routerLinkActive="active">Calendar</a>
      </div>
   </ng-template>
   """,

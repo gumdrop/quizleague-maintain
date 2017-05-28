@@ -42,7 +42,8 @@ import quizleague.web.site.common.SeasonSelectService
     CompetitionFixturesTitleComponent,
     CupCompetitionComponent,
     PlateCompetitionComponent,
-    BeerCompetitionComponent],
+    BeerCompetitionComponent
+    ] ++ @@[SingletonCompetitionComponent],
   providers = @@[CompetitionService, CompetitionViewService])
 class CompetitionModule
 
@@ -60,6 +61,7 @@ class CompetitionModule
                Route("cup", component = %%[CupCompetitionComponent]),
                Route("plate", component = %%[PlateCompetitionComponent]),
                Route("beer", component = %%[BeerCompetitionComponent]),
+               Route("singleton", component = %%[SingletonCompetitionComponent]),
                Route("", component = %%[CompetitionTitleComponent], outlet = "title")
                )
               ),

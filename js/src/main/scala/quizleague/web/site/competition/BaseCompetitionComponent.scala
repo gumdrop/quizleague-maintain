@@ -21,6 +21,9 @@ abstract class BaseCompetitionComponent(
     with TitledComponent {
   
   @JSExport
+  val textName:String
+  
+  @JSExport
   val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
 
   itemObs.subscribe(t => setTitle(t.name)) 

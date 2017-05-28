@@ -42,7 +42,8 @@ class MockData extends InMemoryDbService {
 <p>Our season normally runs from October to April; matches are played on Tuesday nights at 8:30pm, and generally last about 1&frac12; hours.</p>
 <p>The best way to get a flavour of the league is to read some <a href="reports/all">match reports</a>.</p>""", "text/html").asJson.noSpaces),
         literal(id ="5", json =  Text("5", "<b>Some bold team text here</b>", "text/html").asJson.noSpaces),
-        literal(id ="6", json =  Text("6", "Season text 2", "text/plain").asJson.noSpaces)
+        literal(id ="6", json =  Text("6", "Season text 2", "text/plain").asJson.noSpaces),
+        literal(id ="7", json =  Text("7", "Individual Competition text", "text/html").asJson.noSpaces)
         
 
 
@@ -67,8 +68,21 @@ class MockData extends InMemoryDbService {
             Year.of(2017), 
             Year.of(2018),
             Ref[Text]("text","1"), 
-            List(Ref[Competition]("competition","1")),
-            List[CalendarEvent]()).asJson.noSpaces),
+            List(Ref[Competition]("competition","1"),Ref[Competition]("competition","2")),
+            List[CalendarEvent](
+                CalendarEvent(
+                    Ref[Venue]("venue","1"),
+                    LocalDate.parse("2017-03-01"),
+                    LocalTime.of(20,30), 
+                    Duration.ofMinutes(90),
+                    "Individuals Qualification" ),
+                    CalendarEvent(
+                    Ref[Venue]("venue","1"),
+                    LocalDate.parse("2017-06-06"),
+                    LocalTime.of(20,30), 
+                    Duration.ofMinutes(90),
+                    "Presentation Night" ))
+            ).asJson.noSpaces),
             literal(id="2", json = Season("2",
             Year.of(2016), 
             Year.of(2017),
@@ -84,7 +98,14 @@ class MockData extends InMemoryDbService {
           List(Ref[Results]("results","1"),Ref[Results]("results","2")),
           List(Ref[LeagueTable]("leaguetable","1")),
           Ref[Text]("text","1"),
-          None).asInstanceOf[Competition].asJson.noSpaces)
+          None).asInstanceOf[Competition].asJson.noSpaces),
+          literal(id="2", json=SingletonCompetition("2",
+              "Indvidual Quiz",
+              Event(Ref[Venue]("venue","1"),
+                    LocalDate.parse("2017-05-05"),
+                    LocalTime.of(20,30), 
+                    Duration.ofMinutes(90)),
+              Ref[Text]("text","7")).asInstanceOf[Competition].asJson.noSpaces)  
       ),
       "fixtures" -> js.Array(literal(id="1", json=Fixtures("1",
           "Week 1",
