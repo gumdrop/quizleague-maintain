@@ -31,6 +31,11 @@ import quizleague.web.maintain.venue.VenueService
              required
              [(ngModel)]="item.name" name="name">
         </md-input-container>
+      <md-input-container>
+          <input mdInput placeholder="text name" type="text"
+             required
+             [(ngModel)]="item.textName" name="textName">
+        </md-input-container>
           <div fxLayout="row">
             <md-input-container>        
               <input mdInput placeholder="Date" type="date"

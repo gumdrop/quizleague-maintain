@@ -105,7 +105,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
         case c:DSiC => Observable.zip(
             child(c.text,textService),
             child(c.event.venue, venueService),
-            (text:Text, venue:Venue) => new SingletonCompetition(c.id,c.name,text,Event(venue,c.event.date, c.event.time, c.event.duration))
+            (text:Text, venue:Venue) => new SingletonCompetition(c.id,c.name,text,c.textName,Event(venue,c.event.date, c.event.time, c.event.duration))
         )
 
       }
@@ -144,6 +144,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.id,
           c.name,
           null,
+          c.textName,
           Event(null,c.event.date,c.event.time,c.event.duration)
         )
       }
@@ -219,6 +220,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       newId(),
       "Singleton",
       DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90)),
+      "",
       textService.getRef(textService.instance()))
 
 
@@ -255,6 +257,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           s.id,
           s.name,
           DomEvent(venueService.getRef(s.event.venue), s.event.date, s.event.time, s.event.duration),
+          s.textName,
           textService.getRef(s.text))
       }
 

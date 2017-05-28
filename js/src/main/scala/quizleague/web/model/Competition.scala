@@ -72,6 +72,7 @@ class SingletonCompetition(
       override val id:String,
       override val name:String,
       override val text:Text,
+      val textName:String,
       val event:Event) extends Competition{
   override val typeName = singleton.toString()
   override val fixtures = js.Array[Fixtures]()

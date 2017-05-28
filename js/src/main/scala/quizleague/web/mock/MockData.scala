@@ -105,6 +105,7 @@ class MockData extends InMemoryDbService {
                     LocalDate.parse("2017-05-05"),
                     LocalTime.of(20,30), 
                     Duration.ofMinutes(90)),
+              "individual_front_page",
               Ref[Text]("text","7")).asInstanceOf[Competition].asJson.noSpaces)  
       ),
       "fixtures" -> js.Array(literal(id="1", json=Fixtures("1",

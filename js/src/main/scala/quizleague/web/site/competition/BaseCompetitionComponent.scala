@@ -20,8 +20,6 @@ abstract class BaseCompetitionComponent(
     with MenuComponent
     with TitledComponent {
   
-  @JSExport
-  val textName:String
   
   @JSExport
   val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
