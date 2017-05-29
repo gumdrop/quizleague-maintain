@@ -1,6 +1,7 @@
 package quizleague.web.site.root
 
 import scala.scalajs.js
+import js.timers._
 
 import angular.core.BrowserAnimationsModule
 import angular.flexlayout.FlexLayoutModule
@@ -33,11 +34,12 @@ import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import java.time.LocalDate
 
+
 @Component(
   template = """
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
     <div>
-    <md-tab-group>
+    <md-tab-group dynamicHeight="true" [selectedIndex]="tabIndex" (click)="tabSelected()">
       <md-tab label="League Tables">
         <md-card>
           <ql-league-table *ngFor="let table of (league | async)?.tables" [table]="table"></ql-league-table>
@@ -83,7 +85,11 @@ class RootComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService,
     val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent{
+    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent with OnInit{
+  
+  var tabIndex:Int = 0;
+  val tabCount = 3;
+  var intervalId:SetIntervalHandle = null
   
   setTitle("Home")
   val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
@@ -96,9 +102,13 @@ class RootComponent(
     .map((f,i) => f.take(1))
     
   val currentSeason = applicationContextService.get.map((ac,i) => ac.currentSeason)
+  
+  def tabSelected(){
+    clearInterval(intervalId)
+  }
+  
+  override def ngOnInit() = {
+    intervalId = setInterval(5000){tabIndex = if(tabIndex == tabCount - 1) 0 else tabIndex + 1}
+  }
 }
 
-@Component(
-  template = "<div>Root Menu</div>"
-)
-class RootMenuComponent

@@ -35,8 +35,8 @@ import java.time.LocalDate
 
 @NgModule(
   imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule, ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[RootComponent, RootMenuComponent],
-  exports = @@[RootComponent, RootMenuComponent]
+  declarations = @@[RootComponent],
+  exports = @@[RootComponent]
 )
 class RootModule
 

@@ -10,30 +10,19 @@ import angulate2.ext.inMemoryWebApi.{ InMemoryBackendConfigArgs, InMemoryWebApiM
 import angulate2.http.HttpModule
 import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
-import angulate2.std._
+import angulate2.std.{ %%, @@, @@@, Component, Injectable, NgModule, Routes }
 import quizleague.web.mock.MockData
-import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
+import quizleague.web.site.calendar.CalendarModule
+import quizleague.web.site.common.{ CommonAppModule, SideMenuService }
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
-import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.site.results.ResultsModule
+import quizleague.web.site.root.{ RootComponent, RootModule }
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.site.team.TeamModule
-import quizleague.web.site.text.TextModule
 import quizleague.web.site.user.UserModule
 import quizleague.web.site.venue.VenueModule
-import quizleague.web.util.Logging
-import rxjs.Observable
-import quizleague.web.site.season.SeasonService
-import angulate2.common.CommonModule
-import quizleague.web.site.root._
-import quizleague.web.site.leaguetable.LeagueTableModule
-import quizleague.web.site.season.SeasonService
-import quizleague.web.site.results.ResultsComponentsModule
-import quizleague.web.site.fixtures.FixturesComponentsModule
-import java.time.LocalDate
-import quizleague.web.site.calendar.CalendarModule
 
 
 
@@ -46,9 +35,7 @@ import quizleague.web.site.calendar.CalendarModule
   providers = @@[SideMenuService]
 )
 @classModeScala
-class AppModule (router:Router) extends Logging{
-  log(router.config, "Routes : ")
-}
+class AppModule (router:Router)
 
 
 @NgModule(
@@ -60,8 +47,7 @@ class ApplicationModules
   root = true,
   Route(path = "home", 
       children = @@@(
-          Route(path="", component = %%[RootComponent]), 
-          Route(path="", component = %%[RootMenuComponent], outlet="sidemenu"))),
+          Route(path="", component = %%[RootComponent]))),
   Route(path = "",   redirectTo = "/home", pathMatch = "full" ))
 class AppRoutingModule
 
