@@ -11,7 +11,7 @@
     // map tells the System loader where to look for things
     map: {
       // our app is within the target/scala-2.11 folder
-      app: 'target/scala-2.11',
+      app: 'webjars/quizleague-jvm/0.0.1',
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
       '@angular/common': 'npm:@angular/common/bundles/common.umd.js',

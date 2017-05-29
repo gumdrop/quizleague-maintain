@@ -1,6 +1,7 @@
 name := "Quiz League"
 
-//EclipseKeys.useProjectId := true
+EclipseKeys.skipParents in ThisBuild := false
+EclipseKeys.withSource := true
 
 val circeVersion = "0.7.0"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
@@ -10,17 +11,11 @@ lazy val commonSettings = Seq(
   version := "0.0.1",
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
-  scalacOptions ++= (if (isSnapshot.value) Seq.empty else Seq({
-        val a = baseDirectory.value.toURI.toString.replaceFirst("[^/]+/?$", "")
-        val g = "https://raw.githubusercontent.com/gumdrop/quizleague"
-        s"-P:scalajs:mapSourceURI:$a->$g/master/"
-      })),
   resolvers += Resolver.sonatypeRepo("snapshots")
-  
 )
 
 lazy val root = project.in(file(".")).
-  aggregate(web, server).
+  aggregate(web, server).settings(commonSettings: _*).
   settings(
     publish := {},
     publishLocal := {},
@@ -31,7 +26,7 @@ lazy val quizleague = crossProject.in(file(".")).
   settings(commonSettings: _*).
   settings( 
     name := "quizleague",
-    ngBootstrap := Some("quizleague.web.site.AppModule"),
+    ngBootstrap := Some("quizleague.web.maintain.AppModule"),
     libraryDependencies ++= Seq(
 	  "io.circe" %%% "circe-core",
 	  "io.circe" %%% "circe-generic",
@@ -41,12 +36,18 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm"
-	
   ).
   jsSettings(
-    name := "quizleague-js"
+    name := "quizleague-js",
+    npmDependencies in Compile += "rxjs" -> "5.0.1"
   )
 
-lazy val server = quizleague.jvm
+lazy val server = quizleague.jvm.settings(
+  scalaJSProjects := Seq(web),
+  pipelineStages in Assets := Seq(scalaJSPipeline),
+compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+).enablePlugins(SbtWeb,JettyPlugin, WebScalaJSBundlerPlugin)
 lazy val web = quizleague.js .
-	enablePlugins(Angulate2Plugin)
+enablePlugins(Angulate2Plugin,ScalaJSWeb,ScalaJSBundlerPlugin)
+
