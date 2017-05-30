@@ -48,6 +48,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	npmDependencies in Compile += "@angular/platform-browser-dynamic" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/router" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/upgrade" -> "~4.0.0",
+	npmDependencies in Compile += "@angular/animations" -> "~4.0.0",
 	npmDependencies in Compile += "core-js" -> "^2.4.1",
 	npmDependencies in Compile += "rxjs" -> "~5.0.1",
 	npmDependencies in Compile += "zone.js" -> "0.8.4",

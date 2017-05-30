@@ -8,8 +8,8 @@ object Main extends JSApp {
 def main(): Unit = {
   new AppFacade
 }}
-
-
+//
+//
 @js.native
-@JSImport("../quizleague-js-sjsx.js",JSImport.Namespace)
+@JSImport("","app")
 class AppFacade extends js.Object
