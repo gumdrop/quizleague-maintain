@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/tasks/backup</url>
+    <description>backup</description>
+    <schedule>every tuesday 19:30</schedule>
+  </cron>
+</cronentries>
+

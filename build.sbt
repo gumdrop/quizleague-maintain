@@ -36,6 +36,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm"
+
   ).
   jsSettings(
     name := "quizleague-js",
@@ -65,8 +66,10 @@ lazy val quizleague = crossProject.in(file(".")).
 lazy val server = quizleague.jvm.settings(
   scalaJSProjects := Seq(web),
   pipelineStages in Assets := Seq(scalaJSPipeline),
-compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+  compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
+       
+  libraryDependencies += "com.sun.jersey" % "jersey-bundle" % "1.19",
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 ).enablePlugins(SbtWeb,JettyPlugin, WebScalaJSBundlerPlugin)
 lazy val web = quizleague.js .
 enablePlugins(Angulate2Plugin,ScalaJSWeb,ScalaJSBundlerPlugin)

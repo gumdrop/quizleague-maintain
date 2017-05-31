@@ -6,10 +6,10 @@ import scala.scalajs.js.JSApp
 
 object Main extends JSApp {
 def main(): Unit = {
-  new AppFacade
+  //new AppFacade
 }}
 //
 //
-@js.native
-@JSImport("","app")
-class AppFacade extends js.Object
+//@js.native
+//@JSImport("","app")
+//class AppFacade extends js.Object
