@@ -4,7 +4,7 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <listener>
+  <!-- listener>
     <listener-class>org.chilternquizleague.web.ApplicationStartListener</listener-class>
   </listener>
   <filter>
@@ -39,8 +39,8 @@
     <filter-name>URLRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
-  </filter-mapping>
-  <servlet>
+  </filter-mapping-->
+  <!-->servlet>
     <description></description>
     <display-name>View REST Services</display-name>
     <servlet-name>ViewServices</servlet-name>
@@ -77,9 +77,26 @@
   <servlet-mapping>
     <servlet-name>backuphandler</servlet-name>
     <url-pattern>/tasks/backup</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping-->
+  
+  	<servlet>
+		<servlet-name>jersey-servlet</servlet-name>
+		<servlet-class>
+                     com.sun.jersey.spi.container.servlet.ServletContainer
+                </servlet-class>
+		<init-param>
+		     <param-name>com.sun.jersey.config.property.packages</param-name>
+		     <param-value>quizleague.rest</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
-  <security-constraint>
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+  <!-- >security-constraint>
     <web-resource-collection>
       <web-resource-name>maintenance</web-resource-name>
       <url-pattern>/maintain/*</url-pattern>
@@ -100,5 +117,5 @@
     <auth-constraint>
       <role-name>admin</role-name>
     </auth-constraint>
-  </security-constraint>
+  </security-constraint-->
 </web-app>
