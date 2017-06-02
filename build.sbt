@@ -4,6 +4,7 @@ EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
 val circeVersion = "0.7.0"
+val appengineVersion = "1.9.53"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 lazy val commonSettings = Seq(
@@ -35,8 +36,21 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M8",
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
-     name := "quizleague-jvm"
+     name := "quizleague-jvm",
+     
+     libraryDependencies ++= Seq(
+	  "com.google.appengine" % "appengine-testing",
+	  "com.google.appengine" % "appengine-api-stubs"
 
+	).map(_ % appengineVersion),
+	
+	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
+	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
+	
+	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
+    libraryDependencies += "com.sun.jersey" % "jersey-bundle" % "1.19"
+
+	
   ).
   jsSettings(
     name := "quizleague-js",
@@ -67,8 +81,6 @@ lazy val server = quizleague.jvm.settings(
   scalaJSProjects := Seq(web),
   pipelineStages in Assets := Seq(scalaJSPipeline),
   compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-       
-  libraryDependencies += "com.sun.jersey" % "jersey-bundle" % "1.19",
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 ).enablePlugins(SbtWeb,JettyPlugin, WebScalaJSBundlerPlugin)
 lazy val web = quizleague.js .
