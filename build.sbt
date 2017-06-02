@@ -74,7 +74,8 @@ lazy val quizleague = crossProject.in(file(".")).
     npmDependencies in Compile += "reflect-metadata" -> "^0.1.8",
     npmDependencies in Compile += "hammerjs" -> "^2.0.8",
 	npmDevDependencies in Compile += "angulate2-scalajs-bundler" -> "1.0.3",
-	webpackConfigFile in fastOptJS := Some(baseDirectory.value  / "webpack.config.js")
+	webpackConfigFile in fastOptJS := Some(baseDirectory.value  / "webpack.config.js"),
+	webpackConfigFile in fullOptJS := Some(baseDirectory.value  / "webpack.prod.config.js")
   )
 
 lazy val server = quizleague.jvm.settings(
