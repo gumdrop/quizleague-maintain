@@ -46,7 +46,6 @@ lazy val quizleague = crossProject.in(file(".")).
 	
 	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
 	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
-	
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
     libraryDependencies += "com.sun.jersey" % "jersey-bundle" % "1.19"
 
