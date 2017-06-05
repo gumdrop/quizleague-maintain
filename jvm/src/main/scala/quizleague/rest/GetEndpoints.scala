@@ -25,7 +25,7 @@ trait GetEndpoints {
     else {
       val r = out(id)
       Response.fromResponse(r)
-      .header(ETAG, s""""${EtagCache.add(id, r.getEntity)}"""")
+      .header(ETAG, EtagCache.add(id, r.getEntity))
       .header(HttpHeaders.CACHE_CONTROL, "max-age=60")
       .build
     }
