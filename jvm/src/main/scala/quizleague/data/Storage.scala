@@ -41,9 +41,10 @@ object Storage {
       else if (json.isBoolean) json.asBoolean
       else if (json.isObject) json.asObject.map(doit(new EmbeddedEntity()))
       else if (json.isArray) json.asArray.map(v => asArrayList(v.map(o => convertObject(o))))
+      else if (json.isNull) None
       else None
 
-      value.get
+      value.getOrElse(null)
     }
 
     def asArrayList[T](v: Vector[T]): ArrayList[T] = if (v.isEmpty) nullList[T] else new ArrayList(v.toList.asJava)

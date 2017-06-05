@@ -13,6 +13,9 @@ import com.google.appengine.api.datastore._
 import java.util.UUID.randomUUID
 import java.util.ArrayList
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig
+import java.time._
+import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.util.json.codecs.ScalaTimeCodecs._
 
 class StorageSpec extends FlatSpec with Matchers with BeforeAndAfter with OptionValues {
 
@@ -61,7 +64,17 @@ class StorageSpec extends FlatSpec with Matchers with BeforeAndAfter with Option
         Ref("text",uuid),
         List(Ref("user",uuid)))
         
-  val result = Result(randomUUID.toString(), Ref("fixture", uuid), 23, 45, Ref("user",uuid),"note1" ,List(), true)
+  val result = Result(uuid, Ref("fixture", uuid), 23, 45, Ref("user",uuid),"note1" ,List(), true)
+  
+  val competition:Competition = LeagueCompetition(uuid, 
+          "League", 
+          LocalTime.of(20,30), 
+          Duration.ofMinutes(90),
+          List(Ref[Fixtures]("fixtures",uuid),Ref[Fixtures]("fixtures",uuid),Ref[Fixtures]("fixtures",uuid)),
+          List(Ref[Results]("results",uuid),Ref[Results]("results",uuid)),
+          List(Ref[LeagueTable]("leaguetable",uuid)),
+          Ref[quizleague.domain.Text]("text",uuid),
+          None)
   
   "Save" should "store a simple entity succesfully" in {
         
@@ -159,6 +172,15 @@ class StorageSpec extends FlatSpec with Matchers with BeforeAndAfter with Option
     
     v should contain allOf (venue,venue1)
       
+  }
+  
+  it should "save and load polymorphic entities successfully" in {
+    
+    save(competition)
+    
+    val c = load[Competition](competition.id)
+    
+    c shouldBe an[LeagueCompetition] 
   }
   
 }
