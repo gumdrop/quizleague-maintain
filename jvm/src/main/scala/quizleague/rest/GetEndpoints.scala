@@ -2,6 +2,7 @@ package quizleague.rest
 
 import javax.ws.rs._
 import javax.ws.rs.core._
+import javax.ws.rs.core.HttpHeaders._
 import io.circe._, io.circe.generic.auto._, io.circe.syntax._
 import quizleague.data.Storage
 import quizleague.domain._
@@ -14,7 +15,7 @@ trait GetEndpoints {
     try Response.status(200)
     .entity(Storage.load[T](id).asJson.noSpaces.toString)
     .`type`(MediaType.APPLICATION_JSON)
-    .header(HttpHeaders.CACHE_CONTROL, "max-age=3600")
+    .header(CACHE_CONTROL, "max-age=3600")
     .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
   }
@@ -23,7 +24,10 @@ trait GetEndpoints {
     if(EtagCache.isMatch(id, etag)) Response.status(304).build
     else {
       val r = out(id)
-      Response.fromResponse(r).header(HttpHeaders.ETAG, EtagCache.add(id, r.getEntity)).build
+      Response.fromResponse(r)
+      .header(ETAG, s""""${EtagCache.add(id, r.getEntity)}"""")
+      .header(HttpHeaders.CACHE_CONTROL, "max-age=60")
+      .build
     }
   }
 
@@ -54,7 +58,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/text/{id}")
-  def text(@PathParam("id") id: String, @HeaderParam("If-None-Match") etag:String) = out[Text](id,etag)
+  def text(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Text](id,etag)
 
   @GET
   @Path("/season")
@@ -78,7 +82,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/results/{id}")
-  def results(@PathParam("id") id: String, @HeaderParam("If-None-Match") etag:String) = out[Results](id, etag)
+  def results(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Results](id, etag)
 
   @GET
   @Path("/result")
@@ -110,7 +114,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/competition/{id}")
-  def competition(@PathParam("id") id: String, @HeaderParam("If-None-Match") etag:String) = out[Competition](id,etag)
+  def competition(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Competition](id,etag)
 
   @GET
   @Path("/user")

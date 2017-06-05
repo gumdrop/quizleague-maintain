@@ -6,7 +6,7 @@ object EtagCache {
   private val cache = new ConcurrentHashMap[String,String]
   
   def add(id:String, payload:Any):String = {
-    val etag = payload.hashCode().toString
+    val etag = s""""${payload.hashCode().toString}""""
     cache.put(id, etag)
     etag
   }
