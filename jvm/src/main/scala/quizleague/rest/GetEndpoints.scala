@@ -37,11 +37,11 @@ trait GetEndpoints {
   }
 
   @GET
-  @Path("/applicationContext")
+  @Path("/applicationcontext")
   def applicationContext() = list[ApplicationContext]
 
   @GET
-  @Path("/globalText/{id}")
+  @Path("/globaltext/{id}")
   def globalText(@PathParam("id") id: String) = out[GlobalText](id)
 
   @GET

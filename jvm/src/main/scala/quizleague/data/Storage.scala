@@ -17,19 +17,19 @@ object Storage {
     list
   }
 
-  def datastore = DatastoreServiceFactory.getDatastoreService();
+  def datastore = DatastoreServiceFactory.getDatastoreService
 
-  def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Key = save(makeKind(tag), entity.id, encoder(entity))
+  def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Key = save(makeKind, entity.id, encoder(entity))
 
-  def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind(tag), id, decoder)
+  def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind, id, decoder)
 
   def list[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
-    val q: Query = new Query(makeKind(tag))
+    val q: Query = new Query(makeKind)
 
     datastore.prepare(q).asIterable().map(entityToObj(_, decoder)).toList
   }
 
-  private def makeKind(tag: ClassTag[_]) = tag.runtimeClass.getSimpleName.toLowerCase
+  private def makeKind(implicit tag: ClassTag[_]) = tag.runtimeClass.getSimpleName.toLowerCase
 
   private def save(kind: String, id: String, json: Json): Key = {
 
