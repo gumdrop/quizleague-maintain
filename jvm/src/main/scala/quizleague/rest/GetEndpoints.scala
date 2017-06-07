@@ -11,24 +11,20 @@ import quizleague.util.json.codecs.ScalaTimeCodecs._
 import scala.reflect.ClassTag
 
 trait GetEndpoints {
-  protected def out[T <: Entity](id: String)(implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]):Response = {
+  
+  this:EtagSupport =>  
+  
+  val defaultCacheAge:Int
+  val shortCacheAge:Int
+  
+  protected def out[T <: Entity](id: String, cacheAge:Int = defaultCacheAge)(implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]):Response = {
     try Response.status(200)
     .entity(Storage.load[T](id).asJson.noSpaces.toString)
     .`type`(MediaType.APPLICATION_JSON)
-    .header(CACHE_CONTROL, "max-age=3600")
+    .header(CACHE_CONTROL, s"max-age=cacheAge")
+    .header(ETAG, EtagCache.get(uriInfo.getPath))
     .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
-  }
-  
-  protected def out[T <: Entity](id: String, etag:String)(implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]):Response = {
-    if(EtagCache.isMatch(id, etag)) Response.status(304).build
-    else {
-      val r = out(id)
-      Response.fromResponse(r)
-      .header(ETAG, EtagCache.add(id, r.getEntity))
-      .header(HttpHeaders.CACHE_CONTROL, "max-age=60")
-      .build
-    }
   }
 
   protected def list[T <: Entity](implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]) = {
@@ -58,7 +54,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/text/{id}")
-  def text(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Text](id,etag)
+  def text(@PathParam("id") id: String) = out[Text](id,shortCacheAge)
 
   @GET
   @Path("/season")
@@ -82,7 +78,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/results/{id}")
-  def results(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Results](id, etag)
+  def results(@PathParam("id") id: String) = out[Results](id, shortCacheAge)
 
   @GET
   @Path("/result")
@@ -114,7 +110,7 @@ trait GetEndpoints {
 
   @GET
   @Path("/competition/{id}")
-  def competition(@PathParam("id") id: String, @HeaderParam(IF_NONE_MATCH) etag:String) = out[Competition](id,etag)
+  def competition(@PathParam("id") id: String) = out[Competition](id,shortCacheAge)
 
   @GET
   @Path("/user")

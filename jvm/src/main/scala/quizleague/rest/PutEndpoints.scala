@@ -10,10 +10,12 @@ import quizleague.util.json.codecs.ScalaTimeCodecs._
 import scala.reflect.ClassTag
 
 trait PutEndpoints {
+  
+  this:EtagSupport =>
 
   private def save[T <: Entity](json: String)(implicit tag: ClassTag[T], decoder: Decoder[T], encoder: Encoder[T]) = {
-    val key = Storage.save(decode[T](json).merge.asInstanceOf[T])
-    EtagCache.remove(key.getName)
+    Storage.save(decode[T](json).merge.asInstanceOf[T])
+    EtagCache.add(uriInfo.getPath,json)
     Response.status(201).`type`(MediaType.APPLICATION_JSON_TYPE).build
   }
 
