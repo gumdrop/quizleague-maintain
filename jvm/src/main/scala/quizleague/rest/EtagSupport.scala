@@ -12,7 +12,8 @@ trait EtagSupport {
 
     request.getMethod match {
       case "GET" => {
-        val rb = request.evaluatePreconditions(EtagCache.get(uriInfo.getPath))
+        val tag = EtagCache.get(uriInfo.getPath)
+        val rb = if(tag != null) request.evaluatePreconditions(tag) else null
         if (rb != null) throw new WebApplicationException(rb.build())
       }
       case "PUT" => {
