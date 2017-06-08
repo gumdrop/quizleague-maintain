@@ -1,6 +1,5 @@
 package quizleague.rest
 
-trait PostEndpoints {
-  
+trait SitePostEndpoints {
   
 }

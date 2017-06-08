@@ -1,7 +1,9 @@
-package quizleague.rest
+package quizleague.rest.endpoint
 
 import javax.ws.rs.Path
 import javax.ws.rs.core._
+import quizleague.rest.EtagSupport
+import quizleague.rest.GetEndpoints
 
 
 @Path("/site")
@@ -13,5 +15,5 @@ class SiteEndpoint(
   override val defaultCacheAge = 3600
   override val shortCacheAge = 300
 
-  pre
+  preChecks()
 }

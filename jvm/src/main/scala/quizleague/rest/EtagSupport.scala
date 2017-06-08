@@ -8,16 +8,13 @@ trait EtagSupport {
   val request: Request
   val uriInfo: UriInfo
 
-  def pre = {
+  def preChecks() = {
 
     request.getMethod match {
-      case "GET" => {
+      case "GET" | "PUT" => {
         val tag = EtagCache.get(uriInfo.getPath)
         val rb = if(tag != null) request.evaluatePreconditions(tag) else null
         if (rb != null) throw new WebApplicationException(rb.build())
-      }
-      case "PUT" => {
-        EtagCache.remove(uriInfo.getPath)
       }
     }
 

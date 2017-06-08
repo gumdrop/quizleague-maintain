@@ -15,8 +15,8 @@ trait PutEndpoints {
 
   private def save[T <: Entity](json: String)(implicit tag: ClassTag[T], decoder: Decoder[T], encoder: Encoder[T]) = {
     Storage.save(decode[T](json).merge.asInstanceOf[T])
-    EtagCache.add(uriInfo.getPath,json)
-    Response.status(201).`type`(MediaType.APPLICATION_JSON_TYPE).build
+    val etag = EtagCache.add(uriInfo.getPath,json)
+    Response.status(200).header(HttpHeaders.ETAG, etag).`type`(MediaType.APPLICATION_JSON_TYPE).entity(json).build
   }
 
   @PUT
