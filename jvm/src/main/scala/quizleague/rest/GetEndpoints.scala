@@ -21,7 +21,7 @@ trait GetEndpoints {
     try Response.status(200)
     .entity(Storage.load[T](id).asJson.noSpaces.toString)
     .`type`(MediaType.APPLICATION_JSON)
-    .header(CACHE_CONTROL, s"max-age=cacheAge")
+    .header(CACHE_CONTROL, s"max-age=$cacheAge")
     .header(ETAG, EtagCache.get(uriInfo.getPath))
     .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
