@@ -10,7 +10,8 @@ case class ApplicationContext (
   textSet:GlobalText,
   currentSeason:Season,
   senderEmail:String,
-  emailAliases:js.Array[EmailAlias]
+  emailAliases:js.Array[EmailAlias],
+  cloudStoreBucket:String
 )
 
 @Data

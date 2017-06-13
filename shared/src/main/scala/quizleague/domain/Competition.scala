@@ -56,7 +56,7 @@ case class SubsidiaryLeagueCompetition(
 case class SingletonCompetition(
   id:String,
   name:String,
-  event:Event,
+  event:Option[Event],
   textName:String,
   text:Ref[Text]    
 ) extends Competition with BaseSingletonCompetition
@@ -67,7 +67,7 @@ object Competition
 
  trait BaseSingletonCompetition{
     
-  val event:Event
+  val event:Option[Event]
   val textName:String
 
 }

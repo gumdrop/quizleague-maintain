@@ -33,7 +33,8 @@ lazy val quizleague = crossProject.in(file(".")).
 	  "io.circe" %%% "circe-generic",
 	  "io.circe" %%% "circe-parser"
 	).map(_ % circeVersion),
-	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M8").
+	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M8",
+	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm",
      
@@ -46,8 +47,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
 	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
-    libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1",
-	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
+    libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1"
 
 	
   ).

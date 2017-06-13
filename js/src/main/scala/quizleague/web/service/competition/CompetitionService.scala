@@ -104,13 +104,15 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
             
         case c:DSiC => Observable.zip(
             child(c.text,textService),
-            child(c.event.venue, venueService),
-            (text:Text, venue:Venue) => new SingletonCompetition(c.id,c.name,text,c.textName,Event(venue,c.event.date, c.event.time, c.event.duration))
+            eventOut(c.event),
+            (text:Text, event:Event) => new SingletonCompetition(c.id,c.name,text,c.textName,event)
         )
 
       }
 
     }
+    
+    def eventOut(ev:Option[DomEvent]):Observable[Event] = ev.map(e => venueService.get(e.venue.id).map((v,i) => Event(v,e.date, e.time, e.duration))).getOrElse(Observable.of(null))
 
 
     def doMapOutSparse(dom: Dom):Competition = {
@@ -145,7 +147,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.name,
           null,
           c.textName,
-          Event(null,c.event.date,c.event.time,c.event.duration)
+          null
         )
       }
     }
@@ -256,12 +258,14 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
         case s: SingletonCompetition => DSiC(
           s.id,
           s.name,
-          DomEvent(venueService.getRef(s.event.venue), s.event.date, s.event.time, s.event.duration),
+          eventIn(s.event),
           s.textName,
           textService.getRef(s.text))
       }
 
     }
+    
+    def eventIn(event:Event) = if(event == null) None else Option(DomEvent(venueService.getRef(event.venue), event.date, event.time, event.duration))
 
   }
 }

@@ -41,7 +41,7 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,dom.homeScore, dom.awayScore, null, dom.note, !dom.reports.isEmpty,js.Array())
   override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
     child(dom.fixture, fixtureService),
-    child(dom.submitter,userService),
+    child(dom.submitter.getOrElse(null),userService),
     mapReports(dom.reports),
     (fixture:Fixture,submitter:User, reports:js.Array[Report]) => Model(dom.id, fixture, dom.homeScore, dom.awayScore, submitter, dom.note, !dom.reports.isEmpty, reports)
   )
@@ -72,7 +72,7 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
       fixtureService.getRef(model.fixture),
       model.homeScore, 
       model.awayScore, 
-      userService.getRef(model.submitter),
+      Option(userService.getRef(model.submitter)),
       model.note,
       model.reports.map(r => DomReport(teamService.getRef(r.team), textService.getRef(r.text))).toList
       )
