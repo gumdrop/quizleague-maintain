@@ -221,7 +221,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
     def makeSingleton = DSiC(
       newId(),
       "Singleton",
-      DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90)),
+      Option(DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90))),
       "",
       textService.getRef(textService.instance()))
 

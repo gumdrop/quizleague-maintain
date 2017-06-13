@@ -38,12 +38,8 @@ lazy val quizleague = crossProject.in(file(".")).
   jvmSettings(
      name := "quizleague-jvm",
      
-     libraryDependencies ++= Seq(
-	  "com.google.appengine" % "appengine-testing",
-	  "com.google.appengine" % "appengine-api-stubs"
-
-	).map(_ % appengineVersion),
-	
+	libraryDependencies += "com.google.appengine" % "appengine-testing" % appengineVersion,
+	libraryDependencies += "com.google.appengine" % "appengine-api-stubs" % appengineVersion,
 	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
 	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",

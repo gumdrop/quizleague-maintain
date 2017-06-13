@@ -62,7 +62,9 @@ class MockData extends InMemoryDbService {
           Ref[GlobalText]("globalText","1"), 
           Ref[Season]("season","1"),
           "a@b.c", 
-          List(EmailAlias("webmaster@b.c", Ref[User]("user","1")))).asJson.noSpaces)    
+          List(EmailAlias("webmaster@b.c", Ref[User]("user","1"))),
+          "bucket name").asJson.noSpaces)
+
     ),
     "season" -> js.Array(literal(id="1", json = Season("1",
             Year.of(2017), 
@@ -101,10 +103,10 @@ class MockData extends InMemoryDbService {
           None).asInstanceOf[Competition].asJson.noSpaces),
           literal(id="2", json=SingletonCompetition("2",
               "Indvidual Quiz",
-              Event(Ref[Venue]("venue","1"),
+              Option(Event(Ref[Venue]("venue","1"),
                     LocalDate.parse("2017-05-05"),
                     LocalTime.of(20,30), 
-                    Duration.ofMinutes(90)),
+                    Duration.ofMinutes(90))),
               "individual_front_page",
               Ref[Text]("text","7")).asInstanceOf[Competition].asJson.noSpaces)  
       ),
@@ -168,14 +170,14 @@ class MockData extends InMemoryDbService {
       "result" -> js.Array(literal(id="1", json=Result("1",
           Ref[Fixture]("fixture","1"),
           80,70,
-          Ref[User]("user", "1"),
+          Option(Ref[User]("user", "1")),
           "a note",
           List(Report(Ref[Team]("team", "1"), Ref[Text]("text","3")))
         ).asJson.noSpaces),
         literal(id="2", json=Result("2",
           Ref[Fixture]("fixture","2"),
           70,80,
-          Ref[User]("user", "1"),
+          Option(Ref[User]("user", "1")),
           "",
           List()
         ).asJson.noSpaces)
