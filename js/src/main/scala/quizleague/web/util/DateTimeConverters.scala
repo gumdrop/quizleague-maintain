@@ -1,14 +1,14 @@
 package quizleague.web.util
 
-import java.time._
+import org.threeten.bp._
 import scalajs.js
-import java.time.temporal.TemporalUnit
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.temporal.TemporalUnit
+import org.threeten.bp.temporal.ChronoUnit
 
 object DateTimeConverters{
   import scala.language.implicitConversions
   
-  implicit def yearToInt(year:Year):Int = year.getValue()
+  implicit def yearToInt(year:Year):Int = year.getValue
   implicit def intToYear(int:Int):Year = Year of int
   implicit def stringToLocalDate(date:String):LocalDate = LocalDate parse(date)
   implicit def localDateToString(date:LocalDate):String = date.toString

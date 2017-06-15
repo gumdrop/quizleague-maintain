@@ -31,7 +31,7 @@ import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
 @NgModule(
   imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule, ResultsComponentsModule, FixturesComponentsModule],

@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore._
 import java.util.UUID.randomUUID
 import java.util.ArrayList
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig
-import java.time._
+import org.threeten.bp._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.util.json.codecs.ScalaTimeCodecs._
 

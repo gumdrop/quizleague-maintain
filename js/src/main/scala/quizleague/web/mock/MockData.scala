@@ -7,12 +7,12 @@ import angulate2.ext.inMemoryWebApi.InMemoryDbService
 import quizleague.domain._
 import quizleague.web.util.UUID
 import js.Dynamic.literal
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.Duration
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.util.json.codecs.ScalaTimeCodecs._
-import java.time.Year
+import org.threeten.bp.Year
 
 
 @JSExport

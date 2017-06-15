@@ -1,6 +1,6 @@
 package quizleague.web.site.competition
 
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
 import scala.scalajs.js
 
@@ -17,7 +17,7 @@ trait TeamCompetitionComponent{
   
   @JSExport
   def nextFixtures(fixtures:js.Array[Fixtures]) = {
-    val now = LocalDate.now().toString()
+    val now = LocalDate.now.toString()
     fixtures.filter((f:Fixtures) => f.date > now).sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date).take(1)
   }
   

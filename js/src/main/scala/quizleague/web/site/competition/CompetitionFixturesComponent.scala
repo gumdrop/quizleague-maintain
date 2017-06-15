@@ -8,7 +8,7 @@ import quizleague.web.site.global.ApplicationContextService
 import scalajs.js
 import quizleague.web.model.Results
 import quizleague.web.model.Fixtures
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
 @Component(
   template = s"""
@@ -39,7 +39,7 @@ class CompetitionFixturesComponent(
   itemObs.subscribe(t => setTitle(s"${t.name} - All Fixtures"))
   
   def filter(fixtures:js.Array[Fixtures]) = {
-    val now = LocalDate.now().toString()
+    val now = LocalDate.now.toString()
     fixtures.filter(f => f.date > now)
   }
 }

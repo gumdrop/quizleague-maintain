@@ -12,14 +12,14 @@ import quizleague.domain.Ref
 import rxjs.Observable
 import quizleague.web.names.ComponentNames
 import scala.scalajs.js
-import java.time.Year
+import org.threeten.bp.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.service._
-import java.time.LocalTime
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixturesNames
 
@@ -45,7 +45,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   
   override val fixtureService:FixturePutService
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, model.fixtures.map(fixtureService.getRef(_)).toList)
-  override protected def make() = Dom(newId, "","",LocalDate.now(),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+  override protected def make() = Dom(newId, "","",LocalDate.now,LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   def instance(competition:Competition) = {
     
@@ -56,7 +56,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
     add(
     competition match {
       case c:LeagueCompetition => Dom(newId, "", c.name, findNextDate(c), c.startTime, c.duration, List())
-      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now(),c.startTime,c.duration,List())
+      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now,c.startTime,c.duration,List())
       case _ => null
     })
   }

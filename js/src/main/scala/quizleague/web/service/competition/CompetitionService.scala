@@ -16,17 +16,17 @@ import quizleague.web.service.fixtures._
 import quizleague.web.service.results._
 import quizleague.web.service.leaguetable._
 import quizleague.web.model.CompetitionType.CompetitionType
-import java.time.LocalTime
-import java.time.Duration
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
 import quizleague.web.model.CompetitionType
 import java.util.concurrent.TimeUnit
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.temporal.ChronoUnit
 import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.util.Logging
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.names.CompetitionNames
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {

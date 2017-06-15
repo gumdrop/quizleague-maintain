@@ -14,7 +14,7 @@ import scala.scalajs.js
 import js.JSConverters._
 import js.ArrayOps
 import quizleague.web.service._
-import java.time.Year
+import org.threeten.bp.Year
 import quizleague.web.util.DateTimeConverters._
 import scala.scalajs.js.Date
 import quizleague.web.service.user.UserGetService

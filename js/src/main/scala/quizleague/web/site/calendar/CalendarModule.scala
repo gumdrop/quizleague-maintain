@@ -25,7 +25,7 @@ import quizleague.web.site.common.SeasonSelectService
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.model.Season
 import quizleague.web.site.season.SeasonService
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.model.Competition
 import quizleague.web.model.SingletonCompetition
 import js.JSConverters._
@@ -61,7 +61,7 @@ class CalendarViewService(
     
     import quizleague.web.model.CompetitionType._
     
-    val now = LocalDate.now().toString
+    val now = LocalDate.now.toString
     
     def singletonEvents(c:Competition):js.Array[EventWrapper] = c match {
       case s:SingletonCompetition => js.Array(EventWrapper(s.event,c))

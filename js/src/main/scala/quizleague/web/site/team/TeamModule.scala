@@ -24,7 +24,7 @@ import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import quizleague.web.model.Result
 import quizleague.web.model.Fixture
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.site.global.ApplicationContextService
 import rxjs.Subject
 import quizleague.web.site.global.ApplicationContextService

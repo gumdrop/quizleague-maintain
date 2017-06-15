@@ -2,7 +2,7 @@ package quizleague.util.json.codecs
 
 import io.circe._
 import cats.syntax.either._
-import java.time._
+import org.threeten.bp._
 
 object ScalaTimeCodecs {
 
