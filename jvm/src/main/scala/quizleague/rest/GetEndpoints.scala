@@ -28,7 +28,10 @@ trait GetEndpoints {
   }
 
   protected def list[T <: Entity](implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]) = {
-    try Response.status(200).entity(Storage.list[T].asJson.noSpaces.toString).build
+    try Response.status(200)
+    .`type`(MediaType.APPLICATION_JSON)
+    .entity(Storage.list[T].asJson.noSpaces.toString)
+    .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
   }
 

@@ -73,6 +73,7 @@ object Storage {
       case null => Json.Null
       case d: java.lang.Double => Json.fromDoubleOrNull(d)
       case s: String => Json.fromString(s)
+      case t: Text => Json.fromString(t.getValue)
       case b: Boolean => Json.fromBoolean(b)
       case ee: EmbeddedEntity => Json.fromFields(props(ee))
       case l: java.util.List[_] => Json.fromValues(l.filter(_ != null).map(convertToJson(_)))

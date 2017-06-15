@@ -15,17 +15,17 @@ trait GetService[T] extends Logging {
 
   val serviceRoot: String
 
-  lazy val uriRoot = s"$serviceRoot/$typeName"
+  lazy val uriRoot = s"/$serviceRoot/$typeName"
 
   val http: Http
   private[service] var items: Map[String, U] = Map()
-  val requestOptions = js.Dynamic.literal(responseType = "Text")
+  val requestOptions = js.Dynamic.literal()
 
   def get(id: String)(implicit depth: Int = 1): Observable[T] = if (depth <= 0) getSparse(id) else items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u, i) => mapOut(u)))
   protected def getSparse(id: String): Observable[T] = items.get(id).map(u => Observable.of(mapOutSparse(u))).getOrElse(getFromHttp(id).map((u, i) => mapOutSparse(u)))
 
   def list(): Observable[js.Array[T]] = http.get(s"$uriRoot", requestOptions)
-    .map((r, i) => r.jsonData[js.Array[js.Dynamic]].toArray)
+    .map((r, i) => {log(r.json,s"incoming json : ${r.json}");r.jsonData[js.Array[js.Dynamic]].toArray})
     .map((a, i) => a.map(x => add(unwrap(x))).toJSArray)
 
   def flush() = items = Map()
@@ -49,7 +49,7 @@ trait GetService[T] extends Logging {
 
   private[service] def getDom(id: String) = items(id)
 
-  private def unwrap(obj: js.Dynamic) = fromJson(obj.json.toString)
+  private def unwrap(obj: js.Dynamic) = fromJson(log(obj, s"object: ${obj.toString}").toString)
 
   private def fromJson(jsonString: String): U = if (jsonString == null) null.asInstanceOf[U] else deser(jsonString)
 

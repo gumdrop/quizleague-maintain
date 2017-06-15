@@ -28,8 +28,8 @@ import quizleague.web.site.venue.VenueModule
 
 
 @NgModule(
-  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, AppRoutingModule] :+
-  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, AppRoutingModule],
+  //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
   declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],
   providers = @@[SideMenuService]

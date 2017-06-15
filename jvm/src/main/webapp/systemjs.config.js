@@ -11,7 +11,7 @@
     // map tells the System loader where to look for things
     map: {
       // our app is within the target/scala-2.11 folder
-      app: 'webjars/quizleague-jvm/0.0.1',
+      app: '',
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
       '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
@@ -29,6 +29,8 @@
       '@angular/upgrade/static': 'npm:@angular/upgrade/bundles/upgrade-static.umd.js',
             // other libraries
       'rxjs':                      'npm:rxjs',
+      'core-js':'npm:core-js',
+      'zone.js':'npm:zone.js',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
       '@angular/material': 'npm:@angular/material/bundles/material.umd.js',
       '@angular/flex-layout': 'npm:@angular/flex-layout/bundles/flex-layout.umd.js',
