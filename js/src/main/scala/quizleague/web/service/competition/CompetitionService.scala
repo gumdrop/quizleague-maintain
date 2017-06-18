@@ -28,6 +28,9 @@ import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
 import org.threeten.bp.LocalDate
 import quizleague.web.names.CompetitionNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+  import quizleague.util.json.codecs.ScalaTimeCodecs._  
+  import quizleague.util.json.codecs.DomainCodecs._  
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom
@@ -42,9 +45,8 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
   override protected def mapOut(comp: Dom)(implicit depth:Int) = doMapOut(comp)
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+    override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 
   object Helpers {
     import quizleague.web.util.DateTimeConverters._

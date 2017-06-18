@@ -6,26 +6,25 @@
   </welcome-file-list>
   <!-- listener>
     <listener-class>org.chilternquizleague.web.ApplicationStartListener</listener-class>
-  </listener>
-  <filter>
+  </listener-->
   <filter>
     <filter-name>PassThroughFilter</filter-name>
-    <filter-class>org.chilternquizleague.web.PassThroughFilter</filter-class>
+    <filter-class>quizleague.rest.PassThroughFilter</filter-class>
   </filter>
   <filter>
     <filter-name>MaintainURLRewriteFilter</filter-name>
-    <filter-class>org.chilternquizleague.web.MaintainURLRewriteFilter</filter-class>
+    <filter-class>quizleague.rest.MaintainURLRewriteFilter</filter-class>
   </filter>
   <filter>
     <filter-name>URLRewriteFilter</filter-name>
-    <filter-class>org.chilternquizleague.web.URLRewriteFilter</filter-class>
+    <filter-class>quizleague.rest.URLRewriteFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>PassThroughFilter</filter-name>
     <url-pattern>/_ah/*</url-pattern>
     <url-pattern>/tasks/*</url-pattern>
     <url-pattern>/entity/*</url-pattern>
-    <url-pattern>/view/*</url-pattern>
+    <url-pattern>/site/*</url-pattern>
     <url-pattern>/secure/*</url-pattern>
     <url-pattern>/calendar/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
@@ -39,7 +38,7 @@
     <filter-name>URLRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
-  </filter-mapping-->
+  </filter-mapping>
   <!-->servlet>
     <description></description>
     <display-name>View REST Services</display-name>
@@ -98,7 +97,7 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
-  <!-- >security-constraint>
+  <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintenance</web-resource-name>
       <url-pattern>/maintain/*</url-pattern>
@@ -119,5 +118,5 @@
     <auth-constraint>
       <role-name>admin</role-name>
     </auth-constraint>
-  </security-constraint-->
+  </security-constraint>
 </web-app>

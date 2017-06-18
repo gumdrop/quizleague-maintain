@@ -15,6 +15,8 @@ import quizleague.web.service.venue._
 import quizleague.web.service.text._
 import quizleague.web.service.user._
 import quizleague.web.names.TeamNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.DomainCodecs
 
 trait TeamGetService extends GetService[Team] with TeamNames {
 
@@ -33,10 +35,9 @@ trait TeamGetService extends GetService[Team] with TeamNames {
       (venue: Venue, text: Text, users: js.Array[User]) => Team(team.id, team.name, team.shortName, venue, text, users, team.retired))
 
   override def flush() = { textService.flush(); super.flush() }
-
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-  override def deser(jsonString: String) = decode[DomTeam](jsonString).merge.asInstanceOf[DomTeam]
+  
+  protected def dec(json:String) = decode[U](json)
+  protected def decList(json:String) = decode[List[U]](json)
 
   def listVenues() = venueService.list()
   def listUsers() = userService.list()

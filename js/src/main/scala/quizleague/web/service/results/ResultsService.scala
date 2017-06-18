@@ -19,10 +19,12 @@ import scala.scalajs.js.Date
 import quizleague.web.names.ResultsNames
 import quizleague.web.service.fixtures.FixturesGetService
 import quizleague.web.service.fixtures.FixturesPutService
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 
 trait ResultsGetService extends GetService[Results] with ResultsNames {
   override type U = Dom
+
   val resultService:ResultGetService
   val fixturesService:FixturesGetService
 
@@ -33,10 +35,8 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
     (fixtures:Fixtures, results:js.Array[Result]) => Model(dom.id,fixtures,results)
   )
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
-
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait ResultsPutService extends PutService[Results] with ResultsGetService with DirtyListService[Model]{

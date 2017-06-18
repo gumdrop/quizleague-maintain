@@ -8,6 +8,8 @@ import quizleague.domain.{ Entity, Ref }
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging
 import rxjs.Observable
+import io.circe.Error
+
 
 trait GetService[T] extends Logging {
   this: ComponentNames =>
@@ -25,8 +27,8 @@ trait GetService[T] extends Logging {
   protected def getSparse(id: String): Observable[T] = items.get(id).map(u => Observable.of(mapOutSparse(u))).getOrElse(getFromHttp(id).map((u, i) => mapOutSparse(u)))
 
   def list(): Observable[js.Array[T]] = http.get(s"$uriRoot", requestOptions)
-    .map((r, i) => {log(r.json,s"incoming json : ${r.json}");r.jsonData[js.Array[js.Dynamic]].toArray})
-    .map((a, i) => a.map(x => add(unwrap(x))).toJSArray)
+    .map((r, i) => decList(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[List[U]])
+    .map((a, i) => a.map(x => mapOutSparse(x)).toJSArray)
 
   def flush() = items = Map()
 
@@ -34,14 +36,13 @@ trait GetService[T] extends Logging {
   protected final def getFromHttp(id: String): Observable[U] = {
 
     http.get(s"$uriRoot/$id", requestOptions).
-      map((r, i) => r.jsonData[js.Dynamic]).
-      map((a, i) => {
-        val u = unwrap(a)
-        items = items + ((u.id, u))
-        u
-      }).onError((x, t) => { log(s"error in GET for path $uriRoot/$id : $x : $t"); Observable.of(null).asInstanceOf[Observable[U]] })
+      map((r, i) => dec(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[U])
+      .onError((x, t) => { log(s"error in GET for path $uriRoot/$id : $x : $t"); Observable.of(null).asInstanceOf[Observable[U]] })
 
   }
+  
+  protected def dec(json:String):Either[Error,U]
+  protected def decList(json:String):Either[Error,List[U]]
 
   protected final def child[A <: Entity, B](ref: Ref[A], service: GetService[B])(implicit depth: Int): Observable[B] = if (ref != null) service.get(ref.id)(depth - 1) else Observable.of(null.asInstanceOf[B])
   protected final def mapOutList[A <: Entity, B](list: List[Ref[A]], service: GetService[B])(implicit depth: Int): Observable[js.Array[B]] =
@@ -49,13 +50,9 @@ trait GetService[T] extends Logging {
 
   private[service] def getDom(id: String) = items(id)
 
-  private def unwrap(obj: js.Dynamic) = fromJson(log(obj, s"object: ${obj.toString}").toString)
-
-  private def fromJson(jsonString: String): U = if (jsonString == null) null.asInstanceOf[U] else deser(jsonString)
-
   protected def mapOut(domain: U)(implicit depth: Int): Observable[T]
   protected def mapOutSparse(domain: U): T
-  protected def deser(json: String): U
+
 
 }
 

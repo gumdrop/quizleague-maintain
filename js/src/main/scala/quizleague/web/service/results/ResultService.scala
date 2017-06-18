@@ -28,10 +28,14 @@ import quizleague.web.service.fixtures.FixturePutService
 import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
+import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._
 
 
 trait ResultGetService extends GetService[Model] with ResultNames {
   override type U = Dom
+
+
   
   val userService:UserGetService
   val fixtureService:FixtureGetService
@@ -45,6 +49,9 @@ trait ResultGetService extends GetService[Model] with ResultNames {
     mapReports(dom.reports),
     (fixture:Fixture,submitter:User, reports:js.Array[Report]) => Model(dom.id, fixture, dom.homeScore, dom.awayScore, submitter, dom.note, !dom.reports.isEmpty, reports)
   )
+  
+    override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 
   private def mapReports(reports:List[DomReport])(implicit depth:Int):Observable[js.Array[Report]] = {
     if(reports.isEmpty)
@@ -54,9 +61,6 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   }
   
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
 
 }
 

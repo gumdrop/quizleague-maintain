@@ -11,9 +11,11 @@ import quizleague.web.service.season.{ SeasonGetService, SeasonPutService }
 import quizleague.web.service.user.{ UserGetService, UserPutService }
 import quizleague.web.util.Logging
 import rxjs.Observable
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 trait ApplicationContextGetService extends GetService[ApplicationContext] with ApplicationContextNames with Logging {
   override type U = Dom
+  
 
   val globalTextService: GlobalTextGetService
   val userService: UserGetService
@@ -33,10 +35,8 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
 
   def get(): Observable[ApplicationContext] = list().switchMap((x, i) => get(x(0).id))
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
-
+    override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait ApplicationContextPutService extends PutService[ApplicationContext] with ApplicationContextGetService {

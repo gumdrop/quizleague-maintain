@@ -44,7 +44,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
     libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1"
-
+    
 	
   ).
   jsSettings(

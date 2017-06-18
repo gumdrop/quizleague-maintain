@@ -38,6 +38,10 @@ trait GetEndpoints {
   @GET
   @Path("/applicationcontext")
   def applicationContext() = list[ApplicationContext]
+  
+  @GET
+  @Path("/applicationcontext/{id}")
+  def applicationContext(@PathParam("id") id: String) = out[ApplicationContext](id)
 
   @GET
   @Path("/globaltext/{id}")
@@ -122,4 +126,12 @@ trait GetEndpoints {
   @GET
   @Path("/user/{id}")
   def user(@PathParam("id") id: String) = out[User](id)
+  
+  @GET
+  @Path("/leaguetable")
+  def leaguetable() = list[LeagueTable]
+
+  @GET
+  @Path("/leaguetable/{id}")
+  def leaguetable(@PathParam("id") id: String) = out[LeagueTable](id)
 }

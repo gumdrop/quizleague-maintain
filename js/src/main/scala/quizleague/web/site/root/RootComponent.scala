@@ -69,7 +69,7 @@ import org.threeten.bp.LocalDate
     </md-tab-group>
     </div>
       <div class="text_area">
-        <ql-named-text name="front_page_main"></ql-named-text>
+        <ql-named-text name="front-page-suppl"></ql-named-text>
         <br>
         <ql-text [textId]="(currentSeason | async)?.text.id"></ql-text>
       </div>

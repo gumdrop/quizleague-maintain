@@ -8,6 +8,7 @@ import quizleague.web.model.User
 import quizleague.domain.{ User => DomUser }
 import rxjs.Observable
 import quizleague.web.names.UserNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 
 
@@ -18,8 +19,9 @@ trait UserGetService extends GetService[User] with UserNames {
   override protected def mapOutSparse(user: DomUser): User =
     User(user.id, user.name, user.email, user.retired)
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def deser(jsonString: String) = decode[DomUser](jsonString).merge.asInstanceOf[DomUser]
+  protected def dec(json:String) = decode[U](json)
+  protected def decList(json:String) = decode[List[U]](json)
+
 }
 
 trait UserPutService extends PutService[User] with UserGetService {

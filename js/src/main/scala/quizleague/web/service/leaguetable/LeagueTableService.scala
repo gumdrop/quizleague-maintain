@@ -28,11 +28,14 @@ import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.LeagueTableNames
 import quizleague.web.service.results.ResultsGetService
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 
 
 trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
   override type U = Dom
+
+
 
   val teamService: TeamGetService
 
@@ -42,6 +45,8 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
       Observable.of(dom), mapRows(dom.rows),
       (dom: Dom, rows: js.Array[LeagueTableRow]) => Model(dom.id, dom.description, rows))
 
+        override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 
   private def mapRows(rows: List[DomRow])(implicit depth: Int): Observable[js.Array[LeagueTableRow]] = {
     if (rows.isEmpty) Observable.of(js.Array())
@@ -49,10 +54,6 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
       Observable.zip(rows.map(x => Observable.zip(child(x.team, teamService), Observable.of(x), (team: Team, x: DomRow) => LeagueTableRow(team, x.position, x.played, x.won, x.lost, x.drawn, x.leaguePoints, x.matchPointsFor, x.matchPointsAgainst))): _*)
   }
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
 
 }
 

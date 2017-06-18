@@ -21,6 +21,8 @@ import quizleague.web.service.competition._
 import quizleague.web.names.SeasonNames
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._
 
 trait SeasonGetService extends GetService[Season] with SeasonNames {
   override type U = Dom
@@ -37,6 +39,9 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
 
   override def flush() = { textService.flush(); super.flush() }
   
+  protected def dec(json:String) = decode[U](json)
+  protected def decList(json:String) = decode[List[U]](json)
+  
   private def mapEvents(events:List[DomEvent])(implicit depth:Int):Observable[js.Array[CalendarEvent]] = {
   if(events.isEmpty)
     Observable.of(js.Array())
@@ -45,10 +50,7 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
         venue, event.date,event.time,event.duration,event.description))) : _*)
   }
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
-
+  
 }
 
 trait SeasonPutService extends PutService[Season] with SeasonGetService {

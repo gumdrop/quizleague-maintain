@@ -13,10 +13,13 @@ import quizleague.web.service._
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.names.GlobalTextNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 
 trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
   override type U = Dom
+
+
   
   val textService:TextGetService
   
@@ -27,9 +30,8 @@ trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
   
   override def flush() = {textService.flush();super.flush()}
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
-
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetService{

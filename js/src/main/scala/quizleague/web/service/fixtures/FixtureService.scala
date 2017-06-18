@@ -23,11 +23,14 @@ import quizleague.web.service.venue.VenuePutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixtureNames
+import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._  
+import quizleague.util.json.codecs.DomainCodecs._  
 
 
 
 trait FixtureGetService extends GetService[Fixture] with FixtureNames{
-    override type U = Dom
+  override type U = Dom
     
   val venueService:VenueGetService
   val teamService:TeamGetService
@@ -40,10 +43,8 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
       child(dom.away, teamService),
       (venue: Venue, home: Team, away: Team) => Model(dom.id, dom.description, dom.parentDescription, venue, home, away, dom.date, dom.time, dom.duration))
 
-  
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
  
 }
 

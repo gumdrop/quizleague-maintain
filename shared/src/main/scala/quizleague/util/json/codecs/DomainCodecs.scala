@@ -20,4 +20,5 @@ object DomainCodecs{
   implicit val eventDecoder: Decoder[Event] = deriveDecoder
   implicit val eventEncoder: Encoder[Event] = deriveEncoder
   
+  
 }

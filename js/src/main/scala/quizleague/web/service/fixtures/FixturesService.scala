@@ -22,6 +22,8 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixturesNames
+import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._  
 
 
 
@@ -34,10 +36,8 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
   override protected def mapOut(dom:Dom)(implicit depth:Int) = mapOutList(dom.fixtures,fixtureService)(2).
     map((fixtures,i) => Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,fixtures))
   
-  
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
  
 }
 
