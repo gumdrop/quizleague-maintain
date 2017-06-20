@@ -8,6 +8,7 @@ import quizleague.domain.{ Entity, Ref }
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging
 import rxjs.Observable
+import quizleague.web.util.rx.RefObservable
 
 trait GetService[T] extends Logging {
   this: ComponentNames =>
@@ -53,6 +54,9 @@ trait GetService[T] extends Logging {
 
   private def fromJson(jsonString: String): U = if (jsonString == null) null.asInstanceOf[U] else deser(jsonString)
 
+  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]) = RefObservable(ref, service.get(ref.id))
+  
+  
   protected def mapOut(domain: U)(implicit depth: Int): Observable[T]
   protected def mapOutSparse(domain: U): T
   protected def deser(json: String): U
