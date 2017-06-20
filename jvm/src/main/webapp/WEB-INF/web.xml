@@ -17,9 +17,13 @@
   </filter>
   <filter>
     <filter-name>URLRewriteFilter</filter-name>
-    <filter-class>quizleague.rest.URLRewriteFilter</filter-class>
+    <filter-class>quizleague.rest.HistoryApiFallbackFilter</filter-class>
+    <init-param>
+    	<param-name>forwardPath</param-name>
+    	<param-value>/index.html</param-value>
+    </init-param>
   </filter>
-  <filter-mapping>
+  <!--filter-mapping>
     <filter-name>PassThroughFilter</filter-name>
     <url-pattern>/_ah/*</url-pattern>
     <url-pattern>/tasks/*</url-pattern>
@@ -33,10 +37,11 @@
     <filter-name>MaintainURLRewriteFilter</filter-name>
     <url-pattern>/maintain/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
-  </filter-mapping>
+
+  </filter-mapping-->
   <filter-mapping>
     <filter-name>URLRewriteFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <!-->servlet>
@@ -94,7 +99,7 @@
 
 	<servlet-mapping>
 		<servlet-name>jersey-servlet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 
   <security-constraint>

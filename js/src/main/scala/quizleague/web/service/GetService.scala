@@ -17,7 +17,7 @@ trait GetService[T] extends Logging {
 
   val serviceRoot: String
 
-  lazy val uriRoot = s"/$serviceRoot/$typeName"
+  lazy val uriRoot = s"/rest/$serviceRoot/$typeName"
 
   val http: Http
   private[service] var items: Map[String, U] = Map()
