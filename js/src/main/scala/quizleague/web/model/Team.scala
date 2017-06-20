@@ -12,6 +12,6 @@ case class Team(
     shortName:String,
     venue:RefObservable[Venue],
     text:RefObservable[Text],
-    users:Observable[js.Array[User]],
+    users:js.Array[RefObservable[User]],
     retired:Boolean
 )

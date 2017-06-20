@@ -67,6 +67,6 @@ class TeamComponent(
   private def initVenues() = service.listVenues.subscribe(venues = _)
   private def initUsers() = service.listUsers.subscribe(users = _)
   
-  def removeUser(user:User) = item.users -= user
+  //def removeUser(user:User) = item.users -= user
 }
     

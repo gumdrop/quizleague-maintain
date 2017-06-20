@@ -125,7 +125,7 @@ class FixturesComponent(
     def unusedTeams(other:Team) = teamManager.unusedTeams(other)
     
     def setVenue(team:Team) = {
-      teamService.get(team.id).subscribe(x => venue = x.venue)
+      //teamService.get(team.id).subscribe(x => venue = x.venue)
     }
     
     def addFixture() = {
