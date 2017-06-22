@@ -10,28 +10,39 @@ import js.annotation.JSExport
 import quizleague.web.service.PutService
 import quizleague.web.service.GetService
 import quizleague.web.util.Logging
+import quizleague.web.util.rx.RefObservable
+import scala.language.implicitConversions
 
-trait ItemComponent[T] extends OnInit with Logging{
-  val service:GetService[T] with PutService[T]
-  val route:ActivatedRoute
-  val location:Location
-  
+trait ItemComponent[T] extends OnInit with Logging {
+  val service: GetService[T] with PutService[T]
+  val route: ActivatedRoute
+  val location: Location
 
   @JSExport
-  var item:T = _
-  
+  var item: T = _
+
   @JSExport
-  def save():Unit = {service.save(item);location.back()}
-  
+  def save(): Unit = { service.save(item); location.back() }
+
   @JSExport
-  def cancel():Unit = {service.flush();location.back()}
+  def cancel(): Unit = { service.flush(); location.back() }
 
   @JSExport
   def ngOnInit() = init()
-  
-  def init(): Unit = loadItem().subscribe( x=> {log(null, "before load item");this.item = x ; log(item,"loaded item")})
-    
-  protected def loadItem(depth:Int = 1) = route.params
-    .switchMap( (params,i) => service.get(params("id"))(depth))
+
+  def init(): Unit = loadItem().subscribe(x => this.item = x)
+
+  protected def loadItem(depth: Int = 1) = route.params
+    .switchMap((params, i) => service.get(params("id"))(depth))
+
 }
 
+object ItemComponent {
+
+  implicit def ---=[T](list: js.Array[RefObservable[T]]) = new ArrayWrapper(list)
+
+  class ArrayWrapper[T](list: js.Array[RefObservable[T]]) {
+    def ---=(id: String) = list --= list.filter(_.id == id)
+  }
+
+}

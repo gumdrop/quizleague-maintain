@@ -77,7 +77,8 @@ class TeamViewService(
     override val applicationContextService:ApplicationContextService) extends SeasonSelectService{
 
 
-  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = seasonService.getResults(season).map(
+  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
+    seasonService.getResults(season).map(
     (r, i) => r.flatMap(_.results)
       .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)
       .take(take))
