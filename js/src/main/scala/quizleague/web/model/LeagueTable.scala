@@ -2,6 +2,7 @@ package quizleague.web.model
 
 import angulate2.std.Data
 import scalajs.js.Array
+import quizleague.web.util.rx.RefObservable
 
 @Data
 case class LeagueTable(id: String,
@@ -11,7 +12,7 @@ case class LeagueTable(id: String,
 
 @Data
 case class LeagueTableRow(
-  team: Team,
+  team: RefObservable[Team],
   position: String,
   played: Int,
   won: Int,

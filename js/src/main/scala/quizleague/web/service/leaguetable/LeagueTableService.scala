@@ -36,17 +36,11 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
 
   val teamService: TeamGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id, dom.description, js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth: Int) = 
-    Observable.zip(
-      Observable.of(dom), mapRows(dom.rows),
-      (dom: Dom, rows: js.Array[LeagueTableRow]) => Model(dom.id, dom.description, rows))
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id, dom.description, mapRows(dom.rows))
 
+  private def mapRows(rows: List[DomRow]):js.Array[LeagueTableRow] = {
 
-  private def mapRows(rows: List[DomRow])(implicit depth: Int): Observable[js.Array[LeagueTableRow]] = {
-    if (rows.isEmpty) Observable.of(js.Array())
-    else
-      Observable.zip(rows.map(x => Observable.zip(child(x.team, teamService), Observable.of(x), (team: Team, x: DomRow) => LeagueTableRow(team, x.position, x.played, x.won, x.lost, x.drawn, x.leaguePoints, x.matchPointsFor, x.matchPointsAgainst))): _*)
+      rows.map(x => LeagueTableRow(refObs(x.team, teamService), x.position, x.played, x.won, x.lost, x.drawn, x.leaguePoints, x.matchPointsFor, x.matchPointsAgainst)).toJSArray
   }
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
@@ -64,11 +58,11 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
   override protected def mapIn(model: Model) = Dom(
     model.id,
     model.description,
-    model.rows.map(r => DomRow(teamService.getRef(r.team), r.position, r.played, r.won, r.lost, r.drawn, r.leaguePoints, r.matchPointsFor, r.matchPointsAgainst)).toList)
+    model.rows.map(r => DomRow(teamService.ref(r.team), r.position, r.played, r.won, r.lost, r.drawn, r.leaguePoints, r.matchPointsFor, r.matchPointsAgainst)).toList)
 
   override protected def make() = Dom(newId, "", List())
 
-  def rowInstance(team: Team) = LeagueTableRow(team, "", 0, 0, 0, 0, 0, 0, 0)
+  def rowInstance(team: Team) = LeagueTableRow(teamService.refObs(team.id), "", 0, 0, 0, 0, 0, 0, 0)
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._

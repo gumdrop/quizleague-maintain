@@ -92,16 +92,20 @@ class RootComponent(
   var intervalId:SetIntervalHandle = null
   
   setTitle("Home")
-  val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
+  val league = applicationContextService.get
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getLeagueCompetition(s))
   val results = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getResults(s))
     .map((r,i) => r.take(1))
   val fixtures = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getFixtures(s))
     .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
     .map((f,i) => f.take(1))
     
-  val currentSeason = applicationContextService.get.map((ac,i) => ac.currentSeason)
+  val currentSeason = applicationContextService.get.switchMap((ac,i) => ac.currentSeason.obs)
   
   def tabSelected(){
     clearInterval(intervalId)
