@@ -21,6 +21,7 @@ import quizleague.web.service.competition._
 import quizleague.web.names.SeasonNames
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
+import quizleague.web.util.rx.RefObservable
 
 trait SeasonGetService extends GetService[Season] with SeasonNames {
   override type U = Dom
@@ -28,12 +29,12 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
   val competitionService: CompetitionGetService
   val venueService: VenueGetService
 
-  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), js.Array(),js.Array())
-  override protected def mapOut(season: Dom)(implicit depth:Int) =
-    Observable.zip(
-      mapOutList(season.competitions, competitionService),
-      mapEvents(season.calendar),
-      (competitions: js.Array[Competition], calendar:js.Array[CalendarEvent]) => Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), competitions, calendar))
+  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, refObs(season.text,textService), refObsList(season.competitions, competitionService),js.Array())
+  override protected def mapOut(season: Dom)(implicit depth:Int) = Observable.of(mapOutSparse(season))
+//    Observable.zip(
+//      mapOutList(season.competitions, competitionService),
+//      mapEvents(season.calendar),
+//      (competitions: js.Array[Competition], calendar:js.Array[CalendarEvent]) => Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), competitions, calendar))
 
   override def flush() = { textService.flush(); super.flush() }
   
@@ -60,8 +61,8 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
       season.id, 
       season.startYear, 
       season.endYear, 
-      textService.getRef(season.text), 
-      season.competitions.map(competitionService.getRef(_)).toList, 
+      textService.ref(season.text), 
+      season.competitions.map(competitionService.ref(_)).toList, 
       season.calendar.map(e=>{log(e,"incoming events");DomEvent(venueService.getRef(e.venue), e.date, e.time, e.duration, e.description)}).toList
   )
   override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())

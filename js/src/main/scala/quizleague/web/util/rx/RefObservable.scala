@@ -1,34 +1,26 @@
 package quizleague.web.util.rx
 
-import rxjs.Observable
 import quizleague.domain.Ref
-import scalajs.js
-import scala.scalajs.js.annotation.JSExport
-import scala.scalajs.js.annotation.ScalaJSDefined
+import rxjs.Observable
+import rxjs.core.Subscription
+import scala.scalajs.js
+import scala.scalajs.js.annotation._
 
 @ScalaJSDefined
-class RefObservable[T](val id:String, val obs:Observable[T]) extends js.Object{
-  def subscribe(f:T => Any) = obs.subscribe(f)
+class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Object {
 
-  def canEqual(other: Any) = {
-    other.isInstanceOf[quizleague.web.util.rx.RefObservable[T]]
-  }
+  @JSName("subscribeScala")
+  def subscribe[R](f: T => R) = obs.subscribe(f)
 
-  override def equals(other: Any) = {
-    other match {
-      case that: quizleague.web.util.rx.RefObservable[T] => that.canEqual(RefObservable.this) && id == that.id
-      case _ => false
-    }
-  }
+  @JSName("subscribe")
+  def subscribeJS(next: js.UndefOr[js.Function1[T, _]],
+    error: js.UndefOr[js.Function1[js.Dynamic, _]],
+    complete: js.UndefOr[js.Function0[_]]): Subscription = obs.subscribeJS(next, error, complete)
 
-  override def hashCode() = {
-    val prime = 41
-    prime + id.hashCode
-  }
 }
 
 object RefObservable {
-  
-  def apply[T](ref:Ref[_], obs:Observable[T]) = new RefObservable(ref.id,obs)
-  def apply[T](id:String, obs:Observable[T]) = new RefObservable(id,obs)
+
+  def apply[T](ref: Ref[_], obs: Observable[T]) = new RefObservable(ref.id, obs)
+  def apply[T](id: String, obs: Observable[T]) = new RefObservable(id, obs)
 }
