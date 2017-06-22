@@ -4,6 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
@@ -67,7 +68,7 @@ class SeasonComponent(
   
     def addCompetition(typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      item.competitions += comp
+      item.competitions +++= (comp.id,comp)
       editCompetition(comp)
     }
   

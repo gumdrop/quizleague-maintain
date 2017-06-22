@@ -20,12 +20,13 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
   val userService: UserGetService
   val seasonService: SeasonGetService
   override protected def mapOutSparse(context: Dom) = ApplicationContext(context.id, context.leagueName, refObs(context.textSet, globalTextService), refObs(context.currentSeason, seasonService), context.senderEmail, mapOutAliases(context.emailAliases))
-  override protected def mapOut(context: Dom)(implicit depth: Int) = Observable.of(mapOutSparse(context))
   def mapOutAliases(list: List[DomEmailAlias]) = list.map(e => EmailAlias(e.alias, refObs(e.user, userService))).toJSArray
 
   def listTextSets() = globalTextService.list()
+  
+  lazy val currentContext = list().map((x, i) => x(0))
 
-  def get(): Observable[ApplicationContext] = list().switchMap((x, i) => get(x(0).id))
+  def get(): Observable[ApplicationContext] = currentContext
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 

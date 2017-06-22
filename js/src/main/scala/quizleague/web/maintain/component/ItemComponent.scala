@@ -12,6 +12,7 @@ import quizleague.web.service.GetService
 import quizleague.web.util.Logging
 import quizleague.web.util.rx.RefObservable
 import scala.language.implicitConversions
+import rxjs.Observable
 
 trait ItemComponent[T] extends OnInit with Logging {
   val service: GetService[T] with PutService[T]
@@ -39,10 +40,11 @@ trait ItemComponent[T] extends OnInit with Logging {
 
 object ItemComponent {
 
-  implicit def ---=[T](list: js.Array[RefObservable[T]]) = new ArrayWrapper(list)
+  implicit def wrapArray[T](list: js.Array[RefObservable[T]]) = new ArrayWrapper(list)
 
   class ArrayWrapper[T](list: js.Array[RefObservable[T]]) {
     def ---=(id: String) = list --= list.filter(_.id == id)
+    def +++=(id:String, item:T) = list += RefObservable(id, Observable.of(item))
   }
 
 }

@@ -2,6 +2,7 @@ package quizleague.web.model
 
 import angulate2.std.Data
 import scalajs.js
+import quizleague.web.util.rx.RefObservable
 
 @Data
 case class Season(
@@ -9,6 +10,6 @@ case class Season(
     startYear:Int,
     endYear:Int,
     text:Text,
-    competitions:js.Array[Competition],
+    competitions:js.Array[RefObservable[Competition]],
     calendar:js.Array[CalendarEvent]
 )

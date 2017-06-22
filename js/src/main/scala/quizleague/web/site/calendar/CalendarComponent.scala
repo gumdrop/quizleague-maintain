@@ -122,7 +122,7 @@ class FixturesEventComponent extends PanelComponent
 @Component(
   selector = "ql-calendar-event",
   template = """
-        <div><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{event.event.venue.name}}</a></div>
+        <div><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <a routerLink="/venue/{{(event.event.venue | async).id}}">{{(event.event.venue | async).name}}</a></div>
 """,
   inputs = @@@("event")
 )
@@ -132,7 +132,7 @@ class CalendarEventComponent extends EventComponent
 @Component(
   selector = "ql-competition-event",
   template = """
-        <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{event.competition.name}}</a>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{event.event.venue.name}}</a></div>
+        <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{event.competition.name}}</a>  {{event.event.time}}  Venue : <a routerLink="/venue/{{(event.event.venue | async).id}}">{{(event.event.venue | async).name}}</a></div>
 """,
   inputs = @@@("event")
 )

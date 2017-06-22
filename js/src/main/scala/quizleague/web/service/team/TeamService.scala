@@ -25,7 +25,6 @@ trait TeamGetService extends GetService[Team] with TeamNames {
   val userService: UserGetService
 
   override protected def mapOutSparse(team: DomTeam) = Team(team.id, team.name, team.shortName, refObs(team.venue,venueService), refObs(team.text, textService), team.users.map(u => userService.getRO(u.id)).toJSArray, team.retired)
-  override protected def mapOut(team: DomTeam)(implicit depth:Int) = Observable.of(mapOutSparse(team))
 
   override def flush() = { textService.flush(); super.flush() }
 

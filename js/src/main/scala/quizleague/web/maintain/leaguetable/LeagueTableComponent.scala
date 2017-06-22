@@ -54,7 +54,7 @@ import quizleague.web.maintain.util.TeamManager
                 <td>
                   <button md-icon-button type="button" (click)="removeRow(row)" ><md-icon class="md-24">delete</md-icon></button>
                 </td>
-                <td>{{row.team.name}}</td>
+                <td>{{(row.team | async).name}}</td>
                 <td>
                   <md-input-container>
                     <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4">
