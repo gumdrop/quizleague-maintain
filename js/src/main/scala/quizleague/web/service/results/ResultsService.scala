@@ -1,9 +1,6 @@
 package quizleague.web.service.results
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
-import quizleague.web.service.EntityService
+
 import quizleague.web.model._
 import quizleague.web.model.{ Results => Model }
 import quizleague.domain.{ Results => Dom }
@@ -26,12 +23,7 @@ trait ResultsGetService extends GetService[Results] with ResultsNames {
   val resultService:ResultGetService
   val fixturesService:FixturesGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
-    child(dom.fixtures, fixturesService),
-    mapOutList(dom.results, resultService)(3),
-    (fixtures:Fixtures, results:js.Array[Result]) => Model(dom.id,fixtures,results)
-  )
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixtures, fixturesService),refObsList(dom.results, resultService))
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
@@ -44,7 +36,7 @@ trait ResultsPutService extends PutService[Results] with ResultsGetService with 
   override val resultService:ResultPutService
   override val fixturesService:FixturesPutService
 
-  override protected def mapIn(model: Model) = Dom(model.id, fixturesService.getRef(model.fixtures), model.results.map(resultService.getRef(_)).toList)
+  override protected def mapIn(model: Model) = Dom(model.id, fixturesService.ref(model.fixtures), resultService.ref(model.results))
 
   override def save(model:Model) = {resultService.saveAllDirty;super.save(model)}
   

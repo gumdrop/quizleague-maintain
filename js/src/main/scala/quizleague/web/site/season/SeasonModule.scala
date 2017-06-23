@@ -16,7 +16,7 @@ import angular.material.MaterialModule
 import quizleague.web.model.Results
 import quizleague.web.model.Fixtures
 import scalajs.js
-import quizleague.web.util.rx.RefObservable
+import quizleague.web.util.rx._
 import rxjs.Observable
 
 

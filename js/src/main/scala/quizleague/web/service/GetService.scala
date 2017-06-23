@@ -8,7 +8,7 @@ import quizleague.domain.{ Entity, Ref }
 import quizleague.web.names.ComponentNames
 import quizleague.web.util.Logging
 import rxjs.Observable
-import quizleague.web.util.rx.RefObservable
+import quizleague.web.util.rx._
 
 trait GetService[T] extends Logging {
   this: ComponentNames =>
@@ -67,9 +67,6 @@ trait GetService[T] extends Logging {
   protected def mapOutSparse(domain: U): T
   protected def deser(json: String): U
   
-     
-  def zip[A](list:js.Array[RefObservable[A]]) = Observable.zip(list.map(_.obs):_*)
-
 }
 
 

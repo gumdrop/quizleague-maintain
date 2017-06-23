@@ -30,10 +30,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     
   val fixtureService:FixtureGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,js.Array())
-  override protected def mapOut(dom:Dom)(implicit depth:Int) = mapOutList(dom.fixtures,fixtureService)(2).
-    map((fixtures,i) => Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,fixtures))
-  
+  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,refObsList(dom.fixtures, fixtureService))
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
@@ -44,7 +41,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
 trait FixturesPutService extends PutService[Fixtures] with FixturesGetService with DirtyListService[Model] {
   
   override val fixtureService:FixturePutService
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, model.fixtures.map(fixtureService.getRef(_)).toList)
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures))
   override protected def make() = Dom(newId, "","",LocalDate.now(),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   def instance(competition:Competition) = {
