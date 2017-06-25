@@ -4,7 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
-import quizleague.web.maintain.component.ItemComponent._
+import ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js

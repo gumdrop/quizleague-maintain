@@ -4,6 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
+import ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
@@ -18,9 +19,8 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.model.Team
 import quizleague.web.maintain.venue.VenueService
 import rxjs.Observable
-import rxjs.Observable
+import rxjs.Observable.zip
 import quizleague.web.maintain.util.TeamManager
-
 
 @Component(
   template = s"""
@@ -70,84 +70,77 @@ import quizleague.web.maintain.util.TeamManager
      $formButtons
     </form>
   </div>
-  """    
-)
+  """)
 @classModeScala
 class FixturesComponent(
-    override val service:FixturesService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    val router:Router,
-    val competitionService:CompetitionService,
-    val fixtureService:FixtureService,
-    val teamService:TeamService,
-    val venueService:VenueService)
-    extends ItemComponent[Fixtures] with Logging{
-  
-    override def cancel():Unit = location.back()
-    var comp:Competition = _
-    var teamManager:TeamManager = _
-    var homeTeam:Team = _
-    var awayTeam:Team = _
-    var venue:Venue = _
-    var venues:js.Array[Venue] = _
-    
-    override def init(): Unit = {
-      
-      route.params    
-      .switchMap( (params,i) => competitionService.get(params("competitionId")) )
+  override val service: FixturesService,
+  override val route: ActivatedRoute,
+  override val location: Location,
+  val router: Router,
+  val competitionService: CompetitionService,
+  val fixtureService: FixtureService,
+  val teamService: TeamService,
+  val venueService: VenueService)
+    extends ItemComponent[Fixtures] with Logging {
+
+  override def cancel(): Unit = location.back()
+  var comp: Competition = _
+  var teamManager: TeamManager = _
+  var homeTeam: Team = _
+  var awayTeam: Team = _
+  var venue: Venue = _
+  var venues: js.Array[Venue] = _
+
+  override def init(): Unit = {
+
+    route.params
+      .switchMap((params, i) => competitionService.get(params("competitionId")))
       .subscribe(comp = _)
-     
-      venueService.list.subscribe(venues = _)
-  
-      Observable.zip(
-        loadItem(6),
-        teamService.list(),
-        (fix: Fixtures, teams: js.Array[Team]) => (fix, teams)).subscribe(
-          {
-            case (fix, teams) => {
-              log(fix,"fixtures")
-              log(teams,"teams")
-              teamManager = new TeamManager(teams)
-              
-              fix.fixtures.foreach({ x => { teamManager.take(x.away); teamManager.take(x.home) } })
-              item = fix
-            }
-          })
 
-    }
-    
-    override def save():Unit = {
-      service.cache(item)
-      item.fixtures.foreach({fixtureService.cache(_)})
-      location.back()}
+    venueService.list.subscribe(venues = _)
 
-    def unusedTeams(other:Team) = teamManager.unusedTeams(other)
-    
-    def setVenue(team:Team) = {
-      //teamService.get(team.id).subscribe(x => venue = x.venue)
-    }
-    
-    def addFixture() = {
-      fixtureService.instance(
-          item, 
-          teamManager.take(homeTeam), 
-          teamManager.take(awayTeam), 
-          venue).subscribe(
-            item.fixtures += _  
-          )
- 
-      homeTeam = null
-      awayTeam = null
-      venue = null
-    }
-    
-    def removeFixture(fx:Fixture) = {
-      item.fixtures -= fx
-      teamManager.untake(fx.home)
-      teamManager.untake(fx.away)
-    }
-    
+    Observable.zip(
+      loadItem()
+        .switchMap((f, i) => zip(f.fixtures.map(_.obs): _*))
+        .switchMap((f, i) => f.flatMap(x => js.Array(x.home, x.away))),
+      teamService.list(),
+      (fixtureTeams: js.Array[Team], teams: js.Array[Team]) => {
+        teamManager = new TeamManager(teams)
+        fixtureTeams.foreach(teamManager.take(_))
+      })
+
+  }
+
+  override def save(): Unit = {
+    service.cache(item)
+    //item.fixtures.foreach({fixtureService.cache(_)})
+    location.back()
+  }
+
+  def unusedTeams(other: Team) = teamManager.unusedTeams(other)
+
+  def setVenue(team: Team) = {
+    //teamService.get(team.id).subscribe(x => venue = x.venue)
+  }
+
+  def addFixture() = {
+    fixtureService.instance(
+      item,
+      teamManager.take(homeTeam),
+      teamManager.take(awayTeam),
+      venue).subscribe(i =>
+        item.fixtures +++= (i.id, i))
+
+    homeTeam = null
+    awayTeam = null
+    venue = null
+  }
+
+  def removeFixture(fx: Fixture) = {
+    item.fixtures ---= fx.id
+    teamManager.untake(fx.home)
+    teamManager.untake(fx.away)
+  }
 
 }
     

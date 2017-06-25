@@ -3,7 +3,7 @@ package quizleague.web.maintain.results
 import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
-import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
@@ -18,7 +18,7 @@ import quizleague.web.util.Logging
 @Component(
   template = s"""
  <div>
-    <h2>Results {{item.fixtures.parentDescription}} {{item.fixtures.description}}</h2>
+    <h2>Results {{(item.fixtures | async).parentDescription}} {{(item.fixtures | async).description}}</h2>
     <form #fm="ngForm" (submit)="save()">
     <div fxLayout="column">
        <div fxLayout="column">
@@ -66,20 +66,18 @@ class ResultsComponent(
     
     
     
-    def removeResult(result:Result) = item.results -= result
+    def removeResult(result:Result) = item.results ---= result.id
     
     def toggleNote(result:Result) = if(showNotes.contains(result)) showNotes -= result else showNotes += result
      
     def showNote(result:Result) = showNotes.contains(result)
     def showReports(result:Result) = {
       service.cache(item)
-      item.results.foreach({resultService.cache(_)})
       router.navigateRelativeTo(route,"result",result.id,"report")
     }
     
     override def save():Unit = {
       service.cache(item)
-      item.results.foreach({resultService.cache(_)})
       location.back()
     }
 }

@@ -36,11 +36,17 @@ class SeasonService(override val http: Http,
     override val competitionService: CompetitionService,
     override val venueService: VenueService) extends SeasonGetService with ServiceRoot {
   
-    def getResults(season:Season) = zip(season.competitions).map((c,i) => c.flatMap(_.results).sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date))
+    def getResults(season:Season):Observable[js.Array[Results]] = zip(season.competitions).switchMap((c,i) => 
+        resWithFixs(c.flatMap(_.results))
+        .map((rs,i) => rs.sort(sortPair _)
+            .map(_._1)))
     
     def getFixtures(season:Season) = zip(season.competitions).map((c,i) => c.flatMap(_.fixtures).sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date))
     
     def getLeagueCompetition(season:Season) = zip(season.competitions).map((cs,i) => cs.filter(_.typeName == "league").head)
 
   
+    private def resWithFixs(results:js.Array[Results]):Observable[js.Array[(Results,Fixtures)]] = Observable.zip(results.map(r => r.fixtures.obs.map((f,i) => (r,f))):_*)
+    
+    private def sortPair(r1:(Results,Fixtures), r2:(Results,Fixtures)) = r2._2.date compareTo r1._2.date
 }
