@@ -4,6 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component._
+import quizleague.web.maintain.component.ItemComponent._
 import quizleague.web.model._
 import scala.scalajs.js
 import angulate2.ext.classModeScala
@@ -12,6 +13,7 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
+import quizleague.web.util.rx._
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.names.FixturesNames
 
@@ -43,16 +45,19 @@ class FixturesListComponent(
   
   def sort(a:Fixtures,b:Fixtures) = a.date compareTo b.date
   
-  def init(): Unit = route.params
-    .switchMap( (params,i) => competitionService.get(params("competitionId"))(2) )
-    .subscribe(x => {this.items = x.fixtures.sort(sort _); comp = x})
+  def init(): Unit = {
+    val temp = route.params
+    .switchMap( (params,i) => competitionService.get(params("competitionId")))
+    .switchMap((c,i) => zip(c.fixtures))
+    .map((fs,i) => fs.sort(sort _)).subscribe(x => {this.items = x})
+  }
     
   def back() = location.back()
     
     
   override def addNew():Unit = {
-    val item = service.instance(comp)
-    comp.fixtures.push(item)
+    val item = service.instance(comp, items)
+    comp.fixtures +++= (item.id, item)
     competitionService.cache(comp)
     router.navigateRelativeTo(route,service.getId(item))
   }

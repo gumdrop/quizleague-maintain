@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDate
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixturesNames
+import quizleague.web.util.rx._
 
 
 
@@ -44,10 +45,10 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures))
   override protected def make() = Dom(newId, "","",LocalDate.now(),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
-  def instance(competition:Competition) = {
+  def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
     
     def findNextDate(c:LeagueCompetition) = {
-      c.fixtures.sort((a:Model,b:Model) => b.date compareTo a.date).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
+      fixtures.sort((a:Model,b:Model) => b.date compareTo a.date).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
     }
     
     add(

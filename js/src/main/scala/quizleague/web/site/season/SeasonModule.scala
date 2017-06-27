@@ -38,12 +38,8 @@ class SeasonService(override val http: Http,
   
     def getResults(season:Season):Observable[js.Array[Results]] = zip(season.competitions).switchMap((c,i) => filterAndSort[Results,Fixtures](c.flatMap(_.results),_.fixtures,(x,y) => true, (r1,r2) => r1._2.date compareTo r2._2.date))
     
-    def getFixtures(season:Season) = zip(season.competitions).switchMap((c,i) => filterAndSort[Fixtures,Fixtures](c.flatMap(_.fixtures),r => r,(x:Fixtures,y:Fixtures) => true, (r1:(Fixtures,Fixtures),r2:(Fixtures,Fixtures))=> r1._2.date compareTo r2._2.date))
+    def getFixtures(season:Season) = zip(season.competitions).switchMap((c,i) => zip(c.flatMap(_.fixtures)).map((fs,i) => fs.sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date)))
     
     def getLeagueCompetition(season:Season) = zip(season.competitions).map((cs,i) => cs.filter(_.typeName == "league").head)
 
-  
-    private def resWithFixs(results:js.Array[Results]):Observable[js.Array[(Results,Fixtures)]] = Observable.zip(results.map(r => r.fixtures.obs.map((f,i) => (r,f))):_*)
-    
-    private def sortPair(r1:(Results,Fixtures), r2:(Results,Fixtures)) = r2._2.date compareTo r1._2.date
 }
