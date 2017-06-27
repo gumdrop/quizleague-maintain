@@ -33,6 +33,7 @@ import rxjs.BehaviorSubject
 import angulate2.forms.FormsModule
 import angulate2.platformBrowser.BrowserModule
 import quizleague.web.site.common.SeasonSelectService
+import quizleague.web.util.rx._
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
@@ -78,20 +79,23 @@ class TeamViewService(
 
 
   def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
-    seasonService.getResults(season).map(
-    (r, i) => r.flatMap(_.results)
-      .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)
+    seasonService.getResults(season).switchMap(
+    (r, i) => 
+      filterAndSort[Result,Fixture](
+          r.flatMap(_.results),
+          r => r.fixture,
+          (r,f) => f.home.id == team.id || f.away.id == team.id, 
+          (r1,r2) => r1._2.date compareTo r2._2.date)
       .take(take))
+
 
   def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
 
     val now = LocalDate.now.toString()
 
     seasonService.getFixtures(season).map(
-      (r, i) => r.flatMap(_.fixtures)
-        .filter(fixture => fixture.date >= now)
-        .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id)
-        .take(take))
+      (r, i) => filter[Fixture](r.flatMap(_.fixtures), f => f.date >= now && (f.home.id == team.id || f.away.id == team.id))
+       .take(take))
   }
 }
 

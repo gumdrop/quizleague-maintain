@@ -43,14 +43,12 @@ class FixturesListComponent(
   
   var comp:Competition = _
   
-  def sort(a:Fixtures,b:Fixtures) = a.date compareTo b.date
+  def sortf(a:Fixtures,b:Fixtures) = a.date compareTo b.date
   
-  def init(): Unit = {
-    val temp = route.params
+  def init(): Unit =  route.params
     .switchMap( (params,i) => competitionService.get(params("competitionId")))
-    .switchMap((c,i) => zip(c.fixtures))
-    .map((fs,i) => fs.sort(sort _)).subscribe(x => {this.items = x})
-  }
+    .switchMap((c,i) => sort(c.fixtures, sortf)).subscribe(x => {this.items = x})
+  
     
   def back() = location.back()
     
