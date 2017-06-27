@@ -7,6 +7,7 @@ import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.MenuComponent
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.util.rx._
 import angulate2.core.animations
 import angulate2.core.animate
 import angulate2.ext.classModeScala
@@ -41,7 +42,9 @@ class ReportComponent(
     override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
   val result = route.params.switchMap( (params,i) => service.get(params("id"))(4))
-    
+  
+  extract2()
+  
   setTitle(result.map((r,i) => s"Reports for ${r.fixture.parentDescription} ${r.fixture.description} - ${r.fixture.home.name} : ${r.fixture.away.name}"))
   
   def back() = location.back()
