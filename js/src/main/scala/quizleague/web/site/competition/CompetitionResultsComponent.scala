@@ -6,7 +6,8 @@ import angulate2.std._
 import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.global.ApplicationContextService
 import scalajs.js
-import quizleague.web.model.Results
+import quizleague.web.model._
+import quizleague.web.util.rx._
 
 @Component(
   template = s"""
@@ -36,7 +37,7 @@ class CompetitionResultsComponent(
 
   itemObs.subscribe(t => setTitle(s"${t.name} - All Results"))
   
-  def sort(results:js.Array[Results]) = results.sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date)
+  def sortit(results:js.Array[Results]) = sort[Results,Fixtures](results, _.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date,1)
 
 }
 
