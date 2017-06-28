@@ -10,6 +10,7 @@ package object rx {
   implicit def refObsToObs[T](refObs: RefObservable[T]) = refObs.obs
 
   implicit def zip[A](list: js.Array[RefObservable[A]]) = Observable.zip(list.map(_.obs): _*)
+  implicit def zipRO[A](list: js.Array[RefObservable[A]]) = RefObservable("dummy",zip(list))
 
   def filterAndSort1[T, U](
     list: js.Array[T],
@@ -44,13 +45,21 @@ package object rx {
   def sort[T](list: js.Array[RefObservable[T]], sort:((T,T) => Int)) = zip(list).map((l,i) => l.sort(sort))
   def filter[T](list: js.Array[RefObservable[T]], filter:(T => Boolean)) = zip(list).map((l,i) => l.filter(filter))
   
-  def action2[T,U,V](t:T, x1:T => RefObservable[U], x2:U => RefObservable[V], action:((T,U,V) => Unit)) = { 
+  
+  def extract1[T,U,R](t:T, x1:T => RefObservable[U])(extract:(T,U) => R) = { 
+    val xx1 = x1(t).obs
+    
+    xx1.map((u,i) => (t,u)).map((x,i) => {x match {case (t,u) => extract(t,u)}})
+  }
+  
+  def extract2[T,U,V,R](t:T, x1:T => RefObservable[U], x2:U => RefObservable[V])(extract:(T,U,V) => R) = { 
     val xx1 = x1(t).obs
     val xx2 = xx1.switchMap((a,i) => x2(a).obs.map((b,i) => b))
     
     Observable.zip(
        xx1,
        xx2,
-       (u:U,v:V) => ((t,u,v))).subscribe({case (t,u,v) => action(t,u,v)})
+       (u:U,v:V) => ((t,u,v))).map((x,i) => {x match {case (t,u,v) => extract(t,u,v)}})
   }
+   
 }

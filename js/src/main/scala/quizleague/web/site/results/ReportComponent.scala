@@ -12,6 +12,8 @@ import angulate2.core.animations
 import angulate2.core.animate
 import angulate2.ext.classModeScala
 import angulate2.common.Location
+import quizleague.web.model._
+import scalajs.js
 
 @Component(
   template = """
@@ -43,9 +45,7 @@ class ReportComponent(
   
   val result = route.params.switchMap( (params,i) => service.get(params("id"))(4))
   
-  extract2()
-  
-  setTitle(result.map((r,i) => s"Reports for ${r.fixture.parentDescription} ${r.fixture.description} - ${r.fixture.home.name} : ${r.fixture.away.name}"))
+  setTitle(result.switchMap((r,i) => extract2[Result,Fixture,js.Array[Team],String](r, _.fixture, f => js.Array(f.home,f.away))((r,f,ts) => s"Reports for ${f.parentDescription} ${f.description} - ${ts(0).name} : ${ts(1).name}")))
   
   def back() = location.back()
 }
