@@ -55,9 +55,10 @@ trait GetService[T] extends Logging {
 
   private def fromJson(jsonString: String): U = if (jsonString == null) null.asInstanceOf[U] else deser(jsonString)
 
-  final def refObs(id:String) = RefObservable(id, get(id))
-  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]) = RefObservable(ref, service.get(ref.id))
-  protected final def refObsList[A <: Entity, B](refs:List[Ref[A]], service:GetService[B]) = refs.map(refObs(_,service)).toJSArray
+  final def refObs(id:String):RefObservable[T] = RefObservable(id, get(id))
+  final def refObs(opt:Option[Ref[U]]):RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs[U,T](ref,this))
+  protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]):RefObservable[B] = RefObservable(ref, service.get(ref.id))
+  protected final def refObsList[A <: Entity, B](refs:List[Ref[A]], service:GetService[B]):js.Array[RefObservable[B]] = refs.map(refObs(_,service)).toJSArray
   
   def ref(id:String):Ref[U] = Ref(typeName,id)
   def ref(list:js.Array[RefObservable[T]]):List[Ref[U]] = list.map(ref _).toList

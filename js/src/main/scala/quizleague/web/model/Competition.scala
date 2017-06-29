@@ -69,7 +69,7 @@ class SubsidiaryLeagueCompetition(
 class SingletonCompetition(
     override val id: String,
     override val name: String,
-    override val text: Text,
+    override val text: RefObservable[Text],
     val textName: String,
     val event: Event) extends Competition {
   override val typeName = singleton.toString()

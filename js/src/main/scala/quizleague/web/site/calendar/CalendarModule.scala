@@ -72,7 +72,7 @@ class CalendarViewService(
       case _ => js.Array()
     }
     
-    def flatten[T](obs:Observable[js.Array[Observable[js.Array[T]]]]):Observable[js.Array[T]] = obs.map((e,i) => Observable.zip(e:_*).map((a,i) => a.flatten.toJSArray)).switchMap((o,i) => o)
+    def flatten[T](obs:Observable[js.Array[Observable[js.Array[T]]]]):Observable[js.Array[T]] = obs.map((e,i) => Observable.zip(e:_*).map((a,i) => a.flatten.toJSArray)).concatAll()
     
     val comps = zip(season.competitions)
     

@@ -43,9 +43,9 @@ package object rx {
   }
 
   def sort[T,U](list: js.Array[T], extract:T => RefObservable[U], sort:((T,U),(T,U)) => Int, take:Int = Integer.MAX_VALUE) = 
-    Observable.zip(list.map(t => extract(t).obs.map((u,i) => (t,u)))).map((x,i) => x.sort((a,b) => sort(a,b)).take(take))
+    Observable.zip(list.map(t => extract(t).obs.map((u,i) => (t,u))):_*).map((x,i) => x.sort((a:(T,U),b:(T,U)) => sort(a,b)).take(take))
     
-  def sort[T](list: js.Array[RefObservable[T]], sort:((T,T) => Int)) = zip(list).map((l,i) => l.sort((x,y) => sort(x,y)))
+  def sort[T](list: js.Array[RefObservable[T]], sort:((T,T) => Int)) = zip(list).map((l,i) => l.sort((x:T,y:T) => sort(x,y)))
   def filter[T](list: js.Array[RefObservable[T]], filter:(T => Boolean)) = zip(list).map((l,i) => l.filter(filter))
   
   
