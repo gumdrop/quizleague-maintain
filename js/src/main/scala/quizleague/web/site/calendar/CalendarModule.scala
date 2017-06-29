@@ -74,7 +74,9 @@ class CalendarViewService(
     val comps = zip(season.competitions)
     
     val results = comps
-      .switchMap((cs,i) => cs.flatMap(c => (c,c.results)))
+      .map((cs,i) => 
+        cs.map(c => (c,c.results)).map(cr => extract1[Results,Fixtures,EventWrapper](cr._2, (r:Results) => r.fixtures)((r,f) => EventWrapper(r,f.date,cr._1))
+          ))
       //.switchMap((cr,i) => extract1[Results,Fixtures,EventWrapper](cr._2, _.fixtures)((r,f) => EventWrapper(r,f.date,cr._1)))
     
     results

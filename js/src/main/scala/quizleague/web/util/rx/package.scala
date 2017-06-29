@@ -55,6 +55,13 @@ package object rx {
     xx1.map((u,i) => (t,u)).map((x,i) => {x match {case (t,u) => extract(t,u)}})
   }
   
+  def extract1[T,U,R](list:js.Array[RefObservable[T]], x1:T => RefObservable[U])(extract:(T,U) => R) = { 
+    val tlist = zip(list)
+    val xx1 = tlist.switchMap((l,i) => Observable.zip(l.map(t => x1(t).obs.map((u,i) => (t,u))):_*))
+    
+    xx1.map((xl,i) => xl.map(x => {x match {case (t,u) => extract(t,u)}}))
+  }
+  
   def extract2[T,U,V,R](t:T, x1:T => RefObservable[U], x2:U => RefObservable[V])(extract:(T,U,V) => R) = { 
     val xx1 = x1(t).obs
     val xx2 = xx1.switchMap((a,i) => x2(a).obs.map((b,i) => b))
