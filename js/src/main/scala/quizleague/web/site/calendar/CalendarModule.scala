@@ -35,6 +35,7 @@ import quizleague.web.site.fixtures.FixturesComponentsModule
 import quizleague.web.model._
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.util.rx._
+import scala.scalajs.js.WrappedArray
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CommonAppModule, SeasonModule, CalendarRoutesModule, ResultsComponentsModule, FixturesComponentsModule],
@@ -71,28 +72,30 @@ class CalendarViewService(
       case _ => js.Array()
     }
     
+    def flatten[T](obs:Observable[js.Array[Observable[js.Array[T]]]]):Observable[js.Array[T]] = obs.map((e,i) => Observable.zip(e:_*).map((a,i) => a.flatten.toJSArray)).switchMap((o,i) => o)
+    
     val comps = zip(season.competitions)
     
-    val results = comps
+    val results = flatten(comps
       .map((cs,i) => 
-        cs.map(c => (c,c.results)).map(cr => extract1[Results,Fixtures,EventWrapper](cr._2, (r:Results) => r.fixtures)((r,f) => EventWrapper(r,f.date,cr._1))
-          ))
-      //.switchMap((cr,i) => extract1[Results,Fixtures,EventWrapper](cr._2, _.fixtures)((r,f) => EventWrapper(r,f.date,cr._1)))
+        cs.filter(_.typeName != subsidiary.toString)
+        .map(c => extract1[Results,Fixtures,EventWrapper](c.results, (r:Results) => r.fixtures)((r,f) => EventWrapper(r,f.date,c)))))
     
-    results
-      
-      
-//     Observable.zip(season.competitions.map(_.obs):_*).map(
-//          (c,i) => 
-//          Observable.zip(c.filter(_.typeName != subsidiary.toString).flatMap(c => c.results)).map((x,i) => EventWrapper(x,c)) ++
-//          c.flatMap(c => c.fixtures.filter(_.date > now).map(EventWrapper(_,c))) ++
-//          c.flatMap(singletonEvents _) ++
-//          season.calendar.map(e => EventWrapper(e)))
-//          .groupBy(_.date)
-//          .toIterable
-//          .map(t => new DateWrapper(t._1, t._2))
-//          .toJSArray
-//          .sort((d1:DateWrapper,d2:DateWrapper) => d1.date compareTo d2.date))
+    val fixtures = flatten(comps.map((cs,i) => cs.map(c => zip(c.fixtures).map((f,i) => f.filter(_.date > now).map(EventWrapper(_,c))))))      
+    
+    val singletons = comps.map((cs,i) => cs.flatMap(singletonEvents _))
+    
+    val seasons = Observable.of(season.calendar.map(e => EventWrapper(e)))
+
+    Observable.zip(
+        results,fixtures,singletons,seasons, 
+        (r:js.Array[EventWrapper],f:js.Array[EventWrapper],s:js.Array[EventWrapper],seas:js.Array[EventWrapper]) => 
+          (js.Array() ++ r ++ f ++ s ++ seas)
+          .groupBy(_.date)
+          .toIterable
+          .map(t => new DateWrapper(t._1, t._2))
+          .toJSArray
+          .sort((d1:DateWrapper,d2:DateWrapper) => d1.date compareTo d2.date))  
 
   }
   
