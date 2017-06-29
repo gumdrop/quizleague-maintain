@@ -33,6 +33,7 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import java.time.LocalDate
+import quizleague.web.util.rx._
 
 
 @Component(
@@ -47,9 +48,9 @@ import java.time.LocalDate
       </md-tab>
       <md-tab label="Latest Results">
         <md-card *ngFor="let res of results | async">
-          <md-card-title>{{res.fixtures.parentDescription}} : {{res.fixtures.date | date:"dd MMM yyyy"}} - {{res.fixtures.description}}</md-card-title>
+          <md-card-title>{{(res.fixtures | async)?.parentDescription}} : {{(res.fixtures | async)?.date | date:"dd MMM yyyy"}} - {{(res.fixtures | async)?.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [results]="res.results" ></ql-results-simple>
+            <ql-results-simple [results]="zipit(res.results) | async" ></ql-results-simple>
           </md-card-content>
           
         </md-card>
@@ -59,7 +60,7 @@ import java.time.LocalDate
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [fixtures]="item.fixtures" ></ql-fixtures-simple>
+            <ql-fixtures-simple [fixtures]="zipit(item.fixtures) | async" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>
@@ -114,5 +115,7 @@ class RootComponent(
   override def ngOnInit() = {
     intervalId = setInterval(5000){tabIndex = if(tabIndex == tabCount - 1) 0 else tabIndex + 1}
   }
+  
+  def zipit[T](list:js.Array[RefObservable[T]]) = zip(list)
 }
 

@@ -20,7 +20,7 @@ import scalajs.js
     <div *ngIf="result | async as item; else loading">
       <div *ngFor="let report of item.reports" fxLayout="column">
         <md-card>
-          <md-card-subtitle>By {{report.team.name}}</md-card-subtitle>
+          <md-card-subtitle>By {{(report.team | async).name}}</md-card-subtitle>
           <md-card-content>
             <ql-text [textId]="report.text.id"></ql-text>
           </md-card-content>
@@ -53,7 +53,7 @@ class ReportComponent(
 @Component(
   template = """
     <div *ngIf="result | async as item; else loading">
-      <ql-section-title><span>Reports for {{item.fixture.date | date:"d MMM yyyy"}} {{item.fixture.parentDescription}} {{item.fixture.description}} - {{item.fixture.home.name}} : {{item.fixture.away.name}}</span></ql-section-title>
+      <ql-section-title *ngIf="item.fixture | async as fixture"><span>Reports for {{fixture.date | date:"d MMM yyyy"}} {{fixture.parentDescription}} {{fixture.description}} - {{(fixture.home | async).name}} : {{(fixture.away | async).name}}</span></ql-section-title>
     </div>
     <ng-template #loading>Loading...</ng-template> 
   """    

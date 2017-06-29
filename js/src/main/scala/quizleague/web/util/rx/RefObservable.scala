@@ -5,6 +5,7 @@ import rxjs.Observable
 import rxjs.core.Subscription
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
+import quizleague.web.util.Logging._
 
 @ScalaJSDefined
 class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Object {
@@ -13,9 +14,13 @@ class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Objec
   def subscribe[R](f: T => R) = obs.subscribe(f)
 
   @JSName("subscribe")
-  def subscribeJS(next: js.UndefOr[js.Function1[T, _]],
+  def subscribeJS(
+    next: js.UndefOr[js.Function1[T, _]],
     error: js.UndefOr[js.Function1[js.Dynamic, _]],
-    complete: js.UndefOr[js.Function0[_]]): Subscription = obs.subscribeJS(next, error, complete)
+    complete: js.UndefOr[js.Function0[_]]): Subscription = {
+    
+    obs.subscribeJS(next, error, complete)
+  }
 
 }
 

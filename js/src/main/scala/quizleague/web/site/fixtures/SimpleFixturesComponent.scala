@@ -11,7 +11,7 @@ import quizleague.web.model.Fixture
   template = s"""
     <table>
       <tr *ngFor="let fixture of fixtures">
-        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td><td>{{fixture.home.name}}</td><td> - </td><td>{{fixture.away.name}}</td> 
+        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td><td>{{(fixture.home | async).shortName}}</td><td> - </td><td>{{(fixture.away | async).shortName}}</td> 
       </tr>
     </table>      
   """,
