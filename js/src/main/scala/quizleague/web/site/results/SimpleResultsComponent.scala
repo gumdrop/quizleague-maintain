@@ -45,7 +45,7 @@ class SimpleResultsComponent{
   @Input
   var inlineDetails = false
   
-  def nameClass(score1:Int, score2:Int) = if(score1 > score2) "winner" else "" 
+  def nameClass(score1:Int, score2:Int) = if(score1 > score2) "winner" else if(score1 == score2) "orange" else ""
     
   def hasReports(result:Result) = !result.reports.isEmpty
     
