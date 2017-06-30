@@ -7,6 +7,7 @@ import quizleague.web.model.Team
 import rxjs.Observable
 import scalajs.js
 import quizleague.web.site.season.SeasonService
+import quizleague.web.util.rx._
 
 @Component(
   template = s"""
@@ -20,6 +21,6 @@ class CompetitionMenuComponent(
     viewService:CompetitionViewService,
     seasonService:SeasonService){
   
-  val competitions = viewService.season.switchMap((s,i) => seasonService.get(s.id)).map((s,i) => s.competitions)
+  val competitions = viewService.season.switchMap((s,i) => seasonService.get(s.id)).map((s,i) => zip(s.competitions)).concatAll()
 
 }

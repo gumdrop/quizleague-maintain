@@ -48,9 +48,9 @@ import quizleague.web.util.rx._
       </md-tab>
       <md-tab label="Latest Results">
         <md-card *ngFor="let res of results | async">
-          <md-card-title>{{(res.fixtures | async)?.parentDescription}} : {{(res.fixtures | async)?.date | date:"dd MMM yyyy"}} - {{(res.fixtures | async)?.description}}</md-card-title>
+          <md-card-title *ngIf="res.fixtures | async as fixtures">{{fixtures.parentDescription}} : {{fixtures.date | date:"dd MMM yyyy"}} - {{fixtures.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [results]="zip(res.results) | async" ></ql-results-simple>
+            <ql-results-simple [list]="res.results" ></ql-results-simple>
           </md-card-content>
           
         </md-card>
@@ -60,7 +60,7 @@ import quizleague.web.util.rx._
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [fixtures]="zip(item.fixtures) | async" ></ql-fixtures-simple>
+            <ql-fixtures-simple [list]="item.fixtures" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>

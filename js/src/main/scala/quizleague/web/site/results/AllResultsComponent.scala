@@ -26,7 +26,7 @@ import quizleague.web.site.common.ComponentUtils
     <md-card *ngFor="let item of items | async">
       <md-card-title *ngIf="item.fixtures | async as fixtures">{{fixtures.parentDescription}} - {{fixtures.date | date:"d MMMM yyyy"}} : {{fixtures.description}}</md-card-title>
       <md-card-content>
-        <ql-results-simple [results]="zip(item.results) | async"></ql-results-simple>
+        <ql-results-simple [list]="item.results"></ql-results-simple>
       </md-card-content>
       </md-card>
     </div>

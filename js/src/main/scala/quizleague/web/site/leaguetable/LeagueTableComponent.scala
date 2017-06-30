@@ -3,11 +3,12 @@ package quizleague.web.site.leaguetable
 import angulate2.std._
 import quizleague.web.model.LeagueTable
 import rxjs.Observable
+import quizleague.web.util.rx.RefObservable
 
 @Component(
     selector = "ql-league-table",
     template = """
-      <table *ngIf="itemObs | async as item; else loading" >
+      <table *ngIf="table | async as item; else loading" >
         <caption>{{item.description}}</caption>
         <thead>
           <th>Pos.</th><th>Team</th><th>Pl.</th><th>W</th><th>D</th><th>L</th><th>S</th><th>Pts</th>
@@ -51,15 +52,16 @@ import rxjs.Observable
 )
 class LeagueTableComponent(
   service:LeagueTableService 
-) extends OnInit{
+){
   
   @Input
-  var table:LeagueTable = _
+  var table:Observable[LeagueTable] = _
+  
+  @Input
+  def ref_= (ref:RefObservable[LeagueTable]):Unit = table = ref.obs
   
   var itemObs:Observable[LeagueTable] = _
   
-  override def ngOnInit() = {
-    itemObs = service.get(table.id)
-  }
+ 
   
 }

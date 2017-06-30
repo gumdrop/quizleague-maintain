@@ -22,7 +22,7 @@ import quizleague.web.site.common.TitledComponent
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Last few results</md-card-subtitle>
       <md-card-content>
-        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
+        <ql-results-simple [results]="results" [inlineDetails]="true"></ql-results-simple>
       </md-card-content>
       <md-card-actions>
         <a md-button routerLink="results">Show All</a>
@@ -32,7 +32,7 @@ import quizleague.web.site.common.TitledComponent
       <md-card-title>Fixtures</md-card-title>
       <md-card-subtitle>Next few fixtures</md-card-subtitle>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="fixtures" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
       <md-card-actions>
         <a md-button routerLink="fixtures">Show All</a>

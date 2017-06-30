@@ -42,10 +42,15 @@ package object rx {
 
   }
 
-  def sort[T,U](list: js.Array[T], extract:T => RefObservable[U], sort:((T,U),(T,U)) => Int, take:Int = Integer.MAX_VALUE) = 
-    Observable.zip(list.map(t => extract(t).obs.map((u,i) => (t,u))):_*).map((x,i) => x.sort((a:(T,U),b:(T,U)) => sort(a,b)).take(take))
+  def sort1[T,U](list: js.Array[T], extract:T => RefObservable[U], sort:((T,U),(T,U)) => Int, take:Int = Integer.MAX_VALUE) = 
+    Observable.zip(list.map(t => extract(t).obs.map((u,i) => (t,u))):_*).map((x,i) => x.sort((a:(T,U),b:(T,U)) => sort(a,b)).map(_._1).take(take))
     
-  def sort[T](list: js.Array[RefObservable[T]], sort:((T,T) => Int)) = zip(list).map((l,i) => l.sort((x:T,y:T) => sort(x,y)))
+  def sort[T](list: js.Array[RefObservable[T]], sort:((T,T) => Int), take:Int = Integer.MAX_VALUE) = zip(list).map((l,i) => l.sort((x:T,y:T) => sort(x,y)).take(take))
+  
+  def sort2[T,U](list: js.Array[RefObservable[T]],extract:T => RefObservable[U], sortfn:((T,U),(T,U)) => Int, take:Int = Integer.MAX_VALUE) = 
+    zip(list).switchMap((l,i) => sort1(l,extract,sortfn,take))
+  
+  
   def filter[T](list: js.Array[RefObservable[T]], filter:(T => Boolean)) = zip(list).map((l,i) => l.filter(filter))
   
   

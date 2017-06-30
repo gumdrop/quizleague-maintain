@@ -38,6 +38,8 @@ class CalendarComponent(
   setTitle("Calendar")
 
   val itemObs = service.season.switchMap((s, i) => service.getEvents(s))
+  
+  itemObs.subscribe(l => log(l.size, "Size"))
 
 }
 
