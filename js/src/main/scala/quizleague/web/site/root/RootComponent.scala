@@ -13,7 +13,7 @@ import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
 import angulate2.std._
 import quizleague.web.mock.MockData
-import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
+import quizleague.web.site.common._
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
@@ -50,7 +50,7 @@ import quizleague.web.util.rx._
         <md-card *ngFor="let res of results | async">
           <md-card-title>{{(res.fixtures | async)?.parentDescription}} : {{(res.fixtures | async)?.date | date:"dd MMM yyyy"}} - {{(res.fixtures | async)?.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [results]="zipit(res.results) | async" ></ql-results-simple>
+            <ql-results-simple [results]="zip(res.results) | async" ></ql-results-simple>
           </md-card-content>
           
         </md-card>
@@ -60,7 +60,7 @@ import quizleague.web.util.rx._
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [fixtures]="zipit(item.fixtures) | async" ></ql-fixtures-simple>
+            <ql-fixtures-simple [fixtures]="zip(item.fixtures) | async" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>
@@ -86,7 +86,12 @@ class RootComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService,
     val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent with OnInit{
+    val seasonService:SeasonService) 
+      extends SectionComponent 
+      with NoMenuComponent 
+      with TitledComponent 
+      with ComponentUtils 
+      with OnInit{
   
   var tabIndex:Int = 0;
   val tabCount = 3;
@@ -116,6 +121,6 @@ class RootComponent(
     intervalId = setInterval(5000){tabIndex = if(tabIndex == tabCount - 1) 0 else tabIndex + 1}
   }
   
-  def zipit[T](list:js.Array[RefObservable[T]]) = zip(list)
+
 }
 

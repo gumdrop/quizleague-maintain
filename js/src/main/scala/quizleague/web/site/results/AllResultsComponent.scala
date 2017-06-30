@@ -17,15 +17,16 @@ import scalajs.js
 import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.util.Logging._
+import quizleague.web.site.common.ComponentUtils
 
 
 @Component(
   template = s"""
     <div fxLayout="column" fxLayoutGap="5px">  
     <md-card *ngFor="let item of items | async">
-      <md-card-title>{{item.fixtures.parentDescription}} - {{item.fixtures.date | date:"d MMMM yyyy"}} : {{item.fixtures.description}}</md-card-title>
+      <md-card-title *ngIf="item.fixtures | async as fixtures">{{fixtures.parentDescription}} - {{fixtures.date | date:"d MMMM yyyy"}} : {{fixtures.description}}</md-card-title>
       <md-card-content>
-        <ql-results-simple [results]="item.results"></ql-results-simple>
+        <ql-results-simple [results]="zip(item.results) | async"></ql-results-simple>
       </md-card-content>
       </md-card>
     </div>
@@ -37,7 +38,7 @@ class AllResultsComponent(
     seasonService:SeasonService,
     viewService:ResultsViewService,
     override val sideMenuService:SideMenuService,
-    override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
+    override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent with ComponentUtils{
   
   setTitle("All Results")
   

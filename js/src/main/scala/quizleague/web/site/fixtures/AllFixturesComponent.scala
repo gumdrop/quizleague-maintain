@@ -17,6 +17,7 @@ import quizleague.web.site.results.ResultsViewService
 import quizleague.web.model.Season
 import rxjs.Observable
 import quizleague.web.util.Logging._
+import quizleague.web.site.common.ComponentUtils
 
 @Component(
   template = s"""
@@ -24,7 +25,7 @@ import quizleague.web.util.Logging._
     <md-card *ngFor="let item of items | async">
       <md-card-title>{{item.parentDescription}} - {{item.date | date:"d MMMM yyyy"}} : {{item.description}}</md-card-title>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="item.fixtures"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="zip(item.fixtures) | async"></ql-fixtures-simple>
       </md-card-content>      
     </md-card>
   </div>
@@ -36,7 +37,7 @@ class AllFixturesComponent(
     seasonService:SeasonService,
     viewService:ResultsViewService,
     override val sideMenuService:SideMenuService,
-    override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
+    override val titleService:TitleService) extends SectionComponent with MenuComponent with ComponentUtils with TitledComponent{
   
   setTitle("All Fixtures")
   

@@ -14,7 +14,7 @@ import rxjs.Observable
         </thead>
         <tbody>
           <tr *ngFor="let row of item.rows">
-            <td>{{row.position}}</td><td><a routerLink="/team/{{(row.team | async).id}}">{{(row.team | async).shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+            <td>{{row.position}}</td><td><a routerLink="/team/{{(row.team | async)?.id}}">{{(row.team | async)?.shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>
         </tbody>
       </table>
