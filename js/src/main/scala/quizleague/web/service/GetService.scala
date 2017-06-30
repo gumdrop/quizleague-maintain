@@ -22,7 +22,7 @@ trait GetService[T] extends Logging {
   private[service] var items: Map[String, U] = Map()
   val requestOptions = js.Dynamic.literal()
 
-  def get(id: String)(implicit depth: Int = 1): Observable[T] = if (depth <= 0) getSparse(id) else items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u, i) => mapOut(u)))
+  def get(id: String)(implicit depth: Int = 1): Observable[T] = items.get(id).map(mapOut(_)).getOrElse(getFromHttp(id).switchMap((u, i) => mapOut(u)))
   def getRO(id:String):RefObservable[T] = RefObservable(id,get(id)(0))
   protected def getSparse(id: String): Observable[T] = items.get(id).map(u => Observable.of(mapOutSparse(u))).getOrElse(getFromHttp(id).map((u, i) => mapOutSparse(u)))
 
@@ -64,7 +64,7 @@ trait GetService[T] extends Logging {
   def ref(list:js.Array[RefObservable[T]]):List[Ref[U]] = list.map(ref _).toList
   def ref(ro:RefObservable[T]):Ref[U] = Ref(typeName,ro.id)
   
-  protected def mapOut(domain: U)(implicit depth: Int): Observable[T] = Observable.of(mapOutSparse(domain))
+  protected def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
   protected def mapOutSparse(domain: U): T
   protected def deser(json: String): U
   

@@ -95,7 +95,7 @@ class TeamViewService(
 
     seasonService.getFixtures(season).map(
       (r, i) => filter[Fixture](r.flatMap(_.fixtures), f => f.date >= now && (f.home.id == team.id || f.away.id == team.id))
-       .take(take))
+       .take(take)).concatAll()
   }
 }
 

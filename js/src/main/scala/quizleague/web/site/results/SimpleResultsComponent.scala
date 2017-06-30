@@ -9,6 +9,7 @@ import quizleague.web.model.Result
 @Component(
   selector = "ql-results-simple",
   template = s"""
+    size {{results?.length}}
     <table>
       <tr *ngFor="let result of results">
         <td *ngIf="inlineDetails" class="inline-details" >{{(result.fixture | async)?.date | date : "d MMM yyyy"}} : {{(result.fixture | async)?.parentDescription}} {{(result.fixture | async)?.description}}</td>

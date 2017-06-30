@@ -20,8 +20,6 @@ trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
   
   val textService:TextGetService
   
-  override protected def mapOut(globalText:Dom)(implicit depth:Int):Observable[GlobalText] = Observable.of(mapOutSparse(globalText))
-
   override protected def mapOutSparse(globalText:Dom):GlobalText =
    GlobalText(globalText.id, globalText.name, globalText.text.map {case (k,v) => TextEntry(k, Ref(v.typeName, v.id))}.toJSArray, globalText.retired)
   

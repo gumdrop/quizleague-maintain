@@ -41,7 +41,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
-  override protected def mapOut(comp: Dom)(implicit depth:Int) = doMapOut(comp)
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
@@ -55,11 +54,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import domain.{ SubsidiaryLeagueCompetition => DSC }
     import domain.{ SingletonCompetition => DSiC }  
    
-
-    def doMapOut(dom: Dom)(implicit depth:Int): Observable[Competition] = {
-      if (dom == null) Observable.of(null) else Observable.of(mapOutSparse(dom))
-   }
-
 
     def doMapOutSparse(dom: Dom):Competition = {
       if (dom == null) return null
