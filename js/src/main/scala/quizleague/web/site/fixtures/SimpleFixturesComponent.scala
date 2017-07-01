@@ -13,7 +13,10 @@ import rxjs.Observable
   template = s"""
     <table>
       <tr *ngFor="let fixture of fixtures | async">
-        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td><td>{{(fixture.home | async)?.shortName}}</td><td> - </td><td>{{(fixture.away | async)?.shortName}}</td> 
+        <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
+        <td>{{(fixture.home | async)?.shortName}}</td>
+        <td> - </td>
+        <td>{{(fixture.away | async)?.shortName}}</td> 
       </tr>
     </table>      
   """,

@@ -36,6 +36,7 @@ import quizleague.web.model._
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.util.rx._
 import scala.scalajs.js.WrappedArray
+import quizleague.web.util.Logging._
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, CommonAppModule, SeasonModule, CalendarRoutesModule, ResultsComponentsModule, FixturesComponentsModule],
@@ -80,22 +81,26 @@ class CalendarViewService(
       .map((cs,i) => 
         cs.filter(_.typeName != subsidiary.toString)
         .map(c => extract1[Results,Fixtures,EventWrapper](c.results, (r:Results) => r.fixtures)((r,f) => EventWrapper(r,f.date,c)))))
-    
+        
     val fixtures = flatten(comps.map((cs,i) => cs.map(c => zip(c.fixtures).map((f,i) => f.filter(_.date > now).map(EventWrapper(_,c))))))      
     
     val singletons = comps.map((cs,i) => cs.flatMap(singletonEvents _))
     
     val seasons = Observable.of(season.calendar.map(e => EventWrapper(e)))
 
-    Observable.zip(
+    val  res = Observable.zip(
         results,fixtures,singletons,seasons, 
-        (r:js.Array[EventWrapper],f:js.Array[EventWrapper],s:js.Array[EventWrapper],seas:js.Array[EventWrapper]) => 
-          (js.Array() ++ r ++ f ++ s ++ seas)
+        (r:js.Array[EventWrapper],f:js.Array[EventWrapper],s:js.Array[EventWrapper],seas:js.Array[EventWrapper]) => { 
+          val ret = (js.Array() ++ r /*++ f*/ ++ s ++ seas)
           .groupBy(_.date)
           .toIterable
           .map(t => new DateWrapper(t._1, t._2))
           .toJSArray
-          .sort((d1:DateWrapper,d2:DateWrapper) => d1.date compareTo d2.date))  
+          .sort((d1:DateWrapper,d2:DateWrapper) => d1.date compareTo d2.date)
+          ret
+        }      
+    )  
+    res
 
   }
   

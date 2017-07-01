@@ -13,10 +13,10 @@ import quizleague.web.site.common.ComponentUtils
 @Component(
   template = s"""
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card *ngFor="let results of sortit(item.results) | async">
-      <md-card-title>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</md-card-title>
+    <md-card *ngFor="let results of sortit(item?.results) | async">
+      <md-card-title>{{(results?.fixtures | async)?.date | date:"d MMM yyyy"}}</md-card-title>
       <md-card-content>
-          <ql-results-simple [list]="results.results" ></ql-results-simple>
+          <ql-results-simple [list]="results?.results" ></ql-results-simple>
       </md-card-content>
     </md-card>
   </div>
