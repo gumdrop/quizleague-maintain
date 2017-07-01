@@ -9,14 +9,15 @@ import scalajs.js
 import quizleague.web.model._
 import quizleague.web.util.rx._
 import quizleague.web.site.common.ComponentUtils
+import rxjs.Observable
 
 @Component(
   template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card *ngFor="let results of sortit(item?.results) | async">
-      <md-card-title>{{(results?.fixtures | async)?.date | date:"d MMM yyyy"}}</md-card-title>
+  <div fxLayout="column" fxLayoutGap="5px">
+    <md-card *ngFor="let results of sortedResults | async">
+      <md-card-title>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</md-card-title>
       <md-card-content>
-          <ql-results-simple [list]="results?.results" ></ql-results-simple>
+          <ql-results-simple [list]="results.results" ></ql-results-simple>
       </md-card-content>
     </md-card>
   </div>
@@ -39,7 +40,7 @@ class CompetitionResultsComponent(
 
   itemObs.subscribe(t => setTitle(s"${t.name} - All Results"))
   
-  def sortit(results:js.Array[RefObservable[Results]]) = sort2[Results,Fixtures](results, _.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date)
+  val sortedResults = itemObs.switchMap((c,i) => sort2[Results,Fixtures](c.results, _.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date))
 
 }
 

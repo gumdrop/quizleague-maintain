@@ -14,8 +14,8 @@ import quizleague.web.util.rx._
 
 @Component(
   template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card *ngFor="let fixtures of filter(item.fixtures) | async">
+  <div fxLayout="column" fxLayoutGap="5px">
+    <md-card *ngFor="let fixtures of filteredFixtures | async">
       <md-card-title>{{fixtures.date | date:"d MMM yyyy"}}</md-card-title>
       <md-card-content>
           <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
@@ -39,12 +39,11 @@ class CompetitionFixturesComponent(
   
   val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
 
-  itemObs.subscribe(t => setTitle(s"${t.name} - All Fixtures"))
+  val now = LocalDate.now().toString()
+  val filteredFixtures = itemObs.switchMap((c,i) => zip(c.fixtures).map((fs,i) => fs.filter(f => f.date > now)))
   
-  def filter(fixtures:js.Array[RefObservable[Fixtures]]) = {
-    val now = LocalDate.now().toString()
-    zip(fixtures).map((fs,i) => fs.filter(f => f.date > now))
-  }
+  itemObs.subscribe(t => setTitle(s"${t.name} - All Fixtures"))
+ 
 }
 
 @Component(
