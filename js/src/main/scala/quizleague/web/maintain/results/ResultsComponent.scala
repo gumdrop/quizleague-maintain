@@ -12,7 +12,7 @@ import TemplateElements._
 import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
-import quizleague.web.util.Logging
+import quizleague.web.util.rx._
 
 
 @Component(
@@ -24,14 +24,14 @@ import quizleague.web.util.Logging
        <div fxLayout="column">
         <h4>Result List</h4>
          <div fxLayout="column">
-          <div *ngFor="let result of item.results;let i = index" fxLayout="column">
-              <div fxLayout="row">
+          <div *ngFor="let r of item.results;let i = index" fxLayout="column">
+              <div fxLayout="row" *ngIf="r | async as result">
                 <button md-icon-button type="button" (click)="removeResult(result)" ><md-icon class="md-24">delete</md-icon></button>
-                <md-input-container>
-                  <input mdInput placeholder="{{result.fixture.home.name}}" [(ngModel)]="result.homeScore" name="home{{i}}" type="number">
+                <md-input-container *ngIf="result.fixture | async as fixture">
+                  <input mdInput placeholder="{{(fixture.home | async)?.name}}" [(ngModel)]="result.homeScore" name="home{{i}}" type="number">
                 </md-input-container>
-                <md-input-container>
-                  <input mdInput placeholder="{{result.fixture.away.name}}" [(ngModel)]="result.awayScore" name="away{{i}}" type="number">
+                <md-input-container *ngIf="result.fixture | async as fixture">
+                  <input mdInput placeholder="{{(fixture.away | async)?.name}}" [(ngModel)]="result.awayScore" name="away{{i}}" type="number">
                 </md-input-container>
                 <button md-icon-button type="button" (click)="toggleNote(result)" ><md-icon class="md-24">note</md-icon></button>
                 <button md-icon-button type="button" (click)="showReports(result)" ><md-icon class="md-24">report</md-icon></button>
@@ -56,10 +56,12 @@ class ResultsComponent(
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
-    extends ItemComponent[Results] with Logging{
+    extends ItemComponent[Results]{
   
   
-    val showNotes = js.Array[Result]()    
+    val showNotes = js.Array[Result]()  
+    
+    def results() = zip(item.results)
   
   
     override def cancel():Unit = location.back()
