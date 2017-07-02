@@ -32,7 +32,7 @@ trait TeamGetService extends GetService[Team] with TeamNames {
 
   override def deser(jsonString: String) = decode[DomTeam](jsonString).merge.asInstanceOf[DomTeam]
 
-  def listVenues() = venueService.list()
+  def listVenues() = venueService.list().map((l,i) => l.map(v => venueService.refObs(v.id)))
   def listUsers() = userService.list()
 }
 
@@ -44,7 +44,7 @@ trait TeamPutService extends PutService[Team] with TeamGetService {
 
   override protected def mapIn(team: Team) = DomTeam(team.id, team.name, team.shortName, venueService.ref(team.venue.id), textService.ref(team.text.id), team.users.map(u => userService.ref(u.id)).toList, team.retired)
   override protected def make() = DomTeam(newId(), "", "", null, textService.getRef(textService.instance()))
-  override def save(team: Team) = { textService.save(team.text); super.save(team) }
+  override def save(team: Team) = { log(team.toString(), "team");textService.save(team.text);log(team.venue,"team venue");super.save(team) }
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
   override def ser(item: DomTeam) = item.asJson.noSpaces

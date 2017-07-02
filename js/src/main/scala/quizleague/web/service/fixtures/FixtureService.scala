@@ -48,7 +48,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   def instance(fx:Fixtures, home:Team, away:Team, venue:Venue) = {
     val dom = Dom(newId,fx.description, fx.parentDescription,venueService.getRef(venue),teamService.getRef(home),teamService.getRef(away),fx.date,fx.start,fx.duration)
-    mapOut(dom)
+    mapOutSparse(dom)
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._

@@ -19,8 +19,9 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.model.Team
 import quizleague.web.maintain.venue.VenueService
 import rxjs.Observable
-import rxjs.Observable.zip
+import rxjs.Observable
 import quizleague.web.maintain.util.TeamManager
+import quizleague.web.util.rx._
 
 @Component(
   template = s"""
@@ -60,9 +61,9 @@ import quizleague.web.maintain.util.TeamManager
           <button md-icon-button type="button" (click)="addFixture()" [disabled]="!(homeTeam && awayTeam && venue)"><md-icon class="md-24">add</md-icon></button>
          </div>
          <div fxLayout="column">
-          <div *ngFor="let fixture of item.fixtures" fxLayout="row">
-            <button md-icon-button type="button" (click)="removeFixture(fixture)" ><md-icon class="md-24">delete</md-icon></button>
-            <span>{{fixture.home.name}} - {{fixture.away.name}} @ {{fixture.venue.name}}</span>
+          <div *ngFor="let f of item.fixtures" fxLayout="row">
+            <button *ngIf="f | async as fixture" md-icon-button type="button" (click)="removeFixture(fixture)" ><md-icon class="md-24">delete</md-icon></button>
+            <span *ngIf="f | async as fixture">{{(fixture.home | async)?.name}} - {{(fixture.away | async)?.name}} @ {{(fixture.venue | async)?.name}}</span>
           </div>
          </div>
         </div>      
@@ -92,7 +93,8 @@ class FixturesComponent(
   var venues: js.Array[Venue] = _
 
   override def init(): Unit = {
-
+    super.init()
+    
     route.params
       .switchMap((params, i) => competitionService.get(params("competitionId")))
       .subscribe(comp = _)
@@ -101,13 +103,13 @@ class FixturesComponent(
 
     Observable.zip(
       loadItem()
-        .switchMap((f, i) => zip(f.fixtures.map(_.obs): _*))
+        .switchMap((f, i) => zip(f.fixtures))
         .switchMap((f, i) => f.flatMap(x => js.Array(x.home, x.away))),
       teamService.list(),
       (fixtureTeams: js.Array[Team], teams: js.Array[Team]) => {
         teamManager = new TeamManager(teams)
         fixtureTeams.foreach(teamManager.take(_))
-      })
+      }).subscribe(x => Unit)
 
   }
 
@@ -117,19 +119,21 @@ class FixturesComponent(
     location.back()
   }
 
-  def unusedTeams(other: Team) = teamManager.unusedTeams(other)
+  def unusedTeams(other: Team) = if(teamManager == null) null else teamManager.unusedTeams(other)
 
   def setVenue(team: Team) = {
-    //teamService.get(team.id).subscribe(x => venue = x.venue)
+    teamService.get(team.id).switchMap((t,i) => t.venue.obs).subscribe(venue = _)
   }
 
   def addFixture() = {
-    fixtureService.instance(
+    val f = fixtureService.instance(
       item,
       teamManager.take(homeTeam),
       teamManager.take(awayTeam),
-      venue).subscribe(i =>
-        item.fixtures +++= (i.id, i))
+      venue)
+      
+      item.fixtures +++= (f.id, f)
+      fixtureService.cache(f)
 
     homeTeam = null
     awayTeam = null

@@ -45,7 +45,7 @@ lazy val quizleague = crossProject.in(file(".")).
   ).
   jsSettings(
     name := "quizleague-js",
-    ngBootstrap := Some("quizleague.web.site.AppModule")
+    ngBootstrap := Some("quizleague.web.maintain.AppModule")
   )
 
 lazy val server = quizleague.jvm
