@@ -6,15 +6,18 @@ import angulate2.std._
 import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.global.ApplicationContextService
 import scalajs.js
-import quizleague.web.model.Results
+import quizleague.web.model._
+import quizleague.web.util.rx._
+import quizleague.web.site.common.ComponentUtils
+import rxjs.Observable
 
 @Component(
   template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card *ngFor="let results of sort(item.results)">
-      <md-card-title>{{results.fixtures.date | date:"d MMM yyyy"}}</md-card-title>
+  <div fxLayout="column" fxLayoutGap="5px">
+    <md-card *ngFor="let results of sortedResults | async">
+      <md-card-title>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</md-card-title>
       <md-card-content>
-          <ql-results-simple [results]="results.results" ></ql-results-simple>
+          <ql-results-simple [list]="results.results" ></ql-results-simple>
       </md-card-content>
     </md-card>
   </div>
@@ -30,13 +33,14 @@ class CompetitionResultsComponent(
   override val sideMenuService: SideMenuService)
     extends SectionComponent
     with MenuComponent
-    with TitledComponent{
+    with TitledComponent
+    with ComponentUtils{
   
-  val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
+  val itemObs = route.params.switchMap((params, i) => service.get(params("id")))
 
   itemObs.subscribe(t => setTitle(s"${t.name} - All Results"))
   
-  def sort(results:js.Array[Results]) = results.sort((r1:Results,r2:Results) => r2.fixtures.date compareTo r1.fixtures.date)
+  val sortedResults = itemObs.switchMap((c,i) => sort2[Results,Fixtures](c.results, _.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date))
 
 }
 

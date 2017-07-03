@@ -4,6 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
@@ -45,7 +46,8 @@ import quizleague.web.maintain.competition.CompetitionService
           <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
         </div>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let comp of item.competitions" ><button (click)="editCompetition(comp)" type="button">{{comp.name}}</button>
+          <md-chip *ngFor="let comp of item.competitions" >
+            <button *ngIf="comp | async as c" (click)="editCompetition(c)" type="button">{{c.name}}</button>
           </md-chip>
         </md-chip-list>
 
@@ -67,7 +69,7 @@ class SeasonComponent(
   
     def addCompetition(typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      item.competitions += comp
+      item.competitions +++= (comp.id,comp)
       editCompetition(comp)
     }
   

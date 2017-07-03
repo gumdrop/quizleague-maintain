@@ -14,7 +14,6 @@ import quizleague.web.names.TextNames
 trait TextGetService extends GetService[Text] with TextNames {
     import io.circe._, io.circe.generic.auto._, io.circe.parser._
   override type U = Dom
-  override protected def mapOut(text: Dom)(implicit depth:Int): Observable[Text] = Observable.of(mapOutSparse(text))
   override protected def mapOutSparse(text: Dom): Text = Text(text.id, text.text, text.mimeType)
   protected def dec(json:String) = decode[U](json)
   protected def decList(json:String) = decode[List[U]](json)

@@ -34,33 +34,19 @@ import quizleague.util.json.codecs.ScalaTimeCodecs._
 
 trait ResultGetService extends GetService[Model] with ResultNames {
   override type U = Dom
-
-
   
   val userService:UserGetService
   val fixtureService:FixtureGetService
   val textService:TextGetService
   val teamService:TeamGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,null,dom.homeScore, dom.awayScore, null, dom.note, !dom.reports.isEmpty,js.Array())
-  override protected def mapOut(dom: Dom)(implicit depth:Int) = Observable.zip(
-    child(dom.fixture, fixtureService),
-    child(dom.submitter.getOrElse(null),userService),
-    mapReports(dom.reports),
-    (fixture:Fixture,submitter:User, reports:js.Array[Report]) => Model(dom.id, fixture, dom.homeScore, dom.awayScore, submitter, dom.note, !dom.reports.isEmpty, reports)
-  )
-  
-    override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixture, fixtureService),dom.homeScore, dom.awayScore, refObs(dom.submitter, userService), dom.note, !dom.reports.isEmpty,mapReports(dom.reports))
 
-  private def mapReports(reports:List[DomReport])(implicit depth:Int):Observable[js.Array[Report]] = {
-    if(reports.isEmpty)
-      Observable.of(js.Array())
-    else
-      Observable.zip(reports.map(r => Observable.zip(child(r.team, teamService), child(r.text,textService), (team:Team,text:Text) => Report(team,text))) : _*)
-  }
+  private def mapReports(reports:List[DomReport]) =  reports.map(r => Report(refObs(r.team, teamService),refObs(r.text, textService))).toJSArray
+   
   
-  
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 
 }
 
@@ -73,12 +59,12 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
   
   override protected def mapIn(model: Model) = Dom(
       model.id, 
-      fixtureService.getRef(model.fixture),
+      fixtureService.ref(model.fixture),
       model.homeScore, 
       model.awayScore, 
-      Option(userService.getRef(model.submitter)),
+      userService.ref(model.submitter),
       model.note,
-      model.reports.map(r => DomReport(teamService.getRef(r.team), textService.getRef(r.text))).toList
+      model.reports.map(r => DomReport(teamService.ref(r.team), textService.ref(r.text))).toList
       )
 
   override protected def make() = ???

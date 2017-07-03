@@ -15,7 +15,6 @@ import quizleague.web.names.UserNames
 trait UserGetService extends GetService[User] with UserNames {
   override type U = DomUser
 
-  override protected def mapOut(user: DomUser)(implicit depth:Int): Observable[User] = Observable.of(mapOutSparse(user))
   override protected def mapOutSparse(user: DomUser): User =
     User(user.id, user.name, user.email, user.retired)
 

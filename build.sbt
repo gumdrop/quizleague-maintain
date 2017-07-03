@@ -13,6 +13,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   resolvers += Resolver.sonatypeRepo("snapshots")
+  
 )
 
 lazy val root = project.in(file(".")).
@@ -27,7 +28,6 @@ lazy val quizleague = crossProject.in(file(".")).
   settings(commonSettings: _*).
   settings( 
     name := "quizleague",
-    ngBootstrap := Some("quizleague.web.site.AppModule"),
     libraryDependencies ++= Seq(
 	  "io.circe" %%% "circe-core",
 	  "io.circe" %%% "circe-generic",
@@ -49,6 +49,7 @@ lazy val quizleague = crossProject.in(file(".")).
   ).
   jsSettings(
     name := "quizleague-js",
+    ngBootstrap := Some("quizleague.web.maintain.AppModule"),
     npmDependencies in Compile += "@angular/common" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/compiler" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/core" -> "~4.0.0",

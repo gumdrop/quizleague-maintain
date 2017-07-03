@@ -16,6 +16,8 @@ import quizleague.web.util.Logging
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.model.LeagueCompetition
 import quizleague.web.names.LeagueTableNames
+import quizleague.web.maintain.component.ItemComponent._
+import quizleague.web.util.rx._
 
 
 
@@ -44,16 +46,19 @@ class LeagueTableListComponent(
   
   var comp:Competition = _
   
-  def sort(a:LeagueTable,b:LeagueTable) = a.description compareTo b.description
+  def sortit(a:LeagueTable,b:LeagueTable) = a.description compareTo b.description
   
-  def init(): Unit = route.params
-    .switchMap( (params,i) => competitionService.get(params("competitionId")))
-    .subscribe(x => {comp = x;items = comp.tables.sort(sort _)})
+  def init(): Unit = {
+    val comps = route.params.switchMap( (params,i) => competitionService.get(params("competitionId")))
+    comps.subscribe(comp = _)
+    comps.switchMap((x,i) => sort(x.tables,sortit _)).subscribe((x:js.Array[LeagueTable]) => items = x)
+  }
+    
     
   override def addNew():Unit = {
     val item = log(service.instance(), "new table")
     service.cache(item)
-    comp.tables.push(item)
+    comp.tables +++= (item.id,item)
     competitionService.cache(comp)
     router.navigateRelativeTo(route,service.getId(item))
   }

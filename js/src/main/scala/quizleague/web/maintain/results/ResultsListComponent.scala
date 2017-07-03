@@ -15,15 +15,17 @@ import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.names.ResultsNames
+import quizleague.web.util.rx._
+import rxjs.Observable
 
 
 
 @Component(
   template = s"""
   <div>
-    <h2>{{comp.name}} Results List</h2>
+    <h2>{{(comp | async).name}} Results List</h2>
     <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" mdButton>{{item.fixtures.date}}</a>
+      <a routerLink="{{item.id}}" mdButton>{{(item.fixtures | async).date}}</a>
     </div>
    $backFAB
   </div>
@@ -40,13 +42,19 @@ class ResultsListComponent(
   
   override def ngOnInit() = init()
   
-  var comp:Competition = _
+  var comp:Observable[Competition] = _
   
-  def sort(a:Results,b:Results) = a.fixtures.date compareTo b.fixtures.date
+  def sort(a:(Results,Fixtures),b:(Results,Fixtures)) = a._2.date compareTo b._2.date
   
-  def init(): Unit = route.params
-    .switchMap( (params,i) => competitionService.get(params("competitionId"))(2))
-    .subscribe(x => {items = x.results.sort(sort _);comp = x})
+  def init(): Unit = {
+    comp = route.params.switchMap( (params,i) => competitionService.get(params("competitionId")))
+    
+    comp.switchMap((c,i) => c.results)
+    .switchMap((rs,i) => Observable.zip(rs.map(r => r.fixtures.obs.map((f,i) => (r,f))):_*)) 
+    .subscribe(x => {items = x.sort(sort _).map(_._1)})
+  }
+    
+
     
   def back() = location.back()
    

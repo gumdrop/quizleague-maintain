@@ -24,7 +24,7 @@ import angulate2.core.OnInit
 )
 @classModeScala
 class TeamTitleComponent(
-    route:ActivatedRoute,
+    route:ActivatedRoute,  
     service:TeamService){  
   
   val itemObs = route.params.switchMap((params,i) => service.get(params("id")))

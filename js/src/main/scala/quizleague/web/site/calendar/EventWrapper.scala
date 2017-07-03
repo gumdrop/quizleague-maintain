@@ -28,9 +28,8 @@ class CompetitionEventWrapper(val event:Event, val competition:Competition) exte
 }
 
 @JSExportAll
-class ResultsEventWrapper(@JSExport val results:Results, val competition:Competition) extends EventWrapper{
+class ResultsEventWrapper(@JSExport val results:Results, override val date:String,val competition:Competition) extends EventWrapper{
   override val eventType = "results"
-  override val date = results.fixtures.date
 }
 
 @JSExportAll
@@ -41,9 +40,9 @@ class FixturesEventWrapper(val fixtures:Fixtures, val competition:Competition) e
 
 object EventWrapper{
   
-  def apply(event:Event, competition:Competition) = new CompetitionEventWrapper(event, competition)
-  def apply(event:CalendarEvent) = new CalendarEventWrapper(event)
-  def apply(results:Results, competition:Competition) = new ResultsEventWrapper(results, competition)
-  def apply(fixtures:Fixtures, competition:Competition) = new FixturesEventWrapper(fixtures, competition)
+  def apply(event:Event, competition:Competition):EventWrapper = new CompetitionEventWrapper(event, competition)
+  def apply(event:CalendarEvent):EventWrapper  = new CalendarEventWrapper(event)
+  def apply(results:Results, date:String, competition:Competition):EventWrapper  = new ResultsEventWrapper(results,date, competition)
+  def apply(fixtures:Fixtures, competition:Competition):EventWrapper = new FixturesEventWrapper(fixtures, competition)
   
 }

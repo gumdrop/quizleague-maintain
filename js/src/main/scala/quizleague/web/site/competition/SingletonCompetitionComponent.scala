@@ -12,7 +12,7 @@ import quizleague.web.site.global.ApplicationContextService
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="10px">
     <ql-named-text [name]="item.textName"></ql-named-text>
     <md-card>
-      <div><b>This season's competition will take place at <a routerLink="/venue/{{item.event.venue.id}}">{{item.event.venue.name}}</a> on {{item.event.date | date:"d MMMM yyyy"}} starting at {{formatTime(item.event) | date:"h:mm a"}}</b> </div>
+      <div><b>This season's competition will take place at <a routerLink="/venue/{{item.event.venue.id}}">{{(item.event.venue | async)?.name}}</a> on {{item.event.date | date:"d MMMM yyyy"}} starting at {{formatTime(item.event) | date:"h:mm a"}}</b> </div>
       <br>
       <ql-text [textId]="item.text.id"></ql-text>
     </md-card> 

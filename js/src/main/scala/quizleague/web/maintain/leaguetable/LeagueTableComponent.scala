@@ -12,7 +12,7 @@ import TemplateElements._
 import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
-import quizleague.web.util.Logging
+import quizleague.web.util.Logging._
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
 
@@ -54,7 +54,7 @@ import quizleague.web.maintain.util.TeamManager
                 <td>
                   <button md-icon-button type="button" (click)="removeRow(row)" ><md-icon class="md-24">delete</md-icon></button>
                 </td>
-                <td>{{row.team.name}}</td>
+                <td>{{(row.team | async).name}}</td>
                 <td>
                   <md-input-container>
                     <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4">
@@ -109,16 +109,15 @@ class LeagueTableComponent(
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
-    extends ItemComponent[LeagueTable] with Logging{
+    extends ItemComponent[LeagueTable]{
   
     var teamManager:TeamManager =_
   
     override def cancel():Unit = location.back()
     override def init() = {
       
-      log(item, "start init")
-      
-      loadItem().subscribe(x => item = log(x, "in init"))
+      loadItem().subscribe(item = _)
+      log(item, "table")
       teamService.list().subscribe(x => teamManager = new TeamManager(x))
 
     }

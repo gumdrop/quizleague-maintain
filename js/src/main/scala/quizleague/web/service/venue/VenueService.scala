@@ -11,7 +11,6 @@ import io.circe._,  io.circe.generic.auto._,io.circe.parser._
 
 trait VenueGetService extends GetService[Venue] with VenueNames {
   override type U = DomVenue
-  override protected def mapOut(venue: DomVenue)(implicit depth:Int): Observable[Venue] = Observable.of(mapOutSparse(venue))
   override protected def mapOutSparse(venue: DomVenue): Venue = {
     Venue(venue.id, venue.name, venue.address, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null), venue.imageURL.getOrElse(null), venue.retired)
   }

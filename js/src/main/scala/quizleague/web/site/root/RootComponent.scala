@@ -13,7 +13,7 @@ import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
 import angulate2.std._
 import quizleague.web.mock.MockData
-import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
+import quizleague.web.site.common._
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
@@ -33,6 +33,7 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import org.threeten.bp.LocalDate
+import quizleague.web.util.rx._
 
 
 @Component(
@@ -47,9 +48,9 @@ import org.threeten.bp.LocalDate
       </md-tab>
       <md-tab label="Latest Results">
         <md-card *ngFor="let res of results | async">
-          <md-card-title>{{res.fixtures.parentDescription}} : {{res.fixtures.date | date:"dd MMM yyyy"}} - {{res.fixtures.description}}</md-card-title>
+          <md-card-title *ngIf="res.fixtures | async as fixtures">{{fixtures.parentDescription}} : {{fixtures.date | date:"dd MMM yyyy"}} - {{fixtures.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [results]="res.results" ></ql-results-simple>
+            <ql-results-simple [list]="res.results" ></ql-results-simple>
           </md-card-content>
           
         </md-card>
@@ -59,7 +60,7 @@ import org.threeten.bp.LocalDate
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [fixtures]="item.fixtures" ></ql-fixtures-simple>
+            <ql-fixtures-simple [list]="item.fixtures" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>
@@ -69,7 +70,7 @@ import org.threeten.bp.LocalDate
     </md-tab-group>
     </div>
       <div class="text_area">
-        <ql-named-text name="front-page-suppl"></ql-named-text>
+        <ql-named-text name="front_page_main"></ql-named-text>
         <br>
         <ql-text [textId]="(currentSeason | async)?.text.id"></ql-text>
       </div>
@@ -85,23 +86,32 @@ class RootComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService,
     val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent with OnInit{
+    val seasonService:SeasonService) 
+      extends SectionComponent 
+      with NoMenuComponent 
+      with TitledComponent 
+      with ComponentUtils 
+      with OnInit{
   
   var tabIndex:Int = 0;
   val tabCount = 3;
   var intervalId:SetIntervalHandle = null
   
   setTitle("Home")
-  val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
+  val league = applicationContextService.get
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getLeagueCompetition(s))
   val results = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getResults(s))
     .map((r,i) => r.take(1))
   val fixtures = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getFixtures(s))
     .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
     .map((f,i) => f.take(1))
     
-  val currentSeason = applicationContextService.get.map((ac,i) => ac.currentSeason)
+  val currentSeason = applicationContextService.get.switchMap((ac,i) => ac.currentSeason.obs)
   
   def tabSelected(){
     clearInterval(intervalId)

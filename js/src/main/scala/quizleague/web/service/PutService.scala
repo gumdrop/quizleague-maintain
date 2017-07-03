@@ -4,6 +4,8 @@ import scalajs.js
 import quizleague.web.util.UUID
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
+import rxjs.Observable
+import quizleague.web.util.rx.RefObservable
 
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
@@ -11,6 +13,8 @@ trait PutService[T] {
   def cache(item: T) = add(mapIn(item))
   
   def save(item: T):Unit = save(mapIn(item))
+  
+  def save(obs:RefObservable[T]):Unit = obs.subscribe(save(_))
   
   protected def save(item:U):Unit = saveDom(item)
   

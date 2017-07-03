@@ -20,7 +20,7 @@ import quizleague.web.site.common.TitledComponent
     <md-card>
       <md-card-title>All Fixtures</md-card-title>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="fixtures" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
     </md-card>
   </div>

@@ -16,7 +16,7 @@ import scala.scalajs.js.annotation.JSExport
     <md-card>
       <md-card-title>All Results</md-card-title>
       <md-card-content>
-        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
+        <ql-results-simple [results]="results" [inlineDetails]="true"></ql-results-simple>
       </md-card-content>
     </md-card>
   </div>
