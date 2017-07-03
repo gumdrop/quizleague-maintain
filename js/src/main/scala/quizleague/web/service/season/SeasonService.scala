@@ -22,6 +22,8 @@ import quizleague.web.service.competition._
 import quizleague.web.names.SeasonNames
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
+import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._
 
 trait SeasonGetService extends GetService[Season] with SeasonNames {
   override type U = Dom

@@ -40,7 +40,7 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   val textService:TextGetService
   val teamService:TeamGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixture, fixtureService),dom.homeScore, dom.awayScore, refObs(dom.submitter, userService), dom.note, !dom.reports.isEmpty,mapReports(dom.reports))
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixture, fixtureService),dom.homeScore, dom.awayScore, userService.refObs(dom.submitter), dom.note, !dom.reports.isEmpty,mapReports(dom.reports))
 
   private def mapReports(reports:List[DomReport]) =  reports.map(r => Report(refObs(r.team, teamService),refObs(r.text, textService))).toJSArray
    
@@ -62,7 +62,7 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
       fixtureService.ref(model.fixture),
       model.homeScore, 
       model.awayScore, 
-      userService.ref(model.submitter),
+      Option(userService.ref(model.submitter)),
       model.note,
       model.reports.map(r => DomReport(teamService.ref(r.team), textService.ref(r.text))).toList
       )

@@ -24,8 +24,8 @@ import quizleague.web.maintain.competition.CompetitionModule
 import angular.core.BrowserAnimationsModule
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule] :+
-  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
+  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule],
+  //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
   declarations = @@[AppComponent,RootComponent],
   bootstrap = @@[AppComponent]
 )

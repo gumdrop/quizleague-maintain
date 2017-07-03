@@ -51,10 +51,6 @@ trait GetService[T] extends Logging {
 
   private[service] def getDom(id: String) = items(id)
 
- 
-
-  private def fromJson(jsonString: String): U = if (jsonString == null) null.asInstanceOf[U] else deser(jsonString)
-
   final def refObs(id:String):RefObservable[T] = RefObservable(id, get(id))
   final def refObs(opt:Option[Ref[U]]):RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs[U,T](ref,this))
   protected final def refObs[A <: Entity, B](ref: Ref[A], service: GetService[B]):RefObservable[B] = RefObservable(ref, service.get(ref.id))
@@ -62,11 +58,11 @@ trait GetService[T] extends Logging {
   
   def ref(id:String):Ref[U] = Ref(typeName,id)
   def ref(list:js.Array[RefObservable[T]]):List[Ref[U]] = list.map(ref _).toList
-  def ref(ro:RefObservable[T]):Ref[U] = Ref(typeName,ro.id)
+  def ref(ro:RefObservable[T]):Ref[U] = if(ro == null) null else Ref(typeName,ro.id)
   
   protected def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
   protected def mapOutSparse(domain: U): T
-  protected def deser(json: String): U
+  
 
 }
 

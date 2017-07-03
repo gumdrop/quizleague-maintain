@@ -44,7 +44,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   
   override val fixtureService:FixturePutService
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures))
-  override protected def make() = Dom(newId, "","",LocalDate.now(),LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+  override protected def make() = Dom(newId, "","",LocalDate.now,LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
     
@@ -55,7 +55,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
     add(
     competition match {
       case c:LeagueCompetition => Dom(newId, "", c.name, findNextDate(c), c.startTime, c.duration, List())
-      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now(),c.startTime,c.duration,List())
+      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now,c.startTime,c.duration,List())
       case _ => null
     })
   }

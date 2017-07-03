@@ -44,6 +44,7 @@ s.quizleague.web.site.fixtures.FixturesComponentsModule = __decorate(s.quizleagu
 
 s.quizleague.web.maintain.user.UserRoutesModule = __decorate(s.quizleague.web.maintain.user.UserRoutesModule_()._decorators,s.quizleague.web.maintain.user.UserRoutesModule);
 __decorate([core.Input(),__metadata('design:type',Object)],s.quizleague.web.site.fixtures.SimpleFixturesComponent.prototype,'fixtures',null);
+__decorate([core.Input(),],s.quizleague.web.site.fixtures.SimpleFixturesComponent.prototype,'list',null);
 __decorate([core.Input(),__metadata('design:type',Object)],s.quizleague.web.site.fixtures.SimpleFixturesComponent.prototype,'inlineDetails',null);
 s.quizleague.web.site.fixtures.SimpleFixturesComponent = __decorate(s.quizleague.web.site.fixtures.SimpleFixturesComponent_()._decorators,s.quizleague.web.site.fixtures.SimpleFixturesComponent);
 __decorate([core.Input(),__metadata('design:type',Object)],s.quizleague.web.site.season.SeasonSelectComponent.prototype,'currentSeason',null);
@@ -235,6 +236,7 @@ s.quizleague.web.site.calendar.CalendarEventComponent = __decorate(s.quizleague.
 __decorate([core.Input(),__metadata('design:type',String)],s.quizleague.web.site.text.TextComponent.prototype,'textId',null);
 s.quizleague.web.site.text.TextComponent = __decorate(s.quizleague.web.site.text.TextComponent_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.site.text.TextService])]),s.quizleague.web.site.text.TextComponent);
 __decorate([core.Input('results'),__metadata('design:type',Object)],s.quizleague.web.site.results.SimpleResultsComponent.prototype,'results',null);
+__decorate([core.Input(),],s.quizleague.web.site.results.SimpleResultsComponent.prototype,'list',null);
 __decorate([core.Input(),__metadata('design:type',Object)],s.quizleague.web.site.results.SimpleResultsComponent.prototype,'inlineDetails',null);
 s.quizleague.web.site.results.SimpleResultsComponent = __decorate(s.quizleague.web.site.results.SimpleResultsComponent_()._decorators,s.quizleague.web.site.results.SimpleResultsComponent);
 
@@ -276,7 +278,7 @@ s.quizleague.web.site.venue.VenuesComponent = __decorate(s.quizleague.web.site.v
 
 s.quizleague.web.site.fixtures.AllFixturesTitleComponent = __decorate(s.quizleague.web.site.fixtures.AllFixturesTitleComponent_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.site.results.ResultsViewService])]),s.quizleague.web.site.fixtures.AllFixturesTitleComponent);
 
-s.quizleague.web.maintain.team.TeamComponent = __decorate(s.quizleague.web.maintain.team.TeamComponent_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.maintain.team.TeamService,require('@angular/router').ActivatedRoute,require('@angular/common').Location,require('@angular/router').Router])]),s.quizleague.web.maintain.team.TeamComponent);
+s.quizleague.web.maintain.team.TeamComponent = __decorate(s.quizleague.web.maintain.team.TeamComponent_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.maintain.team.TeamService,require('@angular/router').ActivatedRoute,require('@angular/common').Location,require('@angular/router').Router,s.quizleague.web.maintain.venue.VenueService])]),s.quizleague.web.maintain.team.TeamComponent);
 
 s.quizleague.web.site.results.ReportTitleComponent = __decorate(s.quizleague.web.site.results.ReportTitleComponent_()._decorators.concat([__metadata('design:paramtypes',[require('@angular/router').ActivatedRoute,s.quizleague.web.site.results.ResultService])]),s.quizleague.web.site.results.ReportTitleComponent);
 
@@ -296,10 +298,11 @@ s.quizleague.web.site.venue.VenueComponent = __decorate(s.quizleague.web.site.ve
 
 s.quizleague.web.site.calendar.FixturesEventComponent = __decorate(s.quizleague.web.site.calendar.FixturesEventComponent_()._decorators,s.quizleague.web.site.calendar.FixturesEventComponent);
 
-s.quizleague.web.site.calendar.CalendarViewService = __decorate(s.quizleague.web.site.calendar.CalendarViewService_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.site.global.ApplicationContextService,s.quizleague.web.site.season.SeasonService])]),s.quizleague.web.site.calendar.CalendarViewService);
+s.quizleague.web.site.calendar.CalendarViewService = __decorate(s.quizleague.web.site.calendar.CalendarViewService_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.site.global.ApplicationContextService,s.quizleague.web.site.season.SeasonService,s.quizleague.web.site.competition.CompetitionService])]),s.quizleague.web.site.calendar.CalendarViewService);
 
 s.quizleague.web.maintain.team.TeamModule = __decorate(s.quizleague.web.maintain.team.TeamModule_()._decorators,s.quizleague.web.maintain.team.TeamModule);
 __decorate([core.Input(),__metadata('design:type',Object)],s.quizleague.web.site.leaguetable.LeagueTableComponent.prototype,'table',null);
+__decorate([core.Input(),],s.quizleague.web.site.leaguetable.LeagueTableComponent.prototype,'ref',null);
 s.quizleague.web.site.leaguetable.LeagueTableComponent = __decorate(s.quizleague.web.site.leaguetable.LeagueTableComponent_()._decorators.concat([__metadata('design:paramtypes',[s.quizleague.web.site.leaguetable.LeagueTableService])]),s.quizleague.web.site.leaguetable.LeagueTableComponent);
 
 s.quizleague.web.site.results.ResultsComponentsModule = __decorate(s.quizleague.web.site.results.ResultsComponentsModule_()._decorators,s.quizleague.web.site.results.ResultsComponentsModule);

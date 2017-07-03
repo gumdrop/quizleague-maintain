@@ -37,10 +37,8 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 
   override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,refObs(dom.venue, venueService),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration)
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
   override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]]
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait FixturePutService extends PutService[Fixture] with FixtureGetService with DirtyListService[Model]{
