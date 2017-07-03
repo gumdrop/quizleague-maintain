@@ -116,9 +116,7 @@ class LeagueTableComponent(
     override def cancel():Unit = location.back()
     override def init() = {
       
-      log(item, "start init")
-      
-      loadItem().subscribe(x => item = log(x, "in init"))
+      loadItem().subscribe(item = _)
       teamService.list().subscribe(x => teamManager = new TeamManager(x))
 
     }
