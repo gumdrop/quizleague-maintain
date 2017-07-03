@@ -7,3 +7,4 @@ node_modules/
 .settings/
 .cache-main
 *.log
+*.sjsir
