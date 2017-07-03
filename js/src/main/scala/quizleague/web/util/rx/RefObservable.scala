@@ -21,6 +21,8 @@ class RefObservable[+T](val id: String, val obs: Observable[T]) extends js.Objec
     
     obs.subscribeJS(next, error, complete)
   }
+  
+  def toJSON() = js.Dynamic.literal(("id",id))
 
 }
 

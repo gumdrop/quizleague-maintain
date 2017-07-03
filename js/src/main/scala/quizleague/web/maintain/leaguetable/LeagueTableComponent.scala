@@ -12,7 +12,7 @@ import TemplateElements._
 import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
-import quizleague.web.util.Logging
+import quizleague.web.util.Logging._
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
 
@@ -109,7 +109,7 @@ class LeagueTableComponent(
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
-    extends ItemComponent[LeagueTable] with Logging{
+    extends ItemComponent[LeagueTable]{
   
     var teamManager:TeamManager =_
   
@@ -117,6 +117,7 @@ class LeagueTableComponent(
     override def init() = {
       
       loadItem().subscribe(item = _)
+      log(item, "table")
       teamService.list().subscribe(x => teamManager = new TeamManager(x))
 
     }
