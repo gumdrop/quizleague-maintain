@@ -37,7 +37,7 @@ class CompetitionFixturesComponent(
     with TitledComponent
     with ComponentUtils{
   
-  val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
+  val itemObs = route.params.switchMap((params, i) => service.get(params("id")))
 
   val now = LocalDate.now.toString()
   val filteredFixtures = itemObs.switchMap((c,i) => zip(c.fixtures).map((fs,i) => fs.filter(f => f.date > now)))

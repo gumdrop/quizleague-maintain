@@ -6,6 +6,8 @@ import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
 import rxjs.Observable
 import quizleague.web.util.rx.RefObservable
+import io.circe.Json
+import quizleague.web.util.Logging._
 
 trait PutService[T] {
   this: GetService[T] with ComponentNames=>
@@ -19,25 +21,23 @@ trait PutService[T] {
   protected def save(item:U):Unit = saveDom(item)
   
   private[service] def saveDom(i:U) = {
-    http.put(s"$uriRoot/${i.id}", wrap(i), requestOptions).subscribe(x=>x)
+    http.put(s"$uriRoot/${i.id}", enc(i).noSpaces, requestOptions).subscribe(x=>x)
     log(i,s"saved $uriRoot/${i.id} to http")
     deCache(i)
   }
   
   
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
-  def delete(item:T) = {items = items - mapIn(item).id} 
+  def delete(item:T) = {items -= mapIn(item).id} 
   def instance() = add(make())
   def getId(item:T) = if (item != null ) mapIn(item).id else null
   protected final def newId() = UUID.randomUUID.toString()
-  private[service] def wrap(item:U) = js.Dynamic.literal(id = item.id, json = toJson(item))
-  private[service] def deCache(item:U) = items = items - item.id
-  private def toJson(item:U) = if(item != null) ser(item) else null
+  private[service] def deCache(item:U) = items -= item.id
 
   
   protected def mapIn(model:T):U
   protected def make():U
-  protected def ser(item:U):String
+  protected def enc(item:U):Json
 
 
 }

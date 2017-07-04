@@ -113,7 +113,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
-  override def ser(item: Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
   def instance[A <: Competition](compType: CompetitionType): A = {
     val comp = compType match {

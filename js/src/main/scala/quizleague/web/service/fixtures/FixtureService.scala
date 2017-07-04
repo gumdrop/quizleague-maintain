@@ -55,7 +55,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def ser(item:Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }
 

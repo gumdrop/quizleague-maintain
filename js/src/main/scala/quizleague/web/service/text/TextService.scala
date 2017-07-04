@@ -30,6 +30,6 @@ trait TextPutService extends PutService[Text] with TextGetService with DirtyList
   override protected def make(): Dom = Dom(newId(), "", "")
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def ser(item: Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }

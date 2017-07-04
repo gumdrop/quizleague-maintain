@@ -51,7 +51,7 @@ trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetServ
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def ser(item:Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }
 

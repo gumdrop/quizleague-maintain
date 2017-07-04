@@ -43,7 +43,7 @@ class ReportComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
-  val result = route.params.switchMap( (params,i) => service.get(params("id"))(4))
+  val result = route.params.switchMap( (params,i) => service.get(params("id")))
   
   setTitle(result.switchMap((r,i) => extract2[Result,Fixture,js.Array[Team],String](r, _.fixture, f => js.Array(f.home,f.away))((r,f,ts) => s"Reports for ${f.parentDescription} ${f.description} - ${ts(0).name} : ${ts(1).name}")))
   
@@ -62,5 +62,5 @@ class ReportTitleComponent(
     route:ActivatedRoute,
     service:ResultService
 ){
-  val result = route.params.switchMap( (params,i) => service.get(params("id"))(4))
+  val result = route.params.switchMap( (params,i) => service.get(params("id")))
 }
