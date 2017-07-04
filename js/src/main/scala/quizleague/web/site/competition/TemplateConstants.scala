@@ -1,7 +1,9 @@
 package quizleague.web.site.competition
 
+import quizleague.web.site.common.ComponentUtils._
+
 object TemplateConstants {
-  val cupTemplate = """
+  val cupTemplate = s"""
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
     <ql-named-text [name]="textName"></ql-named-text>
     <ql-text [textId]="item.text.id"></ql-text>

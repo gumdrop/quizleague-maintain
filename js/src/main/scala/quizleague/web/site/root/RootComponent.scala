@@ -14,6 +14,7 @@ import angulate2.router.{ Route, Router }
 import angulate2.std._
 import quizleague.web.mock.MockData
 import quizleague.web.site.common._
+import quizleague.web.site.common.ComponentUtils._
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
@@ -37,7 +38,7 @@ import quizleague.web.util.rx._
 
 
 @Component(
-  template = """
+  template = s"""
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
     <div>
     <md-tab-group dynamicHeight="true" [selectedIndex]="tabIndex" (click)="tabSelected()">
