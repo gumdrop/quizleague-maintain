@@ -9,9 +9,9 @@ object TemplateConstants {
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Latest results</md-card-subtitle>
       <md-card-content>
-        <div *ngFor="let results of latestResults(item.results)">
-          <div>{{results.fixtures.date | date:"d MMM yyyy"}}</div>
-          <ql-results-simple [results]="results.results" ></ql-results-simple>
+        <div *ngFor="let results of latestResults(itemObs) | async">
+          <div>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</div>
+          <ql-results-simple [list]="results.results" ></ql-results-simple>
         </div>
       </md-card-content>
       <md-card-actions>
@@ -22,10 +22,10 @@ object TemplateConstants {
       <md-card-title>Fixtures</md-card-title>
       <md-card-subtitle>Next fixtures</md-card-subtitle>
       <md-card-content>
-        <div *ngFor="let fixtures of nextFixtures(item.fixtures)">
+        <div *ngFor="let fixtures of nextFixtures(itemObs) | async">
           <div>{{fixtures.date | date:"d MMM yyyy"}}</div>
           <div>{{now}}</div>
-          <ql-fixtures-simple [fixtures]="fixtures.fixtures" ></ql-fixtures-simple>
+          <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
         </div>
       </md-card-content>
       <md-card-actions>
@@ -33,6 +33,6 @@ object TemplateConstants {
       </md-card-actions>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """
 }

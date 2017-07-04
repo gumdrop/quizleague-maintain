@@ -10,3 +10,7 @@ trait ComponentUtils {
   @JSExport  
   def zip[T](list:js.Array[RefObservable[T]]) = zipit(list)
 }
+
+object ComponentUtils {
+  val loadingTemplate = "<ng-template #loading>Loading...</ng-template>"
+}

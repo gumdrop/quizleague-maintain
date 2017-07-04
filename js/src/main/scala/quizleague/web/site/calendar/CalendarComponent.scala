@@ -8,9 +8,11 @@ import angulate2.std.{ @@@, Component, Data, Injectable }
 import quizleague.web.site.common.{ NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.util.Logging.log
 import angulate2.core.Input
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
-  template = """
+  template = s"""
   <div *ngIf="itemObs | async as items ; else loading" fxLayout="column" fxLayoutGap="10px">
   <md-card *ngFor="let item of items">
      <md-card-title>{{item.date | date:"EEEE d MMMM yyyy"}}</md-card-title>
@@ -27,7 +29,7 @@ import angulate2.core.Input
   </md-card>
  
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
 """)
 @classModeScala
 class CalendarComponent(

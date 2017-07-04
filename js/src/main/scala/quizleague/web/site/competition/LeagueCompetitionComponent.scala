@@ -5,6 +5,8 @@ import angulate2.router.ActivatedRoute
 import angulate2.std._
 import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.global.ApplicationContextService
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   template = s"""
@@ -45,7 +47,7 @@ import quizleague.web.site.global.ApplicationContextService
       </md-card-actions>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """)
 @classModeScala
 class LeagueCompetitionComponent(

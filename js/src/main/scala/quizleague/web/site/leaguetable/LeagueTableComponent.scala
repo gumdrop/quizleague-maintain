@@ -4,10 +4,12 @@ import angulate2.std._
 import quizleague.web.model.LeagueTable
 import rxjs.Observable
 import quizleague.web.util.rx.RefObservable
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
     selector = "ql-league-table",
-    template = """
+    template = s"""
       <table *ngIf="table | async as item; else loading" >
         <caption>{{item.description}}</caption>
         <thead>
@@ -19,7 +21,7 @@ import quizleague.web.util.rx.RefObservable
           </tr>
         </tbody>
       </table>
-      <ng-template #loading>Loading...</ng-template>
+      $loadingTemplate
     """,
     styles = @@@("""
       table {

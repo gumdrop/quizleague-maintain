@@ -10,6 +10,7 @@ import quizleague.web.model.Results
 import quizleague.web.model.Fixtures
 import org.threeten.bp.LocalDate
 import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 import quizleague.web.util.rx._
 
 @Component(
@@ -22,7 +23,7 @@ import quizleague.web.util.rx._
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """)
 @classModeScala
 class CompetitionFixturesComponent(
@@ -52,7 +53,7 @@ class CompetitionFixturesComponent(
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} Fixtures 
     </span>
-    <ng-template #loading>Loading...</ng-template>
+    $loadingTemplate
   </ql-section-title>
   """    
 )

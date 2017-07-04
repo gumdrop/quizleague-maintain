@@ -9,10 +9,11 @@ import scala.collection.immutable.List
 import scala.scalajs.js
 import angular.platformBrowser.DomSanitizer
 import quizleague.web.util.Logging
-
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
-    template = """
+    template = s"""
  <div *ngIf="itemObs | async as item; else loading">
      <md-card>
       <md-card-content>
@@ -34,7 +35,7 @@ import quizleague.web.util.Logging
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
 """,
     styles = @@@("""
        .map{
@@ -65,12 +66,12 @@ class VenueComponent(
 }
 
 @Component(
-    template = """
+    template = s"""
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}}
     </span>
-    <ng-template #loading>Loading...</ng-template>
+    $loadingTemplate
   </ql-section-title>
 """
 )

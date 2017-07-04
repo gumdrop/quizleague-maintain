@@ -7,6 +7,7 @@ import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.MenuComponent
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.ComponentUtils._
 import quizleague.web.util.rx._
 import angulate2.core.animations
 import angulate2.core.animate
@@ -16,7 +17,7 @@ import quizleague.web.model._
 import scalajs.js
 
 @Component(
-  template = """
+  template = s"""
     <div *ngIf="result | async as item; else loading">
       <div *ngFor="let report of item.reports" fxLayout="column">
         <md-card>
@@ -32,7 +33,7 @@ import scalajs.js
           <md-icon class="md-24">arrow_back</md-icon>
       </button>
     </div>
-    <ng-template #loading>Loading...</ng-template>  
+    $loadingTemplate  
   """
 )
 @classModeScala
@@ -51,11 +52,11 @@ class ReportComponent(
 }
 
 @Component(
-  template = """
+  template = s"""
     <div *ngIf="result | async as item; else loading">
       <ql-section-title *ngIf="item.fixture | async as fixture"><span>Reports for {{fixture.date | date:"d MMM yyyy"}} {{fixture.parentDescription}} {{fixture.description}} - {{(fixture.home | async).name}} : {{(fixture.away | async).name}}</span></ql-section-title>
     </div>
-    <ng-template #loading>Loading...</ng-template> 
+    $loadingTemplate 
   """    
 )
 class ReportTitleComponent(

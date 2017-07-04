@@ -9,6 +9,8 @@ import scalajs.js
 import quizleague.web.model._
 import quizleague.web.util.rx._
 import quizleague.web.site.common.ComponentUtils
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 import rxjs.Observable
 
 @Component(
@@ -21,7 +23,7 @@ import rxjs.Observable
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """)
 @classModeScala
 class CompetitionResultsComponent(
@@ -50,7 +52,7 @@ class CompetitionResultsComponent(
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} Results 
     </span>
-    <ng-template #loading>Loading...</ng-template>
+    $loadingTemplate
   </ql-section-title>
   """    
 )

@@ -3,7 +3,7 @@ package quizleague.web.site.competition
 import angulate2.ext.classModeScala
 import angulate2.std.Component
 import angulate2.core.OnInit
-import quizleague.web.model.Team
+import quizleague.web.model._
 import rxjs.Observable
 import scalajs.js
 import quizleague.web.site.season.SeasonService
@@ -21,6 +21,6 @@ class CompetitionMenuComponent(
     viewService:CompetitionViewService,
     seasonService:SeasonService){
   
-  val competitions = viewService.season.switchMap((s,i) => seasonService.get(s.id)).map((s,i) => zip(s.competitions)).concatAll()
+  val competitions = viewService.season.switchMap((s,i) => seasonService.get(s.id)).map((s,i) => sort[Competition](s.competitions,(c1,c2) => c1.name compareTo c2.name)).concatAll()
 
 }

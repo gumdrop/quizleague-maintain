@@ -54,7 +54,7 @@ import quizleague.web.util.rx._
           </md-card-content>
           
         </md-card>
-        <ng-template #loading>Loading...</ng-template>  
+        $loadingTemplate  
       </md-tab>
       <md-tab label="Next Fixtures">
        <md-card *ngFor="let item of fixtures | async">
@@ -64,7 +64,7 @@ import quizleague.web.util.rx._
           </md-card-content>
     
         </md-card>
-        <ng-template #loading>Loading...</ng-template>  
+        $loadingTemplate  
         
       </md-tab>
     </md-tab-group>

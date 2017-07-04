@@ -9,6 +9,8 @@ import angulate2.router.ActivatedRoute
 import rxjs.Observable
 import quizleague.web.model.Team
 import angulate2.core.OnInit
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   template = s"""
@@ -18,7 +20,7 @@ import angulate2.core.OnInit
     </span>
     <span style="flex:1 1 0;"></span>
     <span><a md-icon-button routerLink="/venue/{{item.venue.id}}" mdTooltip="Venue"><md-icon class="md-24">location_on</md-icon></a></span>
-    <ng-template #loading>Loading...</ng-template>
+    $loadingTemplate
   </ql-section-title>
   """    
 )

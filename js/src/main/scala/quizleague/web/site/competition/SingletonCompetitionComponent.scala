@@ -6,9 +6,11 @@ import angulate2.std.{ @@@, Component, Data, Injectable }
 import quizleague.web.model.Event
 import quizleague.web.site.common.{ SideMenuService, TitleService }
 import quizleague.web.site.global.ApplicationContextService
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
-  template = """
+  template = s"""
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="10px">
     <ql-named-text [name]="item.textName"></ql-named-text>
     <md-card>
@@ -17,7 +19,7 @@ import quizleague.web.site.global.ApplicationContextService
       <ql-text [textId]="item.text.id"></ql-text>
     </md-card> 
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """,
   styles = @@@("""*{font-family:Roboto}"""))
 @classModeScala

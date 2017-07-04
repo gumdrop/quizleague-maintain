@@ -13,6 +13,8 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   template = s"""
@@ -39,7 +41,7 @@ import quizleague.web.site.common.TitledComponent
       </md-card-actions>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """    
 )
 @classModeScala
