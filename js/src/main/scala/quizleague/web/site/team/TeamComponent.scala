@@ -57,9 +57,9 @@ class TeamComponent(
   
   itemObs.subscribe(t => setTitle(t.name))
   
-  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getResults(t, s))) 
+  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getResults(t, s, 5))) 
   
-  val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getFixtures(t, s))) 
+  val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getFixtures(t, s, 5))) 
   
   
 }

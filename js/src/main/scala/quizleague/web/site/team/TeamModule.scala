@@ -87,8 +87,8 @@ class TeamViewService(
           r.flatMap(_.results),
           r => r.fixture,
           (r,f) => f.home.id == team.id || f.away.id == team.id, 
-          (r1,r2) => r1._2.date compareTo r2._2.date)
-      .take(take))
+          (r1,r2) => r2._2.date compareTo r1._2.date)
+          .map((r,i) => r.take(take)))
 
 
   def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
@@ -97,7 +97,7 @@ class TeamViewService(
 
     seasonService.getFixtures(season).map(
       (r, i) => filter[Fixture](r.flatMap(_.fixtures), f => f.date >= now && (f.home.id == team.id || f.away.id == team.id))
-       .take(take)).concatAll()
+       .map((f,i) => f.take(take))).concatAll()
   }
 }
 
