@@ -37,10 +37,12 @@ trait GetService[T] extends Logging {
   protected final def getFromHttp(id: String): Observable[U] = {
 
     http.get(s"$uriRoot/$id", requestOptions).
-      map((r, i) => dec(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[U])
+      map((r, i) => postProcess(dec(r.asInstanceOf[js.Dynamic].text().toString).merge.asInstanceOf[U]))
       .onError((x, t) => { log(s"error in GET for path $uriRoot/$id : $x : $t"); Observable.of(null).asInstanceOf[Observable[U]] })
 
   }
+  
+  protected[service] def postProcess(u:U):U = u
   
   protected def dec(json:String):Either[Error,U]
   protected def decList(json:String):Either[Error,List[U]]
@@ -60,7 +62,7 @@ trait GetService[T] extends Logging {
   def ref(list:js.Array[RefObservable[T]]):List[Ref[U]] = list.map(ref _).toList
   def ref(ro:RefObservable[T]):Ref[U] = if(ro == null) null else Ref(typeName,ro.id)
   
-  protected def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
+  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
   protected def mapOutSparse(domain: U): T
   
 

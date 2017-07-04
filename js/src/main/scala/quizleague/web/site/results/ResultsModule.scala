@@ -25,6 +25,8 @@ import quizleague.web.site.text.TextModule
 import quizleague.web.util.Logging._
 import quizleague.web.site.common.SeasonSelectService
 import angulate2.ext.classModeJS
+import quizleague.web.service.CachingService
+import quizleague.web.model.Result
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
@@ -77,7 +79,7 @@ class ResultService(override val http: Http,
     val userService: UserService,
     val fixtureService: FixtureService,
     val textService: TextService,
-    val teamService: TeamService) extends ResultGetService with ServiceRoot {
+    val teamService: TeamService) extends ResultGetService with ServiceRoot with CachingService[Result]{
 
 }
 

@@ -34,6 +34,8 @@ import angulate2.forms.FormsModule
 import angulate2.platformBrowser.BrowserModule
 import quizleague.web.site.common.SeasonSelectService
 import quizleague.web.util.rx._
+import quizleague.web.service.CachingService
+import quizleague.web.service.CachingService
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
@@ -68,14 +70,14 @@ class TeamRoutesModule
 class TeamService(override val http: Http,
   override val textService: TextService,
   override val venueService: VenueService,
-  override val userService: UserService) extends TeamGetService with ServiceRoot
+  override val userService: UserService) extends TeamGetService with ServiceRoot with CachingService[Team]
 
 @Injectable
 @classModeScala
 class TeamViewService(
     service: TeamService,
     seasonService: SeasonService,
-    override val applicationContextService:ApplicationContextService) extends SeasonSelectService{
+    override val applicationContextService:ApplicationContextService) extends SeasonSelectService {
 
 
   def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
