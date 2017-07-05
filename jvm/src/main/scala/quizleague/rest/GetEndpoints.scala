@@ -31,6 +31,7 @@ trait GetEndpoints {
     try Response.status(200)
     .`type`(MediaType.APPLICATION_JSON)
     .entity(Storage.list[T].asJson.noSpaces.toString)
+    .header(CACHE_CONTROL, s"max-age=$defaultCacheAge")
     .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
   }

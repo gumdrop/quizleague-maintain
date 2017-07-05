@@ -20,17 +20,16 @@ import quizleague.web.site.global.ApplicationContextService
       </md-card-content>
     </md-card>
     <md-card>
-      <md-card-title>Fixtures</md-card-title>
-      <md-card-subtitle>Next fixtures</md-card-subtitle>
+      <md-card-title>Results</md-card-title>
+      <md-card-subtitle>Latest results</md-card-subtitle>
       <md-card-content>
-        <div *ngFor="let fixtures of nextFixtures(itemObs) | async">
-          <div>{{fixtures.date | date:"d MMM yyyy"}}</div>
-          <div>{{now}}</div>
-          <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
+        <div *ngFor="let results of latestResults | async">
+          <div>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</div>
+          <ql-results-simple [list]="results.results" ></ql-results-simple>
         </div>
       </md-card-content>
       <md-card-actions>
-        <a md-button routerLink="fixtures">Show All</a>
+        <a md-button routerLink="results">Show All</a>
       </md-card-actions>
     </md-card>
   </div>
