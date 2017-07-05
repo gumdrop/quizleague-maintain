@@ -74,7 +74,8 @@ class HistoryApiFallbackFilter extends Filter {
 
 	/** */
 	def doFilter(servletRequest:ServletRequest, servletResponse:ServletResponse, filterChain:FilterChain) {
-		val request = servletRequest.asInstanceOf[HttpServletRequest]
+	  
+	  val request = servletRequest.asInstanceOf[HttpServletRequest]
 		val response = servletResponse.asInstanceOf[HttpServletResponse]
 
 		val method = request.getMethod().toUpperCase

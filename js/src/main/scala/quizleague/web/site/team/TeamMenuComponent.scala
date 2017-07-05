@@ -17,6 +17,6 @@ import scalajs.js
 @classModeScala
 class TeamMenuComponent(service:TeamService){
   
-  val teams:Observable[js.Array[Team]] = service.list()
+  val teams:Observable[js.Array[Team]] = service.list().map((t,i) => t.sort((t1:Team,t2:Team) => t1.shortName compareTo t2.shortName))
 
 }

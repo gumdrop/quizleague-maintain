@@ -18,7 +18,7 @@ trait GetService[T] {
 
   val serviceRoot: String
 
-  lazy val uriRoot = s"$serviceRoot/$typeName"
+  lazy val uriRoot = s"rest/$serviceRoot/$typeName"
 
   val http: Http
   private[service] val items: Map[String, U] = Map()
