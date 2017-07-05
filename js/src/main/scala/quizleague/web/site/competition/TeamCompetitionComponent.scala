@@ -13,16 +13,19 @@ import quizleague.web.model.Competition
 
 trait TeamCompetitionComponent{
   
+  this:BaseCompetitionComponent =>
+  lazy val now = LocalDate.now.toString()
+  
   @JSExport
   val textName:String
   
   @JSExport
-  def latestResults(comp:Observable[Competition]) = {log(null, "latest results");comp.switchMap((c,i) => sort2[Results,Fixtures](log(c.results, "results"), r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))}
+  val latestResults = itemObs.switchMap((c,i) => sort2[Results,Fixtures](log(c.results, "results"), r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))
+  
+  
   
   @JSExport
-  def nextFixtures(comp:Observable[Competition]) = {
-    val now = LocalDate.now.toString()
-    comp.switchMap((c,i) => filter[Fixtures](c.fixtures, f => f.date > now)).map((fs,i) => fs.sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date).take(1))
-  }
+  val nextFixtures = itemObs.switchMap((c,i) => filter[Fixtures](c.fixtures, f => f.date > now)).map((fs,i) => fs.sort((f1:Fixtures,f2:Fixtures) => f1.date compareTo f2.date).take(1))
+  
   
 }

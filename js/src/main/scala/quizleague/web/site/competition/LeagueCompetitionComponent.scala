@@ -23,7 +23,7 @@ import ComponentUtils._
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Latest results</md-card-subtitle>
       <md-card-content>
-        <div *ngFor="let results of latestResults(itemObs) | async">
+        <div *ngFor="let results of latestResults | async">
           <div>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</div>
           <ql-results-simple [list]="results.results" ></ql-results-simple>
         </div>
@@ -36,7 +36,7 @@ import ComponentUtils._
       <md-card-title>Fixtures</md-card-title>
       <md-card-subtitle>Next fixtures</md-card-subtitle>
       <md-card-content>
-        <div *ngFor="let fixtures of nextFixtures(itemObs) | async">
+        <div *ngFor="let fixtures of nextFixtures | async">
           <div>{{fixtures.date | date:"d MMM yyyy"}}</div>
           <div>{{now}}</div>
           <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
