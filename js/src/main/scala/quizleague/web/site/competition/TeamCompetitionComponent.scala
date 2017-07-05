@@ -7,6 +7,7 @@ import scala.scalajs.js
 import quizleague.web.model.{ Fixtures, Results }
 import scala.scalajs.js.annotation.JSExport
 import quizleague.web.util.rx._
+import quizleague.web.util.Logging._
 import rxjs.Observable
 import quizleague.web.model.Competition
 
@@ -16,7 +17,7 @@ trait TeamCompetitionComponent{
   val textName:String
   
   @JSExport
-  def latestResults(comp:Observable[Competition]) = comp.switchMap((c,i) => sort2[Results,Fixtures](c.results, r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))
+  def latestResults(comp:Observable[Competition]) = {log(null, "latest results");comp.switchMap((c,i) => sort2[Results,Fixtures](log(c.results, "results"), r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))}
   
   @JSExport
   def nextFixtures(comp:Observable[Competition]) = {

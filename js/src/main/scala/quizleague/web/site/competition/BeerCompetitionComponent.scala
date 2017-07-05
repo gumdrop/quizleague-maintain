@@ -9,7 +9,7 @@ import quizleague.web.site.global.ApplicationContextService
 
 
 @Component(
-  template = """
+  template = s"""
   <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
     <ql-named-text [name]="textName"></ql-named-text>
     <ql-text [textId]="item.text.id"></ql-text>
