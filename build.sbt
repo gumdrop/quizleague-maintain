@@ -49,7 +49,7 @@ lazy val quizleague = crossProject.in(file(".")).
   ).
   jsSettings(
     name := "quizleague-js",
-    ngBootstrap := Some("quizleague.web.site.AppModule"),
+    ngBootstrap := Some("quizleague.web.maintain.AppModule"),
     npmDependencies in Compile += "@angular/common" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/compiler" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/core" -> "~4.0.0",
@@ -61,6 +61,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	npmDependencies in Compile += "@angular/upgrade" -> "~4.0.0",
 	npmDependencies in Compile += "@angular/animations" -> "~4.0.0",
 	npmDependencies in Compile += "core-js" -> "^2.4.1",
+	npmDependencies in Compile += "zone.js" -> "^0.8.4",
 	npmDependencies in Compile += "rxjs" -> "~5.0.1",
 	npmDependencies in Compile += "@angular/cdk" -> "github:angular/cdk-builds",
 	npmDependencies in Compile += "@angular/material" -> "github:angular/material2-builds",

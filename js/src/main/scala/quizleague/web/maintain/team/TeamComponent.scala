@@ -67,5 +67,6 @@ class TeamComponent(
   
   def removeUser(user:User) = item.users ---= user.id
  
+  
 }
     
