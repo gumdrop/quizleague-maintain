@@ -36,7 +36,7 @@ import quizleague.web.maintain.venue.VenueService
              required
              [(ngModel)]="item.textName" name="textName">
         </md-input-container>
-          <div fxLayout="row">
+          <div fxLayout="row" *ngIf="item.event">
             <md-input-container>        
               <input mdInput placeholder="Date" type="date"
                  required
@@ -53,11 +53,13 @@ import quizleague.web.maintain.venue.VenueService
                  [(ngModel)]="item.event.duration" name="duration{{i}}">
             </md-input-container>
           </div>
-            <md-select placeholder="Venue" name="venue{{i}}" [(ngModel)]="item.event.venue" required >
-              <md-option *ngFor="let venue of venues" [value]="venue" >
-                {{venue.name}}
-              </md-option>
-            </md-select>
+          <div *ngIf="item.event">
+          <select placeholder="Venue" name="venue" [(ngModel)]="item.event.venue" required [compareWith]="utils.compareWith">
+            <option *ngFor="let venue of venues | async" [ngValue]="venue" >
+              {{(venue | async)?.name}}
+            </option>
+          </select>
+           </div>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       $formButtons
@@ -73,10 +75,6 @@ class SingletonCompetitionComponent( override val service:CompetitionService,
                                   override val router:Router,
                                   val venueService:VenueService) extends CompetitionComponent{
   
-  var venues:js.Array[Venue] = _
+  var venues = service.listVenues()
   
-  override def init() = {
-    venueService.list().subscribe(venues = _)
-    super.init()
-  }
 }

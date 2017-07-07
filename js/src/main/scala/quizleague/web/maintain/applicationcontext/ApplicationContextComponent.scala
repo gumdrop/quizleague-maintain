@@ -26,11 +26,11 @@ import quizleague.web.model.GlobalText
              required
              [(ngModel)]="item.leagueName" name="leagueName">
         </md-input-container>
-        <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required >
-          <md-option *ngFor="let textSet of textSets" [value]="textSet" >
-           - {{textSet.name}}
-          </md-option>
-        </md-select>
+        <select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required [compareWith]="utils.compareWith">
+          <option *ngFor="let textSet of textSets" [ngValue]="textSet" >
+            {{textSet.name}}
+          </option>
+        </select>
         <md-input-container>        
           <input mdInput placeholder="Sender Email" type="text"
              required

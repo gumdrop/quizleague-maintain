@@ -45,6 +45,10 @@ trait GetEndpoints {
   def applicationContext(@PathParam("id") id: String) = out[ApplicationContext](id)
 
   @GET
+  @Path("/globaltext")
+  def globalText() = list[GlobalText]
+  
+  @GET
   @Path("/globaltext/{id}")
   def globalText(@PathParam("id") id: String) = out[GlobalText](id)
 

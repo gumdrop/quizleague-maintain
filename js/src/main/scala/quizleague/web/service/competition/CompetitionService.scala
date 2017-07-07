@@ -45,8 +45,10 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
 
-    override protected def dec(json:String) = decode[U](json)
+  override protected def dec(json:String) = decode[U](json)
   override protected def decList(json:String) = decode[List[U]](json)
+  
+  def listVenues() = venueService.list().map((l,i) => l.map(v => venueService.refObs(v.id)))
 
   object Helpers {
     import quizleague.web.util.DateTimeConverters._

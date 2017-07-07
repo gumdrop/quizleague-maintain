@@ -37,7 +37,7 @@ import quizleague.web.maintain.competition.CompetitionService
              required
              [(ngModel)]="item.endYear" name="endYear">
         </md-input-container>
-        <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
+        <div fxLayout="row"><button (click)="editText(item?.text)" md-button type="button" >Edit Text...</button></div>
         <div fxLayout="row"><button (click)="calendar()" md-button type="button" >Calendar...</button></div>
         <div fxLayout="row">
           <md-select placeholder="Competitions" [(ngModel)]="selectedType" name="selectedType">  
@@ -46,8 +46,8 @@ import quizleague.web.maintain.competition.CompetitionService
           <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
         </div>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let comp of item.competitions" >
-            <button *ngIf="comp | async as c" (click)="editCompetition(c)" type="button">{{c.name}}</button>
+          <md-chip *ngFor="let comp of item?.competitions" >
+            <button *ngIf="comp | async as c" (click)="editCompetition(c)" type="button">{{c?.name}}</button>
           </md-chip>
         </md-chip-list>
 

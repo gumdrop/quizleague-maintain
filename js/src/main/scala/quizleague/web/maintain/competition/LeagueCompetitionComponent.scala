@@ -38,11 +38,11 @@ import rxjs.Observable
              required step=".1"
              [(ngModel)]="item.duration" name="duration">
         </md-input-container>
-        <md-select placeholder="Subsidiary Competition" name="subsidiary" [(ngModel)]="item.subsidiary"  >
-          <md-option *ngFor="let subsidiary of competitions" [value]="subsidiary" >
+        <select placeholder="Subsidiary Competition" name="subsidiary" [(ngModel)]="item.subsidiary" [compareWith]="utils.compareWith" >
+          <option *ngFor="let subsidiary of competitions" [ngValue]="subsidiary" >
             {{subsidiary.name}}
-          </md-option>
-        </md-select>
+          </option>
+        </select>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>

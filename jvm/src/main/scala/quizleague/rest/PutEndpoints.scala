@@ -57,5 +57,13 @@ trait PutEndpoints {
   @PUT
   @Path("/user/{id}")
   def user_(body: String) = save[User](body)
+  
+  @PUT
+  @Path("/globaltext/{id}")
+  def globalText_(body: String) = save[GlobalText](body)
+  
+  @PUT
+  @Path("/applicationcontext/{id}")
+  def applicationContext_(body: String) = save[ApplicationContext](body)
 
 }

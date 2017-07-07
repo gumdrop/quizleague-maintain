@@ -22,7 +22,7 @@ trait ItemComponent[T] extends OnInit{
   val utils = ComponentFnUtils
 
   @JSExport
-  var item: T = _
+  var item: T = js.Object().asInstanceOf[T]
 
   @JSExport
   def save(): Unit = {service.save(item); location.back() }
@@ -33,7 +33,7 @@ trait ItemComponent[T] extends OnInit{
   @JSExport
   def ngOnInit() = init()
   
-  def init(): Unit = loadItem().subscribe(x => this.item = x)
+  def init(): Unit = loadItem().subscribe(this.item = _)
   
 
   protected def loadItem(depth: Int = 1) = route.params
