@@ -19,7 +19,7 @@ import quizleague.web.names.SeasonNames
   <div>
     <h2>Seasons</h2>
     <div *ngFor="let item of items">
-      <a routerLink="/season/{{item.id}}" md-button>{{item.startYear}}/{{item.endYear}}</a>
+      <a routerLink="{{item.id}}" md-button>{{item.startYear}}/{{item.endYear}}</a>
     </div>
     $addFAB
   </div>

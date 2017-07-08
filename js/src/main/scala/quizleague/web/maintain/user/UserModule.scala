@@ -30,15 +30,14 @@ class UserModule
 
 @Routes(
   root = false,
-  Route(
-    path = "user/:id",
-    component = %%[UserComponent]
-  ),
-  Route(
-    path = "user",
-    component = %%[UserListComponent]
-  )
-)
+  Route(path = "maintain/user", children = @@@(
+    Route(path = "", children = @@@(Route(
+      path = ":id",
+      component = %%[UserComponent]),
+      Route(
+        path = "",
+        component = %%[UserListComponent]))),
+    Route(path = "", component = %%[MaintainMenuComponent], outlet="sidemenu"))))
 class UserRoutesModule 
 
 @Injectable

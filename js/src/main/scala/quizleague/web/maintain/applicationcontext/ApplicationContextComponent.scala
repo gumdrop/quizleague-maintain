@@ -14,6 +14,10 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.model.GlobalText
+import quizleague.web.site.common.SectionComponent
+import quizleague.web.site.common.MenuComponent
+import quizleague.web.site.common.SideMenuService
+
 
 @Component(
   template = s"""
@@ -53,8 +57,9 @@ class ApplicationContextComponent(
     override val service:ApplicationContextService,
     override val route: ActivatedRoute,
     override val location:Location,
+    override val sideMenuService:SideMenuService,
     val router:Router)
-    extends ItemComponent[ApplicationContext] {
+    extends ItemComponent[ApplicationContext] with SectionComponent with MenuComponent {
   
   var textSets:js.Array[GlobalText] = _
   

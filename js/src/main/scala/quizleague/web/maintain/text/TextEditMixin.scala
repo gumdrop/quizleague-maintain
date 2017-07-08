@@ -14,6 +14,6 @@ trait TextEditMixin[T] {
   @JSExport
   def editText(text: Text) = {
     service.cache(item)
-    router.navigateTo("/text", text.id)
+    router.navigateTo("/maintain/text", text.id)
   }
 }

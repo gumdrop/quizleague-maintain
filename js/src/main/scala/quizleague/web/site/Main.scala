@@ -23,12 +23,14 @@ import quizleague.web.site.season.SeasonModule
 import quizleague.web.site.team.TeamModule
 import quizleague.web.site.user.UserModule
 import quizleague.web.site.venue.VenueModule
+import quizleague.web.maintain.MaintainModule
+
 
 
 
 
 @NgModule(
-  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, AppRoutingModule],
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, AppRoutingModule],
   //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
   declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],

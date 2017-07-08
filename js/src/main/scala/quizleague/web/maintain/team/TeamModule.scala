@@ -32,15 +32,12 @@ class TeamModule
 
 @Routes(
   root = false,
-       Route(
-        path = "team/:id",
-        component = %%[TeamComponent]
-      ),
-      Route(
-        path = "team",
-        component = %%[TeamListComponent]
-      )
-)
+  Route(
+    path = "maintain/team", children = @@@(
+      Route(path = "", children = @@@(
+        Route(path = ":id", component = %%[TeamComponent]),
+        Route(path = "", component = %%[TeamListComponent]))),
+      Route(path = "", component = %%[MaintainMenuComponent], outlet = "sidemenu"))))
 class TeamRoutesModule 
 
 

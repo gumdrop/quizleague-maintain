@@ -19,7 +19,7 @@ import quizleague.web.names.TeamNames
   <div>
     <h2>Teams</h2>
     <div *ngFor="let item of items">
-      <a routerLink="/team/{{item.id}}" md-button>{{item.name}}</a>
+      <a routerLink="{{item.id}}" md-button>{{item.name}}</a>
     </div>
 $addFAB
   </div>

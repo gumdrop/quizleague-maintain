@@ -33,7 +33,7 @@ class TextModule
 @Routes(
   root = false,
   Route(
-    path = "text/:id",
+    path = "maintain/text/:id",
     component = %%[TextComponent]
   )
 )

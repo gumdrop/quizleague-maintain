@@ -45,62 +45,65 @@ class SeasonModule
 @Routes(
   root = false,
       
-      
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/results/:resultsId/result/:id/report",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/results/:resultsId/result/:id/report",
         component = %%[ReportListComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/fixtures/:id",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/fixtures/:id",
         component = %%[FixturesComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/results/:id",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/results/:id",
         component = %%[ResultsComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/leaguetable/:id",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/leaguetable/:id",
         component = %%[LeagueTableComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/fixtures",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/fixtures",
         component = %%[FixturesListComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/results",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/results",
         component = %%[ResultsListComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:competitionId/:type/leaguetable",
+        path = "maintain/season/:seasonId/competition/:competitionId/:type/leaguetable",
         component = %%[LeagueTableListComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:id/league",
+        path = "maintain/season/:seasonId/competition/:id/league",
         component = %%[LeagueCompetitionComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:id/cup",
+        path = "maintain/season/:seasonId/competition/:id/cup",
         component = %%[CupCompetitionComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:id/subsidiary",
+        path = "maintain/season/:seasonId/competition/:id/subsidiary",
         component = %%[SubsidiaryCompetitionComponent]
       ),
       Route(
-        path = "season/:seasonId/competition/:id/singleton",
+        path = "maintain/season/:seasonId/competition/:id/singleton",
         component = %%[SingletonCompetitionComponent]
       ),
       Route(
-        path = "season/:id/calendar",
+        path = "maintain/season/:id/calendar",
         component = %%[CalendarComponent]
       ),
       Route(
-        path = "season/:id",
+        path = "maintain/season/:id",
         component = %%[SeasonComponent]
       ),
       Route(
-        path = "season",
+        path = "maintain/season",
         component = %%[SeasonListComponent]
+      ),
+      Route(
+        path = "maintain/season/*",
+        component = %%[MaintainMenuComponent], outlet = "sidemenu"
       )
 )
 class SeasonRoutesModule 
