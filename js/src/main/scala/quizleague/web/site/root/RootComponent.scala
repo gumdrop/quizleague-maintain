@@ -92,7 +92,8 @@ class RootComponent(
       with NoMenuComponent 
       with TitledComponent 
       with ComponentUtils 
-      with OnInit{
+      with OnInit
+      with OnDestroy{
   
   var tabIndex:Int = 0;
   val tabCount = 3;
@@ -120,6 +121,10 @@ class RootComponent(
   
   override def ngOnInit() = {
     intervalId = setInterval(5000){tabIndex = if(tabIndex == tabCount - 1) 0 else tabIndex + 1}
+  }
+  
+  override def ngOnDestroy() = {
+    clearInterval(intervalId)
   }
 }
 
