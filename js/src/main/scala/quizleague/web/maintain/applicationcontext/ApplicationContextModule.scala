@@ -14,6 +14,7 @@ import quizleague.web.maintain.user.UserService
 import quizleague.web.service.applicationcontext.{ ApplicationContextGetService, ApplicationContextPutService }
 import quizleague.web.maintain.season.SeasonService
 import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.web.model.Season
 
 @NgModule(
   imports = @@[CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, ApplicationContextRoutesModule],
@@ -37,6 +38,9 @@ class ApplicationContextService(
     override val globalTextService: GlobalTextService,
     override val seasonService:SeasonService) extends ApplicationContextGetService
   with ApplicationContextPutService
-  with ServiceRoot
+  with ServiceRoot{
+  
+  def listSeasons() = seasonService.list().map((l,i) => l.sort((s1:Season,s2:Season) => s1.startYear compareTo s2.startYear) .map(v => seasonService.refObs(v.id)))
+}
 
 

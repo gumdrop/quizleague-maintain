@@ -51,11 +51,10 @@ class GlobalTextComponent(
     }
     
     def addNew() = {
-      log(item, "before add")
       
       val text = service.entryInstance()
       item.text.push(text)
       
-      log(item, "after add")
+
     }
 }

@@ -23,11 +23,11 @@ trait TextPutService extends PutService[Text] with TextGetService with DirtyList
 
   val mimeLens = lens[Dom].mimeType
 
-  def instance(mimeType: String) = add(mimeLens.set(make())("text/html"))
+  def instance(mimeType: String = "text/html") = add(mimeLens.set(make())(mimeType))
 
   override protected def mapIn(text: Text) = Dom(text.id, text.text, text.mimeType)
 
-  override protected def make(): Dom = Dom(newId(), "", "")
+  override protected def make(): Dom = Dom(newId(), "", "text/html")
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   override def enc(item: Dom) = item.asJson

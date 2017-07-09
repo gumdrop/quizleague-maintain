@@ -17,6 +17,7 @@ import quizleague.web.model.GlobalText
 import quizleague.web.site.common.SectionComponent
 import quizleague.web.site.common.MenuComponent
 import quizleague.web.site.common.SideMenuService
+import quizleague.web.maintain.season.SeasonService
 
 
 @Component(
@@ -30,6 +31,11 @@ import quizleague.web.site.common.SideMenuService
              required
              [(ngModel)]="item.leagueName" name="leagueName">
         </md-input-container>
+        <select placeholder="Current Season" name="season" [(ngModel)]="item.currentSeason" required [compareWith]="utils.compareWith">
+          <option *ngFor="let season of seasons | async" [ngValue]="season" >
+            {{(season | async)?.startYear}}/{{(season | async)?.endYear}}
+          </option>
+        </select>
         <select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required [compareWith]="utils.compareWith">
           <option *ngFor="let textSet of textSets" [ngValue]="textSet" >
             {{textSet.name}}
@@ -62,6 +68,8 @@ class ApplicationContextComponent(
     extends ItemComponent[ApplicationContext] with SectionComponent with MenuComponent {
   
   var textSets:js.Array[GlobalText] = _
+  
+  var seasons = service.listSeasons()
   
   override def ngOnInit() = {super.ngOnInit();initTextSets}
   
