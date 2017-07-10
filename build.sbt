@@ -38,12 +38,14 @@ lazy val quizleague = crossProject.in(file(".")).
   jvmSettings(
      name := "quizleague-jvm",
      
+         
 	libraryDependencies += "com.google.appengine" % "appengine-testing" % appengineVersion % "test",
 	libraryDependencies += "com.google.appengine" % "appengine-api-stubs" % appengineVersion % "test",
 	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
 	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
-    libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1"
+    libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1",
+    libraryDependencies += "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
     
 	
   ).
@@ -79,8 +81,9 @@ lazy val server = quizleague.jvm.settings(
   scalaJSProjects := Seq(web),
   pipelineStages in Assets := Seq(scalaJSPipeline),
   compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-).enablePlugins(SbtWeb,JettyPlugin, WebScalaJSBundlerPlugin)
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+  classesAsJar in Compile := true
+).enablePlugins(SbtWeb, WebScalaJSBundlerPlugin, AppenginePlugin)
 lazy val web = quizleague.js .
-enablePlugins(Angulate2Plugin,ScalaJSWeb,ScalaJSBundlerPlugin)
+enablePlugins(Angulate2Plugin,ScalaJSPlugin,ScalaJSWeb,ScalaJSBundlerPlugin)
 
