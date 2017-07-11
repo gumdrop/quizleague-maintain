@@ -10,7 +10,7 @@ import ComponentUtils._
 @Component(
     selector = "ql-league-table",
     template = s"""
-      <table *ngIf="table | async as item; else loading" >
+      <table *ngIf="table | async as item; else loading" class="mat-elevation-z3">
         <caption>{{item.description}}</caption>
         <thead>
           <th>Pos.</th><th>Team</th><th>Pl.</th><th>W</th><th>D</th><th>L</th><th>S</th><th>Pts</th>
@@ -25,7 +25,7 @@ import ComponentUtils._
     """,
     styles = @@@("""
       table {
-        border : 1.5px solid black;
+        border : 1px solid rgba(0,0,0,.25);
         font-size:14px;
       }
       caption{
@@ -36,17 +36,17 @@ import ComponentUtils._
       }""",
       """
       td{
-        border-bottom: 0.5px solid rgba(0,0,0,.5);
-        border-right: 0.5px solid rgba(0,0,0,.5);
+        border-bottom: 0.5px solid rgba(0,0,0,.25);
+        border-right: 0.5px solid rgba(0,0,0,.25);
       }
       th{
-        border-bottom: 0.5px solid rgba(0,0,0,1);
-        border-right: 0.5px solid rgba(0,0,0,1);
+        border-bottom: 0.5px solid rgba(0,0,0,.25);
+        border-right: 0.5px solid rgba(0,0,0,.25);
       }
       """,
       """
       .num{
-        min-width:3em;
+        min-width:2em;
         text-align:right;
       }
       """
