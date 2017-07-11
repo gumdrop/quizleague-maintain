@@ -83,7 +83,7 @@ lazy val server = quizleague.jvm.settings(
   compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
   classesAsJar in Compile := true,
-  webappResources in Compile += file(s"${baseDirectory}/../js/target/scala-2.11/scalajs-bundler/main/dist")
+  webappResources in Compile += file(s"${baseDirectory.value}/../js/target/scala-2.11/scalajs-bundler/main/dist")
 ).enablePlugins(SbtWeb, WebScalaJSBundlerPlugin, AppenginePlugin)
 lazy val web = quizleague.js .
 enablePlugins(Angulate2Plugin,ScalaJSPlugin,ScalaJSWeb,ScalaJSBundlerPlugin)
