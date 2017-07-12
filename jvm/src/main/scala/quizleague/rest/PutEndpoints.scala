@@ -50,6 +50,7 @@ trait PutEndpoints {
   @PUT
   @Path("/fixtures/{id}")
   def fixtures_(body: String) = save[Fixtures](body)
+  
   @PUT
   @Path("/fixture/{id}")
   def fixture_(body: String) = save[Fixture](body)
@@ -65,5 +66,9 @@ trait PutEndpoints {
   @PUT
   @Path("/applicationcontext/{id}")
   def applicationContext_(body: String) = save[ApplicationContext](body)
+  
+  @PUT
+  @Path("/leaguetable/{id}")
+  def leaguetable_(body: String) = save[LeagueTable](body)
 
 }

@@ -38,7 +38,9 @@ import rxjs.Observable
           </md-select>
            <button md-icon-button type="button" (click)="addRow(team)" [disabled]="!team"><md-icon class="md-24">add</md-icon></button>
          </div>
+
          <div fxLayout="column">
+         <div><button mdButton (click)="sort()">Sort</button></div>
           <table>
             <thead>
               <th></th>
@@ -59,7 +61,7 @@ import rxjs.Observable
                 <td>{{(row.team | async)?.name}}</td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4">
+                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4" value="{{i+1}}">
                   </md-input-container>
                 </td>
                 <td>
@@ -138,10 +140,14 @@ class LeagueTableComponent(
       teamManager.take(team)
     }
     
-    override def save():Unit = {
-      service.cache(item)
-      location.back()
+    def sort() = {
+      item = service.sortTable(item)
     }
+    
+//    override def save():Unit = {
+//      service.cache(item)
+//      location.back()
+//    }
     
     def unusedTeams() = if(teamManager == null) null else teamManager.unusedTeams(null)
     

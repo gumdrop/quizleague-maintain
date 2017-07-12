@@ -67,6 +67,15 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
   import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def enc(item: Dom) = item.asJson
   
+  def sortTable(table:Model) = {
+    val dom = mapIn(table)
+    
+    val rows = dom.rows.sortBy(l => (l.leaguePoints, (l.matchPointsFor - l.matchPointsAgainst), l.won, l.drawn))
+    
+    mapOutSparse(Dom(dom.id, dom.description, rows, dom.retired))
+    
+  }
+  
   def recalculateTable(competition:Competition, table:Model) = {
     val dom = mapIn(table)
     Observable.zip(competition.results.map(x => resultsService.get(x.id)) :_*).
