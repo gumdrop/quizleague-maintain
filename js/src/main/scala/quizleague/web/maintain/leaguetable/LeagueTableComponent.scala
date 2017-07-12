@@ -15,6 +15,8 @@ import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
+import quizleague.web.util.rx._
+import rxjs.Observable
 
 
 @Component(
@@ -54,7 +56,7 @@ import quizleague.web.maintain.util.TeamManager
                 <td>
                   <button md-icon-button type="button" (click)="removeRow(row)" ><md-icon class="md-24">delete</md-icon></button>
                 </td>
-                <td>{{(row.team | async).name}}</td>
+                <td>{{(row.team | async)?.name}}</td>
                 <td>
                   <md-input-container>
                     <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4">
@@ -115,10 +117,15 @@ class LeagueTableComponent(
   
     override def cancel():Unit = location.back()
     override def init() = {
-      
-      loadItem().subscribe(item = _)
-      log(item, "table")
-      teamService.list().subscribe(x => teamManager = new TeamManager(x))
+     super.init()
+     Observable.zip(
+      loadItem()
+        .switchMap((l, i) => zip(l.rows.map(_.team))),
+      teamService.list(),
+      (tableTeams: js.Array[Team], teams: js.Array[Team]) => {
+        teamManager = new TeamManager(teams)
+        tableTeams.foreach(teamManager.take(_))
+      }).subscribe(x => Unit)
 
     }
     
@@ -136,7 +143,7 @@ class LeagueTableComponent(
       location.back()
     }
     
-    def unusedTeams() = teamManager.unusedTeams(null)
+    def unusedTeams() = if(teamManager == null) null else teamManager.unusedTeams(null)
     
 
   
