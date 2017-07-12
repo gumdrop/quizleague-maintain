@@ -31,14 +31,12 @@ class VenueModule
 @Routes(
   root = false,
   Route(
-    path = "venue/:id",
-    component = %%[VenueComponent]
-  ),
-  Route(
-    path = "venue",
-    component = %%[VenueListComponent]
-  )
-)
+    path = "maintain/venue",
+    children = @@@(
+      Route(path = "", children = @@@(
+        Route(path = ":id", component = %%[VenueComponent]),
+        Route(path = "", component = %%[VenueListComponent]))),
+      Route(path = "", component = %%[MaintainMenuComponent], outlet = "sidemenu"))))
 class VenueRoutesModule 
 
 

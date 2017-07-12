@@ -16,18 +16,21 @@ import quizleague.web.service.fixtures._
 import quizleague.web.service.results._
 import quizleague.web.service.leaguetable._
 import quizleague.web.model.CompetitionType.CompetitionType
-import java.time.LocalTime
-import java.time.Duration
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
 import quizleague.web.model.CompetitionType
 import java.util.concurrent.TimeUnit
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.temporal.ChronoUnit
 import quizleague.web.service._
 import quizleague.web.service.text._
 import quizleague.web.util.Logging
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.names.CompetitionNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+  import quizleague.util.json.codecs.ScalaTimeCodecs._  
+  import quizleague.util.json.codecs.DomainCodecs._  
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom
@@ -37,14 +40,15 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   val fixturesService: FixturesGetService
   val leagueTableService: LeagueTableGetService
   val venueService: VenueGetService
+  val competitionService = this
 
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
-  override protected def mapOut(comp: Dom)(implicit depth:Int) = doMapOut(comp)
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
+  
+  def listVenues() = venueService.list().map((l,i) => l.map(v => venueService.refObs(v.id)))
 
   object Helpers {
     import quizleague.web.util.DateTimeConverters._
@@ -55,64 +59,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
     import domain.{ SingletonCompetition => DSiC }  
    
 
-    def doMapOut(dom: Dom)(implicit depth:Int): Observable[Competition] = {
-      if (dom == null) Observable.of(null)
-      dom match {
-        case c: DLC => Observable.zip(
-          mapOutList(c.fixtures, fixturesService),
-          mapOutList(c.results, resultsService),
-          mapOutList(c.tables, leagueTableService),
-          child(c.text,textService),
-          c.subsidiary.map(x => get(x.id)(0)).getOrElse(Observable.of(null)),
-          (fixtures: js.Array[Fixtures], results: js.Array[Results], tables:js.Array[LeagueTable],text: Text, subsidiary: Competition) => {
-            new LeagueCompetition(
-              c.id,
-              c.name,
-              c.startTime,
-              c.duration,
-              fixtures,
-              results,
-              tables,
-              text,
-              subsidiary)
-          })
-        case c: DCC => Observable.zip(
-          mapOutList(c.fixtures, fixturesService),
-          mapOutList(c.results, resultsService),
-          child(c.text,textService),
-          (fixtures: js.Array[Fixtures], results: js.Array[Results], text: Text) => (new CupCompetition(
-            c.id,
-            c.name,
-            c.startTime,
-            c.duration,
-            fixtures,
-            results,
-            text))
-            
-        )
-
-        case c: DSC => Observable.zip(
-          mapOutList(c.results, resultsService),
-          mapOutList(c.tables, leagueTableService),
-          child(c.text,textService),
-          (results: js.Array[Results], tables: js.Array[LeagueTable],text: Text) => (new SubsidiaryLeagueCompetition(
-            c.id,
-            c.name,
-            results,
-            tables,
-            text)))
-            
-        case c:DSiC => Observable.zip(
-            child(c.text,textService),
-            child(c.event.venue, venueService),
-            (text:Text, venue:Venue) => new SingletonCompetition(c.id,c.name,text,c.textName,Event(venue,c.event.date, c.event.time, c.event.duration))
-        )
-
-      }
-
-    }
-
-
     def doMapOutSparse(dom: Dom):Competition = {
       if (dom == null) return null
       dom match {
@@ -121,31 +67,31 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.name,
           c.startTime,
           c.duration,
-          js.Array(),
-          js.Array(),
-          js.Array(),
-          null,
-          null)
+          refObsList(c.fixtures,fixturesService),
+          refObsList(c.results, resultsService),
+          refObsList(c.tables, leagueTableService),
+          refObs(c.text, textService),
+          refObs(c.subsidiary))
         case c: DCC => new CupCompetition(
           c.id,
           c.name,
           c.startTime,
           c.duration,
-          js.Array(),
-          js.Array(),
-          null)
+          refObsList(c.fixtures,fixturesService),
+          refObsList(c.results, resultsService),
+          refObs(c.text, textService))
         case c: DSC => new SubsidiaryLeagueCompetition(
           c.id,
           c.name,
-          js.Array(),
-          js.Array(),
-          null)
+          refObsList(c.results, resultsService),
+          refObsList(c.tables, leagueTableService),
+          refObs(c.text, textService))
         case c : DSiC => new SingletonCompetition(
           c.id,
           c.name,
-          null,
+          refObs(c.text, textService),
           c.textName,
-          Event(null,c.event.date,c.event.time,c.event.duration)
+          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration))
         )
       }
     }
@@ -169,7 +115,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
-  override def ser(item: Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
   def instance[A <: Competition](compType: CompetitionType): A = {
     val comp = compType match {
@@ -219,7 +165,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
     def makeSingleton = DSiC(
       newId(),
       "Singleton",
-      DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90)),
+      Option(DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90))),
       "",
       textService.getRef(textService.instance()))
 
@@ -231,34 +177,34 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           l.name,
           l.startTime,
           l.duration,
-          l.fixtures.map(fixturesService.getRef(_)).toList,
-          l.results.map(resultsService.getRef(_)).toList,
-          l.tables.map(leagueTableService.getRef(_)).toList,
-          textService.getRef(l.text),
-          if (l.subsidiary == null) None else Option(getRef(l.subsidiary)))
+          l.fixtures.map(fixturesService.ref(_)).toList,
+          l.results.map(resultsService.ref(_)).toList,
+          l.tables.map(leagueTableService.ref(_)).toList,
+          textService.ref(l.text),
+          if (l.subsidiary == null) None else Option(ref(l.subsidiary)))
 
         case c: CupCompetition => DCC(
           c.id,
           c.name,
           c.startTime,
           c.duration,
-          c.fixtures.map(fixturesService.getRef(_)).toList,
-          c.results.map(resultsService.getRef(_)).toList,
-          textService.getRef(c.text))
+          c.fixtures.map(fixturesService.ref(_)).toList,
+          c.results.map(resultsService.ref(_)).toList,
+          textService.ref(c.text))
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
-          s.results.map(resultsService.getRef(_)).toList,
-          s.tables.map(leagueTableService.getRef(_)).toList,
-          textService.getRef(s.text))
+          s.results.map(resultsService.ref(_)).toList,
+          s.tables.map(leagueTableService.ref(_)).toList,
+          textService.ref(s.text))
         
         case s: SingletonCompetition => DSiC(
           s.id,
           s.name,
-          DomEvent(venueService.getRef(s.event.venue), s.event.date, s.event.time, s.event.duration),
+          if(s.event == null) None else Some(DomEvent(venueService.ref(s.event.venue), s.event.date, s.event.time, s.event.duration)),
           s.textName,
-          textService.getRef(s.text))
+          textService.ref(s.text))
       }
 
     }

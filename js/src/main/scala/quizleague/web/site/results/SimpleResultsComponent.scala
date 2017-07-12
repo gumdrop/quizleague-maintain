@@ -5,16 +5,18 @@ import scala.scalajs.js
 import angulate2.core.Input
 import angulate2.std.{ Component, Data }
 import quizleague.web.model.Result
+import rxjs.Observable
+import quizleague.web.util.rx._
 
 @Component(
   selector = "ql-results-simple",
   template = s"""
     <table>
-      <tr *ngFor="let result of results">
-        <td *ngIf="inlineDetails" class="inline-details" >{{result.fixture.date | date : "d MMM yyyy"}} : {{result.fixture.parentDescription}} {{result.fixture.description}}</td>
-        <td [ngClass]="nameClass(result.homeScore, result.awayScore)">{{result.fixture.home.name}}</td>
+      <tr *ngFor="let result of results | async">
+        <td *ngIf="inlineDetails" class="inline-details" >{{(result.fixture | async)?.date | date : "d MMM yyyy"}} : {{(result.fixture | async)?.parentDescription}} {{(result.fixture | async)?.description}}</td>
+        <td *ngIf="result.fixture | async as fixture"[ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
         <td>{{result.homeScore}}</td><td> - </td><td>{{result.awayScore}}</td>
-        <td [ngClass]="nameClass(result.awayScore, result.homeScore)">{{result.fixture.away.name}}</td>
+        <td *ngIf="result.fixture | async as fixture" [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
         <td *ngIf="hasReports(result)">
           <a md-icon-button routerLink="/results/{{result.id}}/reports">
             <md-icon class="md-12">description</md-icon>
@@ -40,12 +42,15 @@ import quizleague.web.model.Result
 class SimpleResultsComponent{  
   
   @Input("results")
-  var results:js.Array[Result] = _
+  var results:Observable[js.Array[Result]] = _
+  
+  @Input
+  def list_= (list:js.Array[RefObservable[Result]]):Unit = results = zip(list)
   
   @Input
   var inlineDetails = false
   
-  def nameClass(score1:Int, score2:Int) = if(score1 > score2) "winner" else "" 
+  def nameClass(score1:Int, score2:Int) = if(score1 > score2) "winner" else if(score1 == score2) "orange" else ""
     
   def hasReports(result:Result) = !result.reports.isEmpty
     

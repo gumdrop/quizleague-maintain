@@ -13,6 +13,9 @@ import angular.material.MaterialModule
 import angular.flexlayout.FlexLayoutModule
 import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.season.SeasonModule
+import quizleague.web.service.CachingService
+import quizleague.web.model.Fixture
+import quizleague.web.model.Fixtures
 
 
 @NgModule(
@@ -34,7 +37,7 @@ class FixturesComponentsModule
 @Injectable
 @classModeScala
 class FixturesService(override val http: Http,
-    override val fixtureService: FixtureService) extends FixturesGetService with ServiceRoot {
+    override val fixtureService: FixtureService) extends FixturesGetService with ServiceRoot with CachingService[Fixtures]{
 
 }
 
@@ -42,7 +45,7 @@ class FixturesService(override val http: Http,
 @classModeScala
 class FixtureService(override val http: Http,
     override val venueService: VenueService,
-    override val teamService: TeamService) extends FixtureGetService with ServiceRoot {
+    override val teamService: TeamService) extends FixtureGetService with ServiceRoot with CachingService[Fixture] {
 
 }
 

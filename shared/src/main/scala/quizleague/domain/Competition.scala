@@ -1,9 +1,9 @@
 package quizleague.domain
 
 import java.util.Date
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.Duration
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
 import io.circe.generic.JsonCodec
 
 import quizleague.util.json.codecs.ScalaTimeCodecs._
@@ -56,7 +56,7 @@ case class SubsidiaryLeagueCompetition(
 case class SingletonCompetition(
   id:String,
   name:String,
-  event:Event,
+  event:Option[Event],
   textName:String,
   text:Ref[Text]    
 ) extends Competition with BaseSingletonCompetition
@@ -67,7 +67,7 @@ object Competition
 
  trait BaseSingletonCompetition{
     
-  val event:Event
+  val event:Option[Event]
   val textName:String
 
 }

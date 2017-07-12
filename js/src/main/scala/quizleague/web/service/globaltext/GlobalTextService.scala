@@ -13,23 +13,23 @@ import quizleague.web.service._
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.names.GlobalTextNames
+  import io.circe._, io.circe.generic.auto._, io.circe.parser._
 
 
 trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
   override type U = Dom
+
+
   
   val textService:TextGetService
   
-  override protected def mapOut(globalText:Dom)(implicit depth:Int):Observable[GlobalText] = Observable.of(mapOutSparse(globalText))
-
   override protected def mapOutSparse(globalText:Dom):GlobalText =
    GlobalText(globalText.id, globalText.name, globalText.text.map {case (k,v) => TextEntry(k, Ref(v.typeName, v.id))}.toJSArray, globalText.retired)
   
   override def flush() = {textService.flush();super.flush()}
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
-
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetService{
@@ -51,7 +51,7 @@ trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetServ
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def ser(item:Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }
 

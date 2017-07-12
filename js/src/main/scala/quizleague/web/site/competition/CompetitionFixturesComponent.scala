@@ -8,19 +8,22 @@ import quizleague.web.site.global.ApplicationContextService
 import scalajs.js
 import quizleague.web.model.Results
 import quizleague.web.model.Fixtures
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
+import quizleague.web.util.rx._
 
 @Component(
   template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card *ngFor="let fixtures of filter(item.fixtures)">
+  <div fxLayout="column" fxLayoutGap="5px">
+    <md-card *ngFor="let fixtures of filteredFixtures | async">
       <md-card-title>{{fixtures.date | date:"d MMM yyyy"}}</md-card-title>
       <md-card-content>
-          <ql-fixtures-simple [fixtures]="fixtures.fixtures" ></ql-fixtures-simple>
+          <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """)
 @classModeScala
 class CompetitionFixturesComponent(
@@ -32,16 +35,16 @@ class CompetitionFixturesComponent(
   override val sideMenuService: SideMenuService)
     extends SectionComponent
     with MenuComponent
-    with TitledComponent{
+    with TitledComponent
+    with ComponentUtils{
   
-  val itemObs = route.params.switchMap((params, i) => service.get(params("id"))(4))
+  val itemObs = route.params.switchMap((params, i) => service.get(params("id")))
 
-  itemObs.subscribe(t => setTitle(s"${t.name} - All Fixtures"))
+  val now = LocalDate.now.toString()
+  val filteredFixtures = itemObs.switchMap((c,i) => zip(c.fixtures).map((fs,i) => fs.filter(f => f.date > now)))
   
-  def filter(fixtures:js.Array[Fixtures]) = {
-    val now = LocalDate.now().toString()
-    fixtures.filter(f => f.date > now)
-  }
+  itemObs.subscribe(t => setTitle(s"${t.name} - All Fixtures"))
+ 
 }
 
 @Component(
@@ -50,7 +53,7 @@ class CompetitionFixturesComponent(
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} Fixtures 
     </span>
-    <ng-template #loading>Loading...</ng-template>
+    $loadingTemplate
   </ql-section-title>
   """    
 )

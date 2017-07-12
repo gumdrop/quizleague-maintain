@@ -14,6 +14,7 @@ import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import angulate2.core.Input
 import angulate2.router.Router
+import rxjs.Observable
 
 
 @Component(
@@ -37,11 +38,11 @@ import angulate2.router.Router
              required step=".1"
              [(ngModel)]="item.duration" name="duration">
         </md-input-container>
-        <md-select placeholder="Subsidiary Competition" name="subsidiary" [(ngModel)]="item.subsidiary"  >
-          <md-option *ngFor="let subsidiary of competitions" [value]="subsidiary" >
+        <select placeholder="Subsidiary Competition" name="subsidiary" [(ngModel)]="item.subsidiary" [compareWith]="utils.compareWith" >
+          <option *ngFor="let subsidiary of competitions" [ngValue]="subsidiary" >
             {{subsidiary.name}}
-          </md-option>
-        </md-select>
+          </option>
+        </select>
        </div>
       <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
       <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
@@ -71,7 +72,9 @@ class LeagueCompetitionComponent( override val service:CompetitionService,
   
   override def init() = {
     route.params
-    .switchMap((params,i) => seasonService.get(params("seasonId"))).subscribe((x:Season) => competitions = x.competitions.filter(filterSubs _))
+    .switchMap((params,i) => seasonService.get(params("seasonId")))
+    .switchMap((s,i) => Observable.zip(s.competitions.map(_.obs):_*))
+    .subscribe(c => competitions = c.filter(filterSubs _))
     super.init()}
 
 }

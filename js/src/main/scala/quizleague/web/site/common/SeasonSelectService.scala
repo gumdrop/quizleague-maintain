@@ -18,5 +18,5 @@ trait SeasonSelectService {
   @JSExport
   def seasonChanged(s:Season) = seasonSubject.next(s)
     
-  applicationContextService.get.subscribe(ac => seasonChanged(ac.currentSeason))
+  applicationContextService.get.switchMap((ac,i) => ac.currentSeason.obs).subscribe(seasonChanged(_))
 }

@@ -22,14 +22,17 @@ import quizleague.web.maintain.applicationcontext.ApplicationContextModule
 import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.competition.CompetitionModule
 import angular.core.BrowserAnimationsModule
+import quizleague.web.site.common.SectionComponent
+import quizleague.web.site.common.MenuComponent
+import quizleague.web.site.common.SideMenuService
+import angulate2.ext.classModeScala
 
 @NgModule(
-  imports = @@[BrowserModule, MaterialModule, FlexLayoutModule, AppRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule] :+
-  InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
-  declarations = @@[AppComponent,RootComponent],
-  bootstrap = @@[AppComponent]
+  imports = @@[MaterialModule, FlexLayoutModule, MaintainRoutingModule , HttpModule, BrowserAnimationsModule, DepsModule],
+  //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 0)),
+  declarations = @@[MaintainMenuComponent,RootComponent]
 )
-class AppModule 
+class MaintainModule 
 
 @NgModule(
   imports = @@[VenueModule, TeamModule, UserModule, TextModule, GlobalTextModule, ApplicationContextModule, SeasonModule]
@@ -37,40 +40,28 @@ class AppModule
 class DepsModule
 
 @Routes(
-  root = true,
-  Route(path = "", component = %%[RootComponent])
-)
-class AppRoutingModule
+  root = false,
+  Route(
+    path = "maintain",
+    children = @@@(
+      Route(path = "", children = @@@(
+        Route(path = "", component = %%[RootComponent]))),
+      Route(path = "", component = %%[MaintainMenuComponent], outlet = "sidemenu"))))
+class MaintainRoutingModule
 
 @Component(
-  selector = "ql-app",
   template = """
-  <div>
-   <md-toolbar color='primary'>
-      <button md-icon-button (click)="sidenav.toggle()">
-        <i class='material-icons app-toolbar-menu'>menu</i>
-      </button>
-      Quiz League website maintenance
-    </md-toolbar>
-    <md-sidenav-container>
-      <md-sidenav #sidenav mode="side" opened="true">
         <div  fxLayout="column">
-          <a routerLink="/applicationContext" md-button >Application Context</a>
-          <a routerLink="/globalText" md-button >Global Text</a>
-          <a routerLink="/team" md-button >Teams</a>
-          <a routerLink="/season" md-button >Seasons</a>
-          <a routerLink="/user" md-button >Users</a>
-          <a routerLink="/venue" md-button >Venues</a>
+          <a routerLink="/maintain/applicationContext" md-button routerLinkActive="active">Application Context</a>
+          <a routerLink="/maintain/globalText" md-button routerLinkActive="active">Global Text</a>
+          <a routerLink="/maintain/team" md-button routerLinkActive="active">Teams</a>
+          <a routerLink="/maintain/season" md-button routerLinkActive="active">Seasons</a>
+          <a routerLink="/maintain/user" md-button routerLinkActive="active">Users</a>
+          <a routerLink="/maintain/venue" md-button routerLinkActive="active">Venues</a>
         </div>
-      </md-sidenav>
-      <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 66px);" fxLayout="column">
-        <router-outlet></router-outlet>
-      </div>
-    </md-sidenav-container>
-  </div>
   """
 )
-class AppComponent
+class MaintainMenuComponent
 
 @Component(
   selector = "ql-root",
@@ -82,4 +73,5 @@ class AppComponent
   </div>
   """
 )
-class RootComponent 
+@classModeScala
+class RootComponent(override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent 

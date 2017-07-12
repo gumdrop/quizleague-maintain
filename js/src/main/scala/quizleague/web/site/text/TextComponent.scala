@@ -5,15 +5,17 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.model._
 import rxjs.Observable
 import angulate2.core.OnChanges
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
     selector="ql-text",
-    template="""
+    template=s"""
       <div *ngIf="text | async as te; else loading">
         <div *ngIf="te.mimeType=='text/html'" [innerHTML]="te.text"></div>
         <div *ngIf="te.mimeType=='text/plain'" [innerText]="te.text"></div>
       </div>
-      <ng-template #loading>Loading...</ng-template>
+      $loadingTemplate
 """,
     styles = @@@("*{font-family:Roboto;}") 
 )

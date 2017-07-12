@@ -3,26 +3,29 @@ package quizleague.web.site.leaguetable
 import angulate2.std._
 import quizleague.web.model.LeagueTable
 import rxjs.Observable
+import quizleague.web.util.rx.RefObservable
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
     selector = "ql-league-table",
-    template = """
-      <table *ngIf="itemObs | async as item; else loading" >
+    template = s"""
+      <table *ngIf="table | async as item; else loading" class="mat-elevation-z3">
         <caption>{{item.description}}</caption>
         <thead>
           <th>Pos.</th><th>Team</th><th>Pl.</th><th>W</th><th>D</th><th>L</th><th>S</th><th>Pts</th>
         </thead>
         <tbody>
           <tr *ngFor="let row of item.rows">
-            <td>{{row.position}}</td><td><a routerLink="/team/{{row.team.id}}">{{row.team.shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+            <td>{{row.position}}</td><td><a routerLink="/team/{{(row.team | async)?.id}}">{{(row.team | async)?.shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>
         </tbody>
       </table>
-      <ng-template #loading>Loading...</ng-template>
+      $loadingTemplate
     """,
     styles = @@@("""
       table {
-        border : 1.5px solid black;
+        border : 1px solid rgba(0,0,0,.25);
         font-size:14px;
       }
       caption{
@@ -33,17 +36,17 @@ import rxjs.Observable
       }""",
       """
       td{
-        border-bottom: 0.5px solid rgba(0,0,0,.5);
-        border-right: 0.5px solid rgba(0,0,0,.5);
+        border-bottom: 0.5px solid rgba(0,0,0,.25);
+        border-right: 0.5px solid rgba(0,0,0,.25);
       }
       th{
-        border-bottom: 0.5px solid rgba(0,0,0,1);
-        border-right: 0.5px solid rgba(0,0,0,1);
+        border-bottom: 0.5px solid rgba(0,0,0,.25);
+        border-right: 0.5px solid rgba(0,0,0,.25);
       }
       """,
       """
       .num{
-        min-width:3em;
+        min-width:2em;
         text-align:right;
       }
       """
@@ -51,15 +54,16 @@ import rxjs.Observable
 )
 class LeagueTableComponent(
   service:LeagueTableService 
-) extends OnInit{
+){
   
   @Input
-  var table:LeagueTable = _
+  var table:Observable[LeagueTable] = _
+  
+  @Input
+  def ref_= (ref:RefObservable[LeagueTable]):Unit = table = ref.obs
   
   var itemObs:Observable[LeagueTable] = _
   
-  override def ngOnInit() = {
-    itemObs = service.get(table.id)
-  }
+ 
   
 }

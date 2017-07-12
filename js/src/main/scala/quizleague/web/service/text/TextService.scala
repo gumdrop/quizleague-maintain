@@ -10,26 +10,26 @@ import rxjs.Observable
 import shapeless._
 import quizleague.web.names.TextNames
 
-trait TextGetService extends GetService[Text] with TextNames {
-  override type U = Dom
-  override protected def mapOut(text: Dom)(implicit depth:Int): Observable[Text] = Observable.of(mapOutSparse(text))
-  override protected def mapOutSparse(text: Dom): Text = Text(text.id, text.text, text.mimeType)
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
-  override def deser(jsonString: String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
+trait TextGetService extends GetService[Text] with TextNames {
+    import io.circe._, io.circe.generic.auto._, io.circe.parser._
+  override type U = Dom
+  override protected def mapOutSparse(text: Dom): Text = Text(text.id, text.text, text.mimeType)
+  protected def dec(json:String) = decode[U](json)
+  protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait TextPutService extends PutService[Text] with TextGetService with DirtyListService[Text]{
 
   val mimeLens = lens[Dom].mimeType
 
-  def instance(mimeType: String) = add(mimeLens.set(make())("text/html"))
+  def instance(mimeType: String = "text/html") = add(mimeLens.set(make())(mimeType))
 
   override protected def mapIn(text: Text) = Dom(text.id, text.text, text.mimeType)
 
-  override protected def make(): Dom = Dom(newId(), "", "")
+  override protected def make(): Dom = Dom(newId(), "", "text/html")
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  override def ser(item: Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }

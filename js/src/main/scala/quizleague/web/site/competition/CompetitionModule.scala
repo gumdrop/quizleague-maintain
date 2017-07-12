@@ -60,7 +60,7 @@ class CompetitionModule
                Route("league", component = %%[LeagueCompetitionComponent]),
                Route("cup", component = %%[CupCompetitionComponent]),
                Route("plate", component = %%[PlateCompetitionComponent]),
-               Route("beer", component = %%[BeerCompetitionComponent]),
+               Route("subsidiary", component = %%[BeerCompetitionComponent]),
                Route("singleton", component = %%[SingletonCompetitionComponent]),
                Route("", component = %%[CompetitionTitleComponent], outlet = "title")
                )

@@ -37,8 +37,8 @@ styles = @@@("""
 class SeasonSelectComponent(
     seasonService:SeasonService){
   
-  val seasons = seasonService.list
-  
+  val seasons = seasonService.list.map((s,i) => s.sort((s1:Season,s2:Season) => s2.startYear compareTo s1.startYear))
+   
   @Input
   var currentSeason:Season = _
   

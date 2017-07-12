@@ -1,6 +1,7 @@
 package quizleague.web.maintain.util
 import scalajs.js
 import quizleague.web.model.Team
+import quizleague.web.util.rx.RefObservable
 
 class TeamManager(var teams: js.Array[Team]) {
   teams = teams.filter(!_.retired)
@@ -11,4 +12,5 @@ class TeamManager(var teams: js.Array[Team]) {
 
   def take(team: Team) = { usedTeams = usedTeams + ((team.id, team)); team }
   def untake(team: Team) = usedTeams = usedTeams - team.id
+  def untake(team: RefObservable[Team]) = usedTeams = usedTeams - team.id
 }

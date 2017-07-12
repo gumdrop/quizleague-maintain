@@ -7,6 +7,7 @@ case class ApplicationContext (
   currentSeason:Ref[Season],
   senderEmail:String,
   emailAliases:List[EmailAlias],
+  cloudStoreBucket:String,
   retired:Boolean = false  
 ) extends Entity
 

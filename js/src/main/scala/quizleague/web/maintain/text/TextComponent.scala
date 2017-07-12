@@ -32,6 +32,5 @@ class TextComponent(
     override val route: ActivatedRoute,
     override val location:Location) extends ItemComponent[Text]{
   
-  override def save() = {service.cache(item);location.back()}
   override def cancel():Unit = location.back()
 }

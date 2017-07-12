@@ -13,6 +13,8 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   template = s"""
@@ -22,7 +24,7 @@ import quizleague.web.site.common.TitledComponent
       <md-card-title>Results</md-card-title>
       <md-card-subtitle>Last few results</md-card-subtitle>
       <md-card-content>
-        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
+        <ql-results-simple [results]="results" [inlineDetails]="true"></ql-results-simple>
       </md-card-content>
       <md-card-actions>
         <a md-button routerLink="results">Show All</a>
@@ -32,14 +34,14 @@ import quizleague.web.site.common.TitledComponent
       <md-card-title>Fixtures</md-card-title>
       <md-card-subtitle>Next few fixtures</md-card-subtitle>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="fixtures" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
       <md-card-actions>
         <a md-button routerLink="fixtures">Show All</a>
       </md-card-actions>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """    
 )
 @classModeScala
@@ -57,9 +59,9 @@ class TeamComponent(
   
   itemObs.subscribe(t => setTitle(t.name))
   
-  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getResults(t, ac.currentSeason,5))) 
+  val results = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getResults(t, s, 5))) 
   
-  val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,j) => viewService.getFixtures(t, ac.currentSeason,5))) 
+  val fixtures = itemObs.switchMap((t,i) => applicationContextService.get().switchMap((ac,i) => ac.currentSeason.obs).switchMap((s,j) => viewService.getFixtures(t, s, 5))) 
   
   
 }

@@ -47,15 +47,14 @@ class GlobalTextComponent(
   
     def editText(text:TextEntry) = {
       service.cache(item)
-      router.navigateTo("/text", text.text.id)
+      router.navigateTo("/maintain/text", text.text.id)
     }
     
     def addNew() = {
-      log(item, "before add")
       
       val text = service.entryInstance()
       item.text.push(text)
       
-      log(item, "after add")
+
     }
 }

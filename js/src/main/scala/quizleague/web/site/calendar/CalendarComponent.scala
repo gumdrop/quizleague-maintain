@@ -8,9 +8,11 @@ import angulate2.std.{ @@@, Component, Data, Injectable }
 import quizleague.web.site.common.{ NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.util.Logging.log
 import angulate2.core.Input
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
-  template = """
+  template = s"""
   <div *ngIf="itemObs | async as items ; else loading" fxLayout="column" fxLayoutGap="10px">
   <md-card *ngFor="let item of items">
      <md-card-title>{{item.date | date:"EEEE d MMMM yyyy"}}</md-card-title>
@@ -27,7 +29,7 @@ import angulate2.core.Input
   </md-card>
  
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
 """)
 @classModeScala
 class CalendarComponent(
@@ -82,13 +84,13 @@ trait PanelComponent extends EventComponent{
   template = """
          <div fxLayout="column">
             <div fxLayout="row">
-            <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{event.results.fixtures.parentDescription}}</a> {{event.results.fixtures.description}}</div>
+            <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{(event.results.fixtures | async)?.parentDescription}}</a> {{(event.results.fixtures | async)?.description}}</div>
             <button class="fixButPos" md-icon-button (click)="togglePanel()">
               <md-icon *ngIf="!panelVisible" class="md-24" mdTooltip="Show results">visibility</md-icon>
               <md-icon *ngIf="panelVisible" class="md-24" mdTooltip="Hide results">visibility_off</md-icon>
             </button>
             </div>  
-          <div *ngIf="panelVisible"><ql-results-simple [results]="event.results.results"></ql-results-simple></div>
+          <div *ngIf="panelVisible"><ql-results-simple [list]="event.results.results"></ql-results-simple></div>
           </div>
 
 """,
@@ -109,7 +111,7 @@ class ResultsEventComponent extends PanelComponent
               <md-icon *ngIf="panelVisible" class="md-24" mdTooltip="Hide fixtures">visibility_off</md-icon>
             </button>
             </div>  
-          <div *ngIf="panelVisible"><ql-fixtures-simple [fixtures]="event.fixtures.fixtures"></ql-fixtures-simple></div>
+          <div *ngIf="panelVisible"><ql-fixtures-simple [list]="event.fixtures.fixtures"></ql-fixtures-simple></div>
           </div>
 
 """,
@@ -122,7 +124,7 @@ class FixturesEventComponent extends PanelComponent
 @Component(
   selector = "ql-calendar-event",
   template = """
-        <div><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{event.event.venue.name}}</a></div>
+        <div><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{(event.event.venue | async)?.name}}</a></div>
 """,
   inputs = @@@("event")
 )
@@ -132,7 +134,7 @@ class CalendarEventComponent extends EventComponent
 @Component(
   selector = "ql-competition-event",
   template = """
-        <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{event.competition.name}}</a>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{event.event.venue.name}}</a></div>
+        <div><a routerLink="/competition/{{event.competition.id}}/{{event.competition.typeName}}">{{event.competition.name}}</a>  {{event.event.time}}  Venue : <a routerLink="/venue/{{event.event.venue.id}}">{{(event.event.venue | async)?.name}}</a></div>
 """,
   inputs = @@@("event")
 )

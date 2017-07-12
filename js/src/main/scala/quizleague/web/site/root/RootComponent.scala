@@ -13,7 +13,8 @@ import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
 import angulate2.std._
 import quizleague.web.mock.MockData
-import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
+import quizleague.web.site.common._
+import quizleague.web.site.common.ComponentUtils._
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
 import quizleague.web.site.global.{ ApplicationContextModule, ApplicationContextService }
@@ -32,11 +33,12 @@ import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
+import quizleague.web.util.rx._
 
 
 @Component(
-  template = """
+  template = s"""
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
     <div>
     <md-tab-group dynamicHeight="true" [selectedIndex]="tabIndex" (click)="tabSelected()">
@@ -47,23 +49,23 @@ import java.time.LocalDate
       </md-tab>
       <md-tab label="Latest Results">
         <md-card *ngFor="let res of results | async">
-          <md-card-title>{{res.fixtures.parentDescription}} : {{res.fixtures.date | date:"dd MMM yyyy"}} - {{res.fixtures.description}}</md-card-title>
+          <md-card-title *ngIf="res.fixtures | async as fixtures">{{fixtures.parentDescription}} : {{fixtures.date | date:"dd MMM yyyy"}} - {{fixtures.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [results]="res.results" ></ql-results-simple>
+            <ql-results-simple [list]="res.results" ></ql-results-simple>
           </md-card-content>
           
         </md-card>
-        <ng-template #loading>Loading...</ng-template>  
+        $loadingTemplate  
       </md-tab>
       <md-tab label="Next Fixtures">
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [fixtures]="item.fixtures" ></ql-fixtures-simple>
+            <ql-fixtures-simple [list]="item.fixtures" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>
-        <ng-template #loading>Loading...</ng-template>  
+        $loadingTemplate  
         
       </md-tab>
     </md-tab-group>
@@ -85,23 +87,33 @@ class RootComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService,
     val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService) extends SectionComponent with NoMenuComponent with TitledComponent with OnInit{
+    val seasonService:SeasonService) 
+      extends SectionComponent 
+      with NoMenuComponent 
+      with TitledComponent 
+      with ComponentUtils 
+      with OnInit
+      with OnDestroy{
   
   var tabIndex:Int = 0;
   val tabCount = 3;
   var intervalId:SetIntervalHandle = null
   
   setTitle("Home")
-  val league = applicationContextService.get.switchMap((ac,i) => seasonService.getLeagueCompetition(ac.currentSeason))
+  val league = applicationContextService.get
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getLeagueCompetition(s))
   val results = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getResults(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getResults(s))
     .map((r,i) => r.take(1))
   val fixtures = applicationContextService.get
-    .switchMap((ac,i) => seasonService.getFixtures(ac.currentSeason))
+    .switchMap((ac,i) => ac.currentSeason.obs)
+    .switchMap((s,i) => seasonService.getFixtures(s))
     .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
     .map((f,i) => f.take(1))
     
-  val currentSeason = applicationContextService.get.map((ac,i) => ac.currentSeason)
+  val currentSeason = applicationContextService.get.switchMap((ac,i) => ac.currentSeason.obs)
   
   def tabSelected(){
     clearInterval(intervalId)
@@ -109,6 +121,10 @@ class RootComponent(
   
   override def ngOnInit() = {
     intervalId = setInterval(5000){tabIndex = if(tabIndex == tabCount - 1) 0 else tabIndex + 1}
+  }
+  
+  override def ngOnDestroy() = {
+    clearInterval(intervalId)
   }
 }
 

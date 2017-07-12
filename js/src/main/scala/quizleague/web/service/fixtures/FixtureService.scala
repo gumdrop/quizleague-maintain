@@ -23,6 +23,9 @@ import quizleague.web.service.venue.VenuePutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixtureNames
+import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import quizleague.util.json.codecs.ScalaTimeCodecs._  
+import quizleague.util.json.codecs.DomainCodecs._  
 
 
 
@@ -32,23 +35,14 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val venueService:VenueGetService
   val teamService:TeamGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,null,null,null,dom.date,dom.time,dom.duration)
-  override protected def mapOut(dom: Dom)(implicit depth:Int) =
-    Observable.zip(
-      child(dom.venue,venueService),
-      child(dom.home,teamService),
-      child(dom.away, teamService),
-      (venue: Venue, home: Team, away: Team) => Model(dom.id, dom.description, dom.parentDescription, venue, home, away, dom.date, dom.time, dom.duration))
-
+  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,refObs(dom.venue, venueService),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration)
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def deser(jsonString:String) = decode[Dom](jsonString).merge.asInstanceOf[Dom]
- 
+  override protected def dec(json:String) = decode[U](json)
+  override protected def decList(json:String) = decode[List[U]](json)
 }
 
 trait FixturePutService extends PutService[Fixture] with FixtureGetService with DirtyListService[Model]{
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.getRef(model.venue), teamService.getRef(model.home), teamService.getRef(model.away), model.date, model.time, model.duration)
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.ref(model.venue), teamService.ref(model.home), teamService.ref(model.away), model.date, model.time, model.duration)
   override protected def make() = ???
   
   override val venueService:VenuePutService
@@ -56,12 +50,12 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   def instance(fx:Fixtures, home:Team, away:Team, venue:Venue) = {
     val dom = Dom(newId,fx.description, fx.parentDescription,venueService.getRef(venue),teamService.getRef(home),teamService.getRef(away),fx.date,fx.start,fx.duration)
-    mapOut(dom)(1)
+    mapOutSparse(dom)
   }
   
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   import quizleague.util.json.codecs.ScalaTimeCodecs._
-  override def ser(item:Dom) = item.asJson.noSpaces
+  override def enc(item: Dom) = item.asJson
 
 }
 

@@ -24,7 +24,7 @@ import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import quizleague.web.model.Result
 import quizleague.web.model.Fixture
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import quizleague.web.site.global.ApplicationContextService
 import rxjs.Subject
 import quizleague.web.site.global.ApplicationContextService
@@ -33,6 +33,9 @@ import rxjs.BehaviorSubject
 import angulate2.forms.FormsModule
 import angulate2.platformBrowser.BrowserModule
 import quizleague.web.site.common.SeasonSelectService
+import quizleague.web.util.rx._
+import quizleague.web.service.CachingService
+import quizleague.web.service.CachingService
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
@@ -67,30 +70,34 @@ class TeamRoutesModule
 class TeamService(override val http: Http,
   override val textService: TextService,
   override val venueService: VenueService,
-  override val userService: UserService) extends TeamGetService with ServiceRoot
+  override val userService: UserService) extends TeamGetService with ServiceRoot with CachingService[Team]
 
 @Injectable
 @classModeScala
 class TeamViewService(
     service: TeamService,
     seasonService: SeasonService,
-    override val applicationContextService:ApplicationContextService) extends SeasonSelectService{
+    override val applicationContextService:ApplicationContextService) extends SeasonSelectService {
 
 
-  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = seasonService.getResults(season).map(
-    (r, i) => r.flatMap(_.results)
-      .filter(res => res.fixture.home.id == team.id || res.fixture.away.id == team.id)
-      .take(take))
+  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
+    seasonService.getResults(season).switchMap(
+    (r, i) => 
+      filterAndSort[Result,Fixture](
+          r.flatMap(_.results),
+          r => r.fixture,
+          (r,f) => f.home.id == team.id || f.away.id == team.id, 
+          (r1,r2) => r2._2.date compareTo r1._2.date)
+          .map((r,i) => r.take(take)))
+
 
   def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = {
 
     val now = LocalDate.now.toString()
 
     seasonService.getFixtures(season).map(
-      (r, i) => r.flatMap(_.fixtures)
-        .filter(fixture => fixture.date >= now)
-        .filter(fixture => fixture.home.id == team.id || fixture.away.id == team.id)
-        .take(take))
+      (r, i) => filter[Fixture](r.flatMap(_.fixtures), f => f.date >= now && (f.home.id == team.id || f.away.id == team.id))
+       .map((f,i) => f.take(take))).concatAll()
   }
 }
 

@@ -14,6 +14,11 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.model.GlobalText
+import quizleague.web.site.common.SectionComponent
+import quizleague.web.site.common.MenuComponent
+import quizleague.web.site.common.SideMenuService
+import quizleague.web.maintain.season.SeasonService
+
 
 @Component(
   template = s"""
@@ -26,11 +31,16 @@ import quizleague.web.model.GlobalText
              required
              [(ngModel)]="item.leagueName" name="leagueName">
         </md-input-container>
-        <md-select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required >
-          <md-option *ngFor="let textSet of textSets" [value]="textSet" >
-           - {{textSet.name}}
-          </md-option>
-        </md-select>
+        <select placeholder="Current Season" name="season" [(ngModel)]="item.currentSeason" required [compareWith]="utils.compareWith">
+          <option *ngFor="let season of seasons | async" [ngValue]="season" >
+            {{(season | async)?.startYear}}/{{(season | async)?.endYear}}
+          </option>
+        </select>
+        <select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required [compareWith]="utils.compareWith">
+          <option *ngFor="let textSet of textSets" [ngValue]="textSet" >
+            {{textSet.name}}
+          </option>
+        </select>
         <md-input-container>        
           <input mdInput placeholder="Sender Email" type="text"
              required
@@ -53,10 +63,13 @@ class ApplicationContextComponent(
     override val service:ApplicationContextService,
     override val route: ActivatedRoute,
     override val location:Location,
+    override val sideMenuService:SideMenuService,
     val router:Router)
-    extends ItemComponent[ApplicationContext] {
+    extends ItemComponent[ApplicationContext] with SectionComponent with MenuComponent {
   
   var textSets:js.Array[GlobalText] = _
+  
+  var seasons = service.listSeasons()
   
   override def ngOnInit() = {super.ngOnInit();initTextSets}
   

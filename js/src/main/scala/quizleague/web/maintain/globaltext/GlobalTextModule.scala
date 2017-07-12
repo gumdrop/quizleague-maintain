@@ -33,15 +33,14 @@ class GlobalTextModule
 
 @Routes(
   root = false,
-  Route(
-    path = "globalText/:id",
-    component = %%[GlobalTextComponent]
-  ),
-  Route(
-    path = "globalText",
-    component = %%[GlobalTextListComponent]
-  )
-)
+  Route(path = "maintain/globalText", children = @@@(
+    Route(path = "", children = @@@(Route(
+      path = ":id",
+      component = %%[GlobalTextComponent]),
+      Route(
+        path = "",
+        component = %%[GlobalTextListComponent]))),
+    Route(path = "", component = %%[MaintainMenuComponent], outlet="sidemenu"))))
 class GlobalTextRoutesModule 
 
 

@@ -13,6 +13,8 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.common.TitleService
 import quizleague.web.site.common.TitledComponent
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   template = s"""
@@ -20,11 +22,11 @@ import quizleague.web.site.common.TitledComponent
     <md-card>
       <md-card-title>All Fixtures</md-card-title>
       <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures | async" [inlineDetails]="true"></ql-fixtures-simple>
+        <ql-fixtures-simple [fixtures]="fixtures" [inlineDetails]="true"></ql-fixtures-simple>
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """    
 )
 @classModeScala

@@ -1,8 +1,8 @@
 package quizleague.domain
 
-import java.time.LocalTime
-import java.time.Duration
-import java.time.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.Duration
+import org.threeten.bp.LocalDate
 
 
 case class Fixtures(

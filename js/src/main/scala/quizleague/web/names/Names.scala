@@ -1,7 +1,7 @@
 package quizleague.web.names
 
 trait ApplicationContextNames extends ComponentNames {
-  override val typeName = "applicationContext"
+  override val typeName = "applicationcontext"
 }
 
 trait CompetitionNames extends ComponentNames {
@@ -17,7 +17,7 @@ trait FixtureNames extends ComponentNames {
 }
 
 trait GlobalTextNames extends ComponentNames {
-  override val typeName = "globalText"
+  override val typeName = "globaltext"
 }
 
 trait LeagueTableNames extends ComponentNames {

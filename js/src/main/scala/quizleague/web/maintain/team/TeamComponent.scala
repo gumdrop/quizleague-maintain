@@ -4,6 +4,7 @@ import angulate2.std._
 import angulate2.router.ActivatedRoute
 import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
+import ItemComponent._
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
@@ -14,6 +15,8 @@ import quizleague.web.maintain.text.TextService
 import angulate2.router.Router
 import js.Dynamic.{ global => g }
 import quizleague.web.maintain.text.TextEditMixin
+import quizleague.web.maintain.venue.VenueService
+import scala.scalajs.js.annotation.JSExport
 
 @Component(
   selector = "ql-team",
@@ -31,14 +34,14 @@ import quizleague.web.maintain.text.TextEditMixin
         <input mdInput placeholder="Short Name" type="text" id="shortName" required
              [(ngModel)]="item.shortName" name="shortName">
         </md-input-container>
-        <md-select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required >
-          <md-option *ngFor="let venue of venues" [value]="venue" >
-            {{venue.name}}
-          </md-option>
-        </md-select>
+        <select placeholder="Venue" name="venue" [(ngModel)]="item.venue" required [compareWith]="utils.compareWith">
+          <option *ngFor="let venue of venues | async" [ngValue]="venue" >
+            {{(venue | async)?.name}}
+          </option>
+        </select>
         <label style="color: rgba(0,0,0,.38);">Users</label>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let user of item.users">{{user.name}}
+          <md-chip *ngFor="let user of item.users">{{(user | async)?.name}}
             <button md-icon-button (click)="removeUser(user)" type="button"><md-icon>delete</md-icon></button>
           </md-chip> 
         </md-chip-list>
@@ -55,18 +58,15 @@ class TeamComponent(
     override val service:TeamService,
     override val route: ActivatedRoute,
     override val location:Location,
-    override val router:Router)
+    override val router:Router,
+    val venueService:VenueService)
     extends ItemComponent[Team] with TextEditMixin[Team]{
   
-  var venues:js.Array[Venue] = _
-  var users:js.Array[User] = _
+  val venues = service.listVenues
+  val users = service.listUsers
   
-  def trackVenue(item1:Venue, item2:Venue) = item1.id == item2.id
-  override def ngOnInit() = {super.ngOnInit();initVenues;initUsers}
+  def removeUser(user:User) = item.users ---= user.id
+ 
   
-  private def initVenues() = service.listVenues.subscribe(venues = _)
-  private def initUsers() = service.listUsers.subscribe(users = _)
-  
-  def removeUser(user:User) = item.users -= user
 }
     

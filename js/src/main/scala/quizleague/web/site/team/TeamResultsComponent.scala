@@ -8,6 +8,8 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.util.Logging
 import angulate2.core.Input
 import scala.scalajs.js.annotation.JSExport
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 
 @Component(
@@ -16,11 +18,11 @@ import scala.scalajs.js.annotation.JSExport
     <md-card>
       <md-card-title>All Results</md-card-title>
       <md-card-content>
-        <ql-results-simple [results]="results | async" [inlineDetails]="true"></ql-results-simple>
+        <ql-results-simple [results]="results" [inlineDetails]="true"></ql-results-simple>
       </md-card-content>
     </md-card>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+  $loadingTemplate
   """    
 )
 @classModeScala
@@ -52,13 +54,13 @@ class TeamResultsTitleComponent
 
 @Component(
   selector = "ql-team-sub-title",
-  template = """
+  template = s"""
   <ql-section-title>
      <span *ngIf="itemObs | async as item; else loading">
       {{item.name}} - {{text}}
     </span>
-    <ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($event)"></ql-season-select>
-    <ng-template #loading>Loading...</ng-template>
+    <ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($$event)"></ql-season-select>
+    $loadingTemplate
   </ql-section-title>
   """
 )
