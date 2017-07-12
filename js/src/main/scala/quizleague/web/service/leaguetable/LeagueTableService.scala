@@ -70,7 +70,7 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
   def sortTable(table:Model) = {
     val dom = mapIn(table)
     
-    val rows = dom.rows.sortBy(l => (l.leaguePoints, (l.matchPointsFor - l.matchPointsAgainst), l.won, l.drawn))
+    val rows = dom.rows.sortBy(l => (l.leaguePoints * -1, (l.matchPointsFor - l.matchPointsAgainst) * -1, l.won * -1, l.drawn * -1))
     
     mapOutSparse(Dom(dom.id, dom.description, rows, dom.retired))
     

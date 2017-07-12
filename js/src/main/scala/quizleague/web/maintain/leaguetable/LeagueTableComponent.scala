@@ -40,7 +40,7 @@ import rxjs.Observable
          </div>
 
          <div fxLayout="column">
-         <div><button mdButton (click)="sort()">Sort</button></div>
+         <div fxLayout="row"><button md-button type="button" (click)="sort()">Sort</button></div>
           <table>
             <thead>
               <th></th>
@@ -61,22 +61,22 @@ import rxjs.Observable
                 <td>{{(row.team | async)?.name}}</td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="4" value="{{i+1}}">
+                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="2" >
                   </md-input-container>
                 </td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.won" name="won{{i}}" type="number" length="4">
+                    <input mdInput [(ngModel)]="row.won" name="won{{i}}" type="number" length="2">
                   </md-input-container>
                 </td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.lost" name="lost{{i}}" type="number" length="4">
+                    <input mdInput [(ngModel)]="row.lost" name="lost{{i}}" type="number" length="2">
                   </md-input-container>
                 </td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.drawn" name="drawn{{i}}" type="number" length="4">
+                    <input mdInput [(ngModel)]="row.drawn" name="drawn{{i}}" type="number" length="2">
                   </md-input-container>
                 </td>
                 <td>
@@ -91,7 +91,7 @@ import rxjs.Observable
                 </td>
                 <td>
                   <md-input-container>
-                    <input mdInput [(ngModel)]="row.leaguePoints" name="leaguePoints{{i}}" type="number" length="4">
+                    <input mdInput [(ngModel)]="row.leaguePoints" name="leaguePoints{{i}}" type="number" length="2">
                   </md-input-container>
                 </td>
               </tr>
