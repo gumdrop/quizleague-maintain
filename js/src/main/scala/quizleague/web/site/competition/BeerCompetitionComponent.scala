@@ -53,7 +53,7 @@ class BeerCompetitionComponent(
     )
     with TeamCompetitionComponent{
   
-    override val textName:String = "beer_front_page"
+    override val textName:String = "beer-front-page"
 }
 
    

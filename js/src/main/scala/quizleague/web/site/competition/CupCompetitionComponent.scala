@@ -27,7 +27,7 @@ class CupCompetitionComponent(
     )
     with TeamCompetitionComponent{
   
-    override val textName:String = "cup_front_page"
+    override val textName:String = "cup-front-page"
 }
 
    

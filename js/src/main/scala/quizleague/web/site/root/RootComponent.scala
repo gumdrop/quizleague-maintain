@@ -71,7 +71,7 @@ import quizleague.web.util.rx._
     </md-tab-group>
     </div>
       <div class="text_area">
-        <ql-named-text name="front_page_main"></ql-named-text>
+        <ql-named-text name="front-page-main"></ql-named-text>
         <br>
         <ql-text [textId]="(currentSeason | async)?.text.id"></ql-text>
       </div>
