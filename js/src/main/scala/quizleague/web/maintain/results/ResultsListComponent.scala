@@ -23,9 +23,9 @@ import rxjs.Observable
 @Component(
   template = s"""
   <div>
-    <h2>{{(comp | async).name}} Results List</h2>
+    <h2>{{(comp | async)?.name}} Results List</h2>
     <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" mdButton>{{(item.fixtures | async).date}}</a>
+      <a routerLink="{{item.id}}" mdButton>{{(item.fixtures | async)?.date}}</a>
     </div>
    $backFAB
   </div>
@@ -44,14 +44,12 @@ class ResultsListComponent(
   
   var comp:Observable[Competition] = _
   
-  def sort(a:(Results,Fixtures),b:(Results,Fixtures)) = a._2.date compareTo b._2.date
-  
   def init(): Unit = {
     comp = route.params.switchMap( (params,i) => competitionService.get(params("competitionId")))
     
     comp.switchMap((c,i) => c.results)
     .switchMap((rs,i) => Observable.zip(rs.map(r => r.fixtures.obs.map((f,i) => (r,f))):_*)) 
-    .subscribe(x => {items = x.sort(sort _).map(_._1)})
+    .subscribe(x => {items = x.sortBy(_._2.date).map(_._1)})
   }
     
 

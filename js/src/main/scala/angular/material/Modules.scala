@@ -10,8 +10,8 @@ import angulate2.std._
 
 
 @NgModule(
- imports = @@[MaterialForms, MaterialLayout],
- exports = @@[MaterialForms, MaterialLayout]
+ imports = @@[MdCoreModule, MaterialForms, MaterialLayout],
+ exports = @@[MdCoreModule, MaterialForms, MaterialLayout]
 )
 class MaterialModule
 
@@ -59,6 +59,10 @@ class MaterialLayout
 @js.native
 @JSImport("hammerjs",JSImport.Default)
 class ExternalDeps extends js.Any
+
+@js.native
+@JSImport("@angular/material","MdCoreModule")
+class MdCoreModule extends js.Any
 
 @js.native
 @JSImport("@angular/material","MdSelectModule")

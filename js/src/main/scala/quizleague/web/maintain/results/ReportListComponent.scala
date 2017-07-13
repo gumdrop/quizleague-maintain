@@ -18,11 +18,11 @@ import quizleague.web.maintain.text.TextEditMixin
 
 @Component(
   template = s"""
- <div>
-    <h2>Reports : {{item.fixture.date}} : {{item.fixture.home.name}} vs item.{{item.fixture.away.name}}</h2>
+ <div *ngIf="item.fixture | async as fixture">
+    <h2>Reports : {{fixture.date}} : {{(fixture.home | async)?.name}} vs item.{{(fixture.away | async)?.name}}</h2>
     <form #fm="ngForm" (submit)="save()">
      <div fxLayout="column">
-      <div *ngFor="let report of item.reports" fxLayout="row"><button (click)="editText(report.text)" md-button type="button">{{report.team.shortName}}</button></div>
+      <div *ngFor="let report of item.reports" fxLayout="row"><button (click)="editText(report.text)" md-button type="button">{{(report.team | async)?.shortName}}</button></div>
      </div>
      $formButtons
     </form>

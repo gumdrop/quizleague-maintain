@@ -14,9 +14,12 @@ import TemplateElements._
   <div>
     <h2>Text Detail</h2>
     <form #fm="ngForm" (submit)="save()" >
-      <div >
+      <div fxLayout="column">
+      <md-input-container>
+        <input mdInput placeholder="Mime Type" [(ngModel)]="item.mimeType" name="mimeType">
+      </md-input-container>
         <md-input-container>
-        <textarea mdInput mdTextareaAutosize placeholder="Text" 
+        <textarea mdInput mdTextareaAutosize placeholder="Text" mdAutosizeMinRows="10" mdAutosizeMaxRows="40"
              required
              [(ngModel)]="item.text" name="text"></textarea>
         </md-input-container>
@@ -24,7 +27,8 @@ import TemplateElements._
      $formButtons
     </form>
   </div>
-  """    
+  """ ,
+  styles = @@@("textarea{width:90%;}")
 )
 @classModeScala
 class TextComponent(

@@ -18,7 +18,7 @@ import quizleague.web.util.rx._
 @Component(
   template = s"""
  <div>
-    <h2>Results {{(item.fixtures | async).parentDescription}} {{(item.fixtures | async).description}}</h2>
+    <h2>Results {{(item.fixtures | async)?.parentDescription}} {{(item.fixtures | async)?.description}}</h2>
     <form #fm="ngForm" (submit)="save()">
     <div fxLayout="column">
        <div fxLayout="column">
@@ -33,12 +33,14 @@ import quizleague.web.util.rx._
                 <md-input-container *ngIf="result.fixture | async as fixture">
                   <input mdInput placeholder="{{(fixture.away | async)?.name}}" [(ngModel)]="result.awayScore" name="away{{i}}" type="number">
                 </md-input-container>
-                <button md-icon-button type="button" (click)="toggleNote(result)" ><md-icon class="md-24">note</md-icon></button>
-                <button md-icon-button type="button" (click)="showReports(result)" ><md-icon class="md-24">report</md-icon></button>
+                <button md-icon-button type="button" (click)="toggleNote(result)" mdTooltip="Note"><md-icon class="md-24">note</md-icon></button>
+                <button md-icon-button type="button" (click)="showReports(result)" mdTooltip="Report" ><md-icon class="md-24">report</md-icon></button>
               </div>
-              <md-input-container *ngIf="showNote(result)" >
-                <textarea mdInput placeholder="Notes" [(ngModel)]="result.note" name="note{{i}}" ></textarea>
-              </md-input-container>              
+              <div *ngIf="r | async as result">
+                <md-input-container *ngIf="showNote(result)" >
+                  <textarea mdInput placeholder="Notes" [(ngModel)]="result.note" name="note{{i}}" ></textarea>
+                </md-input-container>
+              </div>              
           </div>
          </div>
         </div>      
