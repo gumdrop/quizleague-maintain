@@ -56,7 +56,7 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
     rectab.rows.size should be(2)
 
     val row1 = rectab.rows.head
-    row1.leaguePoints should be(2)
+    row1.leaguePoints should be(4)
     row1.team.id should be(team2.id)
   }
 }

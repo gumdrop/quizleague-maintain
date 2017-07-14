@@ -40,7 +40,7 @@ object LeagueTableCalculator {
     val rows = teams.map( team =>
 
       results
-      .flatMap(_.results.filter(r => r.fixture.home.id != team.id && r.fixture.away.id == team.id))
+      .flatMap(_.results.filter(r => r.fixture.home.id == team.id || r.fixture.away.id == team.id))
       .map(row(team, _))
       .foldLeft(LeagueTableRow(team,"",0,0,0,0,0,0,0))((acc,r) => LeagueTableRow(
           team,
