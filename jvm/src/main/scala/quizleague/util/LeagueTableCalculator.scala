@@ -24,8 +24,8 @@ object LeagueTableCalculator {
 	  	    "",
 	  	    1,
 	  	    if(points == win)  1 else 0,
-	  	    if(points == draw) 1 else 0,
 	  	    if(points == loss) 1 else 0,
+	  	    if(points == draw) 1 else 0,
 	  	    points,
 	  	    score,
 	  	    oppoScore
@@ -47,8 +47,8 @@ object LeagueTableCalculator {
           "",
           acc.played + r.played,
           acc.won + r.won,
-          acc.drawn + r.drawn,
           acc.lost + r.lost,
+          acc.drawn + r.drawn,
           acc.leaguePoints + r.leaguePoints,
           acc.matchPointsFor + r.matchPointsFor,
           acc.matchPointsAgainst + r.matchPointsAgainst))

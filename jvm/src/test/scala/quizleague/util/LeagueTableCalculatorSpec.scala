@@ -21,7 +21,7 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
     val fixture2 = Fixture("2", "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1))
 
     val result1 = Result("1", Ref("fixture", fixture1.id), 10, 25, None, "", List())
-    val result2 = Result("1", Ref("fixture", fixture2.id), 13, 21, None, "", List())
+    val result2 = Result("2", Ref("fixture", fixture2.id), 13, 21, None, "", List())
 
     val results1 = Results("1", Ref("fixtures", "1"), List(Ref("result", result1.id), Ref("result", result2.id)))
 
@@ -56,7 +56,22 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
     rectab.rows.size should be(2)
 
     val row1 = rectab.rows.head
-    row1.leaguePoints should be(4)
+    val row2 = rectab.rows.tail.head
+    row1.leaguePoints should be(2)
     row1.team.id should be(team2.id)
+    row1.won should be (1)
+    row1.drawn should be (0)
+    row1.lost should be (1)
+    row1.matchPointsFor should be (38)
+    row1.matchPointsAgainst should be (31)
+    
+    row2.leaguePoints should be(2)
+    row2.team.id should be(team1.id)
+    row2.won should be (1)
+    row2.drawn should be (0)
+    row2.lost should be (1)
+    row2.matchPointsFor should be (31)
+    row2.matchPointsAgainst should be (38)
+    
   }
 }
