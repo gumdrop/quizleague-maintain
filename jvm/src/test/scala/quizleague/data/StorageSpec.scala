@@ -64,7 +64,7 @@ class StorageSpec extends FlatSpec with Matchers with BeforeAndAfter with Option
         Ref("text",uuid),
         List(Ref("user",uuid)))
         
-  val result = Result(uuid, Ref("fixture", uuid), 23, 45, Ref("user",uuid),"note1" ,List(), true)
+  val result = Result(uuid, Ref("fixture", uuid), 23, 45, Option(Ref("user",uuid)),"note1" ,List(), true)
   
   val competition:Competition = LeagueCompetition(uuid, 
           "League", 

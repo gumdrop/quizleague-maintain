@@ -12,7 +12,7 @@ object LeagueTableCalculator {
   
   def Desc[T : Ordering] = implicitly[Ordering[T]].reverse
   
-  private def row(team:Ref[Team], result:Result):LeagueTableRow = {
+  private def row(team:Ref[Team], result:Result)(implicit context:StorageContext):LeagueTableRow = {
 	  
     val score = if(result.fixture.home.id == team.id) result.homeScore else result.awayScore
     val oppoScore = if(result.fixture.away.id == team.id) result.homeScore else result.awayScore
@@ -33,12 +33,12 @@ object LeagueTableCalculator {
 	}
   
   
-  def recalculate(table:LeagueTable, results:List[Results]) = {
+  def recalculate(table:LeagueTable, results:List[Results])(implicit context:StorageContext = StorageContext()) = {
     
     val teams = table.rows.map(_.team)
     
-    val rows = for{team <- teams}
-    yield{
+    val rows = teams.map( team =>
+
       results
       .flatMap(_.results.filter(r => r.fixture.home.id != team.id && r.fixture.away.id == team.id))
       .map(row(team, _))
@@ -52,30 +52,10 @@ object LeagueTableCalculator {
           acc.leaguePoints + r.leaguePoints,
           acc.matchPointsFor + r.matchPointsFor,
           acc.matchPointsAgainst + r.matchPointsAgainst))
-    }
+    )
     
     LeagueTable(table.id, table.description, rows.sortBy(r => (r.leaguePoints, r.matchPointsFor, r.won, r.drawn))(Desc))
     
   }
   
-//   private def addResultToTable(result:Result) = {
-//          for(table <- leagueTables) {
-//            for(homeRow <- table.rows if(homeRow.team == result.fixture.home)) updateRow(homeRow, result.homeScore, result.awayScore)
-//            for(awayRow <- table.rows if(awayRow.team == result.fixture.away)) updateRow(awayRow, result.awayScore, result.homeScore)
-//            table.sort
-//          }
-// 
-//  } 
-//  
-//  def recalculateTables = {
-//    
-//    for(table <- leagueTables) table.clear()
-//    
-//    for{resultSet <- results
-//        result <- resultSet.get().results    
-//    } addResultToTable(result)
-//    leagueTables
-//  }
-	
-	
 }
