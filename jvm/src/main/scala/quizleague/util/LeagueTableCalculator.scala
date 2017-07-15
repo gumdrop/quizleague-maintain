@@ -3,8 +3,12 @@ package quizleague.util
 import quizleague.conversions.RefConversions._
 import quizleague.domain._
 import quizleague.util.json.codecs.DomainCodecs._
+import shapeless._
+import quizleague.util.collection.TraversableUtil._
 
 object LeagueTableCalculator {
+  
+  val positionLens = lens[LeagueTableRow].position
   
   val win = 2
   val draw = 1
@@ -54,7 +58,13 @@ object LeagueTableCalculator {
           acc.matchPointsAgainst + r.matchPointsAgainst))
     )
     
-    LeagueTable(table.id, table.description, rows.sortBy(r => (r.leaguePoints, r.matchPointsFor, r.won, r.drawn))(Desc))
+    LeagueTable(
+        table.id, 
+        table.description, 
+        rows
+          .sortBy(r => (r.leaguePoints, r.matchPointsFor, r.won, r.drawn))(Desc)
+          .map(doIndexed((i,r) => positionLens.set(r)(s"${i+1}")))      
+    )
     
   }
   

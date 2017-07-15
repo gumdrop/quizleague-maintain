@@ -76,16 +76,4 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
     
   }
   
-  def recalculateTable(competition:Competition, table:Model) = {
-    val dom = mapIn(table)
-    Observable.zip(competition.results.map(x => resultsService.get(x.id)) :_*).
-      map((results,i) => {
-        
-        dom
-        
-      })
-   /* implement recalculate in map() here*/   
-    
-  }
-
 }

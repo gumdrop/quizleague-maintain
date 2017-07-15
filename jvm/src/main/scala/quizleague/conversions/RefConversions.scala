@@ -22,6 +22,7 @@ object RefConversions {
   }
   
   implicit def refToObject[T <: Entity](ref:Ref[T])(implicit tag:ClassTag[T],decoder: Decoder[T], context:StorageContext = StorageContext()):T = context.get(ref.id).getOrElse(context.put(Storage.load(ref.id)))
-    
+  implicit def refListToObjectList[T <: Entity](list:List[Ref[T]])(implicit tag:ClassTag[T],decoder: Decoder[T], context:StorageContext = StorageContext()):List[T] = list.map(refToObject(_))
+ 
   
 }

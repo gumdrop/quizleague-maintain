@@ -17,6 +17,7 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
 import quizleague.web.util.rx._
 import rxjs.Observable
+import quizleague.web.maintain.competition.CompetitionService
 
 
 @Component(
@@ -40,7 +41,7 @@ import rxjs.Observable
          </div>
 
          <div fxLayout="column">
-         <div fxLayout="row"><button md-button type="button" (click)="sort()">Sort</button></div>
+         <div fxLayout="row"><button md-button type="button" (click)="recalculate()">Recalculate</button></div>
           <table>
             <thead>
               <th></th>
@@ -110,16 +111,23 @@ import rxjs.Observable
 class LeagueTableComponent(
     override val service:LeagueTableService,
     val teamService:TeamService,
+    val competitionService:CompetitionService,
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
     extends ItemComponent[LeagueTable]{
   
     var teamManager:TeamManager =_
+    var comp:Competition = _
   
     override def cancel():Unit = location.back()
     override def init() = {
      super.init()
+     
+     route.params
+      .switchMap((params, i) => competitionService.get(params("competitionId")))
+      .subscribe(comp = _)
+     
      Observable.zip(
       loadItem()
         .switchMap((l, i) => zip(l.rows.map(_.team))),
@@ -140,14 +148,9 @@ class LeagueTableComponent(
       teamManager.take(team)
     }
     
-    def sort() = {
-      item = service.sortTable(item)
+    def recalculate() = {
+      service.recalculateTable(item, comp).subscribe(item = _)
     }
-    
-//    override def save():Unit = {
-//      service.cache(item)
-//      location.back()
-//    }
     
     def unusedTeams() = if(teamManager == null) null else teamManager.unusedTeams(null)
     

@@ -23,6 +23,11 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.user.UserService
 import quizleague.web.maintain.results.ResultsService
+import quizleague.web.service.PostService
+import quizleague.web.model._
+import quizleague.domain.{LeagueTable => Dom}
+import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.web.util.Logging._
 
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
@@ -39,6 +44,13 @@ class LeagueTableService(
     override val http: Http,
     override val teamService:TeamService,
     override val resultsService:ResultsService
-) extends LeagueTableGetService with LeagueTablePutService with ServiceRoot
+) extends LeagueTableGetService with LeagueTablePutService with PostService[LeagueTable] with ServiceRoot{
+  
+  def recalculateTable(table:LeagueTable, competition:Competition) = {
+    val res = command[Dom,String](List(table.id,"competition",competition.id, "recalc"),None)
+    res.map((u,i) => mapOutSparse(u))
+  }
+  
+}
 
 
