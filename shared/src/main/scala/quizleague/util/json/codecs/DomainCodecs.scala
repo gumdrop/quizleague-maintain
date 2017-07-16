@@ -5,6 +5,22 @@ import ScalaTimeCodecs._
 
 object DomainCodecs{
   import io.circe._, io.circe.generic.semiauto._,io.circe.generic.auto._
+  
+  //the ref codecs are for Competition derivation
+  
+  implicit val competitionRefDecoder: Decoder[Ref[Competition]] = deriveDecoder
+  implicit val competitionRefEncoder: Encoder[Ref[Competition]] = deriveEncoder
+  implicit val resultsRefDecoder: Decoder[Ref[Results]] = deriveDecoder
+  implicit val resultsRefEncoder: Encoder[Ref[Results]] = deriveEncoder
+  implicit val fixturesRefDecoder: Decoder[Ref[Fixtures]] = deriveDecoder
+  implicit val fixturesRefEncoder: Encoder[Ref[Fixtures]] = deriveEncoder
+  implicit val leagueTableRefDecoder: Decoder[Ref[LeagueTable]] = deriveDecoder
+  implicit val leagueTableRefEncoder: Encoder[Ref[LeagueTable]] = deriveEncoder
+  implicit val textRefDecoder: Decoder[Ref[Text]] = deriveDecoder
+  implicit val textRefEncoder: Encoder[Ref[Text]] = deriveEncoder
+  implicit val eventDecoder: Decoder[Event] = deriveDecoder
+  implicit val eventEncoder: Encoder[Event] = deriveEncoder
+  
   implicit val venueDecoder: Decoder[Venue] = deriveDecoder
   implicit val venueEncoder: Encoder[Venue] = deriveEncoder
   implicit val teamDecoder: Decoder[Team] = deriveDecoder
