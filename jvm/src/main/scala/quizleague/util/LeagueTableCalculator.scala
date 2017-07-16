@@ -5,6 +5,7 @@ import quizleague.domain._
 import quizleague.util.json.codecs.DomainCodecs._
 import shapeless._
 import quizleague.util.collection.TraversableUtil._
+import quizleague.util.collection._
 
 object LeagueTableCalculator {
   
@@ -14,7 +15,6 @@ object LeagueTableCalculator {
   val draw = 1
   val loss = 0
   
-  def Desc[T : Ordering] = implicitly[Ordering[T]].reverse
   
   private def row(team:Ref[Team], result:Result)(implicit context:StorageContext):LeagueTableRow = {
 	  

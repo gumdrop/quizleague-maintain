@@ -13,7 +13,8 @@ import quizleague.web.service._
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.names.GlobalTextNames
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
@@ -50,7 +51,6 @@ trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetServ
     TextEntry("", Ref(text.typeName, text.id))
   }
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   override def enc(item: Dom) = item.asJson
 
 }

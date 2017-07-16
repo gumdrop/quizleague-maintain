@@ -5,7 +5,8 @@ import quizleague.web.model.Venue
 import quizleague.web.names.VenueNames
 import quizleague.web.service.{ GetService, PutService }
 import rxjs.Observable
-import io.circe._,  io.circe.generic.auto._,io.circe.parser._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 
@@ -27,7 +28,6 @@ trait VenuePutService extends PutService[Venue] with VenueGetService {
   override protected def mapIn(venue: Venue) = {
     Dom(venue.id, venue.name, venue.address, Option(venue.phone), Option(venue.email), Option(venue.website), Option(venue.imageURL), venue.retired)
   }
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   override def enc(item: Dom) = item.asJson
 
 }

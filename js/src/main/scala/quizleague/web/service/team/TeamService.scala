@@ -15,8 +15,8 @@ import quizleague.web.service.venue._
 import quizleague.web.service.text._
 import quizleague.web.service.user._
 import quizleague.web.names.TeamNames
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._
-import quizleague.util.json.codecs.DomainCodecs
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 trait TeamGetService extends GetService[Team] with TeamNames {
 
@@ -46,7 +46,6 @@ trait TeamPutService extends PutService[Team] with TeamGetService {
   override protected def mapIn(team: Team) = Dom(team.id, team.name, team.shortName, venueService.ref(team.venue.id), textService.ref(team.text.id), team.users.map(u => userService.ref(u.id)).toList, team.retired)
   override protected def make() = Dom(newId(), "", "", null, textService.getRef(textService.instance()))
   override def save(team: Team) = {textService.save(team.text);super.save(team) }
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
   override def enc(item: Dom) = item.asJson
 

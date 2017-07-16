@@ -24,8 +24,8 @@ import quizleague.web.util.rx._
        <div fxLayout="column">
         <h4>Result List</h4>
          <div fxLayout="column">
-          <div *ngFor="let r of item.results;let i = index" fxLayout="column">
-              <div fxLayout="row" *ngIf="r | async as result">
+          <div *ngFor="let result of results;let i = index" fxLayout="column">
+              <div fxLayout="row">
                 <button md-icon-button type="button" (click)="removeResult(result)" ><md-icon class="md-24">delete</md-icon></button>
                 <md-input-container *ngIf="result.fixture | async as fixture">
                   <input mdInput placeholder="{{(fixture.home | async)?.name}}" [(ngModel)]="result.homeScore" name="home{{i}}" type="number">
@@ -33,10 +33,10 @@ import quizleague.web.util.rx._
                 <md-input-container *ngIf="result.fixture | async as fixture">
                   <input mdInput placeholder="{{(fixture.away | async)?.name}}" [(ngModel)]="result.awayScore" name="away{{i}}" type="number">
                 </md-input-container>
-                <button md-icon-button type="button" (click)="toggleNote(result)" mdTooltip="Note"><md-icon class="md-24">note</md-icon></button>
-                <button md-icon-button type="button" (click)="showReports(result)" mdTooltip="Report" ><md-icon class="md-24">report</md-icon></button>
+                <button md-icon-button type="button" (click)="toggleNote(result)" mdTooltip="Note"><md-icon class="md-24">report</md-icon></button>
+                <button md-icon-button type="button" (click)="showReports(result)" mdTooltip="Report" ><md-icon class="md-24">description</md-icon></button>
               </div>
-              <div *ngIf="r | async as result">
+              <div>
                 <md-input-container *ngIf="showNote(result)" >
                   <textarea mdInput placeholder="Notes" [(ngModel)]="result.note" name="note{{i}}" ></textarea>
                 </md-input-container>
@@ -61,10 +61,14 @@ class ResultsComponent(
     extends ItemComponent[Results]{
   
   
-    val showNotes = js.Array[Result]()  
+    val showNotes = js.Array[String]()  
+    var results:js.Array[Result] = js.Array()
     
-    def results() = zip(item.results)
-  
+    override def init() = {
+      super.init()
+      loadItem().switchMap((r,i) => zip(r.results)).subscribe(results = _)
+      
+    }
   
     override def cancel():Unit = location.back()
     
@@ -72,17 +76,17 @@ class ResultsComponent(
     
     def removeResult(result:Result) = item.results ---= result.id
     
-    def toggleNote(result:Result) = if(showNotes.contains(result)) showNotes -= result else showNotes += result
+    def toggleNote(result:Result) = if(showNotes.contains(result.id)) showNotes -= result.id else showNotes += result.id
      
-    def showNote(result:Result) = showNotes.contains(result)
+    def showNote(result:Result) = showNotes.contains(result.id)
     def showReports(result:Result) = {
       service.cache(item)
       router.navigateRelativeTo(route,"result",result.id,"report")
     }
     
     override def save():Unit = {
-      service.cache(item)
-      location.back()
+      results.foreach(resultService.save(_))
+      super.save()
     }
 }
     

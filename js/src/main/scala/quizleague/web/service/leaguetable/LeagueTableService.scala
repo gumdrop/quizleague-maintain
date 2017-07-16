@@ -28,7 +28,8 @@ import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.LeagueTableNames
 import quizleague.web.service.results.ResultsGetService
-import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 
@@ -63,8 +64,7 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
 
   def rowInstance(team: Team) = LeagueTableRow(teamService.refObs(team.id), "", 0, 0, 0, 0, 0, 0, 0)
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
+
   override def enc(item: Dom) = item.asJson
   
   def sortTable(table:Model) = {

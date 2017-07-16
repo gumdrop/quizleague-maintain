@@ -11,7 +11,8 @@ import quizleague.web.service.season.{ SeasonGetService, SeasonPutService }
 import quizleague.web.service.user.{ UserGetService, UserPutService }
 import quizleague.web.util.Logging
 import rxjs.Observable
-import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import io.circe._,io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 import scala.scalajs.js.JSConverters._
 
 trait ApplicationContextGetService extends GetService[ApplicationContext] with ApplicationContextNames with Logging {
@@ -40,8 +41,6 @@ trait ApplicationContextPutService extends PutService[ApplicationContext] with A
 
   override protected def mapIn(context: ApplicationContext) = Dom(context.id, context.leagueName, globalTextService.ref(context.textSet), seasonService.ref(context.currentSeason), context.senderEmail, context.emailAliases.map(ea => DomEmailAlias(ea.alias, userService.ref(ea.user))).toList, context.cloudStoreBucket)
   override protected def make() = Dom(newId(), "", null, null, "", List(), "")
-
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
   override def enc(item: Dom) = item.asJson
 }

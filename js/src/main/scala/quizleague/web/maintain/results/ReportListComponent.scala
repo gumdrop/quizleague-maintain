@@ -36,8 +36,5 @@ class ReportListComponent(
     override val route: ActivatedRoute,
     override val location:Location,
     val router:Router)
-    extends ItemComponent[Result] with TextEditMixin[Result] with Logging{
- 
-    override protected def loadItem(depth:Int = 1) = super.loadItem(3)
-}
+    extends ItemComponent[Result] with TextEditMixin[Result] with Logging
     

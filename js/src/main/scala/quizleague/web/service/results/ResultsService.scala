@@ -16,7 +16,8 @@ import scala.scalajs.js.Date
 import quizleague.web.names.ResultsNames
 import quizleague.web.service.fixtures.FixturesGetService
 import quizleague.web.service.fixtures.FixturesPutService
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 trait ResultsGetService extends GetService[Results] with ResultsNames {
@@ -44,8 +45,6 @@ trait ResultsPutService extends PutService[Results] with ResultsGetService with 
   
   def instance(comp:Competition) = ???
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def enc(item: Dom) = item.asJson
 
 }

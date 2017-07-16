@@ -23,8 +23,8 @@ import org.threeten.bp.LocalDate
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixturesNames
 import quizleague.web.util.rx._
-import io.circe._, io.circe.generic.auto._, io.circe.parser._
-import quizleague.util.json.codecs.ScalaTimeCodecs._  
+import io.circe._,io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 
@@ -60,9 +60,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
     })
   }
   override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
-  
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
+
   override def enc(item: Dom) = item.asJson
 
 }

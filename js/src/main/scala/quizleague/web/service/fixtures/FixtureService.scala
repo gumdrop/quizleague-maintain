@@ -23,9 +23,8 @@ import quizleague.web.service.venue.VenuePutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixtureNames
-import io.circe._, io.circe.generic.auto._, io.circe.parser._
-import quizleague.util.json.codecs.ScalaTimeCodecs._  
-import quizleague.util.json.codecs.DomainCodecs._  
+import io.circe._,io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 
@@ -53,8 +52,6 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
     mapOutSparse(dom)
   }
   
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def enc(item: Dom) = item.asJson
 
 }

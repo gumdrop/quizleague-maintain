@@ -8,7 +8,8 @@ import quizleague.web.model.User
 import quizleague.domain.{ User => Dom }
 import rxjs.Observable
 import quizleague.web.names.UserNames
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 
@@ -28,7 +29,6 @@ trait UserPutService extends PutService[User] with UserGetService {
 
   override protected def make(): Dom = Dom(newId(), "", "")
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
   override def enc(item: Dom) = item.asJson
 
 }

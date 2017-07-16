@@ -28,8 +28,8 @@ import quizleague.web.service.fixtures.FixturePutService
 import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
-import io.circe._, io.circe.generic.auto._, io.circe.parser._
-import quizleague.util.json.codecs.ScalaTimeCodecs._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 trait ResultGetService extends GetService[Model] with ResultNames {
@@ -71,8 +71,6 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
   
   override def save(model:Model) = {textService.saveAllDirty; super.save(model)}
 
-  import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-  import quizleague.util.json.codecs.ScalaTimeCodecs._
   override def enc(item: Dom) = item.asJson
 
 }

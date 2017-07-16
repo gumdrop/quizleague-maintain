@@ -4,7 +4,7 @@ import java.util.Date
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.Duration
-import io.circe.generic.JsonCodec
+import io.circe.generic._,io.circe.generic.auto._
 
 import quizleague.util.json.codecs.ScalaTimeCodecs._
 import quizleague.util.json.codecs.DomainCodecs._

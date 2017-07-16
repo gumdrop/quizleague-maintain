@@ -6,7 +6,8 @@ import quizleague.domain._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import quizleague.util.LeagueTableCalculator
-import io.circe._, io.circe.generic.auto._, io.circe.syntax._
+import io.circe.parser._,io.circe.syntax._
+import quizleague.util.json.codecs.DomainCodecs._
 
 
 trait MaintainPostEndpoints {
