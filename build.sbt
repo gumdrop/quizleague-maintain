@@ -4,7 +4,8 @@ EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
 val circeVersion = "0.7.0"
-val appengineVersion = "1.9.53"
+val appengineVersion = "1.9.54"
+val angularVersion = "^4.0.0"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 lazy val commonSettings = Seq(
@@ -52,16 +53,16 @@ lazy val quizleague = crossProject.in(file(".")).
   jsSettings(
     name := "quizleague-js",
     ngBootstrap := Some("quizleague.web.site.AppModule"),
-    npmDependencies in Compile += "@angular/common" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/compiler" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/core" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/forms" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/http" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/platform-browser" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/platform-browser-dynamic" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/router" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/upgrade" -> "~4.0.0",
-	npmDependencies in Compile += "@angular/animations" -> "~4.0.0",
+    npmDependencies in Compile += "@angular/common" -> angularVersion,
+	npmDependencies in Compile += "@angular/compiler" -> angularVersion,
+	npmDependencies in Compile += "@angular/core" -> angularVersion,
+	npmDependencies in Compile += "@angular/forms" -> angularVersion,
+	npmDependencies in Compile += "@angular/http" -> angularVersion,
+	npmDependencies in Compile += "@angular/platform-browser" -> angularVersion,
+	npmDependencies in Compile += "@angular/platform-browser-dynamic" -> angularVersion,
+	npmDependencies in Compile += "@angular/router" -> angularVersion,
+	npmDependencies in Compile += "@angular/upgrade" -> angularVersion,
+	npmDependencies in Compile += "@angular/animations" -> angularVersion,
 	npmDependencies in Compile += "core-js" -> "^2.4.1",
 	npmDependencies in Compile += "zone.js" -> "^0.8.4",
 	npmDependencies in Compile += "rxjs" -> "~5.0.1",

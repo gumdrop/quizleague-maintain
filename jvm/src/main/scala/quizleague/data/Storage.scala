@@ -8,6 +8,9 @@ import reflect._
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import java.util.ArrayList
+import java.util.Collections
+import javax.cache.CacheManager
+import javax.cache.Cache
 
 object Storage {
 
@@ -16,10 +19,20 @@ object Storage {
     list.add(null.asInstanceOf[T])
     list
   }
+  
+  val cache = CacheManager.getInstance.getCacheFactory.createCache(Collections.emptyMap()).asInstanceOf[java.util.Map[String,Entity]].asScala
+  
+  private def cacheId(id:String, kind:String) = s"$kind-$id"
+  def toCache[T <: Entity](entity:T, kind:String):T = {cache.put(cacheId(entity.id, kind) ,entity);entity}
+  def fromCache[T <: Entity](id:String,kind:String):Option[T] = cache.get(cacheId(id, kind)).asInstanceOf[Option[T]]
+
 
   def datastore = DatastoreServiceFactory.getDatastoreService
 
-  def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Key = save(makeKind, entity.id, encoder(entity))
+  def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Key = {
+    val kind = makeKind
+    save(kind, entity.id, encoder(toCache(entity, kind)))
+  }
 
   def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind, id, decoder)
 
@@ -84,9 +97,9 @@ object Storage {
 
   private def load[T](kind: String, id: String, decoder: Decoder[T]): T = {
 
-    val entity = datastore.get(KeyFactory.createKey(kind, id))
-
-    entityToObj(entity, decoder)
+    val cached = fromCache(id, kind)
+    
+    cached.getOrElse(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder))
 
   }
 
