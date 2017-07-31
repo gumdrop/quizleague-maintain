@@ -35,6 +35,7 @@ import quizleague.web.site.results.ResultsComponentsModule
 import quizleague.web.site.fixtures.FixturesComponentsModule
 import org.threeten.bp.LocalDate
 import quizleague.web.util.rx._
+import quizleague.web.site.results.ResultsService
 
 
 @Component(
@@ -87,7 +88,8 @@ class RootComponent(
     override val sideMenuService:SideMenuService,
     override val titleService:TitleService,
     val applicationContextService:ApplicationContextService,
-    val seasonService:SeasonService) 
+    val seasonService:SeasonService,
+    val resultsService:ResultsService) 
       extends SectionComponent 
       with NoMenuComponent 
       with TitledComponent 
@@ -105,7 +107,7 @@ class RootComponent(
     .switchMap((s,i) => seasonService.getLeagueCompetition(s))
   val results = applicationContextService.get
     .switchMap((ac,i) => ac.currentSeason.obs)
-    .switchMap((s,i) => seasonService.getResults(s))
+    .switchMap((s,i) => resultsService.latestResults(s))
     .map((r,i) => r.take(1))
   val fixtures = applicationContextService.get
     .switchMap((ac,i) => ac.currentSeason.obs)

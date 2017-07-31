@@ -70,6 +70,8 @@ class ResultsComponentsModule
 class ResultsService(override val http: Http,
     override val resultService: ResultService,
     override val fixturesService: FixturesService) extends ResultsGetService with ServiceRoot {
+  
+  def latestResults(season:Season) = list(Some(s"latest/${season.id}"))
 
 }
 
