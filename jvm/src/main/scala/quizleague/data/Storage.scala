@@ -95,11 +95,11 @@ object Storage {
 
   }
 
-  private def load[T](kind: String, id: String, decoder: Decoder[T]): T = {
+  private def load[T <: Entity](kind: String, id: String, decoder: Decoder[T]): T = {
 
     val cached = fromCache(id, kind)
     
-    cached.getOrElse(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder))
+    cached.getOrElse(toCache(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder),kind))
 
   }
 
