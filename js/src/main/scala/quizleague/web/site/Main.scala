@@ -105,7 +105,8 @@ class AppRoutingModule
       margin-top:8px;
     }
   """,
-  """[md-icon-button]{top:-3px;}""")
+  """[md-icon-button]{top:-3px;}""",
+  """md-sidenav{width:270px;}""")
 )
 class AppComponent(
     service:ApplicationContextService, 

@@ -16,6 +16,7 @@ import quizleague.web.site.season.SeasonModule
 import quizleague.web.service.CachingService
 import quizleague.web.model.Fixture
 import quizleague.web.model.Fixtures
+import quizleague.web.model.Season
 
 
 @NgModule(
@@ -39,6 +40,7 @@ class FixturesComponentsModule
 class FixturesService(override val http: Http,
     override val fixtureService: FixtureService) extends FixturesGetService with ServiceRoot with CachingService[Fixtures]{
 
+   def nextFixtures(season:Season) = list(Some(s"next/${season.id}"))
 }
 
 @Injectable

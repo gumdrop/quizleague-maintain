@@ -20,6 +20,7 @@ import quizleague.web.site.global.ApplicationContextService
 import quizleague.web.site.results.ResultsService
 import quizleague.web.site.season.SeasonService
 import rxjs.Observable
+import quizleague.web.site.fixtures.FixturesService
 
 
 @Component(
@@ -31,10 +32,10 @@ import rxjs.Observable
         <ql-root-league-table [season]="currentSeason | async"></ql-root-league-table>
       </md-tab>
       <md-tab label="Latest Results">
-        <ql-root-latest-results></ql-root-latest-results>
+        <ql-root-latest-results [season]="currentSeason | async"></ql-root-latest-results>
       </md-tab>
       <md-tab label="Next Fixtures">
-        <ql-root-next-fixtures></ql-root-next-fixtures>
+        <ql-root-next-fixtures [season]="currentSeason | async"></ql-root-next-fixtures>
       </md-tab>
     </md-tab-group>
     </div>
@@ -122,11 +123,15 @@ class LeagueTableComponent(
 )
 class LatestResultsComponent(
     applicationContextService:ApplicationContextService,
-    resultsService:ResultsService){
-  val results = applicationContextService.get
-    .switchMap((ac,i) => ac.currentSeason.obs)
-    .switchMap((s,i) => resultsService.latestResults(s))
-    .map((r,i) => r.take(1))
+    resultsService:ResultsService) extends OnChanges{
+  
+  @Input
+  var season:Season = null
+  var results:Observable[js.Array[Results]] = null
+    
+  override def ngOnChanges(changes: SimpleChanges) {
+    results = if(season != null) resultsService.latestResults(season) else null
+  }
 }
 
 @Component(
@@ -144,11 +149,16 @@ class LatestResultsComponent(
 )
 class NextFixturesComponent(
     applicationContextService:ApplicationContextService,
-    seasonService:SeasonService){
-  val fixtures = applicationContextService.get
-    .switchMap((ac,i) => ac.currentSeason.obs)
-    .switchMap((s,i) => seasonService.getFixtures(s))
-    .map((f,i) => f.filter(_.date >= LocalDate.now.toString))
-    .map((f,i) => f.take(1))
+    fixturesService:FixturesService) extends OnChanges{
+  
+  @Input
+  var season:Season = null
+  var fixtures:Observable[js.Array[Fixtures]] = null
+    
+  override def ngOnChanges(changes: SimpleChanges) {
+    fixtures = if(season != null) fixturesService.nextFixtures(season) else null
+  
+  }
+
 }
 

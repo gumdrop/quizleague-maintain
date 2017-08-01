@@ -10,6 +10,7 @@ import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import quizleague.domain._
 import quizleague.util.collection._
+import org.threeten.bp.LocalDate
 
 
 @Path("/site")
@@ -34,5 +35,20 @@ class SiteEndpoint(
      .take(1)
      
     listOut[Results](results)
+  }
+  
+  @GET
+  @Path("/fixtures/next/{id}")
+  def nextFixtures(@PathParam("id") id:String) = {
+    val now = LocalDate.now
+    val fixtures = refListToObjectList(Storage.load[Season](id).competitions).flatMap(c => c match{
+      case a:TeamCompetition => a.fixtures
+      case _ => List()
+     })
+     .filter(_.date.isAfter(now))
+     .sortBy(_.date.toString)
+     .take(1)
+     
+    listOut[Fixtures](fixtures)
   }
 }
