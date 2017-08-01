@@ -35,7 +35,7 @@ import org.threeten.bp.LocalDate
 
 @NgModule(
   imports = @@[MaterialModule, FlexLayoutModule, CommonModule,TextModule, LeagueTableModule, ResultsComponentsModule, FixturesComponentsModule],
-  declarations = @@[RootComponent],
+  declarations = @@[RootComponent,LeagueTableComponent, LatestResultsComponent, NextFixturesComponent],
   exports = @@[RootComponent]
 )
 class RootModule
