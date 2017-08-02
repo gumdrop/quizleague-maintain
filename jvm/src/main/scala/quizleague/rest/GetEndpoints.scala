@@ -28,11 +28,11 @@ trait GetEndpoints {
 
   protected def list[T <: Entity](implicit tag: ClassTag[T], dec: Decoder[T], enc: Encoder[T]) = listOut(Storage.list[T])
   
-  protected def listOut[T <: Entity](list:List[T])(implicit enc: Encoder[T]) = {
+  protected def listOut[T <: Entity](list:List[T], cacheAge:Int = defaultCacheAge)(implicit enc: Encoder[T]) = {
     try Response.status(200)
     .`type`(MediaType.APPLICATION_JSON)
     .entity(list.asJson.noSpaces.toString)
-    .header(CACHE_CONTROL, s"max-age=$defaultCacheAge")
+    .header(CACHE_CONTROL, s"max-age=$cacheAge")
     .build
     catch { case e: Exception => { e.printStackTrace; Response.status(404).build } }
   }

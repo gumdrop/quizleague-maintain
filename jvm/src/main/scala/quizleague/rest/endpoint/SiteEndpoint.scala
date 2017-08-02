@@ -5,7 +5,6 @@ import quizleague.rest.EtagSupport
 import quizleague.rest.GetEndpoints
 import javax.ws.rs._
 import quizleague.data.Storage
-import quizleague.domain.ApplicationContext
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import quizleague.domain._
@@ -28,7 +27,7 @@ class SiteEndpoint(
   @Path("/results/latest/{id}")
   def latestResults(@PathParam("id") id:String) = {
     implicit val context = StorageContext()
-    val results = refListToObjectList(Storage.load[Season](id).competitions).flatMap(c => c match{
+    val results = competitions(id).flatMap(c => c match{
       case a:TeamCompetition => a.results
       case _ => List()
      })
@@ -43,7 +42,7 @@ class SiteEndpoint(
   def nextFixtures(@PathParam("id") id:String) = {
     implicit val context = StorageContext()
     val now = LocalDate.now
-    val fixtures = refListToObjectList(Storage.load[Season](id).competitions).flatMap(c => c match{
+    val fixtures = competitions(id).flatMap(c => c match{
       case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
       case _ => List()
      })
@@ -57,7 +56,7 @@ class SiteEndpoint(
   @Path("/result/season/{seasonId}/team/{teamId}")
   def teamResults(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
     implicit val context = StorageContext()
-    val results = refListToObjectList(Storage.load[Season](seasonId).competitions).flatMap(c => c match{
+    val results = competitions(seasonId).flatMap(c => c match{
       case a:TeamCompetition => a.results
       case _ => List()
      })
@@ -73,14 +72,16 @@ class SiteEndpoint(
   def teamFixtures(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
     implicit val context = StorageContext()
     val now = LocalDate.now
-    val fixtures = refListToObjectList(Storage.load[Season](seasonId).competitions).flatMap(c => c match{
+    val fixtures = competitions(seasonId).flatMap(c => c match{
       case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
       case _ => List()
      })
      .flatMap(_.fixtures.filter(f => f.home.id == teamId || f.away.id == teamId))
-     .sortBy(_.date.toString)(Desc)
+     .sortBy(_.date.toString)
      .take(take)
      
     listOut[Fixture](fixtures)
   }
+  
+  private def competitions(seasonId:String)(implicit context:StorageContext):List[Competition] =  Storage.load[Season](seasonId).competitions
 }
