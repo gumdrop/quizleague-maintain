@@ -10,7 +10,6 @@ import scala.collection.JavaConverters._
 import java.util.ArrayList
 import java.util.Collections
 import javax.cache.CacheManager
-import javax.cache.Cache
 
 object Storage {
 

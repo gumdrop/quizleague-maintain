@@ -1,21 +1,25 @@
 package quizleague.rest
 
-import java.util.concurrent.ConcurrentHashMap
-
 import javax.ws.rs.core.EntityTag
 import java.util.UUID
+import javax.cache.CacheManager
+import java.util.Collections
+import scala.collection.JavaConverters._
 
 object EtagCache {
-  private val cache = new ConcurrentHashMap[String,EntityTag]
+  
+  private val cache = CacheManager.getInstance.getCacheFactory.createCache(Collections.emptyMap()).asInstanceOf[java.util.Map[String,String]].asScala
   
   def add(id:String):EntityTag = {
     val etag = EntityTag.valueOf(s""""${UUID.randomUUID().toString()}"""")
-    cache.put(id, etag)
+    cache.put(factorId(id), etag.getValue)
     etag
   }
   
-  def remove(id:String) = cache.remove(id)
+  def remove(id:String) = cache.remove(factorId(id))
   
-  def get(id:String) = if(!cache.containsKey(id)) add(id) else cache.get(id)
+  def get(id:String) = cache.get(factorId(id)).fold(add(id))(t => EntityTag.valueOf(s""""$t""""))
+  
+  private def factorId(id:String) = s"$id-etag"
   
  }
