@@ -85,8 +85,8 @@ class VenueTitleComponent(
 
 @Component(
   template = s"""
-  <div *ngFor="let item of items | async">
-    <a routerLink="/venue/{{item.id}}"  md-button routerLinkActive="active" >{{item.name}}</a>
+  <div fxLayout="column" *ngFor="let item of items | async">
+    <a fxFlexAlign="start" routerLink="/venue/{{item.id}}"  md-button routerLinkActive="active" >{{item.name}}</a>
   </div>
   """    
 )
