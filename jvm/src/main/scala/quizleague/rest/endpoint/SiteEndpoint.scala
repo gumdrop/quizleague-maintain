@@ -69,7 +69,7 @@ class SiteEndpoint(
   }
   
   @GET
-  @Path("/fixture/team/{id}")
+  @Path("/fixture/season/{seasonId}/team/{teamId}")
   def teamFixtures(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
     implicit val context = StorageContext()
     val now = LocalDate.now
