@@ -14,9 +14,7 @@ import angular.flexlayout.FlexLayoutModule
 import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.service.CachingService
-import quizleague.web.model.Fixture
-import quizleague.web.model.Fixtures
-import quizleague.web.model.Season
+import quizleague.web.model._
 
 
 @NgModule(
@@ -49,5 +47,6 @@ class FixtureService(override val http: Http,
     override val venueService: VenueService,
     override val teamService: TeamService) extends FixtureGetService with ServiceRoot with CachingService[Fixture] {
 
+  def teamFixtures(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
 }
 

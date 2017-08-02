@@ -27,6 +27,7 @@ import quizleague.web.site.common.SeasonSelectService
 import angulate2.ext.classModeJS
 import quizleague.web.service.CachingService
 import quizleague.web.model.Result
+import quizleague.web.model.Team
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
@@ -83,6 +84,7 @@ class ResultService(override val http: Http,
     val textService: TextService,
     val teamService: TeamService) extends ResultGetService with ServiceRoot with CachingService[Result]{
 
+  def teamResults(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
 }
 
 @Injectable

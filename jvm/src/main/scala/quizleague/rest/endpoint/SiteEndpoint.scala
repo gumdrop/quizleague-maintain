@@ -27,6 +27,7 @@ class SiteEndpoint(
   @GET
   @Path("/results/latest/{id}")
   def latestResults(@PathParam("id") id:String) = {
+    implicit val context = StorageContext()
     val results = refListToObjectList(Storage.load[Season](id).competitions).flatMap(c => c match{
       case a:TeamCompetition => a.results
       case _ => List()
@@ -40,15 +41,46 @@ class SiteEndpoint(
   @GET
   @Path("/fixtures/next/{id}")
   def nextFixtures(@PathParam("id") id:String) = {
+    implicit val context = StorageContext()
     val now = LocalDate.now
     val fixtures = refListToObjectList(Storage.load[Season](id).competitions).flatMap(c => c match{
-      case a:TeamCompetition => a.fixtures
+      case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
       case _ => List()
      })
-     .filter(_.date.isAfter(now))
      .sortBy(_.date.toString)
      .take(1)
      
     listOut[Fixtures](fixtures)
+  }
+  
+  @GET
+  @Path("/result/season/{seasonId}/team/{teamId}")
+  def teamResults(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
+    implicit val context = StorageContext()
+    val results = refListToObjectList(Storage.load[Season](seasonId).competitions).flatMap(c => c match{
+      case a:TeamCompetition => a.results
+      case _ => List()
+     })
+     .flatMap(_.results.filter(r => r.fixture.home.id == teamId || r.fixture.away.id == teamId))
+     .sortBy(_.fixture.date.toString)(Desc)
+     .take(take)
+     
+    listOut[Result](results)
+  }
+  
+  @GET
+  @Path("/fixture/team/{id}")
+  def teamFixtures(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
+    implicit val context = StorageContext()
+    val now = LocalDate.now
+    val fixtures = refListToObjectList(Storage.load[Season](seasonId).competitions).flatMap(c => c match{
+      case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
+      case _ => List()
+     })
+     .flatMap(_.fixtures.filter(f => f.home.id == teamId || f.away.id == teamId))
+     .sortBy(_.date.toString)(Desc)
+     .take(take)
+     
+    listOut[Fixture](fixtures)
   }
 }

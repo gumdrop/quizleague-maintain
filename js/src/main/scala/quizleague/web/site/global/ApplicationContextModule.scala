@@ -9,6 +9,8 @@ import quizleague.web.site.text.GlobalTextService
 import quizleague.web.site.user.UserService
 import quizleague.web.site.common._
 import quizleague.web.site.season.SeasonService
+import quizleague.web.service.CachingService
+import quizleague.web.model.ApplicationContext
 
 @NgModule(
   providers = @@[ApplicationContextService]       
@@ -23,4 +25,4 @@ class ApplicationContextService (
   override val globalTextService:GlobalTextService,
   override val userService:UserService,
   override val seasonService:SeasonService
-) extends ApplicationContextGetService with ServiceRoot 
+) extends ApplicationContextGetService with ServiceRoot with CachingService[ApplicationContext]
