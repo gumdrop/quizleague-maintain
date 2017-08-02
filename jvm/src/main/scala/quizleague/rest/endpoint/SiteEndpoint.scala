@@ -34,7 +34,7 @@ class SiteEndpoint(
      .sortBy(_.fixtures.date.toString)(Desc)
      .take(1)
      
-    listOut[Results](results)
+    listOut[Results](results, shortCacheAge)
   }
   
   @GET
@@ -49,7 +49,7 @@ class SiteEndpoint(
      .sortBy(_.date.toString)
      .take(1)
      
-    listOut[Fixtures](fixtures)
+    listOut[Fixtures](fixtures, shortCacheAge)
   }
   
   @GET
@@ -64,7 +64,7 @@ class SiteEndpoint(
      .sortBy(_.fixture.date.toString)(Desc)
      .take(take)
      
-    listOut[Result](results)
+    listOut[Result](results, shortCacheAge)
   }
   
   @GET
@@ -80,7 +80,7 @@ class SiteEndpoint(
      .sortBy(_.date.toString)
      .take(take)
      
-    listOut[Fixture](fixtures)
+    listOut[Fixture](fixtures, shortCacheAge)
   }
   
   private def competitions(seasonId:String)(implicit context:StorageContext):List[Competition] =  Storage.load[Season](seasonId).competitions
