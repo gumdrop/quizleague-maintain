@@ -56,7 +56,7 @@ class AppRoutingModule
 @Component( 
   selector = "ql-app",
   template = """
-  <div>
+  <div *ngIf="context | async">
    <md-toolbar color='primary' class="mat-elevation-z6">
         <span>
           <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
