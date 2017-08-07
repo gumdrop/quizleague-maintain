@@ -7,23 +7,29 @@ import angulate2.std.{ Component, Data }
 import quizleague.web.model.Result
 import rxjs.Observable
 import quizleague.web.util.rx._
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
+
 
 @Component(
   selector = "ql-results-simple",
   template = s"""
-    <table>
-      <tr *ngFor="let result of results | async">
-        <td *ngIf="inlineDetails" class="inline-details" >{{(result.fixture | async)?.date | date : "d MMM yyyy"}} : {{(result.fixture | async)?.parentDescription}} {{(result.fixture | async)?.description}}</td>
-        <td *ngIf="result.fixture | async as fixture"[ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
-        <td>{{result.homeScore}}</td><td> - </td><td>{{result.awayScore}}</td>
-        <td *ngIf="result.fixture | async as fixture" [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
-        <td *ngIf="hasReports(result)">
-          <a md-icon-button routerLink="/results/{{result.id}}/reports">
-            <md-icon class="md-12">description</md-icon>
-          </a>
-        </td> 
-      </tr>
-    </table>      
+    <table *ngIf="results | async as rs; else loading">
+      <ng-template ngFor let-result [ngForOf]="rs">
+        <tr *ngIf="result.fixture | async as fixture">
+          <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
+          <td [ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
+          <td>{{result.homeScore}}</td><td> - </td><td>{{result.awayScore}}</td>
+          <td [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
+          <td *ngIf="hasReports(result)">
+            <a md-icon-button routerLink="/results/{{result.id}}/reports">
+              <md-icon class="md-12">description</md-icon>
+            </a>
+          </td> 
+        </tr>
+      </ng-template>
+    </table>    
+    $loadingTemplate  
   """,
   styles = js.Array("""
     .winner {

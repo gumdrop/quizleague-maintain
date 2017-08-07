@@ -16,9 +16,11 @@ import ComponentUtils._
           <th>Pos.</th><th>Team</th><th>Pl.</th><th>W</th><th>D</th><th>L</th><th>S</th><th>Pts</th>
         </thead>
         <tbody>
-          <tr *ngFor="let row of item.rows">
-            <td>{{row.position}}</td><td><a routerLink="/team/{{(row.team | async)?.id}}">{{(row.team | async)?.shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+          <ng-template ngFor let-row [ngForOf]="item.rows">
+          <tr *ngIf="row.team | async as team">
+            <td>{{row.position}}</td><td><a routerLink="/team/{{team.id}}">{{team.shortName}}</a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>
+          </ng-template> 
         </tbody>
       </table>
       $loadingTemplate

@@ -18,11 +18,12 @@ import quizleague.web.site.common.TitledComponent
 import quizleague.web.site.common.TitleService
 import quizleague.web.util.Logging._
 import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 
 @Component(
   template = s"""
-    <div fxLayout="column" fxLayoutGap="5px">  
+    <div *ngIf="items | async as its; else loading" fxLayout="column" fxLayoutGap="5px">  
     <md-card *ngFor="let item of items | async">
       <md-card-title *ngIf="item.fixtures | async as fixtures">{{fixtures.parentDescription}} - {{fixtures.date | date:"d MMMM yyyy"}} : {{fixtures.description}}</md-card-title>
       <md-card-content>
@@ -30,6 +31,7 @@ import quizleague.web.site.common.ComponentUtils
       </md-card-content>
       </md-card>
     </div>
+    $loadingTemplate
   """    
 )
 @classModeScala
