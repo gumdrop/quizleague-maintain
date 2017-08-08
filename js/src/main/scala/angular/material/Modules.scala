@@ -42,7 +42,9 @@ class MaterialForms
    MdToolbarModule,
    MdTabsModule,
    MdIconModule,
-   MdTooltipModule
+   MdTooltipModule,
+   MdProgressSpinnerModule,
+   MdProgressBarModule
 ],
  exports = @@[
    MdCardModule,
@@ -51,7 +53,9 @@ class MaterialForms
    MdToolbarModule,
    MdTabsModule,
    MdIconModule,
-   MdTooltipModule
+   MdTooltipModule,
+   MdProgressSpinnerModule,
+   MdProgressBarModule
  ]
 )
 class MaterialLayout
@@ -113,3 +117,10 @@ class MdIconModule extends js.Any
 @JSImport("@angular/material","MdTooltipModule")
 class MdTooltipModule extends js.Any
 
+@js.native
+@JSImport("@angular/material","MdProgressSpinnerModule")
+class MdProgressSpinnerModule extends js.Any
+
+@js.native
+@JSImport("@angular/material","MdProgressBarModule")
+class MdProgressBarModule extends js.Any

@@ -12,5 +12,5 @@ trait ComponentUtils {
 }
 
 object ComponentUtils {
-  val loadingTemplate = "<ng-template #loading>Loading...</ng-template>"
+  val loadingTemplate = """<ng-template #loading><md-progress-bar mode="indeterminate"></md-progress-bar></ng-template>"""
 }

@@ -56,7 +56,7 @@ class AppRoutingModule
 @Component( 
   selector = "ql-app",
   template = """
-  <div *ngIf="context | async">
+  <div *ngIf="context | async; else loading">
    <md-toolbar color='primary' class="mat-elevation-z6">
         <span>
           <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
@@ -98,6 +98,9 @@ class AppRoutingModule
         <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
         <a routerLink="/calendar" md-button routerLinkActive="active">Calendar</a>
      </div>
+  </ng-template>
+  <ng-template #loading>
+    <md-progress></md-progress>
   </ng-template>
   """,
   styles = js.Array("""
