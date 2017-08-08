@@ -26,9 +26,7 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
 
   def listTextSets() = globalTextService.list()
   
-  lazy val currentContext = list().map((x, i) => x(0))
-
-  def get(): Observable[ApplicationContext] = currentContext
+  def get(): Observable[ApplicationContext] = get(Dom.singletonId)
 
   override protected def dec(json:String) = decode[U](json)
   override protected def decList(json:String) = decode[List[U]](json)
@@ -39,7 +37,7 @@ trait ApplicationContextPutService extends PutService[ApplicationContext] with A
   override val userService: UserPutService
   override val seasonService: SeasonPutService
 
-  override protected def mapIn(context: ApplicationContext) = Dom(context.id, context.leagueName, globalTextService.ref(context.textSet), seasonService.ref(context.currentSeason), context.senderEmail, context.emailAliases.map(ea => DomEmailAlias(ea.alias, userService.ref(ea.user))).toList, context.cloudStoreBucket)
+  override protected def mapIn(context: ApplicationContext) = Dom(context.leagueName, globalTextService.ref(context.textSet), seasonService.ref(context.currentSeason), context.senderEmail, context.emailAliases.map(ea => DomEmailAlias(ea.alias, userService.ref(ea.user))).toList, context.cloudStoreBucket)
   override protected def make() = Dom(newId(), "", null, null, "", List(), "")
 
   override def enc(item: Dom) = item.asJson

@@ -25,24 +25,24 @@ import quizleague.web.site.fixtures.FixturesService
 
 @Component(
   template = """
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
+  <div *ngIf="currentSeason | async as season" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
     <div>
     <md-tab-group dynamicHeight="true" [selectedIndex]="tabIndex" (click)="tabSelected()">
       <md-tab label="League Tables">
-        <ql-root-league-table [season]="currentSeason | async"></ql-root-league-table>
+        <ql-root-league-table [season]="season"></ql-root-league-table>
       </md-tab>
       <md-tab label="Latest Results">
-        <ql-root-latest-results [season]="currentSeason | async"></ql-root-latest-results>
+        <ql-root-latest-results [season]="season"></ql-root-latest-results>
       </md-tab>
       <md-tab label="Next Fixtures">
-        <ql-root-next-fixtures [season]="currentSeason | async"></ql-root-next-fixtures>
+        <ql-root-next-fixtures [season]="season"></ql-root-next-fixtures>
       </md-tab>
     </md-tab-group>
     </div>
       <div class="text_area">
         <ql-named-text name="front-page-main"></ql-named-text>
         <br>
-        <ql-text [textId]="(currentSeason | async)?.text.id"></ql-text>
+        <ql-text [textId]="season.text.id"></ql-text>
       </div>
   </div>
   """,

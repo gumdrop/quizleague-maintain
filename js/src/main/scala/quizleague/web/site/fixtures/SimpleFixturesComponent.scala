@@ -7,18 +7,21 @@ import angulate2.std._
 import quizleague.web.model.Fixture
 import quizleague.web.util.rx._
 import rxjs.Observable
+import quizleague.web.site.common.ComponentUtils
+import ComponentUtils._
 
 @Component(
   selector = "ql-fixtures-simple",
   template = s"""
-    <table>
-      <tr *ngFor="let fixture of fixtures | async">
+    <table *ngIf="fixtures | async as fs else loading">
+      <tr *ngFor="let fixture of fs">
         <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
         <td>{{(fixture.home | async)?.shortName}}</td>
         <td> - </td>
         <td>{{(fixture.away | async)?.shortName}}</td> 
       </tr>
-    </table>      
+    </table> 
+    $loadingTemplate     
   """,
     styles = js.Array(
   """
