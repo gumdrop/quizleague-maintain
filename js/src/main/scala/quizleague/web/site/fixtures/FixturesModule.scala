@@ -26,7 +26,7 @@ class FixturesModule
 
 
 @NgModule(
-  imports = @@[CommonModule],
+  imports = @@[CommonModule,MaterialModule],
   declarations = @@[SimpleFixturesComponent],
   exports = @@[SimpleFixturesComponent]
   )

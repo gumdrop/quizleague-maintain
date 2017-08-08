@@ -100,7 +100,7 @@ class AppRoutingModule
      </div>
   </ng-template>
   <ng-template #loading>
-    <md-progress></md-progress>
+    <md-spinner style="position:fixed;top:50%;left:50%"></md-spinner>
   </ng-template>
   """,
   styles = js.Array("""

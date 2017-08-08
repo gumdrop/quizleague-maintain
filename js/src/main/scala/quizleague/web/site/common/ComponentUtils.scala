@@ -12,5 +12,5 @@ trait ComponentUtils {
 }
 
 object ComponentUtils {
-  val loadingTemplate = """<ng-template #loading><md-progress-bar mode="indeterminate"></md-progress-bar></ng-template>"""
+  val loadingTemplate = """<ng-template #loading><md-progress-spinner style="transform:scale(.25);" mode="indeterminate"></md-progress-spinner></ng-template>"""
 }
