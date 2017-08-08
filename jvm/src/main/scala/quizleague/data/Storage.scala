@@ -107,6 +107,6 @@ object Storage {
 
     val r = decoder.decodeJson(json)
 
-    if (r.isLeft) throw r.left.get else r.right.get
+    r.fold(fa => throw fa, fb => fb)
   }
 }
