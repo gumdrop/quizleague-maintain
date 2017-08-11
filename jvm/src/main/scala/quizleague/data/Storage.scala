@@ -10,6 +10,7 @@ import scala.collection.JavaConverters._
 import java.util.ArrayList
 import java.util.Collections
 import javax.cache.CacheManager
+import java.util.Date
 
 object Storage {
 
@@ -94,19 +95,26 @@ object Storage {
 
   }
 
-  private def load[T <: Entity](kind: String, id: String, decoder: Decoder[T]): T = {
+  private def load[T <: Entity](kind: String, id: String, decoder: Decoder[T])(implicit tag: ClassTag[T]): T = {
 
     val cached = fromCache(id, kind)
     
-    cached.getOrElse(toCache(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder),kind))
+    cached.getOrElse(toCache(entityToObj(logTime(s"from store, $kind",() => datastore.get(KeyFactory.createKey(kind, id))), decoder),kind))
 
   }
 
-  private def entityToObj[T](entity: Ent, decoder: Decoder[T]) = {
-    val json: Json = Json.fromFields(props(entity))
+  private def entityToObj[T](entity: Ent, decoder: Decoder[T])(implicit tag:ClassTag[T]) = {
+    val json: Json = logTime(s"to json - ${makeKind(tag)} ",() => Json.fromFields(props(entity)))
 
-    val r = decoder.decodeJson(json)
+    val r = logTime(s"decode, ${makeKind(tag)}", () => decoder.decodeJson(json))
 
     r.fold(fa => throw fa, fb => fb)
+  }
+  
+  private def logTime[U](message:String,fn:() => U):U = {
+    val now = new Date().getTime
+    val r  = fn()
+    println(s"$message, ${new Date().getTime - now}")
+    r
   }
 }

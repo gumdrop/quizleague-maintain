@@ -4,9 +4,9 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <!-- listener>
-    <listener-class>org.chilternquizleague.web.ApplicationStartListener</listener-class>
-  </listener-->
+  <listener>
+    <listener-class>quizleague.rest.ApplicationInit</listener-class>
+  </listener>
   <filter>
     <filter-name>PassThroughFilter</filter-name>
     <filter-class>quizleague.rest.PassThroughFilter</filter-class>
@@ -23,16 +23,11 @@
     	<param-value>/index.html</param-value>
     </init-param>
   </filter>
-  <!-- filter-mapping>
+  <filter-mapping>
     <filter-name>PassThroughFilter</filter-name>
     <url-pattern>/_ah/*</url-pattern>
-    <url-pattern>/tasks/*</url-pattern>
-    <url-pattern>/entity/*</url-pattern>
-    <url-pattern>/site/*</url-pattern>
-    <url-pattern>/secure/*</url-pattern>
-    <url-pattern>/calendar/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
-  </filter-mapping-->
+  </filter-mapping>
   <!-- filter-mapping>
     <filter-name>MaintainURLRewriteFilter</filter-name>
     <url-pattern>/maintain/*</url-pattern>
