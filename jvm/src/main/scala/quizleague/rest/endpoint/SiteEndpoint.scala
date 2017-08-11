@@ -20,13 +20,13 @@ class SiteEndpoint(
   
   override val defaultCacheAge = 3600
   override val shortCacheAge = 300
-
+  implicit val context = StorageContext()
   preChecks()
   
   @GET
   @Path("/results/latest/{id}")
   def latestResults(@PathParam("id") id:String) = {
-    implicit val context = StorageContext()
+    
     val results = competitions(id).flatMap(c => c match{
       case a:TeamCompetition => a.results
       case _ => List()
@@ -40,7 +40,7 @@ class SiteEndpoint(
   @GET
   @Path("/fixtures/next/{id}")
   def nextFixtures(@PathParam("id") id:String) = {
-    implicit val context = StorageContext()
+
     val now = LocalDate.now
     val fixtures = competitions(id).flatMap(c => c match{
       case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
@@ -55,7 +55,7 @@ class SiteEndpoint(
   @GET
   @Path("/result/season/{seasonId}/team/{teamId}")
   def teamResults(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
-    implicit val context = StorageContext()
+
     val results = competitions(seasonId).flatMap(c => c match{
       case a:TeamCompetition => a.results
       case _ => List()
@@ -70,7 +70,7 @@ class SiteEndpoint(
   @GET
   @Path("/fixture/season/{seasonId}/team/{teamId}")
   def teamFixtures(@PathParam("seasonId") seasonId:String, @PathParam("teamId") teamId:String, @QueryParam("take") take:Int = Integer.MAX_VALUE) = {
-    implicit val context = StorageContext()
+
     val now = LocalDate.now
     val fixtures = competitions(seasonId).flatMap(c => c match{
       case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
