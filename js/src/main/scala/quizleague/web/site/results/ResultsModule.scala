@@ -28,6 +28,7 @@ import angulate2.ext.classModeJS
 import quizleague.web.service.CachingService
 import quizleague.web.model.Result
 import quizleague.web.model.Team
+import angular.nginviewport.InViewportModule
 
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
@@ -60,7 +61,7 @@ class ResultsModule
 class ResultsRoutesModule
 
 @NgModule(
-  imports = @@[CommonModule,RouterModule,MaterialModule],
+  imports = @@[CommonModule,RouterModule,MaterialModule,InViewportModule],
   declarations = @@[SimpleResultsComponent],
   exports = @@[SimpleResultsComponent]
   )

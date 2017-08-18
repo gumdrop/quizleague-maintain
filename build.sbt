@@ -11,7 +11,7 @@ addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.fu
 lazy val commonSettings = Seq(
   organization := "quizleague",
   version := "0.0.1",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   resolvers += Resolver.sonatypeRepo("snapshots")
   
@@ -65,7 +65,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	npmDependencies in Compile += "@angular/animations" -> angularVersion,
 	npmDependencies in Compile += "core-js" -> "^2.4.1",
 	npmDependencies in Compile += "zone.js" -> "^0.8.4",
-	npmDependencies in Compile += "rxjs" -> "~5.0.1",
+	npmDependencies in Compile += "rxjs" -> "^5.2.0",
 	npmDependencies in Compile += "@angular/cdk" -> "github:angular/cdk-builds",
 	npmDependencies in Compile += "@angular/material" -> "github:angular/material2-builds",
 	npmDependencies in Compile += "@angular/flex-layout" -> "*",
@@ -74,6 +74,9 @@ lazy val quizleague = crossProject.in(file(".")).
     npmDependencies in Compile += "reflect-metadata" -> "^0.1.8",
     npmDependencies in Compile += "hammerjs" -> "^2.0.8",
 	npmDevDependencies in Compile += "angulate2-scalajs-bundler" -> "1.0.3",
+	//npmDevDependencies in Compile += "intersection-observer" -> "0.2.1",
+    npmDevDependencies in Compile += "angular-inviewport" -> "*",
+	
 	webpackConfigFile in fastOptJS := Some(baseDirectory.value  / "webpack.config.js"),
 	webpackConfigFile in fullOptJS := Some(baseDirectory.value  / "webpack.prod.config.js")
   )
