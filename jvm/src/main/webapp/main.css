@@ -2,8 +2,8 @@
 html,body,ql-app{
 	height:100%;
 	margin:0;
-	font-weight:300;
-	font-family: Roboto;
+	#font-weight:300;
+	#font-family: Roboto;
 }
 #sidenav-content > div{
 	flex:1;

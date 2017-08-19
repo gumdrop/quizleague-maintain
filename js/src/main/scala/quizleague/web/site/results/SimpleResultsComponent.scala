@@ -26,7 +26,7 @@ import quizleague.web.util.Logging.log
             <td class="away" [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
             <td *ngIf="hasReports(result)">
               <a md-icon-button routerLink="/results/{{result.id}}/reports">
-                <md-icon class="md-12">description</md-icon>
+                <md-icon style="transform:scale(0.75)" class="md-12">description</md-icon>
               </a>
             </td> 
           </tr>
