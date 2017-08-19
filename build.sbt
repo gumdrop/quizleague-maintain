@@ -53,6 +53,7 @@ lazy val quizleague = crossProject.in(file(".")).
   jsSettings(
     name := "quizleague-js",
     ngBootstrap := Some("quizleague.web.site.AppModule"),
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.2",
     npmDependencies in Compile += "@angular/common" -> angularVersion,
 	npmDependencies in Compile += "@angular/compiler" -> angularVersion,
 	npmDependencies in Compile += "@angular/core" -> angularVersion,

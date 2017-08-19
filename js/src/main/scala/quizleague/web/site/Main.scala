@@ -24,13 +24,14 @@ import quizleague.web.site.team.TeamModule
 import quizleague.web.site.user.UserModule
 import quizleague.web.site.venue.VenueModule
 import quizleague.web.maintain.MaintainModule
+import angular.nginviewport.InViewportModule
 
 
 
 
 
 @NgModule(
-  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, AppRoutingModule],
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, AppRoutingModule,InViewportModule],
   //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
   declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],
@@ -79,7 +80,7 @@ class AppRoutingModule
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
-        <div fxLayout="column" fxLayoutGap="5px">
+        <div in-viewport-scroll fxLayout="column" fxLayoutGap="5px">
           <router-outlet name="title"></router-outlet>
           <router-outlet></router-outlet>
         </div>

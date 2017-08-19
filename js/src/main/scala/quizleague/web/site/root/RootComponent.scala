@@ -114,7 +114,7 @@ class LeagueTableComponent(
         <md-card *ngFor="let res of results | async">
           <md-card-title *ngIf="res.fixtures | async as fixtures">{{fixtures.parentDescription}} : {{fixtures.date | date:"dd MMM yyyy"}} - {{fixtures.description}}</md-card-title>
           <md-card-content>
-            <ql-results-simple [list]="res.results" ></ql-results-simple>
+            <ql-results-simple [loadIfHidden]="true" [list]="res.results" ></ql-results-simple>
           </md-card-content>
           
         </md-card>

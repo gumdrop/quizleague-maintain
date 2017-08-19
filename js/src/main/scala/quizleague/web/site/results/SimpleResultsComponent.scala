@@ -21,9 +21,9 @@ import quizleague.web.util.Logging.log
         <ng-template ngFor let-result [ngForOf]="rs">
           <tr *ngIf="result.fixture | async as fixture">
             <td *ngIf="inlineDetails" class="inline-details" >{{fixture.date | date : "d MMM yyyy"}} : {{fixture.parentDescription}} {{fixture.description}}</td>
-            <td [ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
-            <td>{{result.homeScore}}</td><td> - </td><td>{{result.awayScore}}</td>
-            <td [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
+            <td class="home" [ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
+            <td class="score">{{result.homeScore}}</td><td> - </td><td class="score">{{result.awayScore}}</td>
+            <td class="away" [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
             <td *ngIf="hasReports(result)">
               <a md-icon-button routerLink="/results/{{result.id}}/reports">
                 <md-icon class="md-12">description</md-icon>
@@ -48,15 +48,29 @@ import quizleague.web.util.Logging.log
       padding-right: .5em;
       color: darkblue;
     }
+""",
+"""
+    .home{
+      text-align:right;
+      padding-right:1em;
+    }
+    .away{
+      padding-left:1em;
+    }
+""",
+""".score{
+      font-weight:500;
+  }
 """)
 )
 class SimpleResultsComponent{  
   
   var inView:Boolean = false
   
-//  @HostListener("window:scroll")
-//  def onResize() = load(true)
+  @Input
+  var loadIfHidden = false
   
+ 
   @Input("results")
   var results:Observable[js.Array[Result]] = _
   
@@ -67,10 +81,7 @@ class SimpleResultsComponent{
   var inlineDetails = false
   
   def load(event:Boolean){
-    log(null,s"in view : $event")
-    if(event){
-      inView = true
-    }
+    inView = event || inView || loadIfHidden
   }
   
   def nameClass(score1:Int, score2:Int) = if(score1 > score2) "winner" else if(score1 == score2) "orange" else ""

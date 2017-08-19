@@ -60,7 +60,7 @@ class SiteEndpoint(
       case a:TeamCompetition => a.results
       case _ => List()
      })
-     .flatMap(_.results.filter(r => r.fixture.home.id == teamId || r.fixture.away.id == teamId))
+     .flatMap(_.results.find(r => r.fixture.home.id == teamId || r.fixture.away.id == teamId))
      .sortBy(_.fixture.date.toString)(Desc)
      .take(take)
      
@@ -76,7 +76,7 @@ class SiteEndpoint(
       case a:TeamCompetition => a.fixtures.filter(_.date.isAfter(now))
       case _ => List()
      })
-     .flatMap(_.fixtures.filter(f => f.home.id == teamId || f.away.id == teamId))
+     .flatMap(_.fixtures.find(f => f.home.id == teamId || f.away.id == teamId))
      .sortBy(_.date.toString)
      .take(take)
      
