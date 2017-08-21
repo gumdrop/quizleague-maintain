@@ -99,14 +99,14 @@ object Storage {
 
     val cached = fromCache(id, kind)
     
-    cached.getOrElse(toCache(entityToObj(logTime(s"from store, $kind",() => datastore.get(KeyFactory.createKey(kind, id))), decoder),kind))
+    cached.getOrElse(toCache(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder),kind))
 
   }
 
   private def entityToObj[T](entity: Ent, decoder: Decoder[T])(implicit tag:ClassTag[T]) = {
-    val json: Json = logTime(s"to json - ${makeKind(tag)} ",() => Json.fromFields(props(entity)))
+    val json: Json = Json.fromFields(props(entity))
 
-    val r = logTime(s"decode, ${makeKind(tag)}", () => decoder.decodeJson(json))
+    val r = decoder.decodeJson(json)
 
     r.fold(fa => throw fa, fb => fb)
   }

@@ -3,7 +3,7 @@ name := "Quiz League"
 EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
-val circeVersion = "0.7.0"
+val circeVersion = "0.8.0"
 val appengineVersion = "1.9.54"
 val angularVersion = "^4.0.0"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)

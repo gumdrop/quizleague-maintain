@@ -15,7 +15,7 @@ import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.service.CachingService
 import quizleague.web.model._
-import angular.nginviewport.InViewportModule
+import inviewport.InViewportModule
 
 
 @NgModule(

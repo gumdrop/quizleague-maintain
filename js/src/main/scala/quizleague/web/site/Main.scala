@@ -6,12 +6,10 @@ import angular.core.BrowserAnimationsModule
 import angular.flexlayout.FlexLayoutModule
 import angular.material.MaterialModule
 import angulate2.ext.classModeScala
-import angulate2.ext.inMemoryWebApi.{ InMemoryBackendConfigArgs, InMemoryWebApiModule }
 import angulate2.http.HttpModule
 import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
-import angulate2.std.{ %%, @@, @@@, Component, Injectable, NgModule, Routes }
-import quizleague.web.mock.MockData
+import angulate2.std._
 import quizleague.web.site.calendar.CalendarModule
 import quizleague.web.site.common.{ CommonAppModule, SideMenuService }
 import quizleague.web.site.competition.CompetitionModule
@@ -24,20 +22,19 @@ import quizleague.web.site.team.TeamModule
 import quizleague.web.site.user.UserModule
 import quizleague.web.site.venue.VenueModule
 import quizleague.web.maintain.MaintainModule
-import angular.nginviewport.InViewportModule
+import inviewport.InViewportModule
+import angulate2.core.OnInit
 
 
 
 
 
 @NgModule(
-  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, AppRoutingModule,InViewportModule],
-  //InMemoryWebApiModule.forRoot(%%[MockData],InMemoryBackendConfigArgs(delay = 500)),
+  imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, InViewportModule, AppRoutingModule],
   declarations = @@[AppComponent], 
   bootstrap = @@[AppComponent],
   providers = @@[SideMenuService]
 )
-@classModeScala
 class AppModule (router:Router)
 
 
@@ -57,13 +54,13 @@ class AppRoutingModule
 @Component( 
   selector = "ql-app",
   template = """
-  <div *ngIf="context | async; else loading" class="mat-typography">
+  <div *ngIf="context | async as ctx; else loading" class="mat-typography">
    <md-toolbar color='primary' class="mat-elevation-z6">
         <span>
-          <button md-icon-button (click)="sidenav.toggle()" [disabled]="!(showSidenav | async)">
+          <button md-icon-button (click)="sidenav.toggle()" [disabled]="!showSidenav">
             <md-icon class="md-24">menu</md-icon>
           </button>
-          <span>{{(context | async)?.leagueName}}</span>
+          <span>{{ctx.leagueName}}</span>
         </span>
         <span style="flex:1 1 0;"></span>
         <span fxHide fxShow.xs="true">
@@ -76,7 +73,7 @@ class AppRoutingModule
       </md-toolbar-row>
     </md-toolbar>
     <md-sidenav-container>
-      <md-sidenav #sidenav [mode]="menuMode()" [opened]="showByDefault() && (showSidenav | async)" (click)="!showByDefault() && sidenav.toggle()">
+      <md-sidenav #sidenav [mode]="menuMode()" [opened]="showByDefault() && showSidenav" (click)="!showByDefault() && sidenav.toggle()">
         <router-outlet name="sidemenu"></router-outlet>
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
@@ -116,15 +113,19 @@ class AppRoutingModule
 )
 class AppComponent(
     service:ApplicationContextService, 
-    sideMenuService:SideMenuService){
+    sideMenuService:SideMenuService) extends OnInit{
   
   val context = service.get
   
-  val showSidenav = sideMenuService.showMenu 
+  var showSidenav:Boolean = _
   
   def menuMode() = sideMenuService.menuMode
   
   def showByDefault() = sideMenuService.showByDefault
+  
+  override def ngOnInit(){
+     sideMenuService.showMenu.subscribe(showSidenav = _)
+  }
   
 }
 
