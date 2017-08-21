@@ -15,7 +15,7 @@ import ComponentUtils._
         <div *ngIf="te.mimeType=='text/html'" [innerHTML]="te.text"></div>
         <div *ngIf="te.mimeType=='text/plain'" [innerText]="te.text"></div>
       </div>
-      $loadingTemplate
+      $loadingTemplateThin
 """,
     styles = @@@("*{font-family:Roboto;}") 
 )

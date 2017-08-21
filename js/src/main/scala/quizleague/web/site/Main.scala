@@ -81,7 +81,9 @@ class AppRoutingModule
       </md-sidenav>
       <div id="sidenav-content" style="padding-left:1em;height:calc(100vh - 128px);" fxLayout="column">
         <div in-viewport-scroll fxLayout="column" fxLayoutGap="5px">
-          <router-outlet name="title"></router-outlet>
+          <div>
+            <router-outlet name="title"></router-outlet>
+          </div>
           <router-outlet></router-outlet>
         </div>
       </div>

@@ -15,6 +15,7 @@ import quizleague.web.site.common.CommonAppModule
 import quizleague.web.site.season.SeasonModule
 import quizleague.web.service.CachingService
 import quizleague.web.model._
+import angular.nginviewport.InViewportModule
 
 
 @NgModule(
@@ -26,7 +27,7 @@ class FixturesModule
 
 
 @NgModule(
-  imports = @@[CommonModule,MaterialModule],
+  imports = @@[CommonModule, MaterialModule, InViewportModule],
   declarations = @@[SimpleFixturesComponent],
   exports = @@[SimpleFixturesComponent]
   )

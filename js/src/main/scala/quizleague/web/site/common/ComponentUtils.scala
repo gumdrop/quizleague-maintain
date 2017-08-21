@@ -12,5 +12,7 @@ trait ComponentUtils {
 }
 
 object ComponentUtils {
-  val loadingTemplate = """<ng-template #loading><span style="position:absolute;"><md-progress-spinner style="transform:scale(.25);" mode="indeterminate"></md-progress-spinner></span></ng-template>"""
+  val loadingTemplate = """<ng-template #loading><span><md-progress-spinner style="transform:scale(.25);" mode="indeterminate"></md-progress-spinner></span></ng-template>"""
+  val loadingTemplateThin = """<ng-template #loading><span style="position:absolute;"><md-progress-spinner style="transform:scale(.25);" mode="indeterminate"></md-progress-spinner></span></ng-template>"""
+
 }

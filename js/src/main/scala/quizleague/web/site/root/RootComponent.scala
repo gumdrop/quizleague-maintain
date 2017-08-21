@@ -140,7 +140,7 @@ class LatestResultsComponent(
        <md-card *ngFor="let item of fixtures | async">
           <md-card-title>{{item.parentDescription}} : {{item.date | date:"dd MMM yyyy"}} - {{item.description}}</md-card-title>
           <md-card-content>
-            <ql-fixtures-simple [list]="item.fixtures" ></ql-fixtures-simple>
+            <ql-fixtures-simple [loadIfHidden]="true" [list]="item.fixtures" ></ql-fixtures-simple>
           </md-card-content>
     
         </md-card>
