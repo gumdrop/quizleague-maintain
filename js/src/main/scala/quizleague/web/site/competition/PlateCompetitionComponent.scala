@@ -27,7 +27,7 @@ class PlateCompetitionComponent(
     )
     with TeamCompetitionComponent{
   
-    override val textName:String = "plate-front-page"
+    override val textName:String = "plate-comp"
 }
 
    

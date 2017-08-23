@@ -12,7 +12,7 @@ object TemplateConstants {
       <md-card-subtitle>Latest results</md-card-subtitle>
       <md-card-content>
         <div *ngFor="let results of latestResults | async">
-          <div>{{(results.fixtures | async)?.date | date:"d MMM yyyy"}}</div>
+          <div>{{(results.fixtures | async)?.date | date:"d MMMM yyyy"}}</div>
           <ql-results-simple [list]="results.results" ></ql-results-simple>
         </div>
       </md-card-content>
@@ -25,7 +25,7 @@ object TemplateConstants {
       <md-card-subtitle>Next fixtures</md-card-subtitle>
       <md-card-content>
         <div *ngFor="let fixtures of nextFixtures | async">
-          <div>{{fixtures.date | date:"d MMM yyyy"}}</div>
+          <div>{{fixtures.date | date:"d MMMM yyyy"}}</div>
           <div>{{now}}</div>
           <ql-fixtures-simple [list]="fixtures.fixtures" ></ql-fixtures-simple>
         </div>

@@ -24,6 +24,7 @@ import quizleague.web.site.venue.VenueModule
 import quizleague.web.maintain.MaintainModule
 import inviewport.InViewportModule
 import angulate2.core.OnInit
+import angulate2.core.AfterViewChecked
 
 
 
@@ -100,12 +101,18 @@ class AppRoutingModule
      </div>
   </ng-template>
   <ng-template #loading>
-    <md-spinner style="position:fixed;top:50%;left:50%"></md-spinner>
+    <md-spinner></md-spinner>
   </ng-template>
   """,
   styles = js.Array("""
     md-sidenav-container{
       margin-top:8px;
+    }
+    md-toolbar{
+      padding:0;
+    }
+    md-spinner{
+      position:fixed; top:calc( 50% - 60px );left:calc( 50% - 60px )
     }
   """,
   """[md-icon-button]{top:-3px;}""",
@@ -113,7 +120,7 @@ class AppRoutingModule
 )
 class AppComponent(
     service:ApplicationContextService, 
-    sideMenuService:SideMenuService) extends OnInit{
+    sideMenuService:SideMenuService) extends AfterViewChecked{
   
   val context = service.get
   
@@ -123,8 +130,8 @@ class AppComponent(
   
   def showByDefault() = sideMenuService.showByDefault
   
-  override def ngOnInit(){
-     sideMenuService.showMenu.subscribe(showSidenav = _)
+  override def ngAfterViewChecked(){
+     sideMenuService.showMenu.delay(100).subscribe(showSidenav = _)
   }
   
 }

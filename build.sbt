@@ -69,14 +69,11 @@ lazy val quizleague = crossProject.in(file(".")).
 	npmDependencies in Compile += "rxjs" -> "^5.2.0",
 	npmDependencies in Compile += "@angular/cdk" -> "github:angular/cdk-builds",
 	npmDependencies in Compile += "@angular/material" -> "github:angular/material2-builds",
-	npmDependencies in Compile += "@angular/flex-layout" -> "*",
-    npmDependencies in Compile += "angular-in-memory-web-api" -> "~0.2.5",
+	npmDependencies in Compile += "@angular/flex-layout" -> "2.0.0-beta9",
     npmDependencies in Compile += "es-module-loader" -> "^1.3.5",
     npmDependencies in Compile += "reflect-metadata" -> "^0.1.8",
     npmDependencies in Compile += "hammerjs" -> "^2.0.8",
 	npmDevDependencies in Compile += "angulate2-scalajs-bundler" -> "1.0.3",
-	//npmDevDependencies in Compile += "intersection-observer" -> "0.2.1",
-    npmDevDependencies in Compile += "angular-inviewport" -> "*",
 	
 	webpackConfigFile in fastOptJS := Some(baseDirectory.value  / "webpack.config.js"),
 	webpackConfigFile in fullOptJS := Some(baseDirectory.value  / "webpack.prod.config.js")

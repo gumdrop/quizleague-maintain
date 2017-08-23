@@ -20,7 +20,7 @@ trait TeamCompetitionComponent{
   val textName:String
   
   @JSExport
-  val latestResults = itemObs.switchMap((c,i) => sort2[Results,Fixtures](log(c.results, "results"), r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))
+  val latestResults = itemObs.switchMap((c,i) => sort2[Results,Fixtures](c.results, r => r.fixtures, (r1,r2) => r2._2.date compareTo r1._2.date, 1))
   
   
   

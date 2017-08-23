@@ -67,7 +67,7 @@ class LeagueCompetitionComponent(
     )
     with TeamCompetitionComponent{
   
-    override val textName:String = "league-front-page"
+    override val textName:String = "league-comp"
 }
 
    
