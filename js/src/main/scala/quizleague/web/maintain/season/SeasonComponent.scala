@@ -46,9 +46,12 @@ import quizleague.web.maintain.competition.CompetitionService
           <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
         </div>
         <md-chip-list selectable="true">
-          <md-chip *ngFor="let comp of item?.competitions" >
-            <button *ngIf="comp | async as c" (click)="editCompetition(c)" type="button">{{c?.name}}</button>
+       <ng-template ngFor let-comp [ngForOf]="item?.competitions">
+          <md-chip *ngIf="comp | async as c"  [removable]="true" (remove)="removeCompetition(c)">
+            <span (click)="editCompetition(c)">{{c?.name}}</span>
+            <md-icon mdChipRemove>cancel</md-icon>
           </md-chip>
+       </ng-template>
         </md-chip-list>
 
       </div>
@@ -71,6 +74,10 @@ class SeasonComponent(
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
       item.competitions +++= (comp.id,comp)
       editCompetition(comp)
+    }
+    
+    def removeCompetition(comp:Competition){
+      item.competitions ---= comp.id      
     }
   
     def editCompetition(comp: Competition) = {

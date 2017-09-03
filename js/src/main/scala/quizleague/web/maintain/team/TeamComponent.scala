@@ -40,10 +40,10 @@ import scala.scalajs.js.annotation.JSExport
           </option>
         </select>
         <label style="color: rgba(0,0,0,.38);">Users</label>
-        <md-chip-list selectable="true">
-          <md-chip *ngFor="let user of item.users">{{(user | async)?.name}}
-            <button md-icon-button (click)="removeUser(user)" type="button"><md-icon>delete</md-icon></button>
-          </md-chip> 
+        <md-chip-list>
+          <md-chip [removable]="true"  (remove)="removeUser(user)" *ngFor="let user of item.users">{{(user | async)?.name}}
+            <md-icon mdChipRemove>cancel</md-icon>
+           </md-chip> 
         </md-chip-list>
         <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
         $chbxRetired

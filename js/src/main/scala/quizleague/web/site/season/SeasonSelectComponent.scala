@@ -14,22 +14,24 @@ import quizleague.web.util.Logging._
 @Component(
   selector = "ql-season-select",
   template = """
-    <select (change)="seasonChanged()" [(ngModel)]="currentSeason" [compareWith]="compare">
-      <option  *ngFor="let season of seasons | async" [ngValue]="season"><ql-season-name [season]="obs(season)"></ql-season-name></option>
-    </select>
+    <md-select class="mat-body-1" (change)="seasonChanged()" [(ngModel)]="currentSeason" [compareWith]="compare">
+      <md-option  *ngFor="let season of seasons | async" [value]="season"><ql-season-name [season]="obs(season)"></ql-season-name></md-option>
+    </md-select>
 """,
 styles = @@@("""
-  select {
+  md-select{
+    padding-left: .25em;
+    position:relative;
+    top:-3px;
+  }
+  md-select .mat-select-value-text span {
     font-size: 20px;
     font-weight: 500;
-    font-family: Roboto,"Helvetica Neue",sans-serif;
-    background-color: transparent;
-    border: none;
     color:  rgba(255,255,255,.87);
-    padding-left: .25em;
+
   }
-  option {
-    color:black;
+  md-option {
+    #color:black;
   }
 """)
 
