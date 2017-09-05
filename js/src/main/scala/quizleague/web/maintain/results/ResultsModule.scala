@@ -45,7 +45,15 @@ class ResultService(
     override val fixtureService:FixtureService,
     override val teamService:TeamService,
     override val userService:UserService,
-    override val textService:TextService
+    override val reportsService:ReportsService
 ) extends ResultGetService with ResultPutService with ServiceRoot
+
+@Injectable
+@classModeScala
+class ReportsService(
+    override val http: Http,
+    override val teamService:TeamService,
+    override val textService:TextService
+) extends ReportsGetService with ReportsPutService with ServiceRoot
 
 

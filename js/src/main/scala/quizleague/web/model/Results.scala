@@ -18,8 +18,13 @@ case class Result(
     awayScore:Int,
     submitter:RefObservable[User],
     note:String,
-    hasReports:Boolean,
-    reports:Array[Report])
+    reports:RefObservable[Reports])
+    
+@Data
+case class Reports(
+    id:String,
+    reports:Array[Report],
+    isEmpty:Boolean)
     
 @Data
 case class Report(

@@ -21,8 +21,8 @@ import quizleague.web.maintain.text.TextEditMixin
  <div *ngIf="item.fixture | async as fixture">
     <h2>Reports : {{fixture.date}} : {{(fixture.home | async)?.name}} vs item.{{(fixture.away | async)?.name}}</h2>
     <form #fm="ngForm" (submit)="save()">
-     <div fxLayout="column">
-      <div *ngFor="let report of item.reports" fxLayout="row"><button (click)="editText(report.text)" md-button type="button">{{(report.team | async)?.shortName}}</button></div>
+     <div *ngIf="item.reports | async as reports" fxLayout="column">
+      <div *ngFor="let report of reports.reports" fxLayout="row"><button (click)="editText(report.text)" md-button type="button">{{(report.team | async)?.shortName}}</button></div>
      </div>
      $formButtons
     </form>

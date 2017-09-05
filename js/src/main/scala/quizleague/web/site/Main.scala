@@ -26,10 +26,6 @@ import inviewport.InViewportModule
 import angulate2.core.OnInit
 import angulate2.core.AfterViewChecked
 
-
-
-
-
 @NgModule(
   imports = @@[BrowserModule,BrowserAnimationsModule ,MaterialModule, FlexLayoutModule, HttpModule, RootModule, ApplicationModules, MaintainModule, InViewportModule, AppRoutingModule],
   declarations = @@[AppComponent], 
