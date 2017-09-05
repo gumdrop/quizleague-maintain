@@ -24,8 +24,8 @@ import quizleague.web.util.Logging.log
             <td class="home" [ngClass]="nameClass(result.homeScore, result.awayScore)">{{(fixture.home | async)?.name}}</td>
             <td class="score">{{result.homeScore}}</td><td> - </td><td class="score">{{result.awayScore}}</td>
             <td class="away" [ngClass]="nameClass(result.awayScore, result.homeScore)">{{(fixture.away | async)?.name}}</td>
-            <td *ngIf="!(result.reports | async)?.isEmpty">
-              <a md-icon-button routerLink="/results/{{result.id}}/reports">
+            <td *ngIf="result.reports | async as reports">
+              <a *ngIf="!reports.isEmpty" md-icon-button routerLink="/results/{{result.id}}/reports">
                 <md-icon style="transform:scale(0.75)" class="md-12">description</md-icon>
               </a>
             </td> 

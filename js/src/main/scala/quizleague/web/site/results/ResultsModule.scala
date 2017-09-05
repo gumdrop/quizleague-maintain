@@ -33,7 +33,7 @@ import inviewport.InViewportModule
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
   declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, ReportComponent, ReportTitleComponent],
-  providers = @@[ResultsService, ResultService, ResultsViewService])
+  providers = @@[ResultsService, ResultService, ResultsViewService, ReportsService])
 class ResultsModule
 
 @Routes(
