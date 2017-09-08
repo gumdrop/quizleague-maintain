@@ -31,4 +31,6 @@ class SeasonListComponent (
     override val router: Router) 
    extends ListComponent[Season] with OnInit with SeasonNames{
       
+   override def sortit(s1:Season, s2:Season) = s1.startYear - s2.startYear
+   
 }

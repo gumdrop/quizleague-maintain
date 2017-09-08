@@ -46,7 +46,7 @@ class LeagueTableListComponent(
   
   var comp:Competition = _
   
-  def sortit(a:LeagueTable,b:LeagueTable) = a.description compareTo b.description
+  override def sortit(a:LeagueTable,b:LeagueTable) = a.description compareTo b.description
   
   def init(): Unit = {
     val comps = route.params.switchMap( (params,i) => competitionService.get(params("competitionId")))

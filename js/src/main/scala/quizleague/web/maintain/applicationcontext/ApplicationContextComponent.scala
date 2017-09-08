@@ -48,8 +48,8 @@ import quizleague.web.maintain.season.SeasonService
         </md-input-container>
         <label style="color: rgba(0,0,0,.38);">Email Aliases</label>
         <md-chip-list selectable>
-          <md-chip *ngFor="let alias of item.emailAliases">{{alias.alias}} : {{alias.user.name}}
-            <button md-icon-button (click)="removeAlias(alias)" type="button"><md-icon>delete</md-icon></button>
+          <md-chip *ngFor="let alias of item.emailAliases" [removable]="true" (remove)="removeAlias(alias)">{{alias.alias}} : {{(alias.user | async)?.name}}
+              <md-icon mdChipRemove>cancel</md-icon>
           </md-chip> 
         </md-chip-list>
      </div>

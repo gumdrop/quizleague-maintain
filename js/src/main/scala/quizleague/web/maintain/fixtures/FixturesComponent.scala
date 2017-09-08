@@ -58,11 +58,11 @@ import quizleague.web.util.rx._
           <md-select placeholder="Venue" [(ngModel)]="venue" name="venue">  
             <md-option *ngFor="let venue of venues" [value]="venue">{{venue.name}}</md-option>
           </md-select>
-          <button md-icon-button type="button" (click)="addFixture()" [disabled]="!(homeTeam && awayTeam && venue)"><md-icon class="md-24">add</md-icon></button>
+          <button md-icon-button type="button" (click)="addFixture()" [disabled]="!(homeTeam && awayTeam && venue)"><md-icon >add</md-icon></button>
          </div>
          <div fxLayout="column">
           <div *ngFor="let f of item.fixtures" fxLayout="row">
-            <button *ngIf="f | async as fixture" md-icon-button type="button" (click)="removeFixture(fixture)" ><md-icon class="md-24">delete</md-icon></button>
+            <button  class="pos-fix" *ngIf="f | async as fixture" md-icon-button type="button" (click)="removeFixture(fixture)" ><md-icon>cancel</md-icon></button>
             <span *ngIf="f | async as fixture">{{(fixture.home | async)?.name}} - {{(fixture.away | async)?.name}} @ {{(fixture.venue | async)?.name}}</span>
           </div>
          </div>
@@ -71,7 +71,13 @@ import quizleague.web.util.rx._
      $formButtons
     </form>
   </div>
-  """)
+  """,
+  styles = @@@("""
+  .pos-fix{
+    position:relative;
+    top:-11px;
+  }
+"""))
 @classModeScala
 class FixturesComponent(
   override val service: FixturesService,

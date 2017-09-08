@@ -26,7 +26,7 @@ import quizleague.web.maintain.user.UserService
 @NgModule(
   imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule],
   declarations = @@[ResultsComponent,ResultsListComponent, ReportListComponent],
-  providers = @@[ResultsService,ResultService]
+  providers = @@[ResultsService,ResultService,ReportsService]
    
 )
 class ResultsModule

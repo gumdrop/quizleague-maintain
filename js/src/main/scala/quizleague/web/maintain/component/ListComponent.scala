@@ -28,8 +28,9 @@ trait ListComponent[T] extends OnInit{
   }
   
   @JSExport
-  override def ngOnInit() = service.list.subscribe(this.items = _)
+  override def ngOnInit() = service.list.subscribe(i => this.items = i.sort(sortit _))
   
+  def sortit(i1:T,i2:T):Int = 0
   
 }
 
