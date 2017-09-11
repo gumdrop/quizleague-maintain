@@ -10,41 +10,37 @@ import scala.scalajs.js
 import angulate2.core.ElementRef
 import rxjs.Observable
 import quizleague.web.util.Logging._
+import quizleague.util.collection._
 
 @Component(
   selector = "ql-season-select",
   template = """
-    <md-select class="mat-body-1" (change)="seasonChanged()" [(ngModel)]="currentSeason" [compareWith]="compare">
-      <md-option  *ngFor="let season of seasons | async" [value]="season"><ql-season-name [season]="obs(season)"></ql-season-name></md-option>
-    </md-select>
+    <md-menu #seasonsMenu="mdMenu" fxLayout="column">
+  <button md-menu-item *ngFor="let season of seasons | async" (click)="seasonChanged(season)"><ql-season-name [season]="obs(season)"></ql-season-name></button>
+</md-menu>
+
+<span [mdMenuTriggerFor]="seasonsMenu">
+   <ql-season-name [season]="obs(currentSeason)"></ql-season-name>
+</span>
+  
 """,
 styles = @@@("""
-  md-select{
+  span{
     padding-left: .25em;
-    position:relative;
-    top:-3px;
+    cursor:pointer;
   }
-  md-select .mat-select-value-text span {
-    font-size: 20px;
-    font-weight: 500;
-    color:  rgba(255,255,255,.87);
-
-  }
-  md-option {
-    #color:black;
-  }
-""")
+ """)
 
 )  
 class SeasonSelectComponent(
     seasonService:SeasonService){
   
-  val seasons = seasonService.list.map((s,i) => s.sort((s1:Season,s2:Season) => s2.startYear compareTo s1.startYear))
+  val seasons = seasonService.list.map((s,i) => s.sortBy(_.startYear)(Desc))
    
   @Input
   var currentSeason:Season = _
   
-  def seasonChanged() = onchange.emit(currentSeason)
+  def seasonChanged(season:Season) ={currentSeason = season; onchange.emit(currentSeason)}
     
   @Output
   val onchange = new EventEmitter[Season]()

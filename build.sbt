@@ -4,7 +4,7 @@ EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
 val circeVersion = "0.8.0"
-val appengineVersion = "1.9.54"
+val appengineVersion = "1.9.55"
 val angularVersion = "^4.0.0"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
