@@ -37,14 +37,11 @@ trait ResultGetService extends GetService[Model] with ResultNames {
   
   val userService:UserGetService
   val fixtureService:FixtureGetService
-  val textService:TextGetService
   val teamService:TeamGetService
+  val reportsService:ReportsGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixture, fixtureService),dom.homeScore, dom.awayScore, userService.refObs(dom.submitter), dom.note, !dom.reports.isEmpty,mapReports(dom.reports))
+  override protected def mapOutSparse(dom: Dom) = Model(dom.id,refObs(dom.fixture, fixtureService),dom.homeScore, dom.awayScore, userService.refObs(dom.submitter), dom.note, refObs(dom.reports, reportsService))
 
-  private def mapReports(reports:List[DomReport]) =  reports.map(r => Report(refObs(r.team, teamService),refObs(r.text, textService))).toJSArray
-   
-  
   override protected def dec(json:String) = decode[U](json)
   override protected def decList(json:String) = decode[List[U]](json)
 
@@ -54,8 +51,8 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
   
   override val userService:UserPutService
   override val fixtureService:FixturePutService
-  override val textService:TextPutService
   override val teamService:TeamPutService
+  override val reportsService:ReportsPutService
   
   override protected def mapIn(model: Model) = Dom(
       model.id, 
@@ -64,13 +61,11 @@ trait ResultPutService extends PutService[Model] with ResultGetService with Dirt
       model.awayScore, 
       Option(userService.ref(model.submitter)),
       model.note,
-      model.reports.map(r => DomReport(teamService.ref(r.team), textService.ref(r.text))).toList
-      )
+      reportsService.ref(model.reports)
+  )
 
   override protected def make() = ???
   
-  override def save(model:Model) = {textService.saveAllDirty; super.save(model)}
-
   override def enc(item: Dom) = item.asJson
 
 }

@@ -46,6 +46,7 @@ class EntityEndpoint(
     saveAll(container.leaguetable)
     saveAll(container.result)
     saveAll(container.results)
+    saveAll(container.reports)
     saveAll(container.season)
     saveAll(container.team)
     saveAll(container.text)

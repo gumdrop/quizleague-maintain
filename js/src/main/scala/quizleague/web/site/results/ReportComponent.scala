@@ -18,7 +18,7 @@ import scalajs.js
 
 @Component(
   template = s"""
-    <div *ngIf="result | async as item; else loading">
+    <div *ngIf="reports | async as item; else loading">
       <div *ngFor="let report of item.reports" fxLayout="column">
         <md-card>
           <md-card-subtitle>By {{(report.team | async).name}}</md-card-subtitle>
@@ -45,6 +45,7 @@ class ReportComponent(
     override val titleService:TitleService) extends SectionComponent with MenuComponent with TitledComponent{
   
   val result = route.params.switchMap( (params,i) => service.get(params("id")))
+  val reports = result.switchMap((r,i) => r.reports.obs)
   
   setTitle(result.switchMap((r,i) => extract2[Result,Fixture,js.Array[Team],String](r, _.fixture, f => js.Array(f.home,f.away))((r,f,ts) => s"Reports for ${f.parentDescription} ${f.description} - ${ts(0).name} : ${ts(1).name}")))
   

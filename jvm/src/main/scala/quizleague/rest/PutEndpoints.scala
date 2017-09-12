@@ -45,6 +45,10 @@ trait PutEndpoints {
   @PUT
   @Path("/result/{id}")
   def result_(body: String) = save[Result](body)
+  
+  @PUT
+  @Path("/reports/{id}")
+  def reports_(body: String) = save[Reports](body)
 
   @PUT
   @Path("/fixtures/{id}")
