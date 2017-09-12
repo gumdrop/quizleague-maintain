@@ -12,7 +12,7 @@ import quizleague.web.util.rx._
 @Component(
   template = s"""
   <div fxLayout="column" *ngFor="let competition of competitions | async">
-    <a fxFlexAlign="start" routerLink="/competition/{{competition.id}}/{{competition.typeName}}"  md-button routerLinkActive="active" >{{competition.name}}</a>
+    <a fxFlexAlign="start" routerLink="/competition/{{competition.id}}/{{competition.typeName}}"  md-menu-item routerLinkActive="active" >{{competition.name}}</a>
   </div>
   """    
 )

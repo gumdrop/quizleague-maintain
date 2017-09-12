@@ -92,12 +92,12 @@ class AppRoutingModule
   </md-menu>
   <ng-template #menu>
      <div fxLayout="row" fxLayout.xs="column">
-        <a routerLink="/home" md-button routerLinkActive="active">Home</a>
-        <a routerLink="/team" md-button routerLinkActive="active">Teams</a>
-        <a routerLink="/competition" md-button routerLinkActive="active">Competitions</a>
-        <a routerLink="/results" md-button routerLinkActive="active">Results</a>
-        <a routerLink="/venue" md-button routerLinkActive="active">Venues</a>
-        <a routerLink="/calendar" md-button routerLinkActive="active">Calendar</a>
+        <a routerLink="/home" md-menu-item routerLinkActive="active">Home</a>
+        <a routerLink="/team" md-menu-item routerLinkActive="active">Teams</a>
+        <a routerLink="/competition" md-menu-item routerLinkActive="active">Competitions</a>
+        <a routerLink="/results" md-menu-item routerLinkActive="active">Results</a>
+        <a routerLink="/venue" md-menu-item routerLinkActive="active">Venues</a>
+        <a routerLink="/calendar" md-menu-item routerLinkActive="active">Calendar</a>
      </div>
   </ng-template>
   <ng-template #loading>

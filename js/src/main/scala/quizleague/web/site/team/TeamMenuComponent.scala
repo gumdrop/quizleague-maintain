@@ -10,7 +10,7 @@ import scalajs.js
 @Component(
   template = s"""
   <div fxLayout="column" *ngFor="let team of teams | async">
-    <a fxFlexAlign="start" routerLink="/team/{{team.id}}"  md-button routerLinkActive="active" >{{team.name}}</a>
+    <a fxFlexAlign="start" routerLink="/team/{{team.id}}"  md-menu-item routerLinkActive="active" >{{team.name}}</a>
   </div>
   """    
 )

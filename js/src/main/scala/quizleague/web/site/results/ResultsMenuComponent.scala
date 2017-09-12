@@ -10,8 +10,8 @@ import scalajs.js
 @Component(
   template = s"""
   <div fxLayout="column">
-   <a fxFlexAlign="start" routerLink="/results/all"  md-button routerLinkActive="active" >All Results</a>
-   <a fxFlexAlign="start" routerLink="/results/fixtures"  md-button routerLinkActive="active" >All Fixtures</a>
+   <a fxFlexAlign="start" routerLink="/results/all"  md-menu-item routerLinkActive="active" >All Results</a>
+   <a fxFlexAlign="start" routerLink="/results/fixtures"  md-menu-item routerLinkActive="active" >All Fixtures</a>
   </div>
   """    
 )
