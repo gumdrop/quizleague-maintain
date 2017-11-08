@@ -55,7 +55,7 @@ object Firebase {
       value.getOrElse(null)
     }
 
-    def asArrayList[T](v: Vector[T]): ArrayList[T] = v.toList.asJava
+    def asArrayList[T](v: Vector[T]) = v.toList.asJava
 
     def doit(entity: Map[String,Any])(obj: JsonObject) = {
 
