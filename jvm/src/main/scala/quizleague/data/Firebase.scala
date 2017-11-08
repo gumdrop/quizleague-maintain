@@ -13,7 +13,7 @@ import java.util.Date
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
 
-object Firebase {
+object Storage {
   val serviceAccount = GoogleCredentials.fromStream(this.getClass.getResourceAsStream("/quizleague/auth/firebase.json"))
 
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
@@ -21,7 +21,7 @@ object Firebase {
   .setProjectId("dummy project id"). build
 
 
-  val datastore = options.getService
+  lazy val datastore = options.getService
 
   
   def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Unit = {
@@ -35,6 +35,7 @@ object Firebase {
 //    val q: Query = new Query(makeKind)
 //
 //    datastore.prepare(q).asIterable().map(entityToObj(_, decoder)).toList
+    List()
   }
 
   private def makeKind(implicit tag: ClassTag[_]) = tag.runtimeClass.getSimpleName.toLowerCase
@@ -86,13 +87,11 @@ object Firebase {
 
   private def load[T <: Entity](kind: String, id: String, decoder: Decoder[T])(implicit tag: ClassTag[T]): T = {
 
-    val cached = fromCache(id, kind)
-    
-    cached.getOrElse(toCache(entityToObj(datastore.get(KeyFactory.createKey(kind, id)), decoder),kind))
+    entityToObj(datastore.document(s"$kind/$id").get.get.getData.asInstanceOf[java.util.Map[String,Any]], decoder)
 
   }
 
-  private def entityToObj[T](entity: Ent, decoder: Decoder[T])(implicit tag:ClassTag[T]) = {
+  private def entityToObj[T](entity: java.util.Map[String,Any], decoder: Decoder[T])(implicit tag:ClassTag[T]) = {
     val json: Json = Json.fromFields(props(entity))
 
     val r = decoder.decodeJson(json)

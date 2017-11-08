@@ -12,7 +12,7 @@ import java.util.Collections
 import javax.cache.CacheManager
 import java.util.Date
 
-object Storage {
+object StorageOld {
 
   def nullList[T] = {
     val list = new ArrayList[T]

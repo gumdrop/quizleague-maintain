@@ -4,9 +4,9 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <listener>
+  <!-- listener>
     <listener-class>quizleague.rest.ApplicationInit</listener-class>
-  </listener>
+  </listener-->
   <filter>
     <filter-name>PassThroughFilter</filter-name>
     <filter-class>quizleague.rest.PassThroughFilter</filter-class>
