@@ -16,9 +16,9 @@ import com.google.auth.Credentials
 object Storage {
   val serviceAccount = GoogleCredentials.fromStream(this.getClass.getResourceAsStream("/quizleague/auth/firebase.json"))
 
-  val options = FirestoreOptions.getDefaultInstance.toBuilder()
+  val options = FirestoreOptions.newBuilder()
   .setCredentials(serviceAccount)
-  .setProjectId("dummy project id"). build
+  .setProjectId("quizleague-d02fe").build
 
 
   lazy val datastore = options.getService
