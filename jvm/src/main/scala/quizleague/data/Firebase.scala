@@ -12,13 +12,14 @@ import java.util.Collections
 import java.util.Date
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
+import java.util.logging.Logger
 
 object Storage {
-  val serviceAccount = GoogleCredentials.fromStream(this.getClass.getResourceAsStream("/quizleague/auth/firebase.json"))
-
-  val options = FirestoreOptions.newBuilder()
-  .setCredentials(serviceAccount)
-  .setProjectId("quizleague-d02fe").build
+  
+  val log = Logger.getLogger(this.getClass.toString())
+  
+  val options = FirestoreOptions.getDefaultInstance.toBuilder()
+  .setProjectId("ql-firestore-trial").build
 
 
   lazy val datastore = options.getService
@@ -58,14 +59,30 @@ object Storage {
 
     def asArrayList[T](v: Vector[T]) = v.toList.asJava
 
-    def doit(entity: Map[String,Any])(obj: JsonObject) = {
+    def doit(entity: Map[String,Object])(obj: JsonObject) = {
 
-      entity ++ obj.toVector.map((handleField _).tupled)
+      val res = entity ++ obj.toVector.map((handleField _).tupled)
+      
+      log.warning(s"entity : $res")
+      res.asInstanceOf[Map[String,Object]].asJava
     }
 
    // val t = datastore.beginTransaction()
+    
+    
 
-    val key = json.asObject.map(obj => datastore.document(s"$kind/$id").create(doit(Map())(obj)))
+    val res = json.asObject.map(obj => {
+      val snapshot = datastore.document(s"$kind/$id").get.get
+      val ret = if(snapshot.exists()){
+        snapshot.getReference.update(doit(Map())(obj))
+      }
+      else{
+         snapshot.getReference.create(doit(Map())(obj))
+      }
+      ret
+      })
+    
+    log.warning(s"$kind/$id : @${res.get.get.getUpdateTime}")
 
   }
 
