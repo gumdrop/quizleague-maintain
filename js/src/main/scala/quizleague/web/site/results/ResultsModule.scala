@@ -7,7 +7,7 @@ import angulate2.ext.classModeScala
 import angulate2.http.Http
 import angulate2.router.{ Route, RouterModule }
 import angulate2.std._
-import quizleague.web.service.results.{ ResultGetService, ResultsGetService }
+import quizleague.web.service.results.{ ResultGetService, ResultsGetService, ReportsGetService }
 import quizleague.web.site.ServiceRoot
 import quizleague.web.site.fixtures.{ FixtureService, FixturesService }
 import quizleague.web.site.team.TeamService
@@ -33,7 +33,7 @@ import inviewport.InViewportModule
 @NgModule(
   imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, ResultsRoutesModule,CommonAppModule, TextModule, FixturesModule, ResultsComponentsModule, SeasonModule],
   declarations = @@[AllResultsComponent, AllResultsTitleComponent, ResultsMenuComponent, ReportComponent, ReportTitleComponent],
-  providers = @@[ResultsService, ResultService, ResultsViewService])
+  providers = @@[ResultsService, ResultService, ResultsViewService, ReportsService])
 class ResultsModule
 
 @Routes(
@@ -82,11 +82,18 @@ class ResultsService(override val http: Http,
 class ResultService(override val http: Http,
     val userService: UserService,
     val fixtureService: FixtureService,
-    val textService: TextService,
-    val teamService: TeamService) extends ResultGetService with ServiceRoot with CachingService[Result]{
+    val teamService: TeamService,
+    val reportsService: ReportsService) extends ResultGetService with ServiceRoot with CachingService[Result]{
 
   def teamResults(season:Season,team:Team, take:Int = Integer.MAX_VALUE) = list(Some(s"season/${season.id}/team/${team.id}?take=$take"))
 }
+
+@Injectable
+@classModeScala
+class ReportsService(override val http: Http,
+    val textService: TextService,
+    val teamService: TeamService) extends ReportsGetService with ServiceRoot 
+
 
 @Injectable
 @classModeScala

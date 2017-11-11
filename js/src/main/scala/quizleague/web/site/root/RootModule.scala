@@ -11,7 +11,6 @@ import angulate2.http.HttpModule
 import angulate2.platformBrowser.BrowserModule
 import angulate2.router.{ Route, Router }
 import angulate2.std._
-import quizleague.web.mock.MockData
 import quizleague.web.site.common.{ CommonAppModule, NoMenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
 import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.fixtures.FixturesModule
