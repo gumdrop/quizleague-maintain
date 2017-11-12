@@ -29,6 +29,18 @@ object Storage {
     val kind = makeKind
     save(kind, entity.id, encoder(entity))
   }
+  
+  def saveAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T], encoder: Encoder[T]):Unit = {
+     val kind = makeKind
+     
+     val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}"),asMap(encoder(e).asObject.get)))
+     
+     val batch = datastore.batch()
+     
+     objrefs.foreach({case (r,o) => batch.set(r,o)})
+     
+     batch.commit()
+  }
 
   def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind, id, decoder)
 
@@ -43,13 +55,27 @@ object Storage {
 
   private def save(kind: String, id: String, json: Json): Unit = {
 
+    // val t = datastore.beginTransaction()
+
+    val res = json.asObject.map(obj => {
+      val ent = asMap(obj)
+      val ref = datastore.document(s"$kind/$id")
+      ref.set(ent)
+
+      //log.warning(s"$kind/$id : @${res.get.get.getUpdateTime}")
+
+    })
+  }
+  
+  private def asMap(obj: JsonObject) = {
+    
     def handleField(name: String, json: Json) =  ((name, convertObject(json)))
 
     def convertObject(json: Json): Any = {
       val value: Option[Any] = if (json.isNumber) json.asNumber.map(_.toDouble)
       else if (json.isString) json.asString.map(_.toString())
       else if (json.isBoolean) json.asBoolean
-      else if (json.isObject) json.asObject.map(doit(Map()))
+      else if (json.isObject) json.asObject.map(doit _)
       else if (json.isArray) json.asArray.map(v => asArrayList(v.map(o => convertObject(o))))
       else if (json.isNull) None
       else None
@@ -59,31 +85,15 @@ object Storage {
 
     def asArrayList[T](v: Vector[T]) = v.toList.asJava
 
-    def doit(entity: Map[String,Object])(obj: JsonObject) = {
+    def doit(obj: JsonObject) = {
 
-      val res = entity ++ obj.toVector.map((handleField _).tupled)
+      val res = Map() ++ obj.toVector.map((handleField _).tupled)
       
-      log.warning(s"entity : $res")
       res.asInstanceOf[Map[String,Object]].asJava
     }
-
-   // val t = datastore.beginTransaction()
     
+    doit(obj)
     
-
-    val res = json.asObject.map(obj => {
-      val snapshot = datastore.document(s"$kind/$id").get.get
-      val ret = if(snapshot.exists()){
-        snapshot.getReference.update(doit(Map())(obj))
-      }
-      else{
-         snapshot.getReference.create(doit(Map())(obj))
-      }
-      ret
-      })
-    
-    log.warning(s"$kind/$id : @${res.get.get.getUpdateTime}")
-
   }
 
   private def props(p: java.util.Map[String,Any]) = p.asScala.toList.map({ case (name: String, o) => (name, convertToJson(o)) }).asJava

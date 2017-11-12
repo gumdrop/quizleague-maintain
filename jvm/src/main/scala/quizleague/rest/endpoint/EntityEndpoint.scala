@@ -33,7 +33,7 @@ class EntityEndpoint(
     import quizleague.util.json.codecs.ScalaTimeCodecs._
     
     def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
-      list.foreach(a => Storage.save[T](a)(tag,encoder))
+      Storage.saveAll[T](list)(tag,encoder)
     }
     
     val container = decode[DomainContainer](json).merge.asInstanceOf[DomainContainer]
