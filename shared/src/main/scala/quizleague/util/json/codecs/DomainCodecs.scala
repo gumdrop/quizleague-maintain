@@ -10,8 +10,6 @@ object DomainCodecs{
   
   implicit val competitionRefDecoder: Decoder[Ref[Competition]] = deriveDecoder
   implicit val competitionRefEncoder: Encoder[Ref[Competition]] = deriveEncoder
-  implicit val resultsRefDecoder: Decoder[Ref[Results]] = deriveDecoder
-  implicit val resultsRefEncoder: Encoder[Ref[Results]] = deriveEncoder
   implicit val fixturesRefDecoder: Decoder[Ref[Fixtures]] = deriveDecoder
   implicit val fixturesRefEncoder: Encoder[Ref[Fixtures]] = deriveEncoder
   implicit val leagueTableRefDecoder: Decoder[Ref[LeagueTable]] = deriveDecoder
@@ -29,8 +27,6 @@ object DomainCodecs{
   implicit val fixturesEncoder: Encoder[Fixtures] = deriveEncoder
   implicit val fixtureDecoder: Decoder[Fixture] = deriveDecoder
   implicit val fixtureEncoder: Encoder[Fixture] = deriveEncoder
-  implicit val resultsDecoder: Decoder[Results] = deriveDecoder
-  implicit val resultsEncoder: Encoder[Results] = deriveEncoder
   implicit val resultDecoder: Decoder[Result] = deriveDecoder
   implicit val resultEncoder: Encoder[Result] = deriveEncoder
   implicit val reportsDecoder: Decoder[Reports] = deriveDecoder

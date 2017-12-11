@@ -12,18 +12,18 @@ import quizleague.util.json.codecs.DomainCodecs._
 
 trait MaintainPostEndpoints {
   
-  @POST
-  @Path("/leaguetable/{tableid}/competition/{compid}/recalc")
-  def recalculateTables(@PathParam("compid") compid: String, @PathParam("tableid") tableid: String) = {
-    
-    val competition = Storage.load[Competition](compid).asInstanceOf[TeamCompetition]
-    
-    val results:List[Results] = competition.results
-   
-    val table = Storage.load[LeagueTable](tableid)
-    
-    LeagueTableCalculator.recalculate(table, results).asJson.noSpaces.toString
-
-  }
+//  @POST
+//  @Path("/leaguetable/{tableid}/competition/{compid}/recalc")
+//  def recalculateTables(@PathParam("compid") compid: String, @PathParam("tableid") tableid: String) = {
+//    
+//    val competition = Storage.load[Competition](compid).asInstanceOf[TeamCompetition]
+//    
+//    val results:List[Results] = competition.results
+//   
+//    val table = Storage.load[LeagueTable](tableid)
+//    
+//    LeagueTableCalculator.recalculate(table, results).asJson.noSpaces.toString
+//
+//  }
   
 }

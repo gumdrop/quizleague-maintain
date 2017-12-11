@@ -1,5 +1,7 @@
 package quizleague.domain
 
+
+
 case class ApplicationContext(
   id: String,
   leagueName: String,
