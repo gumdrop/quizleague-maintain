@@ -15,15 +15,8 @@ import quizleague.data.Storage
 import quizleague.domain.Entity
 
 @Path("/entity")
-class EntityEndpoint(
-  @Context override val request:Request,
-  @Context override val uriInfo:UriInfo
-) extends GetEndpoints with PutEndpoints with MaintainPostEndpoints with EtagSupport{
+class EntityEndpoint extends MaintainPostEndpoints{
   
-  override val defaultCacheAge = 0
-  override val shortCacheAge = 0
-  
-  preChecks()
   
   @POST
   @Path("/dbupload")

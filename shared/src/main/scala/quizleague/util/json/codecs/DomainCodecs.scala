@@ -45,6 +45,7 @@ object DomainCodecs{
   implicit val textEncoder: Encoder[Text] = deriveEncoder
   implicit val userDecoder: Decoder[User] = deriveDecoder
   implicit val userEncoder: Encoder[User] = deriveEncoder
+
   
   
   

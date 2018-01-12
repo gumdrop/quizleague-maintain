@@ -17,6 +17,7 @@ sealed trait Competition extends Entity
   
   val name:String
   val text:Ref[Text]
+  val icon:Option[String]
   override val retired = false
   
 }
@@ -30,7 +31,9 @@ case class LeagueCompetition(
 
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Option[Ref[Competition]]
+  subsidiary:Option[Ref[Competition]],
+  textName:String = "league-comp",
+  icon:Option[String] = None
   
 ) extends Competition with MainLeagueCompetition
 
@@ -42,7 +45,9 @@ case class CupCompetition(
   duration:Duration,
   fixtures:List[Ref[Fixtures]],
 
-  text:Ref[Text]
+  text:Ref[Text],
+  textName:String,
+  icon:Option[String] = None
 ) extends Competition with KnockoutCompetition
 
 case class SubsidiaryLeagueCompetition(
@@ -50,7 +55,9 @@ case class SubsidiaryLeagueCompetition(
   name:String,
  
   tables:List[Ref[LeagueTable]],
-  text:Ref[Text]
+  text:Ref[Text],
+  textName:String = "beer-comp",
+  icon:Option[String] = None
 ) extends Competition with SubsidiaryCompetition  with CompetitionTables
 
 case class SingletonCompetition(
@@ -58,7 +65,8 @@ case class SingletonCompetition(
   name:String,
   event:Option[Event],
   textName:String,
-  text:Ref[Text]    
+  text:Ref[Text],
+  icon:Option[String] = None
 ) extends Competition with BaseSingletonCompetition
 
 object Competition
@@ -83,7 +91,9 @@ object Competition
   val fixtures:List[Ref[Fixtures]]
 }
 
- trait TeamCompetition extends FixturesCompetition
+ trait TeamCompetition extends FixturesCompetition{
+     val textName:String
+ }
 
  trait CompetitionTables{
     val tables:List[Ref[LeagueTable]]
@@ -101,7 +111,9 @@ object Competition
 
  trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
 
- trait SubsidiaryCompetition
+ trait SubsidiaryCompetition{
+     val textName:String
+ }
 
 
 
