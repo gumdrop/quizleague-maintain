@@ -4,15 +4,19 @@ import scalajs.js
 import quizleague.web.util.UUID
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
-import rxjs.Observable
 import quizleague.web.util.rx.RefObservable
 import io.circe.Json
+import io.circe.scalajs._
 import quizleague.web.util.Logging._
+import rxscalajs.Observable
+import quizleague.web.model.Model
 
-trait PutService[T] {
+trait PutService[T <: Model] {
   this: GetService[T] with ComponentNames=>
-
-  def cache(item: T) = add(mapIn(item))
+ 
+  def cache(item: T) = add(item)
+  
+  protected def add(entity:U):T = add(mapOutSparse(entity))
   
   def save(item: T):Unit = save(mapIn(item))
   
@@ -21,16 +25,16 @@ trait PutService[T] {
   protected def save(item:U):Unit = saveDom(item)
   
   private[service] def saveDom(i:U) = {
-    http.put(s"$uriRoot/${i.id}", enc(i).noSpaces, requestOptions).subscribe(x=>x)
-    log(i,s"saved $uriRoot/${i.id} to http")
+    db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
+    log(i,s"saved $uriRoot/${i.id} to firestore")
     deCache(i)
   }
   
   
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
   def delete(item:T) = {items -= mapIn(item).id} 
-  def instance() = add(make())
-  def getId(item:T) = if (item != null ) mapIn(item).id else null
+  def instance() = add(mapOutSparse(make()))
+  def getId(item:T) = if (item != null ) item.id else null
   protected final def newId() = UUID.randomUUID.toString()
   private[service] def deCache(item:U) = items -= item.id
 

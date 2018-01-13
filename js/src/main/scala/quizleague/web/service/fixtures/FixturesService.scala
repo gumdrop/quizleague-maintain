@@ -1,16 +1,13 @@
 package quizleague.web.service.fixtures
 
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.web.model.{Fixtures => Model}
 import quizleague.domain.{Fixtures => Dom}
 import quizleague.domain.Ref
-import rxjs.Observable
 import quizleague.web.names.ComponentNames
+import quizleague.util.collection._
 import scala.scalajs.js
 import org.threeten.bp.Year
 import quizleague.web.util.DateTimeConverters._
@@ -25,6 +22,7 @@ import quizleague.web.names.FixturesNames
 import quizleague.web.util.rx._
 import io.circe._,io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import js.JSConverters._
 
 
 
@@ -35,8 +33,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
 
   override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,refObsList(dom.fixtures, fixtureService))
   
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
  
 }
 
@@ -49,7 +46,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
     
     def findNextDate(c:LeagueCompetition) = {
-      fixtures.sort((a:Model,b:Model) => b.date compareTo a.date).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
+      (fixtures.sortBy(_.date)(Desc)).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
     }
     
     add(
@@ -59,9 +56,10 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
       case _ => null
     })
   }
-  override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
 
   override def enc(item: Dom) = item.asJson
+  
+  override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
 
 }
 

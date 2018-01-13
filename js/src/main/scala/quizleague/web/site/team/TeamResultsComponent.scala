@@ -1,77 +1,63 @@
 package quizleague.web.site.team
 
-import angulate2.ext.classModeScala
-import angulate2.router.ActivatedRoute
-import angulate2.std._
-import quizleague.web.site.common.{ MenuComponent, SectionComponent, SideMenuService, TitleService, TitledComponent }
-import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.util.Logging
-import angulate2.core.Input
-import scala.scalajs.js.annotation.JSExport
-import quizleague.web.site.common.ComponentUtils
-import ComponentUtils._
+import quizleague.web.core._
+import quizleague.web.core.Component
+import quizleague.web.site.fixtures.FixtureService
+import quizleague.web.core.IdComponent
+import scalajs.js
+import quizleague.web.site.ApplicationContextService
+import quizleague.web.site.season.SeasonIdComponent
+import quizleague.web.core.IdComponent
+import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
-
-@Component(
-  template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card>
-      <md-card-title>All Results</md-card-title>
-      <md-card-content>
-        <ql-results-simple [results]="results" [inlineDetails]="true"></ql-results-simple>
-      </md-card-content>
-    </md-card>
-  </div>
-  $loadingTemplate
-  """    
-)
-@classModeScala
-class TeamResultsComponent(
-    route:ActivatedRoute,
-    service:TeamService,
-    viewService:TeamViewService,
-    applicationContextService:ApplicationContextService,
-    override val titleService:TitleService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent with Logging{
-  
-  
-  
-  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-  
-  itemObs.subscribe(t => setTitle(s"${t.name} - Results"))
-  
-  val results = viewService.season.switchMap((s,j) => itemObs.switchMap((t,i) => viewService.getResults(t, s)))
-
+object TeamResultsPage extends RouteComponent with GridSizeComponentConfig {
+  val template = """<v-container v-if="season" v-bind="gridSize" fluid>
+                      <v-layout column>
+                      <v-flex><v-card>
+                        <v-card-text>
+                          <ql-all-team-results  :id="$route.params.id" :seasonId="season.id"></ql-all-team-results>
+                        </v-card-text>
+                      </v-card></v-flex>
+                      <div></div>
+                      </v-layout>
+                    </v-container>"""
+  subscription("season")(c => TeamViewService.season)
   
   
 }
 
-@Component(
-  template = """<ql-team-sub-title text="Results"></ql-team-sub-title>"""
-)
-class TeamResultsTitleComponent
+object TeamResultsComponent extends Component {
+  
+  type facade = SeasonIdComponent with IdComponent
+  val name = "ql-all-team-results"
+  val template = """<ql-fixtures-simple :fixtures="fixtures(id,seasonId)" :inlineDetails="true"></ql-fixtures-simple>"""
+  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamResults(teamId, seasonId))
+  props("id","seasonId")
+  
+}
 
+object TeamResultsTitle extends RouteComponent{
+  val template = """<results-title :id="$route.params.id"></results-title>"""
+ components(TeamResultsTitleComponent)
+}
 
-@Component(
-  selector = "ql-team-sub-title",
-  template = s"""
-  <ql-section-title>
-     <span *ngIf="itemObs | async as item; else loading">
-      {{item.name}} - {{text}}
-    </span>
-    <ql-season-select [currentSeason]="viewService.season | async" (onchange)="viewService.seasonChanged($$event)"></ql-season-select>
-    $loadingTemplate
-  </ql-section-title>
-  """
-)
-class TeamSubTitleComponent(
-    route:ActivatedRoute,
-    service:TeamService,
-    val viewService:TeamViewService){  
+object TeamResultsTitleComponent extends Component{
+  type facade = IdComponent
   
-  @Input
-  var text:String = _
+  val name = "results-title"
+  val template = """<v-toolbar      
+      color="amber darken-3"
+      dark
+      clipped-left>
+      <v-toolbar-title class="white--text" v-if="team">
+        {{team.name}} Results 
+       </v-toolbar-title>
+      &nbsp;
+      <ql-season-select :season="season"></ql-season-select>
+    </v-toolbar>"""
   
-  val itemObs = route.params.switchMap((params,i) => service.get(params("id")))
-  
+  props("id")
+  data("season", TeamViewService.season)
+  subscription("team","id")(c => TeamService.get(c.id))
 }

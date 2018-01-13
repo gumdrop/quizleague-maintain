@@ -1,96 +1,116 @@
 package quizleague.web.maintain.season
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
 import js.JSConverters._
 import quizleague.web.maintain.venue.VenueService
-import angulate2.ext.classModeScala
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
-import js.Dynamic.{ global => g }
-import quizleague.web.maintain.text.TextEditMixin
+
+import js.Dynamic.{ global => g }  
+
 import quizleague.web.util.Logging
 import quizleague.web.model.CompetitionType
 import quizleague.web.maintain.competition.CompetitionService
+import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.ItemComponentConfig
+import quizleague.web.core.RouteComponent
 
-@Component(
-  selector = "ql-season",
-  template = s"""
-  <div>
+
+//@Component(
+//  selector = "ql-season",
+//  template = s"""
+//  <div>
+//    <h2>Calendar {{item.startYear}}/{{item.endYear}}</h2>
+//    <form #fm="ngForm" (submit)="save()">
+//      <div fxLayout="column">
+//        <button md-icon-button (click)="addEvent()" type="button"><md-icon>add</md-icon></button>
+//        <div *ngFor="let event of items;let i = index" fxLayout="row">
+//          <div fxLayout="column">
+//            <button md-icon-button (click)="deleteEvent(event)" type="button"><md-icon>delete</md-icon></button>
+//          </div>  
+//          <div fxLayout="column">
+//          <md-input-container>        
+//            <input mdInput placeholder="Description" type="text" 
+//            required
+//               [(ngModel)]="event.description" name="description{{i}}">
+//          </md-input-container>
+//
+//          <div fxLayout="row">
+//            <md-input-container>        
+//              <input mdInput placeholder="Date" type="date"
+//                 required
+//                 [(ngModel)]="event.date" name="date{{i}}">
+//            </md-input-container>
+//            <md-input-container>        
+//              <input mdInput placeholder="Time" type="time"
+//                 required
+//                 [(ngModel)]="event.time" name="time{{i}}">
+//            </md-input-container>
+//            <md-input-container>        
+//              <input mdInput placeholder="Duration" type="number" step="0.1"
+//                 required
+//                 [(ngModel)]="event.duration" name="duration{{i}}">
+//            </md-input-container>
+//          </div>
+//            <md-select placeholder="Venue" name="venue{{i}}" [(ngModel)]="event.venue" required >
+//              <md-option *ngFor="let venue of venues" [value]="venue" >
+//                {{venue.name}}
+//              </md-option>
+//            </md-select>
+//        </div>
+//        </div>
+//      </div>
+//     $formButtons
+//    </form>
+//  </div>
+//  """    
+//)
+object CalendarComponent extends ItemComponentConfig[Season] with RouteComponent{
+
+  val service = SeasonService
+    
+   
+  val template = s"""
+  <v-container v-if="item">
     <h2>Calendar {{item.startYear}}/{{item.endYear}}</h2>
-    <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-        <button md-icon-button (click)="addEvent()" type="button"><md-icon>add</md-icon></button>
-        <div *ngFor="let event of items;let i = index" fxLayout="row">
-          <div fxLayout="column">
-            <button md-icon-button (click)="deleteEvent(event)" type="button"><md-icon>delete</md-icon></button>
-          </div>  
-          <div fxLayout="column">
-          <md-input-container>        
-            <input mdInput placeholder="Description" type="text" 
-            required
-               [(ngModel)]="event.description" name="description{{i}}">
-          </md-input-container>
-
-          <div fxLayout="row">
-            <md-input-container>        
-              <input mdInput placeholder="Date" type="date"
-                 required
-                 [(ngModel)]="event.date" name="date{{i}}">
-            </md-input-container>
-            <md-input-container>        
-              <input mdInput placeholder="Time" type="time"
-                 required
-                 [(ngModel)]="event.time" name="time{{i}}">
-            </md-input-container>
-            <md-input-container>        
-              <input mdInput placeholder="Duration" type="number" step="0.1"
-                 required
-                 [(ngModel)]="event.duration" name="duration{{i}}">
-            </md-input-container>
-          </div>
-            <md-select placeholder="Venue" name="venue{{i}}" [(ngModel)]="event.venue" required >
-              <md-option *ngFor="let venue of venues" [value]="venue" >
-                {{venue.name}}
-              </md-option>
-            </md-select>
+    <v-form v-model="valid" >
+      <v-layout column>
+        <v-btn icon v-on:click="addEvent()"><v-icon>add</v-icon></v-btn>
+        <div v-for="event in item.calendar" :key="event.id">
+          <v-layout column>
+            <v-layout row>
+             <v-btn icon v-on:click="deleteEvent(event)"><v-icon>delete</v-icon></v-btn>
+             <v-text-field  label="Description" type="text" 
+              required
+                 v-model="event.description" ></v-text-field>
+            </v-layout>
+            <v-layout row>
+              <v-text-field label="Date" v-model="event.date" type="date" required :rules=${valRequired("Date")}></v-text-field>
+              <v-text-field label="Time" v-model="event.time" type="time" required :rules=${valRequired("Time")}></v-text-field>
+              <v-text-field label="Duration" v-model.number="event.duration" type="number" step="0.5" required :rules=${valRequired("Duration")}></v-text-field>
+            </v-layout>
+            <v-select label="Venue" :items="venues" v-model="event.venue"></v-select>
+          </v-layout>
         </div>
-        </div>
-      </div>
+      </v-layout>
      $formButtons
-    </form>
-  </div>
+    </v-form>
+  </v-container>
   """    
-)
-@classModeScala
-class CalendarComponent(
-    override val service:SeasonService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    val venueService:VenueService)
-    extends ItemComponent[Season] with Logging{
-  
-    var items:js.Array[CalendarEvent] = _
-    var venues:js.Array[Venue] = _
-  
-    override def init() = {
-      loadItem().subscribe(x=> {items = x.calendar; item = x})
-      initVenues()
-    }
+    def venues() = SelectUtils.model[Venue](VenueService)(_.name)
+     
+    def addEvent(c:facade) = c.item.calendar += CalendarEvent(null,null,null,0,null)
+    def deleteEvent(c:facade, event:CalendarEvent) = c.item.calendar -= event
     
-    private def initVenues() = venueService.list.subscribe(venues = _)
+    override def save(c:facade) = {service.cache(c.item);c.$router.back()}
     
-    def addEvent() = item.calendar += CalendarEvent(null,null,null,0,null)
-    def deleteEvent(event:CalendarEvent) = item.calendar -= event
-    
-    override def save() = {service.cache(item);location.back()}
-    override def cancel() = location.back()
+    subscription("venues"){c:facade => venues()}
+
+    method("addEvent")({addEvent _}:js.ThisFunction)
+    method("deleteEvent")({deleteEvent _}:js.ThisFunction)
     
 }
     

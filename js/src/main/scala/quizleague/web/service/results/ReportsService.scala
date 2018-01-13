@@ -31,8 +31,7 @@ trait ReportsGetService extends GetService[Model] with ReportsNames {
   private def mapReports(reports:List[DomReport]) =  reports.map(r => Report(refObs(r.team, teamService),refObs(r.text, textService))).toJSArray
    
   
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
 
 }
 

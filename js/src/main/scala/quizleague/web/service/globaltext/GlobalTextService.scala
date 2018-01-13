@@ -1,13 +1,10 @@
 package quizleague.web.service.globaltext
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
 import quizleague.web.model._
 import quizleague.domain.{GlobalText => Dom}
 import quizleague.domain.{Ref => DomRef}
 import quizleague.domain.{Text => DomText}
-import rxjs.Observable
+import rxscalajs.Observable
 import quizleague.web.service.text._
 import quizleague.web.service._
 import scalajs.js
@@ -29,8 +26,8 @@ trait GlobalTextGetService extends GetService[GlobalText] with GlobalTextNames{
   
   override def flush() = {textService.flush();super.flush()}
   
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
+
 }
 
 trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetService{

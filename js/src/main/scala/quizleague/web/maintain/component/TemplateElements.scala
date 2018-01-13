@@ -1,34 +1,61 @@
 package quizleague.web.maintain.component
 
 object TemplateElements {
-  val chbxRetired = """<md-checkbox [(ngModel)]="item.retired" name="retired">Retired</md-checkbox>"""
+  val chbxRetired = """<v-checkbox v-model="item.retired" name="retired" label="Retired"></v-checkbox>"""
   
   val formButtons = """
-      <div style="position:absolute;left:1em;bottom:2em;">
-        <button md-fab type="submit" [disabled]="!fm.form.valid">
-            <md-icon class="md-24">save</md-icon>
-        </button>
-      </div>
-      <div style="position:absolute;right:1em;bottom:2em;">
-        <button md-fab (click)="cancel()" type="button">
-            <md-icon class="md-24">cancel</md-icon>
-        </button>
-      </div>
+            <v-btn
+              fixed
+              dark
+              fab
+              bottom
+              left
+              small
+              color="pink"
+      :disabled="!valid"
+              v-on:click = "save"
+            >
+              <v-icon>save</v-icon>
+            </v-btn>
+            <v-btn
+              fixed
+              dark
+              fab
+              bottom
+              right
+              small
+              color="pink"
+              v-on:click = "cancel"
+            >
+              <v-icon>cancel</v-icon>
+            </v-btn>
 """
   
   val addFAB = """
-    <div style="position:absolute;right:1em;bottom:2em;">
-      <button md-fab (click)="addNew()">
-          <md-icon class="md-24">add</md-icon>
-      </button>
-    </div>
+
+      <v-btn  fixed
+              dark
+              fab
+              bottom
+              left
+              small
+              color="pink"
+              v-on:click="add">
+          <v-icon>add</v-icon>
+      </v-btn>
 """
   
-  val backFAB = """    
-    <div style="position:absolute;left:1em;bottom:2em;">
-      <button md-fab (click)="back()">
-          <md-icon class="md-24">arrow_back</md-icon>
-      </button>
-    </div>
+  val backFAB = """      <v-btn  fixed
+              dark
+              fab
+              bottom
+              right
+              small
+              color="pink"
+              v-on:click="$router.back()">
+          <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
 """
+  
+  def valRequired(name:String) = s""""[(v) => !!v || '$name is required']""""
 }

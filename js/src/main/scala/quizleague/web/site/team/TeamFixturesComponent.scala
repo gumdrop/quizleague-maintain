@@ -1,55 +1,39 @@
 package quizleague.web.site.team
 
-import angulate2.ext.classModeScala
-import angulate2.std.Component
-import quizleague.web.site.common.MenuComponent
-import quizleague.web.site.common.SideMenuService
-import quizleague.web.site.common.SectionComponent
-import angulate2.router.ActivatedRoute
-import rxjs.Observable
-import quizleague.web.model.Team
-import angulate2.core.OnInit
-import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.site.season.SeasonService
-import quizleague.web.site.common.TitleService
-import quizleague.web.site.common.TitledComponent
-import quizleague.web.site.common.ComponentUtils
-import ComponentUtils._
+import quizleague.web.core._
+import quizleague.web.core.Component
+import quizleague.web.site.fixtures.FixtureService
+import quizleague.web.core.IdComponent
+import scalajs.js
+import quizleague.web.site.ApplicationContextService
+import quizleague.web.site.season.SeasonIdComponent
+import quizleague.web.core.IdComponent
+import quizleague.web.core.GridSizeComponentConfig
 
-@Component(
-  template = s"""
-  <div *ngIf="itemObs | async as item; else loading" fxLayout="column" fxLayoutGap="5px">
-    <md-card>
-      <md-card-title>All Fixtures</md-card-title>
-      <md-card-content>
-        <ql-fixtures-simple [fixtures]="fixtures" [inlineDetails]="true"></ql-fixtures-simple>
-      </md-card-content>
-    </md-card>
-  </div>
-  $loadingTemplate
-  """    
-)
-@classModeScala
-class TeamFixturesComponent(
-    route:ActivatedRoute,
-    service:TeamService,
-    viewService:TeamViewService,
-    applicationContextService:ApplicationContextService,
-    override val titleService:TitleService,
-    override val sideMenuService:SideMenuService) extends SectionComponent with MenuComponent with TitledComponent{
+object TeamFixturesPage extends RouteComponent with GridSizeComponentConfig{
+  val template = """
+      <v-container v-if="appData" v-bind="gridSize" fluid>
+        <v-layout column>
+          <v-flex><v-card>
+            <v-card-text>
+              <ql-all-team-fixtures v-if="appData" :id="$route.params.id" :seasonId="appData.currentSeason.id"></ql-all-team-fixtures>
+            </v-card-text>
+          </v-card></v-flex>
+        </v-layout>
+      </v-container>
+"""
+  subscription("appData")(c => ApplicationContextService.get)
   
-  
-  
-  val itemObs = route.params.switchMap( (params,i) => service.get(params("id")))
-  
-  itemObs.subscribe(t => setTitle(s"${t.name} - Fixtures"))
-  
-  val fixtures = itemObs.switchMap((t,i) => viewService.season.switchMap((s,j) => viewService.getFixtures(t, s))) 
-  
-  
+  components(TeamFixturesComponent)
 }
 
-@Component(
-  template = """<ql-team-sub-title text="Fixtures"></ql-team-sub-title>"""
-)
-class TeamFixturesTitleComponent
+  
+object TeamFixturesComponent extends Component {
+  
+  type facade = SeasonIdComponent with IdComponent
+  val name = "ql-all-team-fixtures"
+  val template = """<ql-fixtures-simple :fixtures="fixtures(id,seasonId)" :inlineDetails="true"></ql-fixtures-simple>"""
+  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamFixtures(teamId, seasonId))
+  props("id","seasonId")
+  
+}

@@ -1,43 +1,49 @@
 package quizleague.web.maintain.competition
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
-import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
+import quizleague.web.core._
 import quizleague.web.model._
-import scala.scalajs.js
-import angulate2.ext.classModeScala
-import TemplateElements._
-import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
-import js.Dynamic.{ global => g }
-import angulate2.core.Input
-import quizleague.web.maintain.text.TextEditMixin
-import quizleague.web.util.Logging
-import quizleague.web.maintain.text.TextEditMixin
-import angulate2.router.Router
-import scala.scalajs.js.annotation.JSExport
+import scalajs.js
+import quizleague.web.maintain.season.SeasonService
+import rxscalajs.Observable
+import scala.scalajs.js.UndefOr
+import quizleague.web.maintain.component.ItemComponentConfig._
+import quizleague.web.maintain.leaguetable.LeagueTableService
 
-
-trait CompetitionComponent extends ItemComponent[Competition] with TextEditMixin[Competition] with Logging{
+@js.native
+trait CompetitionComponent extends ItemComponent[Competition]{
+  val season:Season
   
-  @JSExport
-  def fixtures(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "fixtures")
-   }
-   
-  @JSExport 
-  def results(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "results")
-   }
-   
-  @JSExport 
-  def tables(comp:Competition) = {
-     service.cache(item)
-     router.navigateRelativeTo(route, "leaguetable")
-   }
 }
-    
+
+trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with RouteComponent{
+  
+  override type facade <: CompetitionComponent
+  
+  val service = CompetitionService
+  
+  def fixtures(c:facade) = {
+     c.$router.push(s"fixtures")
+   }
+  
+  def toTable(c:facade, tableId:String) = {
+     c.$router.push(s"leaguetable/$tableId")
+  }
+  
+  def removeTable(c:facade, tableId:String) = {
+    c.item.tables ---= tableId
+  }
+  
+  def addTable(c:facade) = {
+    val table = LeagueTableService.instance()
+    c.item.tables +++= (table.id, table)
+  }
+
+  subscription("season"){c:facade => SeasonService.get(c.$route.params("seasonId"))}
+  
+  method("fixtures")({fixtures _}:js.ThisFunction)
+  method("toTable")({toTable _}:js.ThisFunction)
+  method("removeTable")({removeTable _}:js.ThisFunction)
+  method("addTable")({addTable _}:js.ThisFunction)
+  
+}

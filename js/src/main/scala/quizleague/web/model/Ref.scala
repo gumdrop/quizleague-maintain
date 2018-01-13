@@ -1,10 +1,13 @@
 package quizleague.web.model
 
-import angulate2.std.Data
+import scalajs.js
 
-@Data
-case class Ref(
-    typeName:String,
-    id:String
+class Ref(
+  val typeName: String,
+  val id: String) extends js.Object
 
-)
+object Ref {
+  def apply(
+    typeName: String,
+    id: String) = new Ref(typeName, id)
+}

@@ -5,7 +5,6 @@ EclipseKeys.withSource := true
 
 val circeVersion = "0.8.0"
 val appengineVersion = "1.9.59"
-val angularVersion = "^4.0.0"
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 lazy val commonSettings = Seq(
@@ -22,7 +21,8 @@ lazy val root = project.in(file(".")).
   settings(
     publish := {},
     publishLocal := {},
-    resolvers += Resolver.sonatypeRepo("releases")
+    resolvers += Resolver.sonatypeRepo("releases"),
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   )
 
 lazy val quizleague = crossProject.in(file(".")).
@@ -58,18 +58,18 @@ lazy val quizleague = crossProject.in(file(".")).
   jsSettings(
     name := "quizleague-js",
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.2",
-    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12"
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12",
+    libraryDependencies += "com.github.lukajcb" %%% "rxscala-js" % "0.15.0"
 
   )
 
 lazy val server = quizleague.jvm.settings(
-  //scalaJSProjects := Seq(web),
-  //pipelineStages in Assets := Seq(scalaJSPipeline),
-  //compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-  //classesAsJar in Compile := true,
-  //webappResources in Compile += file(s"${baseDirectory.value}/../js/target/scala-2.11/scalajs-bundler/main/dist")
 ).enablePlugins(AppenginePlugin)
-lazy val web = quizleague.js .
+lazy val web = quizleague.js.settings(
+	scalaJSUseMainModuleInitializer := true,
+	scalacOptions += "-P:scalajs:sjsDefinedByDefault",
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+)
 enablePlugins(ScalaJSPlugin)
 

@@ -1,15 +1,12 @@
 package quizleague.web.service.leaguetable
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
+
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.web.model.{ LeagueTable => Model }
 import quizleague.domain.{ LeagueTable => Dom }
 import quizleague.domain.{ LeagueTableRow => DomRow }
 import quizleague.domain.Ref
-import rxjs.Observable
 import scala.scalajs.js
 import js.JSConverters._
 import js.ArrayOps
@@ -27,9 +24,9 @@ import quizleague.web.service.text.TextPutService
 import quizleague.web.service.team.TeamPutService
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.LeagueTableNames
-import quizleague.web.service.results.ResultsGetService
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.web.util.rx.RefObservable
 
 
 
@@ -45,15 +42,13 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
       rows.map(x => LeagueTableRow(refObs(x.team, teamService), x.position, x.played, x.won, x.lost, x.drawn, x.leaguePoints, x.matchPointsFor, x.matchPointsAgainst)).toJSArray
   }
 
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
 
 }
 
 trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService with DirtyListService[Model] {
 
   override val teamService: TeamPutService
-  val resultsService:ResultsGetService
 
   override protected def mapIn(model: Model) = Dom(
     model.id,
@@ -62,7 +57,7 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
 
   override protected def make() = Dom(newId, "", List())
 
-  def rowInstance(team: Team) = LeagueTableRow(teamService.refObs(team.id), "", 0, 0, 0, 0, 0, 0, 0)
+  def rowInstance(team: RefObservable[Team]) = LeagueTableRow(team, "", 0, 0, 0, 0, 0, 0, 0)
 
 
   override def enc(item: Dom) = item.asJson

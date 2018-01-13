@@ -1,55 +1,59 @@
 package quizleague.web.maintain.fixtures
 
-import angulate2.std._
-import angular.material.MaterialModule
-import angulate2.forms.FormsModule
-import angulate2.router.{Route,RouterModule}
-
-import scala.scalajs.js
-
-import angulate2.http.Http
-import quizleague.web.service.EntityService
-import angular.flexlayout.FlexLayoutModule
-import quizleague.web.names.ComponentNames
-
-import quizleague.web.maintain._
-import angulate2.common.CommonModule
-import quizleague.web.maintain.competition.CompetitionModule
-import quizleague.web.service.fixtures._
-import angulate2.ext.classModeScala
+import quizleague.web.service.fixtures.FixtureGetService
+import quizleague.web.service.fixtures.FixturePutService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.venue.VenueService
+import quizleague.web.service.fixtures.FixturesGetService
+import quizleague.web.service.fixtures.FixturesPutService
+import quizleague.web.service.results.ReportsGetService
+import quizleague.web.service.results.ReportsPutService
+import quizleague.web.maintain.text.TextService
+import quizleague.web.maintain.user.UserService
+import quizleague.web.maintain.competition.CompetitionService
+import rxscalajs.Observable._
+import scalajs.js
+import js.JSConverters._
+import quizleague.web.core._
+import quizleague.web.core.RouteConfig
+import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.web.model.Fixture
+import quizleague.domain.Result
 
-@NgModule(
-  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule, FixturesRoutesModule],
-  declarations = @@[FixturesComponent,FixturesListComponent],
-  providers = @@[FixturesService, FixtureService]
-   
-)
-class FixturesModule
+object FixturesModule extends Module {
+  override val routes = @@(     
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/fixtures",
+        components = Map("default" -> FixturesListComponent, "sidenav" -> MaintainMenuComponent)
+      ),
+      RouteConfig(
+        path = "/maintain/season/:seasonId/competition/:id/fixtures/:fixturesId",
+        components = Map("default" -> FixturesComponent, "sidenav" -> MaintainMenuComponent)
+      ),
+      
+  )
+  
+}
 
-@Routes(
-  root = false,
-      Route(
-        path = "_fixtures",
-        component = %%[FixturesListComponent]
-      )
-)
-class FixturesRoutesModule 
+object FixtureService extends FixtureGetService with FixturePutService{
+  override val teamService = TeamService
+  override val venueService = VenueService
+  override val reportsService = ReportsService
+  override val userService = UserService
+  
+  def addResult(fixture:Fixture) = {
+    val fx = mapIn(fixture)
+    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
+  }
+}
 
+object FixturesService extends FixturesGetService with FixturesPutService{
+  override val fixtureService = FixtureService
+  
+  def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
+}
 
-
-@Injectable
-@classModeScala
-class FixturesService(
-    override val http:Http, 
-    override val fixtureService:FixtureService) extends FixturesGetService with FixturesPutService with ServiceRoot
-
-@Injectable
-@classModeScala
-class FixtureService(
-    override val http:Http,
-    override val venueService:VenueService,
-    override val teamService:TeamService) extends FixtureGetService with FixturePutService with ServiceRoot
-
-
+object ReportsService extends ReportsGetService with ReportsPutService{
+  override val teamService = TeamService
+  override val textService = TextService
+}

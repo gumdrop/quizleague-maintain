@@ -1,0 +1,52 @@
+	.tabs__item{text-transform:none;}
+
+  button.btn{text-transform:none;}
+  a.btn{text-transform:none;}
+  .ql-league-table {
+      border : 1px solid rgba(0,0,0,.25);
+      font-size:14px;
+    }
+    .ql-league-table caption{
+      text-align:left;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: Roboto,"Helvetica Neue",sans-serif;
+    }
+    .ql-league-table td{
+      border-bottom: 0.5px solid rgba(0,0,0,.25);
+      border-right: 0.5px solid rgba(0,0,0,.25);
+      padding-right:2px;
+    }
+    .ql-league-table th{
+      border-bottom: 0.5px solid rgba(0,0,0,.25);
+      border-right: 0.5px solid rgba(0,0,0,.25);
+    }
+    .ql-league-table .num{
+      min-width:2em;
+      text-align:right;
+    }
+          
+          
+    .ql-fixtures-simple .inline-details{
+     font-style: italic;
+      padding-right: .5em;
+      color: darkblue;
+    }
+	.ql-fixtures-simple .home{
+      text-align:right;
+      padding-right:1em;
+    }
+    .ql-fixtures-simple .away{
+      padding-left:1em;
+    }
+    
+    .ql-results-simple,.ql-fixtures-simple .winner {
+      	color:darkred;
+        font-weight:600;
+    }
+    .ql-results-simple,.ql-fixtures-simple  .score{
+      font-weight:500;
+ 	 }
+ 	 .ql-calendar .panel-component .view-btn{
+ 	 	top:-13px;
+ 	 }

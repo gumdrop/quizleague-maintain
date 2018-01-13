@@ -1,34 +1,25 @@
 package quizleague.web.maintain.venue
 
-import angulate2.std._
-import quizleague.web.model.Venue
+import quizleague.web.core._
 import quizleague.web.maintain.component.TemplateElements._
-import scala.scalajs.js
-import js.JSConverters._
-import quizleague.web.util.UUID
-import angulate2.router.Router
-import quizleague.web.maintain.component.ListComponent
-import quizleague.web.util.UUID
-import quizleague.web.model.Venue
-import angulate2.ext.classModeScala
-import quizleague.web.names.VenueNames
+import quizleague.web.maintain.component.ItemListComponentConfig
+import quizleague.web.model._
+import quizleague.web.names._
+import scalajs.js
 
-@Component(
-  selector = "ql-venue-list",
-  template = s"""
-  <div>
-    <h2>Venues</h2>
-    <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" md-button>{{item.name}}</a>
-    </div>
-$addFAB
-  </div>
-  """    
-)
-@classModeScala
-class VenueListComponent (
-    override val service:VenueService,
-    override val router: Router) 
-   extends ListComponent[Venue] with OnInit with VenueNames{
+object VenueListComponent extends ItemListComponentConfig[Venue] with RouteComponent with VenueNames{
   
+  override def sort(items:js.Array[Venue]) = items.sortBy(_.name)
+  
+  val template = s"""
+  <v-container>
+    <v-layout column>
+      <div v-for="item in items">
+        <v-btn :to="'venue/' + item.id" flat left>{{item.name}}</v-btn>
+      </div>
+      $addFAB
+    </v-layout>
+  </v-container>
+"""
+val service = VenueService
 }

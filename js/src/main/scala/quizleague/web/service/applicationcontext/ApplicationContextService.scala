@@ -10,7 +10,7 @@ import quizleague.web.service.globaltext.{ GlobalTextGetService, GlobalTextPutSe
 import quizleague.web.service.season.{ SeasonGetService, SeasonPutService }
 import quizleague.web.service.user.{ UserGetService, UserPutService }
 import quizleague.web.util.Logging
-import rxjs.Observable
+import rxscalajs.Observable
 import io.circe._,io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
 import scala.scalajs.js.JSConverters._
@@ -28,8 +28,7 @@ trait ApplicationContextGetService extends GetService[ApplicationContext] with A
   
   def get(): Observable[ApplicationContext] = get(Dom.singletonId)
 
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
 }
 
 trait ApplicationContextPutService extends PutService[ApplicationContext] with ApplicationContextGetService {

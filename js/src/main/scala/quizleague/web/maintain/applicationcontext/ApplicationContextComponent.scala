@@ -1,85 +1,108 @@
 package quizleague.web.maintain.applicationcontext
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
-import quizleague.web.maintain.component.ItemComponent
-import quizleague.web.maintain.component._
+import quizleague.web.core._
+import quizleague.web.maintain.component.TemplateElements._
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import scala.scalajs.js
-import quizleague.web.maintain.venue.VenueService
-import angulate2.ext.classModeScala
-import TemplateElements._
-import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
-import js.Dynamic.{ global => g }
-import quizleague.web.model.GlobalText
-import quizleague.web.site.common.SectionComponent
-import quizleague.web.site.common.MenuComponent
-import quizleague.web.site.common.SideMenuService
+import quizleague.web.maintain.component.SelectUtils
+import quizleague.web.maintain.venue._
+import quizleague.web.maintain.user.UserService
+import quizleague.web.maintain.globaltext.GlobalTextService
+import rxscalajs.Observable
+import scalajs.js
+import js.JSConverters._
+import quizleague.web.maintain.component.SelectWrapper
 import quizleague.web.maintain.season.SeasonService
+import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.util.rx.RefObservable
 
 
-@Component(
-  template = s"""
-  <div>
-    <h2>Application Context</h2>
-    <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-         <md-input-container>
-         <input mdInput placeholder="League Name" type="text"
-             required
-             [(ngModel)]="item.leagueName" name="leagueName">
-        </md-input-container>
-        <select placeholder="Current Season" name="season" [(ngModel)]="item.currentSeason" required [compareWith]="utils.compareWith">
-          <option *ngFor="let season of seasons | async" [ngValue]="season" >
-            {{(season | async)?.startYear}}/{{(season | async)?.endYear}}
-          </option>
-        </select>
-        <select placeholder="Global Text" name="globalText" [(ngModel)]="item.textSet" required [compareWith]="utils.compareWith">
-          <option *ngFor="let textSet of textSets" [ngValue]="textSet" >
-            {{textSet.name}}
-          </option>
-        </select>
-        <md-input-container>        
-          <input mdInput placeholder="Sender Email" type="text"
-             required
-             [(ngModel)]="item.senderEmail" name="senderEmail">
-        </md-input-container>
-        <label style="color: rgba(0,0,0,.38);">Email Aliases</label>
-        <md-chip-list selectable>
-          <md-chip *ngFor="let alias of item.emailAliases" [removable]="true" (remove)="removeAlias(alias)">{{alias.alias}} : {{(alias.user | async)?.name}}
-              <md-icon mdChipRemove>cancel</md-icon>
-          </md-chip> 
-        </md-chip-list>
-     </div>
-     $formButtons
-    </form>
-  </div>
-  """    
-)
-@classModeScala
-class ApplicationContextComponent(
-    override val service:ApplicationContextService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    override val sideMenuService:SideMenuService,
-    val router:Router)
-    extends ItemComponent[ApplicationContext] with SectionComponent with MenuComponent {
-  
-  var textSets:js.Array[GlobalText] = _
-  
-  var seasons = service.listSeasons()
-  
-  override def ngOnInit() = {super.ngOnInit();initTextSets}
-  
-  override def init() = service.get.subscribe(item = _)
-  
-  private def initTextSets() = service.listTextSets.subscribe(textSets = _)
-  
-  def removeAlias(alias:EmailAlias) = item.emailAliases -= alias
-  
-  
- 
+@js.native
+trait ApplicationContextComponent extends ItemComponent[ApplicationContext]{
+  var user:RefObservable[User]
+  var alias:String
 }
-    
+
+object ApplicationContextComponent extends ItemComponentConfig[ApplicationContext] with RouteComponent {
+
+  override type facade = ApplicationContextComponent
+  
+  val service = ApplicationContextService
+  def users() = SelectUtils.model[User](UserService)(_.name)
+  def textSets() = SelectUtils.model[GlobalText](GlobalTextService)(_.name)
+  def seasons() = SelectUtils.model[Season](SeasonService)(s => s"${s.startYear}/${s.endYear}")
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" ref="fm">
+      <v-layout column>
+        <v-text-field
+          label="League Name"
+          v-model="item.leagueName"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <v-select
+          label="Global Text"
+          :items="textSets"
+          v-model="item.textSet"
+          :rules=${valRequired("Name")}
+          required
+          >
+        </v-select>
+        <v-select
+          label="Current Season"
+          :items="seasons"
+          v-model="item.currentSeason"
+          :rules=${valRequired("Name")}
+          required
+          >
+        </v-select>
+        <v-text-field
+          label="Sender Email"
+          v-model="item.senderEmail"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <v-text-field
+          label="Cloud Store Bucket"
+          v-model="item.cloudStoreBucket"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <v-layout column>
+          <span>Email Aliases</span>
+          <v-layout row>
+            <v-btn style="position:relative;top:12px" :disabled="!alias && !user" v-on:click="addAlias" icon><v-icon>add</v-icon></v-btn>
+            <v-text-field v-model="alias" label="Alias"></v-text-field>
+            <v-select clearable v-model="user" label="Select User" :items="users"></v-select>
+          </v-layout>
+        <div>
+          <v-chip close @input="removeAlias(c)" v-for="c in item.emailAliases" :key="c.alias">{{c.alias}} :: {{async(c.user).name}}</v-chip>
+        </div>
+        </v-layout>
+     </v-layout>
+     $formButtons
+    </v-form>
+  </v-container>"""
+
+ def removeAlias(c:facade, alias:EmailAlias) = c.item.emailAliases -= alias 
+ def addAlias(c:facade) = {
+       c.item.emailAliases += EmailAlias(c.alias, c.user)
+       c.alias = null
+       c.user = null
+     }
+     
+   subscription("item"){c => ApplicationContextService.get}
+   subscription("users"){c => users()}
+   subscription("textSets"){c => textSets()}
+   subscription("seasons"){c => seasons()}
+
+   method("removeAlias")({removeAlias _}:js.ThisFunction)
+   method("addAlias")({addAlias _}:js.ThisFunction)
+
+   data("user",null)
+   data("alias",null)
+}

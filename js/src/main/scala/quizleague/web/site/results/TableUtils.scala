@@ -1,7 +1,6 @@
 package quizleague.web.site.results
 
 import scala.scalajs.js.annotation.JSExport
-import angulate2.ext.classModeJS
 
 trait TableUtils {
    @JSExport

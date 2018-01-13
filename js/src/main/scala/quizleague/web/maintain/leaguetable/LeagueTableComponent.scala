@@ -1,47 +1,57 @@
 package quizleague.web.maintain.leaguetable
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
+
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
+import quizleague.web.maintain.component.TemplateElements._
 import quizleague.web.model._
 import scala.scalajs.js
-import angulate2.ext.classModeScala
+
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
+
 import js.Dynamic.{ global => g }
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
 import quizleague.web.util.rx._
-import rxjs.Observable
+import rxscalajs.Observable
 import quizleague.web.maintain.competition.CompetitionService
+import quizleague.web.util.rx.RefObservable
+import quizleague.web.maintain.component.SelectWrapper
+import quizleague.web.core.RouteComponent
+import scalajs.js
+import js.JSConverters._
+import quizleague.util.collection._
 
 
-@Component(
- template = s"""
- <div>
+@js.native
+trait LeagueTableComponent extends ItemComponent[LeagueTable]{
+  val competition:Competition
+  var teamManager:TeamManager
+  val teams:js.Array[SelectWrapper[Team]]
+}
+
+object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteComponent{
+  
+  override type facade = LeagueTableComponent
+  override val service = LeagueTableService  
+
+  val template = s"""
+ <v-container v-if="item && teams">
     <h2>League Tables</h2>
-    <form #fm="ngForm" (submit)="save()">
-    <div fxLayout="column">
-      <div fxLayout="column">
-         <md-input-container>
-          <input mdInput placeholder="Description" name="description" [(ngModel)]="item.description" type="text">
-        </md-input-container>
-       </div>
-       <div fxLayout="column">
+    <v-form v-model="valid">
+    <v-layout column>
+      <v-layout column>
+         <v-text-field label="Description" v-model="item.description" ></v-text-field>
+       </v-layout column>
+       <v-layout column>
         <h4>Rows</h4>
-        <div fxLayout="row">          
-          <md-select placeholder="Home" [(ngModel)]="team" name="team">  
-            <md-option *ngFor="let team of unusedTeams()" [value]="team">{{team.name}}</md-option>
-          </md-select>
-           <button md-icon-button type="button" (click)="addRow(team)" [disabled]="!team"><md-icon class="md-24">add</md-icon></button>
-         </div>
-
-         <div fxLayout="column">
-         <div fxLayout="row"><button md-button type="button" (click)="recalculate()">Recalculate</button></div>
+        <v-layout row>
+          <v-btn icon v-on:click="addRow(team)" :disabled="!team" style="position:relative;top:12px"><v-icon>add</v-icon></v-btn><v-select label="Team" v-model="team" :items="unusedTeams()"></v-select>         
+         </v-layout>
+         <v-layout column>
+           <div><v-btn flat v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
           <table>
             <thead>
               <th></th>
@@ -55,106 +65,84 @@ import quizleague.web.maintain.competition.CompetitionService
               <th>Points</th>
             </thead>
             <tbody>
-              <tr *ngFor="let row of item.rows;let i = index">
+              <tr v-for="(row,i) in sort(item.rows)" :key="row.team.id">
                 <td>
-                  <button md-icon-button type="button" (click)="removeRow(row)" ><md-icon class="md-24">delete</md-icon></button>
+                  <v-btn icon v-on:click="removeRow(row)"><v-icon >delete</v-icon></v-btn>
                 </td>
-                <td>{{(row.team | async)?.name}}</td>
+                <td>{{async(row.team).shortName}}</td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.position" name="position{{i}}" type="text" length="2" >
-                  </md-input-container>
+                  <v-text-field style="width:3em;" v-model="row.position" length="2"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.won" name="won{{i}}" type="number" length="2">
-                  </md-input-container>
+                  <v-text-field style="width:3em;" v-model.number="row.won" type="number" length="2"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.lost" name="lost{{i}}" type="number" length="2">
-                  </md-input-container>
+                  <v-text-field style="width:3em;" v-model.number="row.lost" type="number" length="2"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.drawn" name="drawn{{i}}" type="number" length="2">
-                  </md-input-container>
+                  <v-text-field style="width:3em;" v-model.number="row.drawn" type="number" length="2"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.matchPointsFor" name="matchPointsFor{{i}}" type="number" length="4">
-                  </md-input-container>
+                  <v-text-field style="width:5em;" v-model.number="row.matchPointsFor" type="number" length="4"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.matchPointsAgainst" name="matchPointsAgainst{{i}}" type="number" length="4">
-                  </md-input-container>
+                  <v-text-field style="width:5em;" v-model.number="row.matchPointsAgainst" type="number" length="4"></v-text-field>
                 </td>
                 <td>
-                  <md-input-container>
-                    <input mdInput [(ngModel)]="row.leaguePoints" name="leaguePoints{{i}}" type="number" length="2">
-                  </md-input-container>
+                  <v-text-field style="width:3em;" v-model.number="row.leaguePoints" type="number" length="2"></v-text-field>
                 </td>
               </tr>
             </tbody>
           </table>
-         </div>
-        </div>      
-     </div>
+         </v-layout>
+        </v-layout>      
+     </v-layout>
      $formButtons
-    </form>
-  </div>
+    </v-form>
+  </v-container>"""
+    
+    def removeRow(c:facade, row:LeagueTableRow) = {      
+      c.item.rows -= row
+      teamManager(c).untake(row.team)
+    }
+    def addRow(c:facade, team:RefObservable[Team]) = {
+      c.item.rows += service.rowInstance(team)
+      teamManager(c).take(team)
+    }
+    
+    def recalculate(c:facade) = {
+      service.recalculateTable(c.item, c.competition)
+    }
+    
+    def sort(c:facade,rows:js.Array[LeagueTableRow]) = rows.sortBy(r =>(r.leaguePoints, r.matchPointsFor, r.won, (r.matchPointsAgainst * -1)))(Desc)
+          
+      
 
-  """ 
-)
-@classModeScala
-class LeagueTableComponent(
-    override val service:LeagueTableService,
-    val teamService:TeamService,
-    val competitionService:CompetitionService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    val router:Router)
-    extends ItemComponent[LeagueTable]{
+  def unusedTeams(c:facade) = teamManager(c).unusedTeams(null)
+
+  def teamManager(c:facade) = {
+    if(c.teamManager == null) {
+      c.teamManager = new TeamManager(c.teams)
+      c.item.rows.foreach(r => c.teamManager.take(r.team))
+      c.teamManager
+      } 
+    else c.teamManager
+  }
+
+
+  def teams() = SelectUtils.model[Team](TeamService)(_.name)
+
+  method("unusedTeams")({unusedTeams _ }:js.ThisFunction)
+  method("addRow")({addRow _ }:js.ThisFunction)
+  method("removeRow")({removeRow _ }:js.ThisFunction)
+  method("sort")({sort _ }:js.ThisFunction)  
+
+      
+  data("teamManager",null)
+  data("team", null) 
   
-    var teamManager:TeamManager =_
-    var comp:Competition = _
-  
-    override def cancel():Unit = location.back()
-    override def init() = {
-     super.init()
-     
-     route.params
-      .switchMap((params, i) => competitionService.get(params("competitionId")))
-      .subscribe(comp = _)
-     
-     Observable.zip(
-      loadItem()
-        .switchMap((l, i) => zip(l.rows.map(_.team))),
-      teamService.list(),
-      (tableTeams: js.Array[Team], teams: js.Array[Team]) => {
-        teamManager = new TeamManager(teams)
-        tableTeams.foreach(teamManager.take(_))
-      }).subscribe(x => Unit)
-
-    }
-    
-    def removeRow(row:LeagueTableRow) = {
-      item.rows -= row
-      teamManager.untake(row.team)
-    }
-    def addRow(team:Team) = {
-      item.rows += service.rowInstance(team)
-      teamManager.take(team)
-    }
-    
-    def recalculate() = {
-      service.recalculateTable(item, comp).subscribe(item = _)
-    }
-    
-    def unusedTeams() = if(teamManager == null) null else teamManager.unusedTeams(null)
-    
-
+  subscription("teams")(c => teams())
+  subscription("competition")(c => obsFromParam(c,"competitionId",CompetitionService))
   
 }
     
