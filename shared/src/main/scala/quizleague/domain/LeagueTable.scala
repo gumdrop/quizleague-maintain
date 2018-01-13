@@ -14,4 +14,17 @@ case class LeagueTableRow(
   drawn: Int,
   leaguePoints: Int,
   matchPointsFor: Int,
-  matchPointsAgainst: Int)
+  matchPointsAgainst: Int){
+  
+  def + (row:LeagueTableRow):LeagueTableRow = {
+    LeagueTableRow(
+        team, "", 
+        played + row.played, 
+        won + row.won,
+        lost + row.lost,
+        drawn + row.drawn,
+        leaguePoints + row.leaguePoints,
+        matchPointsFor + row.matchPointsFor,
+        matchPointsAgainst + row.matchPointsAgainst)
+  }
+}

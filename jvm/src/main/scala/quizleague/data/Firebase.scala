@@ -103,6 +103,7 @@ object Storage {
     obj match {
       case null => Json.Null
       case d: java.lang.Double => Json.fromDoubleOrNull(d)
+      case l: java.lang.Long => Json.fromLong(l)
       case s: String => Json.fromString(s)
       case b: Boolean => Json.fromBoolean(b)
       case ee: java.util.Map[String,Any] => Json.fromFields(props(ee))

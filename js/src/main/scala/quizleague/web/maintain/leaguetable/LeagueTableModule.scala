@@ -28,7 +28,6 @@ object LeagueTableService extends LeagueTableGetService with LeagueTablePutServi
   
     
   def recalculateTable(table:LeagueTable, competition:Competition) = {
-//    val res = command[Dom,String](List(table.id,"competition",competition.id, "recalc"),None)
-//    res.map((u,i) => mapOutSparse(u))
+    command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => x)
   }
 }

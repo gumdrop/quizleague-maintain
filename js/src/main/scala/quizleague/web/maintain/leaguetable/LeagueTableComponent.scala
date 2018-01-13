@@ -57,6 +57,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
               <th></th>
               <th>Team</th>
               <th>Position</th>
+              <th>Played</th>
               <th>Won</th>
               <th>Lost</th>
               <th>Drawn</th>
@@ -72,6 +73,9 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
                 <td>{{async(row.team).shortName}}</td>
                 <td>
                   <v-text-field style="width:3em;" v-model="row.position" length="2"></v-text-field>
+                </td>
+                <td>
+                  <v-text-field style="width:3em;" v-model="row.played" type="number" length="2"></v-text-field>
                 </td>
                 <td>
                   <v-text-field style="width:3em;" v-model.number="row.won" type="number" length="2"></v-text-field>
@@ -135,7 +139,8 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
   method("unusedTeams")({unusedTeams _ }:js.ThisFunction)
   method("addRow")({addRow _ }:js.ThisFunction)
   method("removeRow")({removeRow _ }:js.ThisFunction)
-  method("sort")({sort _ }:js.ThisFunction)  
+  method("sort")({sort _ }:js.ThisFunction)
+  method("recalculate")({recalculate _ }:js.ThisFunction)
 
       
   data("teamManager",null)

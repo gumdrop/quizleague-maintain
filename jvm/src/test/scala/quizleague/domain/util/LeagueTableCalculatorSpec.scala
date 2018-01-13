@@ -1,13 +1,12 @@
-package quizleague.util;
+package quizleague.domain.util
 
 import org.scalatest._
-
 import quizleague.domain._
 import org.threeten.bp._
-import scala.collection.mutable.Map
-import quizleague.conversions.RefConversions.StorageContext
 import quizleague.util.conversions.Conversions._
+import org.scalactic.source.Position.apply
 import java.util.UUID.{randomUUID => uuid}
+import quizleague.conversions.RefConversions.StorageContext
 
 
 class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
@@ -20,28 +19,19 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
 
     val venue1 = Ref[Venue]("venue", uuid)
 
-    val fixture1 = Fixture(uuid, "", "", venue1, team1, team2, LocalDate.now, LocalTime.now, Duration.ofHours(1))
-    val fixture2 = Fixture(uuid, "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1))
-    val fixture3 = Fixture(uuid, "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1))
+    val fixture1 = Fixture(uuid, "", "", venue1, team1, team2, LocalDate.now, LocalTime.now, Duration.ofHours(1),Some(Result(10,25,None,None,None)))
+    val fixture2 = Fixture(uuid, "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1),Some(Result(13,21,None,None,None)))
+    val fixture3 = Fixture(uuid, "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1),Some(Result(11,11,None,None,None)))
 
-    val result1 = Result(uuid, Ref("fixture", fixture1.id), 10, 25, None, "", List())
-    val result2 = Result(uuid, Ref("fixture", fixture2.id), 13, 21, None, "", List())
-    val result3 = Result(uuid, Ref("fixture", fixture3.id), 11, 11, None, "", List())
-
-    val results1 = Results(uuid, Ref("fixtures", "1"), List(Ref("result", result1.id), Ref("result", result2.id), Ref("", result3.id)))
-
-    val contextMap = Map[String, Entity]()
+    val contextMap = scala.collection.mutable.Map[String, Entity]()
 
     def addToContext[T <: Entity](a: T) { contextMap += ((a.getClass.getName + a.id, a)) }
 
     addToContext(fixture1)
     addToContext(fixture2)
     addToContext(fixture3)
-    addToContext(result1)
-    addToContext(result2)
-    addToContext(result3)
 
-    implicit val context = StorageContext(contextMap)
+    implicit val context:StorageContext = StorageContext(contextMap)
 
     val table = LeagueTable(
       "1",
@@ -56,7 +46,7 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
           "",
           0, 0, 0, 0, 0, 0, 0)))
 
-    val rectab = LeagueTableCalculator.recalculate(table, List(results1))
+    val rectab = LeagueTableRecalculator.recalculate(List(table), List(fixture1, fixture2,fixture3)).head
 
     println(rectab)
     
