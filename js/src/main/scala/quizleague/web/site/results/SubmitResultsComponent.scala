@@ -30,8 +30,8 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
     <v-container>
       <v-form v-model="valid">
       <v-layout column v-if="appData">
-       <v-text-field v-model="email" label="Enter your mail address" prepend-icon="email"></v-text-field>
-      <div v-if="hasResults">This result has already been submitted, but you can add a match report.</div>
+       <v-text-field v-model="email" label="Enter your mail address" prepend-icon="email" :rules="[required('Your mail address')]" ></v-text-field>
+      <div v-if="hasResults">This result has been submitted. You may add a match report.</div>
       <p></p>
       <v-flex v-for="fixture in fixtures" v-if="!hasResults">
           {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
