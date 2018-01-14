@@ -115,7 +115,7 @@ object FixtureService extends FixtureGetService with PostService{
     
     val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), email)
     
-    command[String,ResultsSubmitCommand](List("results","submit"),Some(cmd)).subscribe(x => Unit)
+    command[String,ResultsSubmitCommand](List("site","result","submit"),Some(cmd)).subscribe(x => Unit)
   }
   
 }

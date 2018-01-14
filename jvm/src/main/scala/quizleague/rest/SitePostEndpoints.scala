@@ -15,13 +15,10 @@ import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 trait SitePostEndpoints {
   @POST
   @Path("/result/submit")
-  def resultSubmit(body:String) = {
+  def resultSubmit(body:String) {
     
     val queue: Queue = QueueFactory.getQueue("results");
-    queue.add(withUrl("/tasks/results/submit").payload(body));
-    
-    
-    "Done"
-    
+    queue.add(withUrl("/rest/task/submitresult").payload(body));
+
   }
 }

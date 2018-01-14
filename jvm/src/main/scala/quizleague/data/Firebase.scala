@@ -5,11 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import quizleague.domain.Entity
 import io.circe._
 import reflect._
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Date
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
 import java.util.logging.Logger
@@ -45,10 +41,7 @@ object Storage {
   def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind, id, decoder)
 
   def list[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
-//    val q: Query = new Query(makeKind)
-//
-//    datastore.prepare(q).asIterable().map(entityToObj(_, decoder)).toList
-    List()
+    datastore.collection(makeKind).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String,Any]], decoder)).toList
   }
 
   private def makeKind(implicit tag: ClassTag[_]) = tag.runtimeClass.getSimpleName.toLowerCase
@@ -96,7 +89,7 @@ object Storage {
     
   }
 
-  private def props(p: java.util.Map[String,Any]) = p.asScala.toList.map({ case (name: String, o) => (name, convertToJson(o)) }).asJava
+  private def props(p: java.util.Map[String,Any]):Iterable[(String,Json)] = p.asScala.toList.map({ case (name: String, o) => (name, convertToJson(o)) })
 
   private def convertToJson(obj: Any): Json = {
 
@@ -107,7 +100,7 @@ object Storage {
       case s: String => Json.fromString(s)
       case b: Boolean => Json.fromBoolean(b)
       case ee: java.util.Map[String,Any] => Json.fromFields(props(ee))
-      case l: java.util.List[_] => Json.fromValues(l.filter(_ != null).map(convertToJson(_)))
+      case l: java.util.List[_] => Json.fromValues(l.asScala.filter(_ != null).map(convertToJson(_)))
       case _ => throw new RuntimeException(s"no match found for ${obj.getClass.getName}")
     }
 
@@ -119,7 +112,7 @@ object Storage {
 
   }
 
-  private def entityToObj[T](entity: java.util.Map[String,Any], decoder: Decoder[T])(implicit tag:ClassTag[T]) = {
+  private def entityToObj[T](entity: java.util.Map[String,Any], decoder: Decoder[T]) = {
     val json: Json = Json.fromFields(props(entity))
 
     val r = decoder.decodeJson(json)
