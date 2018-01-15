@@ -45,7 +45,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
-                <v-btn flat><v-icon>insert_chart</v-icon>Graphs & Stats</v-btn>
+                <v-btn flat><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
             </v-flex>      
@@ -57,8 +57,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
-                <v-btn flat ><v-icon>content_copy</v-icon>Calendar URL</v-btn>
-                <v-btn flat><v-icon>file_download</v-icon>Download Calendar</v-btn>
+                <v-btn flat ><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
               </v-card-actions>
             </v-card>
             </v-flex>
