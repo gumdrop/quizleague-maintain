@@ -1,17 +1,30 @@
 package quizleague.web.model
 
-import angulate2.std.Data
-import scala.scalajs.js
-import rxjs.Observable
 import quizleague.web.util.rx.RefObservable
+import scalajs.js
+import scala.scalajs.js.annotation._
 
-@Data
-case class Team(
-    id:String,
+class Team (
+    val id:String,
+    val name:String,
+    val shortName:String,
+    val venue:RefObservable[Venue],
+    val text:RefObservable[Text],
+    val users:js.Array[RefObservable[User]],
+    val retired:Boolean
+)  extends Model
+
+object Team{
+  
+  def apply(   id:String,
     name:String,
     shortName:String,
     venue:RefObservable[Venue],
     text:RefObservable[Text],
     users:js.Array[RefObservable[User]],
-    retired:Boolean
-)
+    retired:Boolean) = new Team(
+      id,name,shortName,venue,text,users,retired    
+    )
+  
+  
+}

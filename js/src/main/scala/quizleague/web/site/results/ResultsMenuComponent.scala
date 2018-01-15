@@ -1,19 +1,34 @@
 package quizleague.web.site.results
 
-import angulate2.ext.classModeScala
-import angulate2.std.Component
-import angulate2.core.OnInit
-import quizleague.web.model.Team
-import rxjs.Observable
 import scalajs.js
+import quizleague.web.core.RouteComponent
 
-@Component(
-  template = s"""
-  <div fxLayout="column">
-   <a fxFlexAlign="start" routerLink="/results/all"  md-menu-item routerLinkActive="active" >All Results</a>
-   <a fxFlexAlign="start" routerLink="/results/fixtures"  md-menu-item routerLinkActive="active" >All Fixtures</a>
-  </div>
+
+object ResultsMenuComponent extends RouteComponent{
+  val template = """
+  <v-list dense >
+      <v-list-group no-action :value="true">
+            <v-list-tile slot="item" @click="">
+              <v-list-tile-action>
+                <v-icon>check</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Results</v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+    <v-list-tile >
+      <v-btn to="/results/all" flat >All Results</v-btn>
+    </v-list-tile>
+    <v-list-tile >
+      <v-btn to="/fixtures/all" flat >All Fixtures</v-btn>
+    </v-list-tile>
+        <v-list-tile >
+      <v-btn to="/results/submit" flat >Submit Results</v-btn>
+    </v-list-tile>
+      </v-list-group>
+   </v-list>
   """    
-)
-@classModeScala
-class ResultsMenuComponent
+}

@@ -2,15 +2,15 @@ package quizleague.web.maintain.util
 import scalajs.js
 import quizleague.web.model.Team
 import quizleague.web.util.rx.RefObservable
+import quizleague.web.maintain.component.SelectWrapper
 
-class TeamManager(var teams: js.Array[Team]) {
-  teams = teams.filter(!_.retired)
+class TeamManager(var teams: js.Array[SelectWrapper[Team]]) {
   
-  private var usedTeams = Map[String, Team]()
+  private var usedTeams = Set[String]()
 
-  def unusedTeams(other: Team) = teams.filter(x => !usedTeams.contains(x.id) && (if (other != js.undefined && other != null) { x.id != other.id } else true))
+  def unusedTeams(other: RefObservable[Team]) = teams.filter(x => !usedTeams.contains(x.value.id) && (if (other != js.undefined && other != null) { x.value.id != other.id } else true))
 
-  def take(team: Team) = { usedTeams = usedTeams + ((team.id, team)); team }
-  def untake(team: Team) = usedTeams = usedTeams - team.id
-  def untake(team: RefObservable[Team]) = usedTeams = usedTeams - team.id
+  def take(team: RefObservable[Team]) = { usedTeams += team.id; team }
+  def untake(team: RefObservable[Team]) = usedTeams -= team.id
+
 }

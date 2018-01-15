@@ -1,52 +1,44 @@
 package quizleague.web.site.season
 
-import angulate2.std._
+import quizleague.web.core._
 import quizleague.web.model.Season
-import angulate2.core.EventEmitter
-import angulate2.ext.classModeScala
-import quizleague.web.util.Logging
-import rxjs.Subject
-import scala.scalajs.js
-import angulate2.core.ElementRef
-import rxjs.Observable
-import quizleague.web.util.Logging._
+import scalajs.js
 import quizleague.util.collection._
+import quizleague.web.util.Logging._
+import com.felstar.scalajs.vue.VueRxComponent
+import rxscalajs.Subject
 
-@Component(
-  selector = "ql-season-select",
-  template = """
-    <md-menu #seasonsMenu="mdMenu" fxLayout="column">
-  <button md-menu-item *ngFor="let season of seasons | async" (click)="seasonChanged(season)"><ql-season-name [season]="obs(season)"></ql-season-name></button>
-</md-menu>
-
-<span [mdMenuTriggerFor]="seasonsMenu">
-   <ql-season-name [season]="obs(currentSeason)"></ql-season-name>
-</span>
-  
-""",
-styles = @@@("""
-  span{
-    padding-left: .25em;
-    cursor:pointer;
-  }
- """)
-
-)  
-class SeasonSelectComponent(
-    seasonService:SeasonService){
-  
-  val seasons = seasonService.list.map((s,i) => s.sortBy(_.startYear)(Desc))
-   
-  @Input
-  var currentSeason:Season = _
-  
-  def seasonChanged(season:Season) ={currentSeason = season; onchange.emit(currentSeason)}
-    
-  @Output
-  val onchange = new EventEmitter[Season]()
-  
-  def obs(s:Season) = Observable.of(s)
-  
-  def compare(s1:js.Dynamic,s2:js.Dynamic) = s1 == s2 || ((s1 != null && s2 != null) && s1.id == s2.id)
- 
+@js.native
+trait SeasonSelectComponent extends VueRxComponent{
+  val season:Subject[Season]
+  val seasonId:String
 }
+
+object SeasonSelectComponent extends Component{
+  type facade = SeasonSelectComponent
+  val name = "ql-season-select"
+  val template = """
+   <h2 v-if="seasons && seasonId" >
+  
+    <v-select style="top:5px;"
+    :items="wrap(sort(seasons))"
+    v-model="seasonId"
+    >
+    </v-select>
+  </h2>
+"""
+  
+  prop("season")
+  subscription("seasons")(c => SeasonService.list()) 
+  subscription("seasonId")(_.season.map(_.id))
+  
+  method("sort")((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc))
+  method("wrap")((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
+  
+  watch("seasonId")((c:facade, newValue:js.Any) => if(newValue != js.undefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s)))
+  data("seasonId","")
+  
+  
+}
+
+class SelectWrapper(val text:String, val value:js.Any) extends js.Object

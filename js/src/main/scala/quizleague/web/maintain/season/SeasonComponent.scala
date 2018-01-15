@@ -1,96 +1,87 @@
 package quizleague.web.maintain.season
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
-import quizleague.web.maintain.component.ItemComponent._
-import quizleague.web.maintain.component._
+import quizleague.web.maintain.component.ItemComponentConfig
+import quizleague.web.maintain.component.ItemComponentConfig._
+import quizleague.web.core.RouteComponent
 import quizleague.web.model._
-import scala.scalajs.js
+import quizleague.web.maintain.component.TemplateElements._
+import scalajs.js
 import js.JSConverters._
-import quizleague.web.maintain.venue.VenueService
-import angulate2.ext.classModeScala
-import TemplateElements._
-import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
-import js.Dynamic.{ global => g }
-import quizleague.web.maintain.text.TextEditMixin
-import quizleague.web.util.Logging
-import quizleague.web.model.CompetitionType
 import quizleague.web.maintain.competition.CompetitionService
 
-@Component(
-  selector = "ql-season",
-  template = s"""
-  <div>
-    <h2>Season Detail</h2>
-    <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-        <md-input-container>
-            <input mdInput placeholder="Start Year" type="number"
-             required
-             [(ngModel)]="item.startYear" name="startYear">
-        </md-input-container>
-        <md-input-container>        
-          <input mdInput placeholder="End Year" type="number"
-             required
-             [(ngModel)]="item.endYear" name="endYear">
-        </md-input-container>
-        <div fxLayout="row"><button (click)="editText(item?.text)" md-button type="button" >Edit Text...</button></div>
-        <div fxLayout="row"><button (click)="calendar()" md-button type="button" >Calendar...</button></div>
-        <div fxLayout="row">
-          <md-select placeholder="Competitions" [(ngModel)]="selectedType" name="selectedType">  
-            <md-option *ngFor="let type of competitionTypes" [value]="type">{{type}}</md-option>
-          </md-select>
-          <button md-icon-button (click)="addCompetition(selectedType)" type="button" [disabled]="selectedType==null"><md-icon>add</md-icon></button>
-        </div>
-        <md-chip-list selectable="true">
-       <ng-template ngFor let-comp [ngForOf]="item?.competitions">
-          <md-chip *ngIf="comp | async as c"  [removable]="true" (remove)="removeCompetition(c)">
-            <span (click)="editCompetition(c)">{{c?.name}}</span>
-            <md-icon mdChipRemove>cancel</md-icon>
-          </md-chip>
-       </ng-template>
-        </md-chip-list>
-
-      </div>
-     $formButtons
-    </form>
-  </div>
-  """    
-)
-@classModeScala
-class SeasonComponent(
-    override val service:SeasonService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    override val router:Router,
-    competitionService:CompetitionService)
-    extends ItemComponent[Season] with TextEditMixin[Season] with Logging{
-  
-  
-    def addCompetition(typeName:String) = {
-      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      item.competitions +++= (comp.id,comp)
-      editCompetition(comp)
-    }
-    
-    def removeCompetition(comp:Competition){
-      item.competitions ---= comp.id      
-    }
-  
-    def editCompetition(comp: Competition) = {
-      service.cache(item)
-      router.navigateRelativeTo(route, "competition", comp.id, comp.typeName)
-    }
-    
-    def calendar() = {
-      service.cache(item)
-      router.navigateRelativeTo(route, "calendar")
-    }
-    
-    lazy val competitionTypes = CompetitionType.values.map(_.toString).toJSArray
-    var selectedType:String = _
+@js.native
+trait SeasonComponent extends ItemComponent[Season]{
+  var selectedType:String
 }
+
+object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
+
+  override type facade = SeasonComponent
     
+
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" ref="fm">
+      <v-layout column>
+        <v-text-field
+          label="Start Year"
+          v-model="item.startYear"
+          :rules=${valRequired("Start Year")}
+          required
+        ></v-text-field>
+        <v-text-field
+          label="End Year"
+          v-model="item.endYear"
+          :rules=${valRequired("End Year")}
+          required
+        ></v-text-field>
+
+        <div><v-btn v-on:click ="editText(item.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="calendar(item.text.id)" flat><v-icon>mdi-calendar</v-icon>Calendar</v-btn></div>
+        <v-layout column>
+          <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
+        <div>
+          <v-chip close v-on:click="editCompetition(async(c))" @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
+        </div>
+        </v-layout>
+        $chbxRetired 
+     </v-layout>
+     $formButtons
+    </v-form>
+  </v-container>"""
+    
+     
+       val service = SeasonService
+  val competitionService = CompetitionService
+  
+  def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
+  
+  def addCompetition(c:facade,typeName:String) = {
+      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
+      c.item.competitions +++= (comp.id,comp)
+      c.selectedType = null
+      editCompetition(c,comp)
+    }
+  
+  def editCompetition(c:facade, comp: Competition) = {
+    service.cache(c.item)
+    c.$router.push(s"${c.item.id}/competition/${comp.id}/${comp.typeName}")
+  }
+  def calendar(c:facade) = {
+      service.cache(c.item)
+      c.$router.push(s"${c.item.id}/calendar")
+    }
+     
+  method("removeCompetition")({removeCompetition _}:js.ThisFunction)
+  method("addCompetition")({addCompetition _}:js.ThisFunction)
+  method("calendar")({calendar _}:js.ThisFunction)
+  method("editCompetition")({editCompetition _}:js.ThisFunction)
+
+  data("types",CompetitionType.values.map(_.toString()).toJSArray)
+  data("selectedType",null)
+  data("valid",true)
+
+}
+

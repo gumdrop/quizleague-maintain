@@ -1,60 +1,56 @@
 package quizleague.web.maintain.globaltext
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
+import quizleague.web.core._
+import quizleague.web.maintain.component.TemplateElements._
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import angulate2.common.Location
-import quizleague.web.maintain.component._
+import quizleague.web.maintain.component.SelectUtils
+import quizleague.web.maintain.venue._
+import quizleague.web.maintain.user.UserService
 import scalajs.js
-import angulate2.ext.classModeScala
-import TemplateElements._
-import angulate2.router.Router
-import quizleague.web.util.Logging
+import js.JSConverters._
 
-@Component(
-  template = s"""
-  <div>
-    <h2>Global Text Detail</h2>
-    <form #fm="ngForm" (submit)="save()" >
-      <div fxLayout="column">
-        <md-input-container>
-        <input mdInput placeholder="Name" type="text" id="name"
-             required
-             [(ngModel)]="item.name" name="name">
-        </md-input-container>
-        <div *ngFor="let text of item.text;let i = index" fxLayout="row">
-         <md-input-container>
-          <input mdInput placeholder="Entry Name" type="text"
-             required
-             [(ngModel)]="text.name" name="textName{{i}}">
-          </md-input-container>
-          <button (click)="editText(text)" md-button type="button" >Edit text...</button>
-        </div>
-        $chbxRetired 
-     </div>
-     $formButtons
-    </form>
-    $addFAB
-  </div>
-  """    
-)
-@classModeScala
-class GlobalTextComponent(
-    override val service:GlobalTextService,
-    override val route: ActivatedRoute,
-    override val location:Location,
-    val router:Router) extends ItemComponent[GlobalText] with Logging {
+object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteComponent {
+
+  val service = GlobalTextService
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" >
+      <v-layout column>
+      <v-layout row v-for="entry in sort(item.text)" :key="entry.text.id">
+          <v-text-field
+          label="Name"
+          v-model="entry.name"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <div><v-btn v-on:click ="editText(entry.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
+      </v-layout>
+     </v-layout>
+      <v-btn  fixed
+              dark
+              fab
+              bottom
+              center
+              small
+              color="pink"
+              v-on:click="add">
+          <v-icon>add</v-icon>
+      </v-btn>
+      $formButtons
+    </v-form>
+  </v-container>"""
+
   
-    def editText(text:TextEntry) = {
-      service.cache(item)
-      router.navigateTo("/maintain/text", text.text.id)
-    }
-    
-    def addNew() = {
+ def sort(c:facade, entries:js.Array[TextEntry]) = entries.sortBy(_.name)     
       
-      val text = service.entryInstance()
-      item.text.push(text)
-      
-
-    }
+ method("sort")({sort _}:js.ThisFunction)
+ method("add")({ (c: facade) =>
+      {
+        val i = service.entryInstance()
+        c.item.text.push(i)
+      }
+    }: js.ThisFunction)
 }

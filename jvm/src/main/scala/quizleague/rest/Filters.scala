@@ -75,11 +75,13 @@ class HistoryApiFallbackFilter extends Filter {
 	/** */
 	def doFilter(servletRequest:ServletRequest, servletResponse:ServletResponse, filterChain:FilterChain) {
 	  
+	  def safeLC(string:String) = if(string == null) "" else string.toLowerCase()
+	  
 	  val request = servletRequest.asInstanceOf[HttpServletRequest]
 		val response = servletResponse.asInstanceOf[HttpServletResponse]
 
 		val method = request.getMethod().toUpperCase
-		val accept = request.getHeader("Accept").toLowerCase();
+		val accept = safeLC(request.getHeader("Accept"));
 		val requestURI = request.getRequestURI();
 
 		val reentrancyKey = request.getAttribute(REENTRANCY_KEY);

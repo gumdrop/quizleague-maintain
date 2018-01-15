@@ -1,32 +1,25 @@
 package quizleague.web.maintain.user
 
-import angulate2.std._
+import quizleague.web.core._
 import quizleague.web.maintain.component.TemplateElements._
+import quizleague.web.maintain.component.ItemListComponentConfig
 import quizleague.web.model._
-import scala.scalajs.js
-import angulate2.router.Router
-import quizleague.web.maintain.component.ListComponent
+import quizleague.web.names._
+import scalajs.js
 
-
-import angulate2.ext.classModeScala
-import quizleague.web.names.UserNames
-
-@Component(
-  selector = "ql-user-list",
-  template = s"""
-  <div>
-    <h2>Users</h2>
-    <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" md-button>{{item.name}}</a>
-    </div>
-$addFAB
-  </div>
-  """    
-)
-@classModeScala
-class UserListComponent (
-    override val service:UserService,
-    override val router: Router) 
-   extends ListComponent[User] with OnInit with UserNames{
+object UserListComponent extends ItemListComponentConfig[User] with RouteComponent with UserNames{
   
+  override def sort(items:js.Array[User]) = items.sortBy(_.name)
+  
+  val template = s"""
+  <v-container>
+    <v-layout column>
+      <div v-for="item in items">
+        <v-btn :to="'user/' + item.id" flat left>{{item.name}}</v-btn>
+      </div>
+      $addFAB
+    </v-layout>
+  </v-container>
+"""
+val service = UserService
 }

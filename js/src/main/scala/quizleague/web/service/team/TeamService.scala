@@ -1,13 +1,9 @@
 package quizleague.web.service.team
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.domain.{ Team => Dom }
 import quizleague.domain.Ref
-import rxjs.Observable
 import quizleague.web.names.ComponentNames
 import scala.scalajs.js.JSConverters._
 import quizleague.web.service._
@@ -17,6 +13,7 @@ import quizleague.web.service.user._
 import quizleague.web.names.TeamNames
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import scalajs.js
 
 trait TeamGetService extends GetService[Team] with TeamNames {
 
@@ -30,11 +27,9 @@ trait TeamGetService extends GetService[Team] with TeamNames {
 
   override def flush() = { textService.flush(); super.flush() }
   
-  protected def dec(json:String) = decode[U](json)
-  protected def decList(json:String) = decode[List[U]](json)
+  protected def dec(json:js.Any) = decodeJson[U](json)
 
-  def listVenues() = venueService.list().map((l,i) => l.map(v => venueService.refObs(v.id)))
-  def listUsers() = userService.list()
+
 }
 
 trait TeamPutService extends PutService[Team] with TeamGetService {

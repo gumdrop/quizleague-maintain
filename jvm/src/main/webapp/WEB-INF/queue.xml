@@ -9,6 +9,10 @@
     <rate>1/s</rate>
   </queue>
   <queue>
+   <name>results</name>
+   <rate>1/s</rate>
+  </queue>
+  <queue>
     <name>backup</name>
     <rate>1/s</rate>
   </queue>

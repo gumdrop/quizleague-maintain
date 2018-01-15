@@ -1,41 +1,40 @@
 package quizleague.web.service.competition
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
-import quizleague.web.service.EntityService
-import quizleague.web.model._
-import quizleague.domain.{ Competition => Dom }
-import quizleague.domain.Ref
-import quizleague.domain.{Event => DomEvent}
-import rxjs.Observable
-import quizleague.web.names.ComponentNames
 import scala.scalajs.js
-import quizleague.web.util.DateTimeConverters._
-import quizleague.web.service.fixtures._
-import quizleague.web.service.results._
-import quizleague.web.service.leaguetable._
-import quizleague.web.model.CompetitionType.CompetitionType
-import org.threeten.bp.LocalTime
+
 import org.threeten.bp.Duration
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+
+import io.circe.syntax.EncoderOps
+import quizleague.domain.{ Competition => Dom, Event => DomEvent }
+import quizleague.util.json.codecs.DomainCodecs.competitionDecoder
+import quizleague.util.json.codecs.DomainCodecs.competitionEncoder
+import quizleague.web.model.Competition
 import quizleague.web.model.CompetitionType
-import java.util.concurrent.TimeUnit
-import org.threeten.bp.temporal.ChronoUnit
-import quizleague.web.service._
-import quizleague.web.service.text._
-import quizleague.web.util.Logging
+import quizleague.web.model.CompetitionType.CompetitionType
+import quizleague.web.model.CupCompetition
+import quizleague.web.model.Event
+import quizleague.web.model.LeagueCompetition
+import quizleague.web.model.SingletonCompetition
+import quizleague.web.model.SubsidiaryLeagueCompetition
+import quizleague.web.names.CompetitionNames
+import quizleague.web.service.DirtyListService
+import quizleague.web.service.GetService
+import quizleague.web.service.fixtures.FixturesGetService
+import quizleague.web.service.fixtures.FixturesPutService
+import quizleague.web.service.leaguetable.LeagueTableGetService
+import quizleague.web.service.leaguetable.LeagueTablePutService
+import quizleague.web.service.text.TextGetService
+import quizleague.web.service.text.TextPutService
 import quizleague.web.service.venue.VenueGetService
 import quizleague.web.service.venue.VenuePutService
-import org.threeten.bp.LocalDate
-import quizleague.web.names.CompetitionNames
-import io.circe._,io.circe.parser._,io.circe.syntax._
-import quizleague.util.json.codecs.DomainCodecs._ 
+import quizleague.web.util.Logging 
 
 trait CompetitionGetService extends GetService[Competition] with CompetitionNames with Logging {
   override type U = Dom
 
   val textService: TextGetService
-  val resultsService: ResultsGetService
   val fixturesService: FixturesGetService
   val leagueTableService: LeagueTableGetService
   val venueService: VenueGetService
@@ -44,19 +43,20 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
   import Helpers._
   override protected def mapOutSparse(comp: Dom) = doMapOutSparse(comp)
 
-  override protected def dec(json:String) = decode[U](json)
-  override protected def decList(json:String) = decode[List[U]](json)
+  override protected def dec(json:js.Any) = decodeJson[U](json)
+
   
-  def listVenues() = venueService.list().map((l,i) => l.map(v => venueService.refObs(v.id)))
+  def listVenues() = venueService.list().map(l => l.map(v => venueService.refObs(v.id)))
 
   object Helpers {
-    import quizleague.web.util.DateTimeConverters._
+    import quizleague.domain.{ CupCompetition => DCC }
+    import quizleague.domain.{ LeagueCompetition => DLC }
+    import quizleague.domain.{ SingletonCompetition => DSiC }
+    import quizleague.domain.{ SubsidiaryLeagueCompetition => DSC }
     import quizleague.domain
-    import domain.{ LeagueCompetition => DLC }
-    import domain.{ CupCompetition => DCC }
-    import domain.{ SubsidiaryLeagueCompetition => DSC }
-    import domain.{ SingletonCompetition => DSiC }  
+    import quizleague.web.util.DateTimeConverters._  
    
+    def unwrapOption[V](opt:Option[V]):V = opt.fold(null.asInstanceOf[V])(x => x)
 
     def doMapOutSparse(dom: Dom):Competition = {
       if (dom == null) return null
@@ -67,30 +67,34 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.startTime,
           c.duration,
           refObsList(c.fixtures,fixturesService),
-          refObsList(c.results, resultsService),
           refObsList(c.tables, leagueTableService),
           refObs(c.text, textService),
-          refObs(c.subsidiary))
+          c.textName,          
+          refObs(c.subsidiary),
+          unwrapOption(c.icon))
         case c: DCC => new CupCompetition(
           c.id,
           c.name,
           c.startTime,
           c.duration,
           refObsList(c.fixtures,fixturesService),
-          refObsList(c.results, resultsService),
-          refObs(c.text, textService))
+          refObs(c.text, textService),
+          c.textName,
+          unwrapOption(c.icon))
         case c: DSC => new SubsidiaryLeagueCompetition(
           c.id,
           c.name,
-          refObsList(c.results, resultsService),
           refObsList(c.tables, leagueTableService),
-          refObs(c.text, textService))
+          refObs(c.text, textService),
+          c.textName,
+          unwrapOption(c.icon))
         case c : DSiC => new SingletonCompetition(
           c.id,
           c.name,
           refObs(c.text, textService),
           c.textName,
-          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration))
+          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration)),
+          unwrapOption(c.icon)
         )
       }
     }
@@ -102,15 +106,12 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 trait CompetitionPutService extends CompetitionGetService with DirtyListService[Competition] {
   import PutHelpers._
   override val textService: TextPutService
-  override val resultsService: ResultsPutService
   override val fixturesService: FixturesPutService
   override val leagueTableService:LeagueTablePutService
   override val venueService:VenuePutService
 
   override protected def mapIn(comp: Competition) = doMapIn(comp)
   override protected def make() = ???
-
-  override def save(comp: Dom) = { textService.saveAllDirty; fixturesService.saveAllDirty; resultsService.saveAllDirty; super.save(comp) }
 
   import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
@@ -127,19 +128,18 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
   }
 
   object PutHelpers {
-    import quizleague.web.util.DateTimeConverters._
     import quizleague.domain
-    import domain.{ LeagueCompetition => DLC }
-    import domain.{ CupCompetition => DCC }
-    import domain.{ SubsidiaryLeagueCompetition => DSC }
-    import domain.{ SingletonCompetition => DSiC }      
+    import quizleague.domain.{ CupCompetition => DCC }
+    import quizleague.domain.{ LeagueCompetition => DLC }
+    import quizleague.domain.{ SingletonCompetition => DSiC }
+    import quizleague.domain.{ SubsidiaryLeagueCompetition => DSC }
+    import quizleague.web.util.DateTimeConverters._      
 
     def makeLeague = DLC(
       newId(),
       "League",
       LocalTime.of(20, 30),
       Duration.ofSeconds(5400),
-      List(),
       List(),
       List(),
       textService.getRef(textService.instance()),
@@ -151,13 +151,12 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       LocalTime.of(20, 30),
       Duration.ofSeconds(5400),
       List(),
-      List(),
-      textService.getRef(textService.instance()))
+      textService.getRef(textService.instance()),
+      "cup-comp")
 
     def makeSubsidiary = DSC(
       newId(),
       "Subsidiary",
-      List(),
       List(),
       textService.getRef(textService.instance()))
     
@@ -177,10 +176,11 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           l.startTime,
           l.duration,
           l.fixtures.map(fixturesService.ref(_)).toList,
-          l.results.map(resultsService.ref(_)).toList,
           l.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(l.text),
-          if (l.subsidiary == null) None else Option(ref(l.subsidiary)))
+          if (l.subsidiary == null) None else Option(ref(l.subsidiary)),
+          l.textName,
+          Option(l.icon))
 
         case c: CupCompetition => DCC(
           c.id,
@@ -188,22 +188,25 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           c.startTime,
           c.duration,
           c.fixtures.map(fixturesService.ref(_)).toList,
-          c.results.map(resultsService.ref(_)).toList,
-          textService.ref(c.text))
+          textService.ref(c.text),
+          c.textName,
+          Option(c.icon))
 
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
-          s.results.map(resultsService.ref(_)).toList,
           s.tables.map(leagueTableService.ref(_)).toList,
-          textService.ref(s.text))
+          textService.ref(s.text),
+          s.textName,
+          Option(s.icon))
         
         case s: SingletonCompetition => DSiC(
           s.id,
           s.name,
           if(s.event == null) None else Some(DomEvent(venueService.ref(s.event.venue), s.event.date, s.event.time, s.event.duration)),
           s.textName,
-          textService.ref(s.text))
+          textService.ref(s.text),
+          Option(s.icon))
       }
 
     }

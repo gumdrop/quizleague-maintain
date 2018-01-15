@@ -1,52 +1,57 @@
 package quizleague.web.maintain.venue
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import quizleague.web.model.Venue
-import angulate2.common.Location
-import quizleague.web.maintain.component._
-import scalajs.js
-import angulate2.ext.classModeScala
-import TemplateElements._
+import quizleague.web.core._
+import quizleague.web.maintain.component.TemplateElements._
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.maintain.component.ItemComponentConfig
+import quizleague.web.model._
 
-@Component(
-  selector = "ql-venue",
-  template = s"""
-  <div>
-    <h2>Venue Detail</h2>
-    <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-        <md-input-container>
-        <input mdInput placeholder="Name" type="text"
-             required
-             [(ngModel)]="item.name" name="name">
-        </md-input-container>
-        <md-input-container>
-        <md-placeholder>Phone</md-placeholder>
-        <input mdInput  type="phone"
-             [(ngModel)]="item.phone" name="phone">
-        </md-input-container>
-        <md-input-container>
-        <input mdInput placeholder="Email" type="email"
-             [(ngModel)]="item.email" name="email">
-        </md-input-container>
-        <md-input-container>
-        <input mdInput placeholder="Website" type="url"
-             [(ngModel)]="item.website" name="website">
-        </md-input-container>
-        <md-input-container>
-        <input mdInput placeholder="Image URL" type="url"
-             [(ngModel)]="item.imageURL" name="imageURL">
-        </md-input-container> 
-        $chbxRetired
-     </div>
+object VenueComponent extends ItemComponentConfig[Venue] with RouteComponent {
+
+  val service = VenueService
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" ref="fm">
+      <v-layout column>
+        <v-text-field
+          label="Name"
+          v-model="item.name"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <v-text-field
+          label="Address"
+          v-model="item.address"
+          :rules=${valRequired("Address")}
+          required
+          textarea
+        ></v-text-field>
+        <v-text-field
+          label="Phone"
+          v-model="item.phone"
+          type="phone"
+        ></v-text-field>
+        <v-text-field
+          label="Email"
+          v-model="item.email"
+          type="email"
+        ></v-text-field>
+        <v-text-field
+          label="Website"
+          v-model="item.website"
+          type="url"
+        ></v-text-field>
+        <v-text-field
+          label="Image URL"
+          v-model="item.imageURL"
+          type="url"
+        ></v-text-field>
+        $chbxRetired 
+        <div><img :src="item.imageURL"></div>
+     </v-layout>
      $formButtons
-    </form>
-  </div>
-  """    
-)
-@classModeScala
-class VenueComponent(
-    override val service:VenueService,
-    override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[Venue] 
+    </v-form>
+  </v-container>"""
+
+}

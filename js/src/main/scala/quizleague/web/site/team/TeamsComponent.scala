@@ -1,23 +1,27 @@
 package quizleague.web.site.team
 
-import angulate2.ext.classModeScala
-import angulate2.std.Component
-import quizleague.web.site.common.SideMenuService
-import quizleague.web.site.common.MenuComponent
-import quizleague.web.site.common.SectionComponent
-import quizleague.web.site.common.TitleService
-import quizleague.web.site.common.TitledComponent
+import quizleague.web.core.RouteComponent
+import quizleague.web.core.GridSizeComponentConfig
 
-@Component(
-  template = s"""
-<ql-named-text name="teams-front-page"></ql-named-text>
-  """    
-)
-@classModeScala
-class TeamsComponent(
-    override val sideMenuService:SideMenuService,
-    override val titleService:TitleService
-    ) extends SectionComponent with MenuComponent with TitledComponent{
-  
-  setTitle("Teams")
+object TeamsComponent extends RouteComponent with GridSizeComponentConfig{
+    val template="""<v-container v-bind="gridSize" fluid>
+        <v-layout>
+          <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
+        </v-layout>
+       </v-container>"""
+
+}
+object TeamsTitleComponent extends RouteComponent{
+   val  template="""<v-toolbar      
+      color="amber darken-3"
+      dark
+	    
+      clipped-left>
+      <v-toolbar-title class="white--text" >
+        Teams
+      </v-toolbar-title>
+    </v-toolbar>"""
+       
+
+
 }

@@ -1,39 +1,31 @@
 package quizleague.rest.endpoint
 
 import javax.ws.rs.Path
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.Request
-import javax.ws.rs.core.UriInfo
-import quizleague.rest.EtagSupport
-import quizleague.rest.GetEndpoints
 import quizleague.rest.MaintainPostEndpoints
-import quizleague.rest.PutEndpoints
 import javax.ws.rs.POST
 import quizleague.domain.container.DomainContainer
 import scala.reflect.ClassTag
 import quizleague.data.Storage
 import quizleague.domain.Entity
+import javax.ws.rs.PathParam
+import quizleague.domain._
+import quizleague.domain.util._
+import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.conversions.RefConversions._
 
 @Path("/entity")
-class EntityEndpoint(
-  @Context override val request:Request,
-  @Context override val uriInfo:UriInfo
-) extends GetEndpoints with PutEndpoints with MaintainPostEndpoints with EtagSupport{
+class EntityEndpoint extends MaintainPostEndpoints{
   
-  override val defaultCacheAge = 0
-  override val shortCacheAge = 0
-  
-  preChecks()
+  implicit val context = StorageContext()
   
   @POST
   @Path("/dbupload")
   def dbload(json:String) = {
-    import io.circe._, io.circe.generic.auto._, io.circe.syntax._, io.circe.parser._
+    import io.circe._, io.circe.generic.auto._, io.circe.parser._
     import quizleague.util.json.codecs.DomainCodecs._
-    import quizleague.util.json.codecs.ScalaTimeCodecs._
     
     def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
-      list.foreach(a => Storage.save[T](a)(tag,encoder))
+      Storage.saveAll[T](list)(tag,encoder)
     }
     
     val container = decode[DomainContainer](json).merge.asInstanceOf[DomainContainer]
@@ -44,8 +36,6 @@ class EntityEndpoint(
     saveAll(container.fixtures)
     saveAll(container.globaltext)
     saveAll(container.leaguetable)
-    saveAll(container.result)
-    saveAll(container.results)
     saveAll(container.reports)
     saveAll(container.season)
     saveAll(container.team)
@@ -56,5 +46,22 @@ class EntityEndpoint(
     
     
     
+  }
+  
+  @POST
+  @Path("/recalculate-table/{tableId}/{competitionId}")
+  def recalculateTable(
+      @PathParam("tableId") tableId: String,
+      @PathParam("competitionId") competitionId: String
+      ) = {
+
+        val table = Storage.load[LeagueTable](tableId)   
+        val competition = Storage.load[Competition](competitionId).asInstanceOf[LeagueCompetition]
+        
+        val blankTable = table.copy(rows = table.rows.map(_.copy(won=0,lost=0,drawn=0,leaguePoints=0,matchPointsFor=0, matchPointsAgainst=0, played=0)))
+        
+        val recalcTable = LeagueTableRecalculator.recalculate(List(blankTable), competition.fixtures.flatMap(_.fixtures))
+        
+        recalcTable.foreach(Storage.save(_))
   }
 }

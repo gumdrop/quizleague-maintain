@@ -1,34 +1,25 @@
 package quizleague.web.maintain.team
 
-import angulate2.std._
+import quizleague.web.core._
 import quizleague.web.maintain.component.TemplateElements._
-
-import scala.scalajs.js
-import js.JSConverters._
-import quizleague.web.util.UUID
-import angulate2.router.Router
-import quizleague.web.maintain.component.ListComponent
-import quizleague.web.util.UUID
+import quizleague.web.maintain.component.ItemListComponentConfig
 import quizleague.web.model._
-import angulate2.ext.classModeScala
-import quizleague.web.names.TeamNames
+import quizleague.web.names._
+import scalajs.js
 
-@Component(
-  selector = "ql-team-list",
-  template = s"""
-  <div>
-    <h2>Teams</h2>
-    <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" md-button>{{item.name}}</a>
-    </div>
-$addFAB
-  </div>
-  """    
-)
-@classModeScala
-class TeamListComponent (
-    override val service:TeamService,
-    override val router: Router) 
-   extends ListComponent[Team] with OnInit with TeamNames{
-      
+object TeamListComponent extends ItemListComponentConfig[Team] with RouteComponent with TeamNames{
+  
+  override def sort(items:js.Array[Team]) = items.sortBy(_.shortName)
+  
+  val template = s"""
+  <v-container>
+    <v-layout column>
+      <div v-for="item in items" :key="item.id">
+        <v-btn :to="'team/' + item.id" flat left>{{item.name}}</v-btn>
+      </div>
+      $addFAB
+    </v-layout>
+  </v-container>
+"""
+val service = TeamService
 }

@@ -1,21 +1,36 @@
 package quizleague.web.model
 
-import angulate2.std.Data
 import quizleague.web.util.rx.RefObservable
+import scalajs.js
 
-@Data
-case class Event(
-  venue: RefObservable[Venue],
-  date: String,
-  time: String,
-  duration : Float)
+class Event(
+  val venue: RefObservable[Venue],
+  val date: String,
+  val time: String,
+  val duration: Float) extends js.Object
 
-@Data
-case class CalendarEvent(
-  venue: RefObservable[Venue],
-  date: String,
-  time: String,
-  duration : Float,
-  description: String)
+object Event {
+  def apply(
+    venue: RefObservable[Venue],
+    date: String,
+    time: String,
+    duration: Float) = new Event(venue, date, time, duration)
+}
+
+class CalendarEvent(
+  val venue: RefObservable[Venue],
+  val date: String,
+  val time: String,
+  val duration: Float,
+  val description: String) extends js.Object
+
+object CalendarEvent {
+  def apply(
+    venue: RefObservable[Venue],
+    date: String,
+    time: String,
+    duration: Float,
+    description: String) = new CalendarEvent(venue, date, time, duration, description)
+}
     
 

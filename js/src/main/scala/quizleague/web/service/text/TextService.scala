@@ -1,23 +1,19 @@
 package quizleague.web.service.text
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
+import scalajs.js
 import quizleague.web.service._
 import quizleague.web.model.Text
 import quizleague.domain.{ Text => Dom }
-import rxjs.Observable
 import shapeless._
 import quizleague.web.names.TextNames
-import io.circe.parser._,io.circe.syntax._
+import io.circe._,io.circe.parser._,io.circe.syntax._,io.circe.scalajs.convertJsToJson
 import quizleague.util.json.codecs.DomainCodecs._
 
 
 trait TextGetService extends GetService[Text] with TextNames {
   override type U = Dom
   override protected def mapOutSparse(text: Dom): Text = Text(text.id, text.text, text.mimeType)
-  protected def dec(json:String) = decode[U](json)
-  protected def decList(json:String) = decode[List[U]](json)
+  protected def dec(json:js.Any) = decodeJson[U](json)
 }
 
 trait TextPutService extends PutService[Text] with TextGetService with DirtyListService[Text]{

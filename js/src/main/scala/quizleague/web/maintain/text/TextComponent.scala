@@ -1,40 +1,37 @@
 package quizleague.web.maintain.text
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
+import quizleague.web.core._
+import quizleague.web.maintain.component.TemplateElements._
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import angulate2.common.Location
-import quizleague.web.maintain.component._
-import scalajs.js
-import angulate2.ext.classModeScala
-import TemplateElements._
 
-@Component(
-  template = s"""
-  <div>
-    <h2>Text Detail</h2>
-    <form #fm="ngForm" (submit)="save()" >
-      <div fxLayout="column">
-      <md-input-container>
-        <input mdInput placeholder="Mime Type" [(ngModel)]="item.mimeType" name="mimeType">
-      </md-input-container>
-        <md-input-container>
-        <textarea mdInput mdTextareaAutosize placeholder="Text" mdAutosizeMinRows="10" mdAutosizeMaxRows="40"
-             required
-             [(ngModel)]="item.text" name="text"></textarea>
-        </md-input-container>
-     </div>
+object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
+
+  val service = TextService
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" ref="fm">
+      <v-layout column>
+        <v-text-field
+          label="Mime Type"
+          v-model="item.mimeType"
+          :rules=${valRequired("Mime Type")}
+          required
+        ></v-text-field>
+        <v-text-field
+          label="Text"
+          v-model="item.text"
+          :rules=${valRequired("Text")}
+          required
+          textarea
+          auto-grow
+        ></v-text-field>
+        $chbxRetired 
+     </v-layout>
      $formButtons
-    </form>
-  </div>
-  """ ,
-  styles = @@@("textarea{width:90%;}")
-)
-@classModeScala
-class TextComponent(
-    override val service:TextService,
-    override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[Text]{
-  
-  override def cancel():Unit = location.back()
+    </v-form>
+  </v-container>"""
+
 }

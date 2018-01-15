@@ -1,46 +1,25 @@
 package quizleague.web.maintain.venue
 
-import angulate2.std._
-import angular.material.MaterialModule
-import angulate2.forms.FormsModule
-import angulate2.platformBrowser.BrowserModule
-import angulate2.router.{Route,RouterModule}
 
-import scala.scalajs.js
-import quizleague.web.model.Venue
-import angulate2.http.Http
-import quizleague.web.service.EntityService
-import angular.flexlayout.FlexLayoutModule
+import scalajs.js
+
+import quizleague.web.service.venue._
+
 import quizleague.web.util.UUID
-import quizleague.web.names.ComponentNames
 
-import angulate2.ext.classModeScala
-import angulate2.common.CommonModule
-import rxjs.Observable
-import quizleague.web.service.venue.VenuePutService
 import quizleague.web.maintain._
-
-@NgModule(
-  imports = @@[CommonModule,FormsModule,MaterialModule,RouterModule,FlexLayoutModule,VenueRoutesModule],
-  declarations = @@[VenueComponent,VenueListComponent],
-  providers = @@[VenueService]
-   
-)
-class VenueModule
-
-@Routes(
-  root = false,
-  Route(
-    path = "maintain/venue",
-    children = @@@(
-      Route(path = "", children = @@@(
-        Route(path = ":id", component = %%[VenueComponent]),
-        Route(path = "", component = %%[VenueListComponent]))),
-      Route(path = "", component = %%[MaintainMenuComponent], outlet = "sidemenu"))))
-class VenueRoutesModule 
+import quizleague.web.core._
+import com.felstar.scalajs.vue._
 
 
-@Injectable
-@classModeScala
-class VenueService(override val http: Http) extends VenuePutService with ServiceRoot
+object VenueModule extends Module{
+  override val routes = @@(
+      RouteConfig(path = "/maintain/venue", components = Map("default" -> VenueListComponent, "sidenav" -> MaintainMenuComponent)),
+      RouteConfig(path="/maintain/venue/:id", components = Map("default" -> VenueComponent, "sidenav" -> MaintainMenuComponent))
+       )
+      
+}
+
+
+object VenueService extends VenueGetService with VenuePutService
 

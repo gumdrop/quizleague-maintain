@@ -1,95 +1,57 @@
 package quizleague.web.site.team
 
-import angular.flexlayout.FlexLayoutModule
-import angular.material.MaterialModule
-import angulate2.common.CommonModule
-import angulate2.ext.classModeScala
-import angulate2.http.Http
-import angulate2.router.Route
-import angulate2.router.RouterModule
-import angulate2.std._
+import quizleague.web.core._
+import quizleague.web.core.RouteConfig
+import scalajs.js
 import quizleague.web.service.team.TeamGetService
-import quizleague.web.site.ServiceRoot
-import quizleague.web.site.text.TextModule
 import quizleague.web.site.text.TextService
-import quizleague.web.site.user.UserService
 import quizleague.web.site.venue.VenueService
-import quizleague.web.model.Team
-import quizleague.web.model.Season
-import quizleague.web.site.season._
-import quizleague.web.site.common.CommonAppModule
-import quizleague.web.site.season.SeasonService
-import quizleague.web.site.results.ResultsModule
-import quizleague.web.site.results.ResultsComponentsModule
-import quizleague.web.site.fixtures.FixturesComponentsModule
-import quizleague.web.model.Result
-import quizleague.web.model.Fixture
-import org.threeten.bp.LocalDate
-import quizleague.web.site.global.ApplicationContextService
-import rxjs.Subject
-import quizleague.web.site.global.ApplicationContextService
-import quizleague.web.util.Logging
-import rxjs.BehaviorSubject
-import angulate2.forms.FormsModule
-import angulate2.platformBrowser.BrowserModule
-import quizleague.web.site.common.SeasonSelectService
-import quizleague.web.util.rx._
-import quizleague.web.service.CachingService
-import quizleague.web.service.CachingService
-import quizleague.web.site.results.ResultService
-import quizleague.web.site.fixtures.FixtureService
+import quizleague.web.site.user.UserService
+import quizleague.web.site.season.SeasonWatchService
+import quizleague.web.service._
+import quizleague.web.model._
+import rxscalajs.Observable
+import quizleague.web.service.PostService
+import quizleague.domain.command.TeamEmailCommand
 
-@NgModule(
-  imports = @@[CommonModule, MaterialModule, RouterModule, FlexLayoutModule, TeamRoutesModule, TextModule, CommonAppModule, ResultsComponentsModule, FixturesComponentsModule, SeasonModule],
-  declarations = @@[TeamComponent, TeamsComponent, TeamMenuComponent, TeamTitleComponent, TeamsTitleComponent, TeamSubTitleComponent, TeamResultsComponent, TeamResultsTitleComponent, TeamFixturesComponent, TeamFixturesTitleComponent],
-  providers = @@[TeamService, TeamViewService])
-class TeamModule
+object TeamModule extends Module{
+  
+  override val components = @@(TeamComponent,TeamTitle, TeamFixturesComponent, TeamNameComponent, TeamResultsComponent)
+  
+  override val routes = @@(      
+      RouteConfig(path = "/team", 
+          components = Map("default" -> TeamsComponent, "title" -> TeamsTitleComponent,"sidenav" -> TeamMenuComponent)),
+      RouteConfig(path = "/team/:id", 
+          components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
+      RouteConfig(path = "/team/:id/fixtures", 
+          components = Map("default" -> TeamFixturesPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
+      RouteConfig(path = "/team/:id/results", 
+          components = Map("default" -> TeamResultsPage, "title" -> TeamResultsTitle,"sidenav" -> TeamMenuComponent))
 
-@Routes(
-  root = false,
-  Route(
-    path = "team",
-    children = @@@(
-      Route(path = ":id", children = @@@(
-        Route(path = "", children = @@@(
-          Route(path = "", component = %%[TeamComponent]),
-          Route(path = "", component = %%[TeamTitleComponent], outlet = "title"))),
-        Route(path = "results", children = @@@(
-          Route(path = "", component = %%[TeamResultsComponent]),
-          Route(path = "", component = %%[TeamResultsTitleComponent], outlet = "title"))),
-        Route(path = "fixtures", children = @@@(
-          Route(path = "", component = %%[TeamFixturesComponent]),
-          Route(path = "", component = %%[TeamFixturesTitleComponent], outlet = "title"))))),
-      Route(path = "", children = @@@(
-        Route(path = "", component = %%[TeamsComponent]),
-        Route(path = "", component = %%[TeamsTitleComponent], outlet = "title"))),
-      Route(path = "", component = %%[TeamMenuComponent], outlet = "sidemenu"))))
-@classModeScala
-class TeamRoutesModule
+  )
 
-@Injectable
-@classModeScala
-class TeamService(override val http: Http,
-  override val textService: TextService,
-  override val venueService: VenueService,
-  override val userService: UserService) extends TeamGetService with ServiceRoot with CachingService[Team]
+      
+}
 
-@Injectable
-@classModeScala
-class TeamViewService(
-    service: TeamService,
-    seasonService: SeasonService,
-    resultService: ResultService,
-    fixtureService: FixtureService,
-    override val applicationContextService:ApplicationContextService) extends SeasonSelectService {
+object TeamService extends TeamGetService with RetiredFilter[Team] with PostService{
+  
+  override val textService = TextService
+  override val userService = UserService
+  override val venueService = VenueService
+  
+  def teamForEmail(email:String):Observable[js.Array[Team]] = {
+    userService.userForEmail(email).combineLatestWith(list())((u,teams) => u.fold(js.Array[Team]())(user => teams.filter(_.users.exists(_.id == user.id))))
+    
 
-
-  def getResults(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
-    resultService.teamResults(season, team, take)
-
-
-  def getFixtures(team: Team, season: Season, take: Int = Integer.MAX_VALUE) = 
-     fixtureService.teamFixtures(season, team, take)
+  }
+  
+  def sendEmailToTeam(sender:String, text:String, team:Team){
+    import quizleague.util.json.codecs.CommandCodecs._
+    
+    val cmd = TeamEmailCommand(sender,text,team.id)
+    command[String,TeamEmailCommand](List("email","team"),Some(cmd)).subscribe(x => Unit)
+  }
   
 }
 
+object TeamViewService extends SeasonWatchService

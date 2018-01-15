@@ -1,21 +1,18 @@
 package quizleague.web.service
 
 import quizleague.web.names.ComponentNames
+import quizleague.web.model.Model
 
-trait DirtyListService[T] extends PutService[T] {
+trait DirtyListService[T <: Model] extends PutService[T] {
   this: GetService[T] with ComponentNames =>
 
   var dirtyIds = Set[String]()
 
   override def cache(item: T) = {
-    cache(mapIn(item))
+    dirtyIds = dirtyIds + item.id
     super.cache(item)
   }
 
-  protected def cache(item: U) = {
-    dirtyIds = dirtyIds + item.id
-    item
-  }
 
   override def deCache(item: U) = {
     dirtyIds = dirtyIds - item.id

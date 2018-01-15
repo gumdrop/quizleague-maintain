@@ -4,9 +4,10 @@ import quizleague.domain.{ Venue => Dom }
 import quizleague.web.model.Venue
 import quizleague.web.names.VenueNames
 import quizleague.web.service.{ GetService, PutService }
-import rxjs.Observable
+import rxscalajs.Observable
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import scalajs.js
 
 
 
@@ -16,8 +17,7 @@ trait VenueGetService extends GetService[Venue] with VenueNames {
     Venue(venue.id, venue.name, venue.address, venue.phone.getOrElse(null), venue.email.getOrElse(null), venue.website.getOrElse(null), venue.imageURL.getOrElse(null), venue.retired)
   }
   
-  protected def dec(json:String) = decode[U](json)
-  protected def decList(json:String) = decode[List[U]](json)
+  protected def dec(json:js.Any) = decodeJson[U](json)
 
 }
 

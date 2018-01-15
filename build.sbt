@@ -4,14 +4,13 @@ EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
 val circeVersion = "0.8.0"
-val appengineVersion = "1.9.55"
-val angularVersion = "^4.0.0"
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+val appengineVersion = "1.9.59"
+//addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 lazy val commonSettings = Seq(
   organization := "quizleague",
   version := "0.0.1",
-  scalaVersion := "2.11.11",
+  scalaVersion := "2.12.3",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
   resolvers += Resolver.sonatypeRepo("snapshots")
   
@@ -22,7 +21,8 @@ lazy val root = project.in(file(".")).
   settings(
     publish := {},
     publishLocal := {},
-    resolvers += Resolver.sonatypeRepo("releases")
+    resolvers += Resolver.sonatypeRepo("releases"),
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   )
 
 lazy val quizleague = crossProject.in(file(".")).
@@ -34,7 +34,7 @@ lazy val quizleague = crossProject.in(file(".")).
 	  "io.circe" %%% "circe-generic",
 	  "io.circe" %%% "circe-parser"
 	).map(_ % circeVersion),
-	libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M8",
+	
 	libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test").
   jvmSettings(
      name := "quizleague-jvm",
@@ -42,51 +42,34 @@ lazy val quizleague = crossProject.in(file(".")).
          
 	libraryDependencies += "com.google.appengine" % "appengine-testing" % appengineVersion % "test",
 	libraryDependencies += "com.google.appengine" % "appengine-api-stubs" % appengineVersion % "test",
-	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "0.4.0",
-	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.6",
+	libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "1.10.0",
+	libraryDependencies += "com.google.appengine.tools" % "appengine-gcs-client" % "0.7",
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
     libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1",
-    libraryDependencies += "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
-    
-	
+    libraryDependencies += "org.mortbay.jetty" % "jetty" % "6.1.22" % "container",
+	libraryDependencies += "io.netty" % "netty-tcnative-boringssl-static" % "2.0.7.Final",
+    libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "0.32.0-beta"/*,
+    libraryDependencies += "io.grpc" % "grpc-netty" % "1.7.0",
+    libraryDependencies += "io.grpc" % "grpc-protobuf" % "1.7.0",
+    libraryDependencies += "io.grpc" % "grpc-stub" % "1.7.0"*/
+
+
   ).
   jsSettings(
     name := "quizleague-js",
-    ngBootstrap := Some("quizleague.web.site.AppModule"),
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.2",
-    npmDependencies in Compile += "@angular/common" -> angularVersion,
-	npmDependencies in Compile += "@angular/compiler" -> angularVersion,
-	npmDependencies in Compile += "@angular/core" -> angularVersion,
-	npmDependencies in Compile += "@angular/forms" -> angularVersion,
-	npmDependencies in Compile += "@angular/http" -> angularVersion,
-	npmDependencies in Compile += "@angular/platform-browser" -> angularVersion,
-	npmDependencies in Compile += "@angular/platform-browser-dynamic" -> angularVersion,
-	npmDependencies in Compile += "@angular/router" -> angularVersion,
-	npmDependencies in Compile += "@angular/upgrade" -> angularVersion,
-	npmDependencies in Compile += "@angular/animations" -> angularVersion,
-	npmDependencies in Compile += "core-js" -> "^2.4.1",
-	npmDependencies in Compile += "zone.js" -> "^0.8.4",
-	npmDependencies in Compile += "rxjs" -> "^5.2.0",
-	npmDependencies in Compile += "@angular/cdk" -> "github:angular/cdk-builds",
-	npmDependencies in Compile += "@angular/material" -> "github:angular/material2-builds",
-	npmDependencies in Compile += "@angular/flex-layout" -> "*",
-    npmDependencies in Compile += "es-module-loader" -> "^1.3.5",
-    npmDependencies in Compile += "reflect-metadata" -> "^0.1.8",
-    npmDependencies in Compile += "hammerjs" -> "^2.0.8",
-	npmDevDependencies in Compile += "angulate2-scalajs-bundler" -> "1.0.3",
-	
-	webpackConfigFile in fastOptJS := Some(baseDirectory.value  / "webpack.config.js"),
-	webpackConfigFile in fullOptJS := Some(baseDirectory.value  / "webpack.prod.config.js")
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12",
+    libraryDependencies += "com.github.lukajcb" %%% "rxscala-js" % "0.15.0"
+
   )
 
 lazy val server = quizleague.jvm.settings(
-  scalaJSProjects := Seq(web),
-  pipelineStages in Assets := Seq(scalaJSPipeline),
-  compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-  classesAsJar in Compile := true,
-  webappResources in Compile += file(s"${baseDirectory.value}/../js/target/scala-2.11/scalajs-bundler/main/dist")
-).enablePlugins(SbtWeb, WebScalaJSBundlerPlugin, AppenginePlugin)
-lazy val web = quizleague.js .
-enablePlugins(Angulate2Plugin,ScalaJSPlugin,ScalaJSWeb,ScalaJSBundlerPlugin)
+).enablePlugins(AppenginePlugin)
+lazy val web = quizleague.js.settings(
+	scalaJSUseMainModuleInitializer := true,
+	scalacOptions += "-P:scalajs:sjsDefinedByDefault",
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+)
+enablePlugins(ScalaJSPlugin)
 

@@ -37,14 +37,6 @@ trait PutEndpoints {
   @PUT
   @Path("/competition/{id}")
   def competition_(body: String) = save[Competition](body)
-
-  @PUT
-  @Path("/results/{id}")
-  def results_(body: String) = save[Results](body)
-  
-  @PUT
-  @Path("/result/{id}")
-  def result_(body: String) = save[Result](body)
   
   @PUT
   @Path("/reports/{id}")

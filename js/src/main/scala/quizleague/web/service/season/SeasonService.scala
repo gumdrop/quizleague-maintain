@@ -1,14 +1,12 @@
 package quizleague.web.service.season
 
-import angulate2.std.Injectable
-import angulate2.ext.classModeScala
-import angulate2.http.Http
+
 import quizleague.web.service.EntityService
 import quizleague.web.model._
 import quizleague.domain.{ Season => Dom }
 import quizleague.domain.{ CalendarEvent => DomEvent }
 import quizleague.domain.Ref
-import rxjs.Observable
+import rxscalajs.Observable
 import quizleague.web.names.ComponentNames
 import scala.scalajs.js
 import js.JSConverters._
@@ -31,15 +29,15 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
   val competitionService: CompetitionGetService
   val venueService: VenueGetService
 
-  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, Text(season.text.id,"",""), refObsList(season.competitions, competitionService),mapEvents(season.calendar))
+  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, refObs(season.text,textService), refObsList(season.competitions, competitionService),mapEvents(season.calendar))
   override def flush() = { textService.flush(); super.flush() }
   
   private def mapEvents(events:List[DomEvent]):js.Array[CalendarEvent] = {
     events.map(event => CalendarEvent(refObs(event.venue, venueService), event.date,event.time,event.duration,event.description)).toJSArray
   }
 
-  protected def dec(json:String) = decode[U](json)
-  protected def decList(json:String) = decode[List[U]](json)
+  protected def dec(json:js.Any) = decodeJson[U](json)
+
 }
 
 trait SeasonPutService extends PutService[Season] with SeasonGetService {
@@ -51,13 +49,12 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
       season.id, 
       season.startYear, 
       season.endYear, 
-      textService.getRef(season.text), 
+      textService.ref(season.text), 
       competitionService.ref(season.competitions), 
       season.calendar.map(e=>DomEvent(venueService.ref(e.venue), e.date, e.time, e.duration, e.description)).toList
   )
   override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())
 
-  override def save(season: Season) = { textService.save(season.text); super.save(season) }
   override def flush() = { textService.flush(); super.flush() }
 
   override def enc(item: Dom) = item.asJson

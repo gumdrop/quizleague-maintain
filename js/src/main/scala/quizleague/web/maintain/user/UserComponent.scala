@@ -1,39 +1,36 @@
 package quizleague.web.maintain.user
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
+import quizleague.web.core._
+import quizleague.web.maintain.component.TemplateElements._
+import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import angulate2.common.Location
-import quizleague.web.maintain.component._
-import scalajs.js
-import angulate2.ext.classModeScala
-import TemplateElements._
 
-@Component(
-  selector = "ql-user",
-  template = s"""
-  <div>
-    <h2>User Detail</h2>
-    <form #fm="ngForm" (submit)="save()" >
-      <div fxLayout="column">
-        <md-input-container> 
-        <input mdInput placeholder="Name" type="text" id="name" 
-             required    
-             [(ngModel)]="item.name" name="name">
-        </md-input-container>
-        <md-input-container>
-        <input mdInput placeholder="Email" type="email" id="email" required
-             [(ngModel)]="item.email" name="email">
-        </md-input-container>
+object UserComponent extends ItemComponentConfig[User] with RouteComponent {
+
+  val service = UserService
+
+  val template = s"""
+  <v-container v-if="item">
+    <v-form v-model="valid" ref="fm">
+      <v-layout column>
+        <v-text-field
+          label="Name"
+          v-model="item.name"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+        <v-text-field
+          label="Email"
+          v-model="item.email"
+          type="email"
+          :rules=${valRequired("Email")}
+          required
+        ></v-text-field>
         $chbxRetired 
-     </div>
+     </v-layout>
      $formButtons
-    </form>
-  </div>
-  """    
-)
-@classModeScala
-class UserComponent(
-    override val service:UserService,
-    override val route: ActivatedRoute,
-    override val location:Location) extends ItemComponent[User] 
+    </v-form>
+  </v-container>"""
+
+}

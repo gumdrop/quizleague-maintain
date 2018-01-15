@@ -17,6 +17,7 @@ sealed trait Competition extends Entity
   
   val name:String
   val text:Ref[Text]
+  val icon:Option[String]
   override val retired = false
   
 }
@@ -27,10 +28,12 @@ case class LeagueCompetition(
   startTime:LocalTime,
   duration:Duration,
   fixtures:List[Ref[Fixtures]],
-  results:List[Ref[Results]],
+
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Option[Ref[Competition]]
+  subsidiary:Option[Ref[Competition]],
+  textName:String = "league-comp",
+  icon:Option[String] = None
   
 ) extends Competition with MainLeagueCompetition
 
@@ -41,24 +44,29 @@ case class CupCompetition(
   startTime:LocalTime,
   duration:Duration,
   fixtures:List[Ref[Fixtures]],
-  results:List[Ref[Results]],
-  text:Ref[Text]
+
+  text:Ref[Text],
+  textName:String,
+  icon:Option[String] = None
 ) extends Competition with KnockoutCompetition
 
 case class SubsidiaryLeagueCompetition(
   id:String,
   name:String,
-  results:List[Ref[Results]], 
+ 
   tables:List[Ref[LeagueTable]],
-  text:Ref[Text]
-) extends Competition with SubsidiaryCompetition with ResultsCompetition with CompetitionTables
+  text:Ref[Text],
+  textName:String = "beer-comp",
+  icon:Option[String] = None
+) extends Competition with SubsidiaryCompetition  with CompetitionTables
 
 case class SingletonCompetition(
   id:String,
   name:String,
   event:Option[Event],
   textName:String,
-  text:Ref[Text]    
+  text:Ref[Text],
+  icon:Option[String] = None
 ) extends Competition with BaseSingletonCompetition
 
 object Competition
@@ -78,16 +86,14 @@ object Competition
   val duration:Duration
 }
 
-sealed trait ResultsCompetition{
-   val results:List[Ref[Results]]
-}
 
  trait FixturesCompetition{
-  this:ResultsCompetition =>
   val fixtures:List[Ref[Fixtures]]
 }
 
- trait TeamCompetition extends FixturesCompetition with ResultsCompetition
+ trait TeamCompetition extends FixturesCompetition{
+     val textName:String
+ }
 
  trait CompetitionTables{
     val tables:List[Ref[LeagueTable]]
@@ -105,7 +111,9 @@ sealed trait ResultsCompetition{
 
  trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
 
- trait SubsidiaryCompetition
+ trait SubsidiaryCompetition{
+     val textName:String
+ }
 
 
 

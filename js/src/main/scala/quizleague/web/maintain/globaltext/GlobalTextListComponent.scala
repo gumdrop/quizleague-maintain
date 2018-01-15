@@ -1,32 +1,21 @@
 package quizleague.web.maintain.globaltext
 
-import angulate2.std._
+import quizleague.web.core._
 import quizleague.web.maintain.component.TemplateElements._
+import quizleague.web.maintain.component.ItemListComponentConfig
 import quizleague.web.model._
-import scala.scalajs.js
-import angulate2.router.Router
-import quizleague.web.maintain.component.ListComponent
+import quizleague.web.names._
 
-
-import angulate2.ext.classModeScala
-import quizleague.web.names.GlobalTextNames
-
-@Component(
-  selector = "ql-globaltext-list",
-  template = s"""
-  <div>
-    <h2>Global Text</h2>
-    <div *ngFor="let item of items">
-      <a routerLink="{{item.id}}" md-button>{{item.name}}</a>
-    </div>
-$addFAB
-  </div>
-  """    
-)
-@classModeScala
-class GlobalTextListComponent (
-    override val service:GlobalTextService,
-    override val router: Router) 
-   extends ListComponent[GlobalText] with OnInit with GlobalTextNames{
-  
+object GlobalTextListComponent extends ItemListComponentConfig[GlobalText] with RouteComponent with GlobalTextNames{
+  val template = s"""
+  <v-container>
+    <v-layout column>
+      <div v-for="item in items">
+        <v-btn :to="'globaltext/' + item.id" flat left>{{item.name}}</v-btn>
+      </div>
+      $addFAB
+    </v-layout>
+  </v-container>
+"""
+val service = GlobalTextService
 }

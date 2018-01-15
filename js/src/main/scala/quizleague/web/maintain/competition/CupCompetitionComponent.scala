@@ -1,58 +1,43 @@
 package quizleague.web.maintain.competition
 
-import angulate2.std._
-import angulate2.router.ActivatedRoute
-import angulate2.common.Location
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.model._
 import scala.scalajs.js
-import angulate2.ext.classModeScala
 import TemplateElements._
-import quizleague.web.maintain.text.TextService
-import angulate2.router.Router
-import js.Dynamic.{ global => g }
-import angulate2.core.Input
-import quizleague.web.maintain.text.TextEditMixin
-import quizleague.web.util.Logging
-import quizleague.web.maintain.text.TextEditMixin
-import angulate2.router.Router
+import quizleague.web.maintain.season.SeasonService
+import rxscalajs.Observable._
+import js.JSConverters._
+import quizleague.web.maintain.component.SelectUtils
+import quizleague.web.core._
+import rxscalajs.Observable
+import quizleague.web.util.Logging._
+import quizleague.web.maintain.season.SeasonService
 
 
-@Component(
-  template = s"""
-  <div>
-    <h2>Cup Competition Detail</h2>
-    <form #fm="ngForm" (submit)="save()">
-      <div fxLayout="column">
-        <md-input-container>
-          <input mdInput placeholder="Name" type="text"
-             required
-             [(ngModel)]="item.name" name="name">
-        </md-input-container>
-        <md-input-container>
-          <input mdInput placeholder="Start Time" type="time"
-             required
-             [(ngModel)]="item.startTime" name="startTime">
-        </md-input-container>
-        <md-input-container>        
-          <input mdInput placeholder="Duration (hours)" type="number"
-             required step=".1"
-             [(ngModel)]="item.duration" name="duration">
-        </md-input-container>
-       </div>
-      <div fxLayout="row"><button (click)="editText(item.text)" md-button type="button" >Edit Text...</button></div>
-      <div fxLayout="row"><button (click)="fixtures(item)" md-button type="button" >Fixtures...</button></div>
-      <div fxLayout="row"><button (click)="results(item)" md-button type="button" >Results...</button></div>
+object CupCompetitionComponent extends CompetitionComponentConfig{
+
+  val   template = s"""
+  <v-container>
+    <h2>Cup Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
+
+    <v-form v-model="valid"  v-if="item && season">
+      <v-layout column>
+   
+          <v-text-field  label="Name" type="text" v-model="item.name"
+             required :rules=${valRequired("Name")}></v-text-field>
+          <v-text-field  label="Start Time" type="time" v-model="item.startTime"
+             required :rules=${valRequired("Start Time")}></v-text-field>
+          <v-text-field  label="Duration" type="number" v-model.number="item.duration"
+             required step="0.5" :rules=${valRequired("Duration")}></v-text-field>
+          <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
+          <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
+      <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
+      <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
+      </v-layout>
       $formButtons
-    </form>
-  </div>
-
-  """    
-)
-@classModeScala
-class CupCompetitionComponent( override val service:CompetitionService,
-                                  override val location:Location,
-                                  override val route:ActivatedRoute,
-                                  override val router:Router) extends CompetitionComponent
+    </v-form>
+  </v-container>"""
+ 
+}
     

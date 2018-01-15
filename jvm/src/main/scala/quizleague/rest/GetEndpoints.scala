@@ -85,22 +85,7 @@ trait GetEndpoints {
   @Path("/venue/{id}")
   def venue(@PathParam("id") id: String) = out[Venue](id)
 
-  @GET
-  @Path("/results")
-  def results() = list[Results]
-
-  @GET
-  @Path("/results/{id}")
-  def results(@PathParam("id") id: String) = out[Results](id)
-
-  @GET
-  @Path("/result")
-  def result() = list[Result]
-  
-  @GET
-  @Path("/result/{id}")
-  def result(@PathParam("id") id: String) = out[Result](id)
-
+ 
   @GET
   @Path("/reports/{id}")
   def reports(@PathParam("id") id: String) = out[Reports](id, shortCacheAge)
