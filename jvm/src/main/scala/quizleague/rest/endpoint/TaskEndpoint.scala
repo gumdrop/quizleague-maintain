@@ -46,7 +46,7 @@ class TaskEndpoint {
   private def updateTables(result:ResultsSubmitCommand){
     
     def compTables(comp:Ref[Competition]):List[LeagueTable] = {
-      comp match {
+      refToObject(comp) match {
         case c:CompetitionTables => c.tables
         case _ => List()
       }
