@@ -61,7 +61,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
                       <v-container>
                         <v-layout column>
                           <v-flex><v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn></v-flex>
-                          <v-flex><v-btn flat v-on:click="download"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></v-flex>
+                          <v-flex><v-btn flat :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></v-flex>
                         </v-layout>
                       </v-container>
                     </v-card-actions>
@@ -79,7 +79,6 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
   method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5)) 
   method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.documentURI}calendar/team/$teamId"))
-  method("download")((teamId:String) => ())
 
 }
 
