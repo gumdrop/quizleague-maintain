@@ -1,22 +1,18 @@
 package quizleague.web.site.team
 
-import com.felstar.scalajs.vue._
-import scalajs.js
-import js.JSConverters
-import quizleague.web.core.RouteComponent
 import quizleague.web.core.Component
-import quizleague.web.site.text.TextService
-import quizleague.web.core._
+import quizleague.web.core.DialogComponent
+import quizleague.web.core.DialogComponentConfig
+import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.core.IdComponent
+import quizleague.web.core.RouteComponent
+import quizleague.web.model.ApplicationContext
 import quizleague.web.model.Team
 import quizleague.web.site.ApplicationContextService
-import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.model.ApplicationContext
+import scala.scalajs.js
 import quizleague.web.site.fixtures.FixtureService
-import quizleague.web.site._
-import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.core.IdComponent
-import com.felstar.scalajs.vue.VuetifyComponent
-import quizleague.web.core.DialogComponentConfig
+import quizleague.web.util.Clipboard
+import org.scalajs.dom
 
 object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
@@ -45,7 +41,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
-                <v-btn flat><v-icon>insert_chart</v-icon>Graphs & Stats</v-btn>
+                <v-btn flat><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
             </v-flex>      
@@ -57,18 +53,29 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
-                <v-btn flat ><v-icon>content_copy</v-icon>Calendar URL</v-btn>
-                <v-btn flat><v-icon>file_download</v-icon>Download Calendar</v-btn>
+                <v-btn flat v-on:click="(showCalDlg=true)"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+                <v-dialog v-model="showCalDlg" max-width="40%" lazy >
+                  <v-card>
+                    <v-card-title>Calendar Feed</v-card-title>
+                    <v-card-actions>
+                      <div><v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn></div>
+                      <div><v-btn flat v-on:click="download"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></div>
+                    </v-card-actions>
+                  </v-card>
+               </v-dialog>
               </v-card-actions>
             </v-card>
             </v-flex>
           </v-layout>
           </v-container>"""
   props("id")
+  data("showCalDlg",false)
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
-  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))  
+  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5)) 
+  method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.documentURI}calendar/team/$teamId"))
+  method("download")((teamId:String) => ())
 
 }
 

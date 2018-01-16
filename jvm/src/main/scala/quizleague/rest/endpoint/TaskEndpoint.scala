@@ -12,6 +12,7 @@ import quizleague.domain.command._
 import quizleague.domain.util._
 import java.util.UUID.{randomUUID => uuid}
 import java.util.logging.Logger
+import quizleague.rest._
 
 
 
@@ -24,9 +25,8 @@ class TaskEndpoint {
   @POST
   @Path("/submitresult")
   def resultSubmit(body:String) = {
-   import io.circe._, io.circe.generic.auto._, io.circe.parser._
    
-   val result = decode[ResultsSubmitCommand](body).merge.asInstanceOf[ResultsSubmitCommand]
+   val result = deser[ResultsSubmitCommand](body)
     
    logger.finest(s"submit result arrived : $result") 
    

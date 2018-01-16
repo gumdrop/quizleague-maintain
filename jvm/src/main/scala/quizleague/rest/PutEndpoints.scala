@@ -2,7 +2,7 @@ package quizleague.rest
 
 import javax.ws.rs._
 import javax.ws.rs.core._
-import io.circe._, io.circe.parser._, io.circe.syntax._
+import io.circe._, io.circe.parser._
 import quizleague.data.Storage
 import quizleague.domain._
 import quizleague.util.json.codecs.DomainCodecs._

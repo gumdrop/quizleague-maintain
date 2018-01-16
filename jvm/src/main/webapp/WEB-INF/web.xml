@@ -4,16 +4,9 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <!-- listener>
-    <listener-class>quizleague.rest.ApplicationInit</listener-class>
-  </listener-->
   <filter>
     <filter-name>PassThroughFilter</filter-name>
     <filter-class>quizleague.rest.PassThroughFilter</filter-class>
-  </filter>
-  <filter>
-    <filter-name>MaintainURLRewriteFilter</filter-name>
-    <filter-class>quizleague.rest.MaintainURLRewriteFilter</filter-class>
   </filter>
   <filter>
     <filter-name>URLRewriteFilter</filter-name>
@@ -28,31 +21,29 @@
     <url-pattern>/_ah/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
-  <!-- filter-mapping>
-    <filter-name>MaintainURLRewriteFilter</filter-name>
-    <url-pattern>/maintain/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-
-  </filter-mapping-->
   <filter-mapping>
     <filter-name>URLRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
-  <!-->servlet>
-    <description></description>
-    <display-name>View REST Services</display-name>
-    <servlet-name>ViewServices</servlet-name>
-    <servlet-class>org.chilternquizleague.web.ViewService</servlet-class>
-  </servlet>
+
   <servlet>
     <servlet-name>mailhandler</servlet-name>
-    <servlet-class>org.chilternquizleague.web.MailHandler</servlet-class>
+    <servlet-class>quizleague.rest.mail.MailHandler</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>mailhandler</servlet-name>
     <url-pattern>/_ah/mail/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>calendar</servlet-name>
+    <servlet-class>quizleague.rest.calendar.CalendarHandler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>calendar</servlet-name>
+    <url-pattern>/calendar/*</url-pattern>
+  </servlet-mapping>
+  <!-->
   <servlet>
     <servlet-name>statshandler</servlet-name>
     <servlet-class>org.chilternquizleague.web.StatsQueueHandler</servlet-class>
