@@ -54,12 +54,16 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               <v-card-actions>
                 <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
                 <v-btn flat v-on:click="(showCalDlg=true)"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
-                <v-dialog v-model="showCalDlg" max-width="40%" lazy >
+                <v-dialog v-model="showCalDlg" max-width="50%" lazy >
                   <v-card>
                     <v-card-title>Calendar Feed</v-card-title>
                     <v-card-actions>
-                      <div><v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn></div>
-                      <div><v-btn flat v-on:click="download"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></div>
+                      <v-container>
+                        <v-layout column>
+                          <v-flex><v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn></v-flex>
+                          <v-flex><v-btn flat v-on:click="download"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></v-flex>
+                        </v-layout>
+                      </v-container>
                     </v-card-actions>
                   </v-card>
                </v-dialog>
