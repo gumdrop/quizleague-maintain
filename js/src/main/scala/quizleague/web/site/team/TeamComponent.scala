@@ -1,22 +1,18 @@
 package quizleague.web.site.team
 
-import com.felstar.scalajs.vue._
-import scalajs.js
-import js.JSConverters
-import quizleague.web.core.RouteComponent
 import quizleague.web.core.Component
-import quizleague.web.site.text.TextService
-import quizleague.web.core._
+import quizleague.web.core.DialogComponent
+import quizleague.web.core.DialogComponentConfig
+import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.core.IdComponent
+import quizleague.web.core.RouteComponent
+import quizleague.web.model.ApplicationContext
 import quizleague.web.model.Team
 import quizleague.web.site.ApplicationContextService
-import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.model.ApplicationContext
+import scala.scalajs.js
 import quizleague.web.site.fixtures.FixtureService
-import quizleague.web.site._
-import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.core.IdComponent
-import com.felstar.scalajs.vue.VuetifyComponent
-import quizleague.web.core.DialogComponentConfig
+import quizleague.web.util.Clipboard
+import org.scalajs.dom
 
 object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
@@ -57,7 +53,17 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
-                <v-btn flat ><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+                <v-menu offset-y>
+                  <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+                   <v-list>
+                    <v-list-tile>
+                      <v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn>
+                    </v-list-tile>
+                    <v-list-tile>
+                      <v-btn flat :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu offset-y>              
               </v-card-actions>
             </v-card>
             </v-flex>
@@ -67,7 +73,8 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
-  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5))  
+  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5)) 
+  method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.documentURI}calendar/team/$teamId"))
 
 }
 

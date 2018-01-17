@@ -12,6 +12,8 @@ import quizleague.domain._
 import quizleague.domain.util._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
+import quizleague.rest._ 
+import io.circe._
 
 @Path("/entity")
 class EntityEndpoint extends MaintainPostEndpoints{
@@ -21,14 +23,12 @@ class EntityEndpoint extends MaintainPostEndpoints{
   @POST
   @Path("/dbupload")
   def dbload(json:String) = {
-    import io.circe._, io.circe.generic.auto._, io.circe.parser._
-    import quizleague.util.json.codecs.DomainCodecs._
     
     def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
       Storage.saveAll[T](list)(tag,encoder)
     }
     
-    val container = decode[DomainContainer](json).merge.asInstanceOf[DomainContainer]
+    val container = deser[DomainContainer](json)
     
     saveAll(container.applicationcontext)
     saveAll(container.competition)
