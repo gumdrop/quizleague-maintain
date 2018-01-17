@@ -53,27 +53,23 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
-                <v-btn flat v-on:click="(showCalDlg=true)"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
-                <v-dialog v-model="showCalDlg" max-width="50%" lazy >
-                  <v-card>
-                    <v-card-title>Calendar Feed</v-card-title>
-                    <v-card-actions>
-                      <v-container>
-                        <v-layout column>
-                          <v-flex><v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn></v-flex>
-                          <v-flex><v-btn flat :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn></v-flex>
-                        </v-layout>
-                      </v-container>
-                    </v-card-actions>
-                  </v-card>
-               </v-dialog>
+                <v-menu offset-y>
+                  <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+                   <v-list>
+                    <v-list-tile>
+                      <v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn>
+                    </v-list-tile>
+                    <v-list-tile>
+                      <v-btn flat :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu offset-y>              
               </v-card-actions>
             </v-card>
             </v-flex>
           </v-layout>
           </v-container>"""
   props("id")
-  data("showCalDlg",false)
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
