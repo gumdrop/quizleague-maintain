@@ -8,15 +8,19 @@ import quizleague.data._
 import quizleague.domain._
 import java.text.SimpleDateFormat
 import quizleague.util.json.codecs.DomainCodecs._
-import java.util.Date
 import quizleague.conversions.RefConversions._
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import quizleague.domain.TeamCompetition
 import quizleague.domain.SingletonCompetition
+import org.threeten.bp._
+
 
 class CalendarHandler extends HttpServlet{
-  val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
+  
+  val utc = ZoneOffset.UTC
+  val local = ZoneId.of("Europe/London")
+  val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(utc)
   override def doPost(req: HttpServletRequest, resp: HttpServletResponse) = {}  
   override def doGet(req: HttpServletRequest, resp: HttpServletResponse) = {
       val bits = parts(req)
@@ -40,7 +44,7 @@ class CalendarHandler extends HttpServlet{
     }
     
     private def formatEvent(event:BaseEvent, text:String):String = {
-      val now = LocalDateTime.now().format(dateFormat)
+      val now = toUtc(LocalDateTime.now())
       val uidPart = text.replaceAll("\\s", "") 
       val address = event.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
       s"""
@@ -49,8 +53,8 @@ DTSTAMP:$now
 UID:${event.date}.$uidPart.chilternquizleague.uk
 DESCRIPTION:$text
 SUMMARY:$text
-DTSTART:${event.date.atTime(event.time).format(dateFormat)}
-DTEND:${event.date.atTime(event.time plus event.duration).format(dateFormat)}
+DTSTART:${toUtc(event.date.atTime(event.time))}
+DTEND:${toUtc(event.date.atTime(event.time plus event.duration))}
 LOCATION:${event.venue.name},$address
 END:VEVENT
 """
@@ -60,7 +64,7 @@ END:VEVENT
       
       val text = s"${fixture.home.shortName} - ${fixture.away.shortName} : $description"
       
-      val now = LocalDateTime.now().format(dateFormat)
+      val now = toUtc(LocalDateTime.now())
       val uidPart = fixture.home.shortName.replaceAll("\\s", "") 
       val address = fixture.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
       s"""
@@ -69,8 +73,8 @@ DTSTAMP:$now
 UID:${fixture.date}.$uidPart.chilternquizleague.uk
 DESCRIPTION:$text
 SUMMARY:$text
-DTSTART:${fixture.date.atTime(fixture.time).format(dateFormat)}
-DTEND:${fixture.date.atTime(fixture.time plus fixture.duration).format(dateFormat)}
+DTSTART:${toUtc(fixture.date.atTime(fixture.time))}
+DTEND:${toUtc(fixture.date.atTime(fixture.time plus fixture.duration))}
 LOCATION:${fixture.venue.name},$address
 END:VEVENT
 """
@@ -78,7 +82,7 @@ END:VEVENT
     }
     private def formatBlankFixtures(fixtures:Fixtures) = {
       
-      val now = LocalDateTime.now.format(dateFormat)
+      val now = toUtc(LocalDateTime.now)
       val uidPart = fixtures.description.replaceAll("\\s", "") 
       s"""
 BEGIN:VEVENT
@@ -86,8 +90,8 @@ DTSTAMP:$now
 UID:${fixtures.date}.$uidPart.chilternquizleague.uk
 DESCRIPTION:${fixtures.description}
 SUMMARY:${fixtures.description}
-DTSTART:${fixtures.date.atTime(fixtures.start).format(dateFormat)}
-DTEND:${fixtures.date.atTime(fixtures.start plus fixtures.duration).format(dateFormat)}
+DTSTART:${toUtc(fixtures.date.atTime(fixtures.start))}
+DTEND:${toUtc(fixtures.date.atTime(fixtures.start plus fixtures.duration))}
 END:VEVENT
 """
 
@@ -152,4 +156,5 @@ END:VEVENT
     }
   
     def parts(req: HttpServletRequest) = req.getPathInfo().split("\\/").tail;
+    def toUtc(dateTime:LocalDateTime) = ZonedDateTime.of(dateTime,local).format(dateFormat)
 }
