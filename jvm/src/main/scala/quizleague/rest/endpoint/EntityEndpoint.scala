@@ -14,6 +14,8 @@ import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import quizleague.rest._ 
 import io.circe._
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
 
 @Path("/entity")
 class EntityEndpoint extends MaintainPostEndpoints{
@@ -22,7 +24,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
   
   @POST
   @Path("/dbupload")
-  def dbload(json:String) = {
+  def dbupload(json:String) = {
     
     def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
       Storage.saveAll[T](list)(tag,encoder)
@@ -46,6 +48,32 @@ class EntityEndpoint extends MaintainPostEndpoints{
     
     
     
+  }
+  
+  @GET
+  @Path("/dbdownload/dump.json")
+  @Produces(Array("application/json"))
+  def dbdownload() = {
+    import Storage.list
+    import io.circe.syntax._
+
+    
+    val container = DomainContainer(
+        list[ApplicationContext],
+        list[Competition],
+        list[Fixtures],
+        list[Fixture],
+        list[GlobalText],
+        list[LeagueTable],
+        list[Reports],
+        list[Season],
+        list[Team],
+        list[Text],
+        list[User],
+        list[Venue]
+    )
+    
+    container.asJson.noSpaces
   }
   
   @POST
