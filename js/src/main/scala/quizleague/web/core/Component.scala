@@ -48,6 +48,7 @@ trait Component {
   def activated:js.Function = null
   def created:js.Function = null
   def beforeCreate:js.Function = null
+  def updated:js.Function = null
 
   var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
@@ -167,7 +168,8 @@ trait Component {
       mounted = mounted,
       activated = activated,
       created = created,
-      beforeCreate = beforeCreate
+      beforeCreate = beforeCreate,
+      updated = updated
            
     )
     

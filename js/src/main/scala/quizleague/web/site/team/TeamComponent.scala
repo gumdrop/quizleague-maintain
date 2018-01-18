@@ -98,6 +98,7 @@ object TeamTitle extends Component {
       dark
       clipped-left
       v-if="team">
+      <ql-title>{{team.name}}</ql-title>
       <v-toolbar-title class="white--text" >
         {{team.name}}
       </v-toolbar-title>
@@ -105,6 +106,7 @@ object TeamTitle extends Component {
       <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=true"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
       <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
       <ql-team-contact-dialog :show="contact" :team="team" v-on:show="handleShow"></ql-team-contact-dialog> 
+
     </v-toolbar>"""
    components(ContactDialog)
    props("id")

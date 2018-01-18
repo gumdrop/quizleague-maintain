@@ -26,6 +26,7 @@ class Vue extends js.Object {
   val $index: Int = js.native
   val $key: js.Any = js.native
   val $value: js.Any = js.native
+  val $slots: js.Dynamic = js.native
   // Data
   type Callback = js.Function2[_, _, Unit]
   def $watch(expOrFn: js.Any, callback: js.Function): Unwatch = js.native

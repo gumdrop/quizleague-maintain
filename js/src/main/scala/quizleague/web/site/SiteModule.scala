@@ -30,12 +30,13 @@ import quizleague.web.site.competition.CompetitionModule
 import quizleague.web.site.calendar.CalendarModule
 import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
+import quizleague.web.site.common._
 
 
 
 object SiteModule extends Module {
   
-  override val modules = @@(HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule)
+  override val modules = @@(CommonModule, HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule)
   
   override val routes = @@(
       RouteConfig(path="/links", components = Map("default" -> LinksComponent)),
@@ -56,6 +57,7 @@ object ApplicationContextService extends ApplicationContextGetService{
   override val userService = UserService
   
 }
+
 
 object SiteService {
   val sidemenu = BehaviorSubject[Boolean](false)

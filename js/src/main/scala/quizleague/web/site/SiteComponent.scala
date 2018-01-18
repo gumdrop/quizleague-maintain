@@ -76,6 +76,7 @@ object SiteComponent extends Component {
         </v-layout>
       </v-container>
     </v-content>
+    <ql-title>Home</ql-title>
   </v-app>"""
   
   data("menu",true)
