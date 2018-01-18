@@ -9,10 +9,11 @@ import quizleague.web.maintain.team.TeamModule
 import quizleague.web.maintain.applicationcontext.ApplicationContextModule
 import quizleague.web.maintain.globaltext.GlobalTextModule
 import quizleague.web.maintain.season.SeasonModule
+import quizleague.web.maintain.database.DatabaseModule
 
 object MaintainModule extends Module{
   
-  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule)
+  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule, DatabaseModule)
   
   override val routes = @@(
     RouteConfig(path = "/maintain", components = Map("sidenav"->MaintainMenuComponent))    
