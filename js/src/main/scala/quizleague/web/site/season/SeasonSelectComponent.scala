@@ -7,6 +7,7 @@ import quizleague.util.collection._
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VueRxComponent
 import rxscalajs.Subject
+import js.UndefOr._
 
 @js.native
 trait SeasonSelectComponent extends VueRxComponent{
@@ -35,7 +36,9 @@ object SeasonSelectComponent extends Component{
   method("sort")((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc))
   method("wrap")((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
   
-  watch("seasonId")((c:facade, newValue:js.Any) => if(newValue != js.undefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s)))
+  watch("seasonId")((c:facade, newValue:js.Any) => {
+    val x:js.UndefOr[js.Any] = newValue
+    if(x.isDefined) SeasonService.get(c.seasonId).subscribe(s => c.season.next(s))})
   data("seasonId","")
   
   
