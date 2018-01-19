@@ -8,6 +8,7 @@ object CompetitionsTitleComponent extends RouteComponent{
       color="purple darken-3"
       dark
       clipped-left>
+      <ql-title v-if="s">Competitions {{s.startYear}}/{{s.endYear}}</ql-title>
       <v-toolbar-title class="white--text" >
         Competitions
       </v-toolbar-title>
@@ -15,4 +16,5 @@ object CompetitionsTitleComponent extends RouteComponent{
     </v-toolbar>"""
   
   data("season",CompetitionViewService.season)
+  subscription("s")(c => CompetitionViewService.season)
 }

@@ -4,7 +4,9 @@ import quizleague.web.core.RouteComponent
 import quizleague.web.core.GridSizeComponentConfig
 
 object TeamsComponent extends RouteComponent with GridSizeComponentConfig{
-    val template="""<v-container v-bind="gridSize" fluid>
+    val template="""
+      <v-container v-bind="gridSize" fluid>
+        <ql-title>Teams</ql-title>
         <v-layout>
           <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
         </v-layout>
@@ -18,7 +20,7 @@ object TeamsTitleComponent extends RouteComponent{
 	    
       clipped-left>
       <v-toolbar-title class="white--text" >
-        Teams
+        Teams 
       </v-toolbar-title>
     </v-toolbar>"""
        

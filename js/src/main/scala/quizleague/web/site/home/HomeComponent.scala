@@ -25,6 +25,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
   )
   override val template="""
    <v-container v-bind="gridSize" v-if="appData">
+     <ql-title>Home</ql-title>
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
       <!--div>
