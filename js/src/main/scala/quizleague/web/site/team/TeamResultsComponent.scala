@@ -50,8 +50,9 @@ object TeamResultsTitleComponent extends Component{
       color="amber darken-3"
       dark
       clipped-left>
+     <ql-title>{{team.name}} : Results {{s.startYear}}/{{s.endYear}}</ql-title>
       <v-toolbar-title class="white--text" v-if="team">
-        {{team.name}} Results 
+        {{team.name}} : Results 
        </v-toolbar-title>
       &nbsp;
       <ql-season-select :season="season"></ql-season-select>
@@ -59,5 +60,6 @@ object TeamResultsTitleComponent extends Component{
   
   props("id")
   data("season", TeamViewService.season)
+  subscription("s")(c => TeamViewService.season)
   subscription("team","id")(c => TeamService.get(c.id))
 }

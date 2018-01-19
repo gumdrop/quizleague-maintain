@@ -14,7 +14,7 @@ object LeagueCompetitionComponent extends Component with GridSizeComponentConfig
   type facade = IdComponent
   val name = "ql-league-competition"
   val template = """
-  <v-container v-bind="gridSize" v-if="item">
+  <v-container v-bind="gridSize" v-if="item" fluid>
     <v-layout column>
       <v-flex>      
         <ql-named-text :name="item.textName"></ql-named-text>

@@ -20,7 +20,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   type facade = SeasonIdComponent with VuetifyComponent
   val name = "ql-calendar" 
   val template = """
-  <v-container v-bind="gridSize"  v-if="items" class="ql-calendar">
+  <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
     <v-layout column>
       <v-flex v-for="item in items" :key="item.date">
         <v-card>
@@ -49,6 +49,7 @@ object CalendarTitleComponent extends RouteComponent{
       dark
       clipped-left
       >
+      <ql-title>Calendar {{s.startYear}}/{{s.endYear}}</ql-title>
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
@@ -56,6 +57,7 @@ object CalendarTitleComponent extends RouteComponent{
     </v-toolbar>"""
   
   data("season", CalendarViewService.season)
+  subscription("s")(c => CalendarViewService.season)
 }
 
 

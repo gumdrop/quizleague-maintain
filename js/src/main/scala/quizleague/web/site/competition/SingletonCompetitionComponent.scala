@@ -18,10 +18,10 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
   val name = "competition"
   
   val template = """ 
-<v-container v-bind="gridSize" fluid v-if="item">
+<v-container v-bind="gridSize" v-if="item" fluid>
     <v-layout column >
-    <v-flex><ql-named-text :name="item.textName"></ql-named-text></v-flex>
-    <v-flex>
+    <v-flex align-content-start><ql-named-text :name="item.textName"></ql-named-text></v-flex>
+    <v-flex align-content-start >
       <v-card>
        <v-card-text>
         <div><b>This season's competition will take place at <a :to="'/venue/' + item.event.venue.id">{{async(item.event.venue).name}}</a> on {{item.event.date | date("d MMMM yyyy")}} starting at {{item.event.time}}</b> </div>

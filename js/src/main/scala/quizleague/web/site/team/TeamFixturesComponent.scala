@@ -37,3 +37,26 @@ object TeamFixturesComponent extends Component {
   props("id","seasonId")
   
 }
+
+object TeamFixturesTitle extends RouteComponent{
+  val template = """<fixtures-title :id="$route.params.id"></fixtures-title>"""
+ components(TeamFixturesTitleComponent)
+}
+
+object TeamFixturesTitleComponent extends Component{
+  type facade = IdComponent
+  
+  val name = "fixtures-title"
+  val template = """<v-toolbar      
+      color="amber darken-3"
+      dark
+      clipped-left>
+     <ql-title>{{team.name}} : Fixtures</ql-title>
+      <v-toolbar-title class="white--text" v-if="team">
+        {{team.name}} : Fixtures 
+       </v-toolbar-title>
+    </v-toolbar>"""
+  
+  props("id")
+  subscription("team","id")(c => TeamService.get(c.id))
+}

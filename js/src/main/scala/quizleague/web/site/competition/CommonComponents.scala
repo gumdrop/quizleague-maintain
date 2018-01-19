@@ -80,7 +80,17 @@ object NextFixtures extends Component{
 
 
 object CompetitionTitle extends RouteComponent{
-  val template = """<competition-title :id="$route.params.id"></competition-title>"""
+  val template = """<competition-title :id="$route.params.id" :text="null"></competition-title>"""
+  components(CompetitionTitleComponent)
+}
+
+object CompetitionResultsTitle extends RouteComponent{
+  val template = """<competition-title :id="$route.params.id" text="Results"></competition-title>"""
+  components(CompetitionTitleComponent)
+}
+
+object CompetitionFixturesTitle extends RouteComponent{
+  val template = """<competition-title :id="$route.params.id" text="Fixtures"></competition-title>"""
   components(CompetitionTitleComponent)
 }
   
@@ -91,16 +101,18 @@ object CompetitionTitleComponent extends Component{
       color="purple darken-3"
       dark
       clipped-left>
-      <ql-title>{{item.name}} {{season.startYear}}/{{season.endYear}}</ql-title>
+      <ql-title v-if="item && season">{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</ql-title>
       <v-toolbar-title class="white--text" v-if="item && season" >
-       <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{season.startYear}}/{{season.endYear}}</span>
+       <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
     </v-toolbar>"""
   
-  props("id")
+  props("id","text")
   subscription("item","id")(c => CompetitionService.get(c.id))
   subscription("season")(c => CompetitionViewService.parentSeason(c.id))
 }
+
+
 
 object ResultsPage extends RouteComponent{
   val template = """<all-results :id="$route.params.id"></all-results>"""
