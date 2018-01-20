@@ -101,8 +101,8 @@ object CompetitionTitleComponent extends Component{
       color="purple darken-3"
       dark
       clipped-left>
-      <ql-title v-if="item && season">{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</ql-title>
       <v-toolbar-title class="white--text" v-if="item && season" >
+       <ql-title>{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</ql-title>
        <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
     </v-toolbar>"""

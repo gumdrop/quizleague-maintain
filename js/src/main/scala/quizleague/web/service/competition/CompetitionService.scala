@@ -84,6 +84,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
         case c: DSC => new SubsidiaryLeagueCompetition(
           c.id,
           c.name,
+          refObsList(c.fixtures,fixturesService),
           refObsList(c.tables, leagueTableService),
           refObs(c.text, textService),
           c.textName,
@@ -158,6 +159,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       newId(),
       "Subsidiary",
       List(),
+      List(),
       textService.getRef(textService.instance()))
     
     def makeSingleton = DSiC(
@@ -195,6 +197,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
+          s.fixtures.map(fixturesService.ref(_)).toList,
           s.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(s.text),
           s.textName,

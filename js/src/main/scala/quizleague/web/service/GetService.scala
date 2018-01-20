@@ -59,7 +59,7 @@ trait GetService[T <: Model] {
 
       db.doc(s"$uriRoot/$id").onSnapshot(subject.inner)
 
-      subject.map(a => dec(a.data()).fold(e => {throw e}, u => u))
+      subject.map(a => if(a.exists) dec(a.data()).fold(e => {throw e}, u => u) else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
     })
 
   }

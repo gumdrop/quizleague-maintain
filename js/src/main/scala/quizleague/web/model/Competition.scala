@@ -57,12 +57,12 @@ class CupCompetition(
 class SubsidiaryLeagueCompetition(
   override val id: String,
   override val name: String,
+  override val fixtures: js.Array[RefObservable[Fixtures]],
   override val tables: js.Array[RefObservable[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
   val icon:String) extends Competition {
   override val typeName = subsidiary.toString()
-  override val fixtures = js.Array[RefObservable[Fixtures]]()
 }
 
 class SingletonCompetition(

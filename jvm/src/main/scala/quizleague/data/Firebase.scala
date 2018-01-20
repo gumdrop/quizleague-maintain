@@ -31,11 +31,16 @@ object Storage {
      
      val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}"),asMap(encoder(e).asObject.get)))
      
-     val batch = datastore.batch()
+     val batchSets = objrefs.grouped(400)
      
-     objrefs.foreach({case (r,o) => batch.set(r,o)})
+     batchSets.foreach( l => {
      
-     batch.commit()
+       val batch = datastore.batch()
+       
+       l.foreach({case (r,o) => batch.set(r,o)})
+       
+       batch.commit()
+     })
   }
 
   def load[T <: Entity](id: String)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(makeKind, id, decoder)
