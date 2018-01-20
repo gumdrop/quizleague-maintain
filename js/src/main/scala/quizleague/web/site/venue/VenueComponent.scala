@@ -126,7 +126,7 @@ object VenueMenuComponent extends Component {
               </v-list-tile-action>
             </v-list-tile>
                     <v-list-tile v-for="venue in sort(venues) " :key="venue.id">
-                    <v-btn :to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn>
+                    <v-list-tile-action><v-btn :to="'/venue/' + venue.id" flat style="text-transform: none;">{{venue.name}}</v-btn></v-list-tile-action>
                     </v-list-tile>
           </v-list-group>
                    </v-list>"""

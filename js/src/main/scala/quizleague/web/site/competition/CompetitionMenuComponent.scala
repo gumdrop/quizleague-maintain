@@ -33,8 +33,8 @@ object CompetitionMenuComponent extends Component{
                 <v-icon>keyboard_arrow_down</v-icon>
               </v-list-tile-action>
             </v-list-tile>
-       <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" left>
-          <v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat left><v-icon v-id="competition.icon" left>{{competition.icon}}</v-icon><span>{{competition.name}}</span></v-btn>
+       <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" >
+          <v-list-tile-action><v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat><v-icon v-id="competition.icon" left>{{competition.icon}}</v-icon><span>{{competition.name}}</span></v-btn></v-list-tile-action>
       </v-list-tile>
     </v-list-group>
     </v-list>

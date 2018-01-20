@@ -20,6 +20,7 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
   val template = """ 
 <v-container v-bind="gridSize" v-if="item" fluid>
     <v-layout column >
+    <div>
     <v-flex align-content-start><ql-named-text :name="item.textName"></ql-named-text></v-flex>
     <v-flex align-content-start >
       <v-card>
@@ -30,6 +31,7 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
         </v-card-text>
       </v-card> 
     </v-flex>
+    </div>
   </v-layout>
 </v-container>"""
   

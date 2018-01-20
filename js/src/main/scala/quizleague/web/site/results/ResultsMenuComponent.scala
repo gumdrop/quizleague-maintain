@@ -20,13 +20,13 @@ object ResultsMenuComponent extends RouteComponent{
               </v-list-tile-action>
             </v-list-tile>
     <v-list-tile >
-      <v-btn to="/results/all" flat >All Results</v-btn>
+      <v-list-tile-action><v-btn to="/results/all" flat >All Results</v-btn></v-list-tile-action>
     </v-list-tile>
     <v-list-tile >
-      <v-btn to="/fixtures/all" flat >All Fixtures</v-btn>
+      <v-list-tile-action><v-btn to="/fixtures/all" flat >All Fixtures</v-btn></v-list-tile-action>
     </v-list-tile>
         <v-list-tile >
-      <v-btn to="/results/submit" flat >Submit Results</v-btn>
+      <v-list-tile-action><v-btn to="/results/submit" flat >Submit Results</v-btn></v-list-tile-action>
     </v-list-tile>
       </v-list-group>
    </v-list>

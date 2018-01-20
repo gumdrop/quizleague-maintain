@@ -181,7 +181,7 @@ object TeamMenuComponent extends RouteComponent {
               </v-list-tile-action>
             </v-list-tile>
        <v-list-tile v-for="team in sort(teams) " :key="team.id">
-        <v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn>
+        <v-list-tile-action><v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn></v-list-tile-action>
        </v-list-tile>
     </v-list-group>
      </v-list>"""
