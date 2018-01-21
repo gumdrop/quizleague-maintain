@@ -8,6 +8,7 @@ import quizleague.web.site.fixtures.FixturesService
 import com.felstar.scalajs.vue.VueComponent
 import quizleague.web.model.Season
 import scalajs.js
+import js.timers._
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.leaguetable.LeagueTableService
@@ -15,14 +16,16 @@ import com.felstar.scalajs.vue.VuetifyComponent
 import quizleague.web.site._
 import quizleague.web.core.GridSizeComponentConfig
 
-
+@js.native
+trait HomeComponent extends VueRxComponent with VuetifyComponent{
+  var sponsorMessage:Boolean
+}
 
 object HomeComponent extends RouteComponent with NoSideMenu with GridSizeComponentConfig{
 
-  type facade = VueRxComponent with VuetifyComponent
+  type facade = HomeComponent
   
-  subscription("appData")(c => ApplicationContextService.get()
-  )
+
   override val template="""
    <v-container v-bind="gridSize" v-if="appData">
      <ql-title>Home</ql-title>
@@ -65,11 +68,25 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
         <ql-text v-if="async(appData.currentSeason).id" :id="async(appData.currentSeason).text.id"></ql-text>
       </v-flex>
     </v-layout>
+     <v-snackbar
+      timeout="3000"
+      color="cyan-darken-2"
+      :multi-line="true"
+      v-model="sponsorMessage"
+    >
+      <ql-named-text name="sponsor-message"></ql-named-text
+     </v-snackbar>
   </v-container>
 """
-    components(HomePageLeagueTable, NextFixturesComponent,LatestResultsComponent)
-    def align(c:facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.smAndDown)
-    computed("align")({align _}:js.ThisFunction)
+  components(HomePageLeagueTable, NextFixturesComponent, LatestResultsComponent)
+  data("sponsorMessage", false)
+
+  subscription("appData")(c => ApplicationContextService.get())
+
+  def align(c: facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.smAndDown)
+  computed("align")({ align _ }: js.ThisFunction)
+
+  override val mounted = ({(c:facade) => setTimeout(5000)(c.sponsorMessage = true)}:js.ThisFunction)
 
 }
 
