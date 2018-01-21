@@ -134,7 +134,7 @@ object LatestResultsComponent extends Component{
      <v-card-text v-if="fixtures">
         <div v-for="f in fixtures" :key="f.id">
         <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
-        <ql-results-simple :results="f.fixtures | combine"></ql-results-simple>
+        <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
         </div>
      </v-card-text>
    </v-card>

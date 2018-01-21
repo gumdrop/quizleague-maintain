@@ -116,6 +116,7 @@ object SubmitResultsTitleComponent extends RouteComponent{
       color="red"
       dark
       clipped-left>
+      <ql-title>Submit Results</ql-title>
       <v-toolbar-title class="white--text" >
         Submit Results
       </v-toolbar-title>
