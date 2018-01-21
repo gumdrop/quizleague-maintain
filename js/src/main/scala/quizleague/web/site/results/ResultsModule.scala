@@ -28,7 +28,7 @@ object ResultsModule extends Module {
       components = Map("default" -> AllFixturesPage, "title" -> AllFixturesTitleComponent, "sidenav" -> ResultsMenuComponent)),
     RouteConfig(
       path = "/results/submit",
-      components = Map("default" -> SubmitResultsComponent,  "sidenav" -> ResultsMenuComponent)),
+      components = Map("default" -> SubmitResultsComponent,  "sidenav" -> ResultsMenuComponent, "title" -> SubmitResultsTitleComponent)),
 
     RouteConfig(path = "/results", redirect = "/results/all"))
 
