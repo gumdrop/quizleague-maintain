@@ -3,6 +3,7 @@ package quizleague.web.site.team
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
 import scalajs.js
+import js.JSConverters._
 import quizleague.web.service.team.TeamGetService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.venue.VenueService
@@ -40,16 +41,15 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
   override val venueService = VenueService
   
   def teamForEmail(email:String):Observable[js.Array[Team]] = {
-    userService.userForEmail(email).combineLatestWith(list())((u,teams) => u.fold(js.Array[Team]())(user => teams.filter(_.users.exists(_.id == user.id))))
-    
-
+    import quizleague.util.json.codecs.DomainCodecs._
+    command[List[U],String](List("site","team-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
   
   def sendEmailToTeam(sender:String, text:String, team:Team){
     import quizleague.util.json.codecs.CommandCodecs._
     
     val cmd = TeamEmailCommand(sender,text,team.id)
-    command[String,TeamEmailCommand](List("email","team"),Some(cmd)).subscribe(x => Unit)
+    command[String,TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
   }
   
 }

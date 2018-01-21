@@ -38,7 +38,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
           <v-text-field v-model.number="fixture.result.homeScore"  :rules="[required('Home Score')]" :label="async(fixture.home).name" type="number" ></v-text-field>
           <v-text-field v-model.number="fixture.result.awayScore"  :rules="[required('Away Score')]" :label="async(fixture.away).name" type="number" ></v-text-field>
       </v-flex>
-      <v-flex v-else>
+      <v-flex v-if="hasResults">
         <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
       </v-flex>
       <v-flex v-if="fixtures.length > 0">
