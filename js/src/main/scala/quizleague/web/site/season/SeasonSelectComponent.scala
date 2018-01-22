@@ -4,7 +4,6 @@ import quizleague.web.core._
 import quizleague.web.model.Season
 import scalajs.js
 import quizleague.util.collection._
-import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VueRxComponent
 import rxscalajs.Subject
 import js.UndefOr._
@@ -15,7 +14,7 @@ trait SeasonSelectComponent extends VueRxComponent{
   val seasonId:String
 }
 
-object SeasonSelectComponent extends Component{
+object SeasonSelectComponent extends Component with SeasonFormatComponent{
   type facade = SeasonSelectComponent
   val name = "ql-season-select"
   val template = """
@@ -34,7 +33,7 @@ object SeasonSelectComponent extends Component{
   subscription("seasonId")(_.season.map(_.id))
   
   method("sort")((seasons:js.Array[Season]) => seasons.sortBy(_.startYear)(Desc))
-  method("wrap")((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(s"${s.startYear}/${s.endYear}", s.id )))    
+  method("wrap")((seasons:js.Array[Season]) => seasons.map(s => new SelectWrapper(formatSeason(s), s.id )))    
   
   watch("seasonId")((c:facade, newValue:js.Any) => {
     val x:js.UndefOr[js.Any] = newValue

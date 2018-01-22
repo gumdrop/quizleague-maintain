@@ -16,6 +16,7 @@ import java.time.DateTimeUtils
 import org.threeten.bp.format.DateTimeFormatter
 import quizleague.web.util.rx._
 import rxscalajs.Observable
+import quill.VueQuillEditor
 
 @JSExportAll
 object SiteApp{
@@ -23,7 +24,7 @@ object SiteApp{
  
   def main(args:Array[String]):Unit = {
 
-
+  Vue.use(VueQuillEditor)
   Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
   Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
   Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))

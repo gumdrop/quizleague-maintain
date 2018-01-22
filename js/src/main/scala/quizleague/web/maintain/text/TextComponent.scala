@@ -14,13 +14,16 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
   <v-container v-if="item">
     <v-form v-model="valid" ref="fm">
       <v-layout column>
+        <div>
         <v-text-field
           label="Mime Type"
           v-model="item.mimeType"
           :rules=${valRequired("Mime Type")}
           required
         ></v-text-field>
-        <v-text-field
+        <quill-editor v-if="item.mimeType=='text/html'" v-model="item.text">
+		    </quill-editor>
+        <v-text-field v-if="item.mimeType=='text/plain'"
           label="Text"
           v-model="item.text"
           :rules=${valRequired("Text")}
@@ -28,7 +31,7 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
           textarea
           auto-grow
         ></v-text-field>
-        $chbxRetired 
+        </div>
      </v-layout>
      $formButtons
     </v-form>

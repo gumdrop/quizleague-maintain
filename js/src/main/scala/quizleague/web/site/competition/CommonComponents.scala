@@ -11,6 +11,7 @@ import quizleague.web.core.GridSizeComponentConfig
 import com.felstar.scalajs.vue.VuetifyComponent
 import quizleague.web.core.GridSizeComponentConfig
 import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.site.season.SeasonFormatComponent
 
 object LeagueTables extends Component{
   type facade = IdComponent
@@ -94,7 +95,7 @@ object CompetitionFixturesTitle extends RouteComponent{
   components(CompetitionTitleComponent)
 }
   
-object CompetitionTitleComponent extends Component{
+object CompetitionTitleComponent extends Component with SeasonFormatComponent{
   type facade = IdComponent
   val name = "competition-title"
   val template = """<v-toolbar      
@@ -102,14 +103,15 @@ object CompetitionTitleComponent extends Component{
       dark
       clipped-left>
       <v-toolbar-title class="white--text" v-if="item && season" >
-       <ql-title>{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</ql-title>
-       <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{text ? (': ' + text + ' ') : ''}}{{season.startYear}}/{{season.endYear}}</span>
+       <ql-title>{{item.name}} {{formatText(text)}}{{formatSeason(season)}}</ql-title>
+       <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{formatText(text)}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
     </v-toolbar>"""
   
   props("id","text")
   subscription("item","id")(c => CompetitionService.get(c.id))
   subscription("season")(c => CompetitionViewService.parentSeason(c.id))
+  method("formatText")((text:String) => if(text == null || text.isEmpty) "" else s": $text ")
 }
 
 

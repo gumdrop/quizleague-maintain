@@ -7,6 +7,7 @@ import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.GridSizeComponentConfig
 import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.site.season.SeasonFormatComponent
 
 
 
@@ -40,11 +41,12 @@ object AllResultsComponent extends Component with GridSizeComponentConfig{
   
 }
 
-object AllResultsTitleComponent extends RouteComponent{
+object AllResultsTitleComponent extends RouteComponent with SeasonFormatComponent{
   val template = """<v-toolbar      
       color="red darken-3"
       dark
       clipped-left>
+      <ql-title v-if="season">All Results {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         All Results
        </v-toolbar-title>
@@ -53,4 +55,5 @@ object AllResultsTitleComponent extends RouteComponent{
     </v-toolbar>"""
   
   data("season", ResultsViewService.season)
+  subscription("s")(c => ResultsViewService.season)
 }

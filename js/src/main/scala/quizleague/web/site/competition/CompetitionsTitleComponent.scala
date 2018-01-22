@@ -1,14 +1,15 @@
 package quizleague.web.site.competition
 
 import quizleague.web.core.RouteComponent
+import quizleague.web.site.season.SeasonFormatComponent
 
 
-object CompetitionsTitleComponent extends RouteComponent{
+object CompetitionsTitleComponent extends RouteComponent with SeasonFormatComponent{
   val template = """<v-toolbar      
       color="purple darken-3"
       dark
       clipped-left>
-      <ql-title v-if="s">Competitions {{s.startYear}}/{{s.endYear}}</ql-title>
+      <ql-title v-if="s">Competitions {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         Competitions
       </v-toolbar-title>

@@ -1,11 +1,11 @@
 package quizleague.web.site.calendar
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSExport
 import quizleague.web.core._
 import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
 import com.felstar.scalajs.vue._
+import quizleague.web.site.season.SeasonFormatComponent
 
 object CalendarPage extends RouteComponent with NoSideMenu{
   
@@ -42,14 +42,14 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   
 }
 
-object CalendarTitleComponent extends RouteComponent{
+object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
   val template = """
     <v-toolbar      
       color="yellow darken-3"
       dark
       clipped-left
       >
-      <ql-title>Calendar {{s.startYear}}/{{s.endYear}}</ql-title>
+      <ql-title>Calendar {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
@@ -90,7 +90,7 @@ object FixturesEventComponent extends EventComponentConfig{
   
   val name = "ql-fixtures-event"
    val template = s"""         
-    <v-container grid-list-xl class="panel-component">
+    <v-container grid-list-xs class="panel-component">
       <v-layout column>
         <v-layout row>
           <div><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.description}}</router-link></div>

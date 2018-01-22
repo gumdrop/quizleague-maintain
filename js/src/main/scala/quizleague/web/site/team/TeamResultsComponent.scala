@@ -10,6 +10,7 @@ import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.IdComponent
 import quizleague.web.core.IdComponent
 import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.site.season.SeasonFormatComponent
 
 object TeamResultsPage extends RouteComponent with GridSizeComponentConfig {
   val template = """<v-container v-if="season" v-bind="gridSize" fluid>
@@ -42,7 +43,7 @@ object TeamResultsTitle extends RouteComponent{
  components(TeamResultsTitleComponent)
 }
 
-object TeamResultsTitleComponent extends Component{
+object TeamResultsTitleComponent extends Component with SeasonFormatComponent{
   type facade = IdComponent
   
   val name = "results-title"
@@ -50,7 +51,7 @@ object TeamResultsTitleComponent extends Component{
       color="amber darken-3"
       dark
       clipped-left>
-     <ql-title>{{team.name}} : Results {{s.startYear}}/{{s.endYear}}</ql-title>
+     <ql-title>{{team.name}} : Results {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" v-if="team">
         {{team.name}} : Results 
        </v-toolbar-title>

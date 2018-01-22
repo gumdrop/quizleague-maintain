@@ -1,15 +1,8 @@
 package quizleague.web.site.fixtures
 
-import quizleague.web.core.RouteComponent
-
 import quizleague.web.core._
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.site.ApplicationContextService
-import rxscalajs.Observable
-import scalajs.js
-import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.core.GridSizeComponentConfig
 import com.felstar.scalajs.vue.VuetifyComponent
 
 
@@ -51,6 +44,7 @@ object AllFixturesTitleComponent extends RouteComponent{
       color="red darken-3"
       dark
       clipped-left>
+      <ql-title>All Fixtures</ql-title>
       <v-toolbar-title class="white--text" >
         All Fixtures
       </v-toolbar-title>
