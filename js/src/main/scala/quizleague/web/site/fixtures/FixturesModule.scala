@@ -96,7 +96,7 @@ object FixtureService extends FixtureGetService with PostService{
     teamService.teamForEmail(email)
       .map(
         _.map(
-          team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)), team.id, Integer.MAX_VALUE, Desc))).map(f => Observable.combineLatest(f.toSeq)
+          team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)).map(_.filter(_.date <= now).sortBy(_.date)(Asc).take(1)), team.id, Integer.MAX_VALUE, Desc))).map(f => Observable.combineLatest(f.toSeq)
           .map(
             _.flatMap(x => x)
               .filter(f => (f.date + f.time) <= now)
