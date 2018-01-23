@@ -5,13 +5,13 @@ EclipseKeys.withSource := true
 
 val circeVersion = "0.8.0"
 val appengineVersion = "1.9.59"
-//addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 lazy val commonSettings = Seq(
   organization := "quizleague",
   version := "0.0.1",
-  scalaVersion := "2.12.3",
-  scalacOptions ++= Seq("-deprecation","-unchecked","-feature","-Xlint"),
+  scalaVersion := "2.12.2",
+  scalacOptions ++= Seq("-deprecation","-unchecked","-feature"),
   resolvers += Resolver.sonatypeRepo("snapshots")
   
 )
@@ -70,6 +70,5 @@ lazy val web = quizleague.js.settings(
 	scalaJSUseMainModuleInitializer := true,
 	scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-)
-enablePlugins(ScalaJSPlugin)
+).enablePlugins(ScalaJSPlugin)
 

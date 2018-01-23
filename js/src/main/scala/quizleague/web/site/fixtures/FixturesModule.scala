@@ -93,20 +93,36 @@ object FixtureService extends FixtureGetService with PostService{
     val today = LocalDate.now.toString()
     val now = today + LocalTime.now().toString()
 
-    teamService.teamForEmail(email)
+    val fixtures:Observable[js.Array[Fixture]] = teamService.teamForEmail(email)
       .map(
         _.map(
-          team => fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitions(seasonId)), team.id, Integer.MAX_VALUE, Desc))).map(f => Observable.combineLatest(f.toSeq)
-          .map(
-            _.flatMap(x => x)
-              .filter(f => (f.date + f.time) <= now)
-              .groupBy(_.date)
-              .toList
-              .sortBy(_._1)(Desc)
-              .take(1)
-              .map { case (k, v) => v }
-              .flatMap(x => x)
-              .toJSArray)).flatten
+          team => fixturesFrom(
+              FixturesService.competitionFixtures(
+                  CompetitionService.competitions(seasonId))
+                  .map(
+                      _.filter(_.date <= today)
+                      .groupBy(_.date)
+                      .toList
+                      .sortBy(_._1)(Desc)
+                      .take(1).map{ case (k, v) => v }.toJSArray.flatMap(x => x)), team.id, Integer.MAX_VALUE, Desc)))
+                      .map(x => combineLatest(x.toSeq))
+                      .flatten
+                      .map(_.toJSArray.flatMap(x => x))
+                      
+      fixtures.map(_.filter(f => (f.date + f.time) <= now))
+
+//          fixtures.map(
+//            _.flatMap(identity)
+//              .filter(f => (f.date + f.time) <= now)
+//              .groupBy(_.date)
+//              .toList
+//              .sortBy(_._1)(Desc)
+//              .take(1)
+//              .map { case (k, v) => v }
+//              .flatMap(identity)
+//              .toJSArray).flatten
+    
+ //   Observable.just(js.Array[Fixture]())
   }
   
 
