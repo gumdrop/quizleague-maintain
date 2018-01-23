@@ -111,18 +111,6 @@ object FixtureService extends FixtureGetService with PostService{
                       
       fixtures.map(_.filter(f => (f.date + f.time) <= now))
 
-//          fixtures.map(
-//            _.flatMap(identity)
-//              .filter(f => (f.date + f.time) <= now)
-//              .groupBy(_.date)
-//              .toList
-//              .sortBy(_._1)(Desc)
-//              .take(1)
-//              .map { case (k, v) => v }
-//              .flatMap(identity)
-//              .toJSArray).flatten
-    
- //   Observable.just(js.Array[Fixture]())
   }
   
 
