@@ -27,3 +27,22 @@ object TeamsTitleComponent extends RouteComponent{
 
 
 }
+
+object TeamsMenuComponent extends RouteComponent{
+  
+  val template = """
+<div>  
+   <ql-side-menu title="Stuff" icon="people">
+    <v-list-tile to="/team/start">
+        <v-list-tile-content><v-list-tile-title >Start a team</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile to="/team/login">
+        <v-list-tile-content><v-list-tile-title >Login</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+  </ql-side-menu>
+  <ql-team-menu></ql-team-menu>
+</div>
+  
+"""
+  components(TeamMenu)
+}

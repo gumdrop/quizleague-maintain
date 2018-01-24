@@ -15,7 +15,7 @@ trait TitleComponent extends VueRxComponent{
 object TitleComponent extends Component{
   type facade = TitleComponent
   val name = "ql-title"
-  val template = """<span style="display:none;"><slot></slot><slot name="dummy">{{leagueName}}</slot></span>"""
+  val template = """<span style="display:none;" v-if="leagueName"><slot></slot><slot name="dummy">{{leagueName}}{{setTitle()}}</slot></span>"""
   
  
   def setTitle(c:facade){
@@ -27,8 +27,9 @@ object TitleComponent extends Component{
     
   }
 
-  override val updated = ({setTitle _}:js.ThisFunction)
-  override val mounted = ({setTitle _}:js.ThisFunction)
+  //override val updated = ({setTitle _}:js.ThisFunction)
+  //override val mounted = ({setTitle _}:js.ThisFunction)
   subscription("leagueName")(c => ApplicationContextService.get.map(_.leagueName))
+  method("setTitle")({setTitle _}:js.ThisFunction)
       
 }

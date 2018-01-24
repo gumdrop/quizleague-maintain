@@ -2,7 +2,7 @@ package quizleague.web.site.competition
 
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.core._
-import quizleague.web.site.season.SeasonIdComponent
+import quizleague.web.site.season._
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.model.Competition
@@ -16,31 +16,17 @@ object CompetitionMenu extends RouteComponent{
   components(CompetitionMenuComponent)
 }
 
-object CompetitionMenuComponent extends Component{
+object CompetitionMenuComponent extends Component with SeasonFormatComponent{
   type facade = SeasonIdComponent
   val name = "ql-competition-menu"
   val template = """
-    <v-list dense v-if="competitions && season">
-     <v-list-group no-action :value="true">
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>mdi-trophy</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Competitions {{season.startYear}}/{{season.endYear}}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-       <v-list-tile v-for="competition in sort(competitions)" :key="competition.id" >
-          <v-list-tile-action><v-btn :to="'/competition/' + competition.id +'/' + competition.typeName" flat><v-icon v-id="competition.icon" left>{{competition.icon}}</v-icon><span>{{competition.name}}</span></v-btn></v-list-tile-action>
+    <ql-side-menu :title="'Competitions ' + formatSeason(season)" icon="mdi-trophy" v-if="competitions && season">
+       <v-list-tile v-for="competition in competitions" :key="competition.id" :to="'/competition/' + competition.id +'/' + competition.typeName">
+          <v-list-tile-action><v-icon  flat left v-if="competition.icon">{{competition.icon}}</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>{{competition.name}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-    </v-list-group>
-    </v-list>
+    </ql-side-menu>
     """
 
-  subscription("competitions")(c => CompetitionViewService.competitions())
+  subscription("competitions")(c => CompetitionViewService.competitions().map(_.sortBy(_.name)))
   subscription("season")(c => CompetitionViewService.season)
-  method("sort")((comps:js.Array[Competition]) => comps.sortBy(_.name))
 }

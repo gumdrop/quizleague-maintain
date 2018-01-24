@@ -34,21 +34,3 @@ object RulesComponent extends RouteComponent with NoSideMenu with GridSizeCompon
   </v-container>"""  
 }
 
-object SideMenuHeader extends Component{
-  val name = "ql-side-menu-header"
-  
-  val template = """
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>{{icon}}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{title}}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>"""
-  
-  props("title","icon")
-}

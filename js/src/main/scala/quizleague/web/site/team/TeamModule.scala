@@ -21,7 +21,7 @@ object TeamModule extends Module{
   
   override val routes = @@(      
       RouteConfig(path = "/team", 
-          components = Map("default" -> TeamsComponent, "title" -> TeamsTitleComponent,"sidenav" -> TeamMenuComponent)),
+          components = Map("default" -> TeamsComponent, "title" -> TeamsTitleComponent,"sidenav" -> TeamsMenuComponent)),
       RouteConfig(path = "/team/:id", 
           components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 

@@ -18,29 +18,16 @@ object SiteComponent extends Component {
       app
       disable-resize-watcher
 	  v-model="drawer">
-    <v-list dense v-if="$vuetify.breakpoint.mdAndDown">
-      <v-list-group no-action>
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>menu</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Main Menu</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-        <v-list-tile><v-list-tile-action><v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn></v-list-tile-action></v-list-tile>  
-      	<v-list-tile><v-list-tile-action><v-btn to="/team" flat ><v-icon left>people</v-icon><span>Teams</span></v-btn></v-list-tile-action></v-list-tile>
-        <v-list-tile><v-list-tile-action><v-btn to="/competition" flat ><v-icon left>mdi-trophy</v-icon><span>Competitions</span></v-btn></v-list-tile-action></v-list-tile>
-        <v-list-tile><v-list-tile-action><v-btn to="/results" flat ><v-icon left>check</v-icon><span>Results</span></v-btn></v-list-tile-action></v-list-tile>  
-        <v-list-tile><v-list-tile-action><v-btn to="/venue" flat ><v-icon left>location_on</v-icon><span>Venues</span></v-btn></v-list-tile-action></v-list-tile>  
-        <v-list-tile><v-list-tile-action><v-btn to="/calendar" flat ><v-icon left>mdi-calendar</v-icon><span>Calendar</span></v-btn></v-list-tile-action></v-list-tile>  
-        <v-list-tile><v-list-tile-action><v-btn to="/rules" flat ><v-icon left>mdi-book-open-page-variant</v-icon><span>Rules</span></v-btn></v-list-tile-action></v-list-tile>
-        <v-list-tile><v-list-tile-action><v-btn to="/links" flat ><v-icon left>link</v-icon><span>Links</span></v-btn></v-list-tile-action></v-list-tile>  
-      </v-list-group>
-    </v-list>
+    <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
+        <v-list-tile to="/home" ><v-list-tile-action><v-icon flat left>home</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Home</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/team" ><v-list-tile-action><v-icon flat left>people</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Teams</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/competition" ><v-list-tile-action><v-icon flat left>mdi-trophy</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Competitions</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/results" ><v-list-tile-action><v-icon flat left>check</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Results</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/venue" ><v-list-tile-action><v-icon flat left>location_on</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Venues</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/calendar" ><v-list-tile-action><v-icon flat left>mdi-calendar</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Calendar</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/rules" ><v-list-tile-action><v-icon flat left>mdi-book-open-page-variant</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Rules</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/links" ><v-list-tile-action><v-icon flat left>link</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Links</v-list-tile-title></v-list-tile-content></v-list-tile>  
+    </ql-side-menu>
 
     <router-view name="sidenav"></router-view>
   </v-navigation-drawer>

@@ -165,27 +165,20 @@ object ContactDialog extends Component with DialogComponentConfig{
 }
 
 object TeamMenuComponent extends RouteComponent {
-  
-  override val template = """
-     <v-list dense v-if="teams">
-     <v-list-group no-action :value="true">
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>people</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Teams</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-       <v-list-tile v-for="team in sort(teams) " :key="team.id">
-        <v-list-tile-action><v-btn :to="'/team/' + team.id" flat >{{team.name}}</v-btn></v-list-tile-action>
+   override val template = """<ql-team-menu></ql-team-menu>"""
+   components(TeamMenu)
+}
+
+object TeamMenu extends Component {
+  val name = "ql-team-menu"
+   override val template = """
+    <ql-side-menu title="Teams" icon="people" v-if="teams">
+        <v-list-tile v-for="team in teams " :key="team.id" :to="'/team/' + team.id">
+        <v-list-tile-content><v-list-tile-title>{{team.name}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
-    </v-list-group>
-     </v-list>"""
-    subscription("teams")(c => TeamService.list)
-    method("sort")((teams:js.Array[Team]) => teams.sortBy(_.shortName)
-    )
+    </ql-side-menu>
+"""
+    subscription("teams")(c => TeamService.list.map(_.sortBy(_.shortName)))
+    
+  
 }

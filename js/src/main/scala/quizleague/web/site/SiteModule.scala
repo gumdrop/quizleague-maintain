@@ -44,7 +44,7 @@ object SiteModule extends Module {
       RouteConfig(path = "",redirect = "/home")
       )
   
-  override val components = @@(SiteComponent, SideMenuHeader)
+  override val components = @@(SiteComponent)
    
 }
 
