@@ -19,9 +19,16 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
   <v-container v-if="item">
     <v-form v-model="valid" >
       <v-layout column>
+       <v-text-field
+          label="Name"
+          v-model="item.name"
+          :rules=${valRequired("Name")}
+          required
+        ></v-text-field>
+      <v-divider></v-divider>
       <v-layout row v-for="entry in sort(item.text)" :key="entry.text.id">
           <v-text-field
-          label="Name"
+          label="Entry Name"
           v-model="entry.name"
           :rules=${valRequired("Name")}
           required
@@ -45,7 +52,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
 
   
  def sort(c:facade, entries:js.Array[TextEntry]) = entries.sortBy(_.name)     
-      
+
  method("sort")({sort _}:js.ThisFunction)
  method("add")({ (c: facade) =>
       {

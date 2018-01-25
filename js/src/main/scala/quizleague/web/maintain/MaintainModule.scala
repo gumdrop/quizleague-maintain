@@ -16,6 +16,6 @@ object MaintainModule extends Module{
   override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule, DatabaseModule)
   
   override val routes = @@(
-    RouteConfig(path = "/maintain", components = Map("sidenav"->MaintainMenuComponent))    
+    RouteConfig(path = "/maintain", components = Map("sidenav"-> MaintainMenuComponent))    
   )
 }

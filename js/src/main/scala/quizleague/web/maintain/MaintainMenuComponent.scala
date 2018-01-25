@@ -4,17 +4,15 @@ import quizleague.web.core._
 
 object MaintainMenuComponent extends RouteComponent{
     val template = """
-  <v-container>
-    <v-layout column>
-      <v-btn flat to="/maintain/applicationcontext" toActive="active">Application Context</v-btn>
-      <v-btn flat to="/maintain/globaltext" toActive="active">Global Text</v-btn>
-      <v-btn flat to="/maintain/team" toActive="active">Teams</v-btn>
-      <v-btn flat to="/maintain/season"  toActive="active">Seasons</v-btn>
-      <v-btn flat to="/maintain/user" toActive="active">Users</v-btn>
-      <v-btn flat to="/maintain/venue" toActive="active">Venues</v-btn>
-      <v-btn flat to="/maintain/database"  toActive="active">Database</v-btn>
-    </v-layout>
-  </v-container>
+     <v-list >
+        <v-list-tile to="/maintain/applicationcontext"><v-list-tile-content><v-list-tile-title>Application Context</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/globaltext"><v-list-tile-content><v-list-tile-title>Global Text</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/team"><v-list-tile-content><v-list-tile-title>Teams</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/season"><v-list-tile-content><v-list-tile-title>Seasons</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/user"><v-list-tile-content><v-list-tile-title>Users</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/venue"><v-list-tile-content><v-list-tile-title>Venues</v-list-tile-title></v-list-tile-content></v-list-tile>        
+        <v-list-tile to="/maintain/database"><v-list-tile-content><v-list-tile-title>Database</v-list-tile-title></v-list-tile-content></v-list-tile>        
+     </v-list>
 """
   
 }
