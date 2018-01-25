@@ -6,7 +6,7 @@ object SideMenu extends Component{
   val name = "ql-side-menu"
   
   val template = """
-     <v-list dense>
+     <v-list >
      <v-list-group no-action :value="true">
             <v-list-tile slot="item" @click="">
               <v-list-tile-action>

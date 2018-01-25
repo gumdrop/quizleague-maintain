@@ -10,7 +10,7 @@ addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.fu
 lazy val commonSettings = Seq(
   organization := "quizleague",
   version := "0.0.1",
-  scalaVersion := "2.12.2",
+  scalaVersion := "2.12.3",
   scalacOptions ++= Seq("-deprecation","-unchecked","-feature"),
   resolvers += Resolver.sonatypeRepo("snapshots")
   

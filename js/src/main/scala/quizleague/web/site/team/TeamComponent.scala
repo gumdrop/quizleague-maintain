@@ -143,7 +143,7 @@ object ContactDialog extends Component with DialogComponentConfig{
                 </v-container>
                 </v-form>
               </v-card-text>
-              </v-card-actions><v-btn flat v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+              <v-card-actions><v-spacer></v-spacer><v-btn flat v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
             </v-card>
          </v-dialog>"""
   
@@ -165,20 +165,20 @@ object ContactDialog extends Component with DialogComponentConfig{
 }
 
 object TeamMenuComponent extends RouteComponent {
-   override val template = """<ql-team-menu></ql-team-menu>"""
-   components(TeamMenu)
+   override val template = """
+     <ql-side-menu title="Teams" icon="people">
+       <v-list-tile to="/team/start">
+        <v-list-tile-content><v-list-tile-title >Start a team</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile to="/team/login">
+          <v-list-tile-content><v-list-tile-title >Login</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-divider></v-divider>
+       <v-list-tile v-if="teams" v-for="team in teams" :key="team.id" :to="'/team/' + team.id">
+          <v-list-tile-content><v-list-tile-title>{{team.name}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
+     </ql-side-menu>
+     """
+   subscription("teams")(c => TeamService.list.map(_.sortBy(_.shortName)))
 }
 
-object TeamMenu extends Component {
-  val name = "ql-team-menu"
-   override val template = """
-    <ql-side-menu title="Teams" icon="people" v-if="teams">
-        <v-list-tile v-for="team in teams " :key="team.id" :to="'/team/' + team.id">
-        <v-list-tile-content><v-list-tile-title>{{team.name}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-    </ql-side-menu>
-"""
-    subscription("teams")(c => TeamService.list.map(_.sortBy(_.shortName)))
-    
-  
-}
