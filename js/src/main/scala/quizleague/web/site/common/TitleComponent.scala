@@ -26,9 +26,6 @@ object TitleComponent extends Component{
     doit(c.leagueName, c.$slots.default.asInstanceOf[js.Array[js.Dynamic]](0).text)
     
   }
-
-  //override val updated = ({setTitle _}:js.ThisFunction)
-  //override val mounted = ({setTitle _}:js.ThisFunction)
   subscription("leagueName")(c => ApplicationContextService.get.map(_.leagueName))
   method("setTitle")({setTitle _}:js.ThisFunction)
       

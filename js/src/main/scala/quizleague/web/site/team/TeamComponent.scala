@@ -56,11 +56,13 @@ object TeamComponent extends Component with GridSizeComponentConfig{
                 <v-menu offset-y>
                   <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
                    <v-list>
-                    <v-list-tile>
-                      <v-btn flat v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon>Copy Calendar URL</v-btn>
+                    <v-list-tile v-on:click="copy(team.id)">
+                      <v-list-tile-action v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon></v-list-tile-action>
+                      <v-list-tile-content ><v-list-tile-title>Copy Calendar URL</v-list-tile-title></v-list-tile-content>
                     </v-list-tile>
-                    <v-list-tile>
-                      <v-btn flat :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank"><v-icon left>mdi-download</v-icon>Download Calendar File</v-btn>
+                    <v-list-tile :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank">
+                      <v-list-tile-action ><v-icon left>mdi-download</v-icon></v-list-tile-action>
+                      <v-list-tile-content><v-list-tile-title>Download Calendar File</v-list-tile-title></v-list-tile-content>
                     </v-list-tile>
                   </v-list>
                 </v-menu offset-y>              

@@ -39,8 +39,9 @@ object SiteComponent extends Component {
       clipped-left
       scroll-off-screen
       >
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
-        <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
+        
         <span v-if="appData">{{appData.leagueName}}</span>
       </v-toolbar-title>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">

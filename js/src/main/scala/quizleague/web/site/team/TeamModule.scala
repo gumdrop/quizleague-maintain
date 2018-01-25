@@ -23,7 +23,9 @@ object TeamModule extends Module{
       
       RouteConfig(path = "/team/start", 
           components = Map("default" -> StartTeamPage, "title" -> StartTeamTitleComponent,"sidenav" -> TeamMenuComponent)),
-      RouteConfig(path = "/team/:id", 
+      RouteConfig(path = "/team/edit/:id", 
+          components = Map("default" -> TeamEditPage, "title" -> TeamTitleComponent)),
+          RouteConfig(path = "/team/:id", 
           components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 
           components = Map("default" -> TeamFixturesPage, "title" -> TeamFixturesTitle,"sidenav" -> TeamMenuComponent)),
