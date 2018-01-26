@@ -14,7 +14,7 @@ import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VuetifyComponent
-import com.felstar.scalajs.vue.VuetifyComponent
+import scala.collection.mutable
 
 
 trait RouteComponent extends Component{

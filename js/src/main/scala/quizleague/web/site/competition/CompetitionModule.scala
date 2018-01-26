@@ -24,6 +24,7 @@ import org.threeten.bp.LocalDate
 import quizleague.web.model.Fixtures
 import quizleague.util.collection._
 import quizleague.web.site.season.SeasonService
+import quizleague.web.util.Logging._
 
 object CompetitionModule extends Module {
   
@@ -69,7 +70,9 @@ object CompetitionViewService extends SeasonWatchService {
   }
   
   def parentSeason(competitionId:String) = {
+    
     val seasons = SeasonService.list
-    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).head)
+    
+    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).headOption.fold[Season](null)(identity))
   }
 }
