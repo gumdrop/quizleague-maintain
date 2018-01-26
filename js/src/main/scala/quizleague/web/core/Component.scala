@@ -50,28 +50,35 @@ trait Component {
   def beforeCreate:js.Function = null
   def updated:js.Function = null
 
-  var observables = js.Dictionary[js.Dictionary[Any]]() 
   val empty = new js.Object
   
   private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]]) => {
-    
-    println("ql-web : entering async")
-    if(in.isDefined){
-    
-    val obs = in.get
-    
-    val retval = observables.get(obs.id)
-    
-    
-    def sub() = {
-      val a = js.Dictionary[Any]()
-      c.$subscribeTo(obs.inner, (b:js.Dynamic) => c.$nextTick({() => Vue.util.extend(a,b);c.$forceUpdate()}))
-      observables += ((obs.id,a))
-      a
-    }
-    if(retval.isEmpty) sub() else retval.get
-    }
-    else empty
+
+    if (in.isDefined) {
+
+      def handleObsCache() = {
+
+        val obsOrNot: UndefOr[Any] = c.asInstanceOf[js.Dynamic].$$observablesForAsync
+
+        c.$$observablesForAsync = if (obsOrNot.isDefined) c.$$observablesForAsync else mutable.Map()
+
+        c.$$observablesForAsync
+
+      }
+      val observables = handleObsCache()
+
+      val obs = in.get
+
+      val retval = observables.get(obs.hashCode)
+
+      def sub() = {
+        val a = js.Dictionary[Any]()
+        c.$subscribeTo(obs.inner, (b: js.Dynamic) => c.$nextTick({ () => Vue.util.extend(a, b); c.$forceUpdate() }))
+        observables += ((obs.hashCode, a))
+        a
+      }
+      if (retval.isEmpty) sub() else retval.get
+    } else empty
 
   }):js.ThisFunction))
   

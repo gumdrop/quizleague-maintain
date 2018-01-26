@@ -9,6 +9,7 @@ import org.scalajs.dom._
 import js.annotation._
 import rxscalajs.Observable
 import rxscalajs.facade.ObservableFacade
+import scala.collection.mutable
 
 @JSGlobal
 @js.native
@@ -137,6 +138,7 @@ trait VueRxComponent extends VueComponent {
   
   def $watchAsObservable(exp:String, options:js.Any):ObservableFacade[js.Any] = js.native
   def $watchAsObservable(exp:String):ObservableFacade[js.Any] = js.native
+  var $$observablesForAsync:mutable.Map[Int,Any] = js.native
   
   
 
