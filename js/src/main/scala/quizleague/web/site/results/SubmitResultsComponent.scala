@@ -19,6 +19,7 @@ trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with
   var hasResults:Boolean
   val reportText:String
   var confirm:Boolean
+  var showProgress:Boolean
 }
 object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
@@ -33,6 +34,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
        <v-text-field v-model="email" label="Enter your email address" prepend-icon="email" :rules="[required('Your mail address')]" type="email"></v-text-field>
       <div v-if="hasResults">This result has been submitted. You may add a match report.</div>
       <p></p>
+      <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>   
       <v-flex v-for="fixture in fixtures" v-if="!hasResults">
           {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
           <v-text-field v-model.number="fixture.result.homeScore"  :rules="[required('Home Score')]" :label="async(fixture.home).name" type="number" ></v-text-field>
@@ -61,13 +63,15 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
   def handleEmail(c:facade) = {
     if(c.email.toLowerCase.matches(emailRegex)) {
-      FixtureService.fixturesForResultSubmission(c.email, c.appData.currentSeason.id).subscribe(handleFixtures(c) _)
+      c.showProgress = true
+      FixtureService.fixturesForResultSubmission(c.email, c.appData.currentSeason.id).debounceTime(100).subscribe(handleFixtures(c) _)
     }
   }
   
   def handleFixtures(c:facade)(fixtures:js.Array[Fixture]) = {
     c.hasResults = fixtures.exists(_.result != null)
     c.fixtures = if(c.hasResults) fixtures else fixtures.map(Fixture.addBlankResult _)
+    c.showProgress = false
   }
   
   def preSubmit(c:facade) {
@@ -92,7 +96,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
     c.hasResults = false
   }
   
-  def mounted(c:facade) = c.$subscribeTo(c.$watchAsObservable("email").debounceTime(100),(x:js.Any) => handleEmail(c))
+  def mounted(c:facade) = c.$subscribeTo(c.$watchAsObservable("email"),(x:js.Any) => handleEmail(c))
   
   
   subscription("appData")(c => ApplicationContextService.get)
@@ -106,6 +110,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   data("reportText",null)
   data("confirm", false)
   data("valid", false)
+  data("showProgress", false)
   
   override val mounted = {(c:facade) => mounted(c)} :js.ThisFunction
 }
