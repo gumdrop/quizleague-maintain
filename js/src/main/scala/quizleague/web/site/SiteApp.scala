@@ -17,21 +17,22 @@ import org.threeten.bp.format.DateTimeFormatter
 import quizleague.web.util.rx._
 import rxscalajs.Observable
 import quill.VueQuillEditor
+import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExportAll
+@JSExportTopLevel("Site")
 object SiteApp{
   
- 
-  def main(args:Array[String]):Unit = {
-
+  @JSExport
+  def main():Unit = {
   Vue.use(VueQuillEditor)
   Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
   Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
   Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
   
-  val demo = new Vue(
+  new Vue(
         literal(el="#app",
-          router = Router(SiteModule())
+        router = Router(SiteModule())
       )
     )
 
