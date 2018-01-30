@@ -2,8 +2,11 @@ package quizleague.web.maintain
 
 import quizleague.web.core._
 
-object MaintainMenuComponent extends RouteComponent{
-    val template = """
+object MaintainMenuComponent extends Component{
+  
+  val name = "ql-maintain-menu"
+  
+  val template = """
      <v-list >
         <v-list-tile to="/maintain/applicationcontext"><v-list-tile-content><v-list-tile-title>Application Context</v-list-tile-title></v-list-tile-content></v-list-tile>
         <v-list-tile to="/maintain/globaltext"><v-list-tile-content><v-list-tile-title>Global Text</v-list-tile-title></v-list-tile-content></v-list-tile>

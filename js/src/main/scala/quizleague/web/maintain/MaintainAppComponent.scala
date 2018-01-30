@@ -16,7 +16,7 @@ object MaintainAppComponent extends Component {
       clipped
       fixed
       app>
-    <router-view name="sidenav"></router-view>
+    <ql-maintain-menu></ql-maintain-menu>
   </v-navigation-drawer>
     <v-toolbar      
       color="blue darken-3"
@@ -44,5 +44,6 @@ object MaintainAppComponent extends Component {
     </v-content>
   </v-app>"""
  
+     components(MaintainMenuComponent)
 }
 

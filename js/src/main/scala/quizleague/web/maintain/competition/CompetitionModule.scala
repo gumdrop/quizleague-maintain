@@ -19,19 +19,19 @@ object CompetitionModule extends Module{
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/league",
-        components = Map("default" -> LeagueCompetitionComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> LeagueCompetitionComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/cup",
-        components = Map("default" -> CupCompetitionComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> CupCompetitionComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/subsidiary",
-        components = Map("default" -> SubsidiaryCompetitionComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> SubsidiaryCompetitionComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/singleton",
-        components = Map("default" -> SingletonCompetitionComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> SingletonCompetitionComponent)
       ),
  )
 }

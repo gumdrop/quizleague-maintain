@@ -9,8 +9,8 @@ import quizleague.web.core.RouteConfig
 
 object GlobalTextModule extends Module {
     override val routes = @@(
-      RouteConfig(path = "/maintain/globaltext", components = Map("default" -> GlobalTextListComponent, "sidenav" -> MaintainMenuComponent)),
-      RouteConfig(path="/maintain/globaltext/:id", components = Map("default" -> GlobalTextComponent, "sidenav" -> MaintainMenuComponent))
+      RouteConfig(path = "/maintain/globaltext", components = Map("default" -> GlobalTextListComponent)),
+      RouteConfig(path="/maintain/globaltext/:id", components = Map("default" -> GlobalTextComponent))
        )
 
 }
