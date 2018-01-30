@@ -1,22 +1,13 @@
 package quizleague.web.site
-import org.scalajs.dom
-
-import scalajs.js.annotation.JSExportAll
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
-import dom.ext.Ajax
 
 import scalajs.js
-import js.JSConverters._
 import js.Dynamic.literal
+import js.JSConverters._
 import com.felstar.scalajs.vue._
-import org.scalajs.dom.raw.HTMLElement
 
-import js.annotation.JSName
-import java.time.DateTimeUtils
 import org.threeten.bp.format.DateTimeFormatter
 import quizleague.web.util.rx._
 import rxscalajs.Observable
-import quill.VueQuillEditor
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
 
