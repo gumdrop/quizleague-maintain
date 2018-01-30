@@ -1,4 +1,4 @@
-package quizleague.web.site
+package quizleague.web.maintain
 import org.scalajs.dom
 
 import scalajs.js.annotation.JSExportAll
@@ -20,18 +20,19 @@ import quill.VueQuillEditor
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExportTopLevel("Site")
-object SiteApp{
+@JSExportTopLevel("Maintain")
+object MaintainApp{
   
   @JSExport
   def main():Unit = {
-    Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
-    Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
-    Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
+  Vue.use(VueQuillEditor)
+  Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
+  Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
+  Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
   
   new Vue(
-        literal(el="#app",
-        router = Router(SiteModule())
+        literal(el="#maintain-app",
+        router = Router(MaintainAppModule())
       )
     )
 
