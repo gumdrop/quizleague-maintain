@@ -8,7 +8,6 @@ import quizleague.web.util.rx.RefObservable
 import io.circe.Json
 import io.circe.scalajs._
 import quizleague.web.util.Logging._
-import rxscalajs.Observable
 import quizleague.web.model.Model
 
 trait PutService[T <: Model] {

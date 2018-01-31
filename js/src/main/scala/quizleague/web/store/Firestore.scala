@@ -1,7 +1,7 @@
 package quizleague.web.store
 
 import scalajs.js.Dynamic.literal
-import firebase.firebase._
+import firebase._
 
 object Firestore {
     val config = literal(      

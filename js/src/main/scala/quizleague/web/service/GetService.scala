@@ -1,19 +1,19 @@
 package quizleague.web.service
 
+import scala.collection.mutable._
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
 
+import firebase.firestore._
+import io.circe._
+import io.circe.scalajs.convertJsToJson
 import quizleague.domain.{ Entity, Ref }
-import quizleague.web.names.ComponentNames
-import quizleague.web.util.Logging._
-import io.circe._, io.circe.parser._, io.circe.syntax._, io.circe.scalajs.convertJsToJson
-import scala.collection.mutable._
-import quizleague.web.util.rx._
-import quizleague.web.store.Firestore
-import rxscalajs._, rxscalajs.subjects._
-import quizleague.web.util.Logging._
-import firebase.firebase.firestore._
 import quizleague.web.model.Model
+import quizleague.web.names.ComponentNames
+import quizleague.web.store.Firestore
+import quizleague.web.util.rx.RefObservable
+import rxscalajs._
+import rxscalajs.subjects._
 
 trait GetService[T <: Model] {
   this: ComponentNames =>
@@ -70,7 +70,7 @@ trait GetService[T <: Model] {
 
   private[service] def getDom(id: String) = items(id)
 
-  protected def decodeJson[T](obj: js.Any)(implicit dec: Decoder[T]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
+  protected def decodeJson[X](obj: js.Any)(implicit dec: Decoder[X]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
   protected[service] def getRefObs(id:String):RefObservable[T] = refObsCache.getOrElseUpdate(id, RefObservable(id, () => get(id)))
   final def refObs(id: String): RefObservable[T] = getRefObs(id)

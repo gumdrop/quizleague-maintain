@@ -1,11 +1,12 @@
 package quizleague.web.site.team
 
+import scala.scalajs.js
+
+import com.felstar.scalajs.vue.VueRxComponent
+
 import quizleague.web.core._
-import quizleague.web.model._
-import quizleague.web.site.text._
-import scalajs.js
-import com.felstar.scalajs.vue._
-import quizleague.web.util.rx._
+import quizleague.web.model.Team
+import quizleague.web.site.text.TextService
 
 object TeamEditPage extends RouteComponent{
   
