@@ -5,7 +5,7 @@ import scalajs.js
 
 
 object UserEditAppComponent extends Component {
-     val name = "ql-maintain-app"
+     val name = "ql-user-edit-app"
 
      val template="""
   <v-app

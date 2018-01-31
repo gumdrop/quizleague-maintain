@@ -1,24 +1,16 @@
 package quizleague.web.useredit
-import org.scalajs.dom
-
-import scalajs.js.annotation.JSExportAll
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
-import dom.ext.Ajax
-
-import scalajs.js
-import js.JSConverters._
-import js.Dynamic.literal
-import com.felstar.scalajs.vue._
-import org.scalajs.dom.raw.HTMLElement
-
-import js.annotation.JSName
-import java.time.DateTimeUtils
-import org.threeten.bp.format.DateTimeFormatter
-import quizleague.web.util.rx._
-import rxscalajs.Observable
-import quill.VueQuillEditor
+import scala.scalajs.js
+import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
+
+import org.threeten.bp.format.DateTimeFormatter
+
+import com.felstar.scalajs.vue._
+
+import quill.VueQuillEditor
+import quizleague.web.util.rx._
+import rxscalajs.Observable
 
 @JSExportTopLevel("UserEdit")
 object UserEditApp{
