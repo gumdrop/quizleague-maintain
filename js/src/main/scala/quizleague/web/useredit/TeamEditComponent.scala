@@ -1,12 +1,11 @@
-package quizleague.web.site.team
+package quizleague.web.useredit
 
 import scala.scalajs.js
-
 import com.felstar.scalajs.vue.VueRxComponent
-
 import quizleague.web.core._
 import quizleague.web.model.Team
 import quizleague.web.site.text.TextService
+import quizleague.web.site.team.TeamService
 
 object TeamEditPage extends RouteComponent{
   

@@ -14,6 +14,7 @@ import quizleague.web.model._
 import rxscalajs.Observable
 import quizleague.web.service.PostService
 import quizleague.domain.command.TeamEmailCommand
+import quizleague.web.useredit.TeamEditPage
 
 object TeamModule extends Module{
   
