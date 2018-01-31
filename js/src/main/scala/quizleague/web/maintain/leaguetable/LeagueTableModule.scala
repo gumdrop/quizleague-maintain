@@ -15,7 +15,7 @@ object LeagueTableModule extends Module{
     override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:competitionId/leaguetable/:id",
-        components = Map("default" -> LeagueTableComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> LeagueTableComponent)
       ),
       
   )

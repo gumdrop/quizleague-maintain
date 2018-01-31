@@ -15,8 +15,8 @@ import quizleague.web.maintain.text.TextService
 
 object TeamModule extends Module{
   override val routes = @@(
-      RouteConfig(path = "/maintain/team", components = Map("default" -> TeamListComponent, "sidenav" -> MaintainMenuComponent)),
-      RouteConfig(path="/maintain/team/:id", components = Map("default" -> TeamComponent, "sidenav" -> MaintainMenuComponent))
+      RouteConfig(path = "/maintain/team", components = Map("default" -> TeamListComponent)),
+      RouteConfig(path="/maintain/team/:id", components = Map("default" -> TeamComponent))
        )
       
 }

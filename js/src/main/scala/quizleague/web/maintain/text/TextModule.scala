@@ -17,7 +17,7 @@ import com.felstar.scalajs.vue._
 
 object TextModule extends Module{
   override val routes = @@(
-       RouteConfig(path="/maintain/text/:id", components = Map("default" -> TextComponent, "sidenav" -> MaintainMenuComponent))
+       RouteConfig(path="/maintain/text/:id", components = Map("default" -> TextComponent))
        )
       
 }

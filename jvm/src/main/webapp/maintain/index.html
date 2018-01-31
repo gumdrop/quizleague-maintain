@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<base href="/">
+	<base href="/maintain/">
 	<meta charset="UTF-8">
 	<meta http-equiv="X-Frame-Options" content="deny" />
 	<meta http-equiv="X-Content-Type-Options" content="nosniff" />
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href='main.css' rel="stylesheet">
+	<link href='/main.css' rel="stylesheet">
  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
  <link rel="stylesheet" href="//cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css">
  <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
@@ -24,12 +24,13 @@
  <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-firestore.js"></script>
 </head>
 <body>
- <div id="app">
- 	<ql-app></ql-app>
+ <div id="maintain-app">
+ 	<ql-maintain-app></ql-maintain-app>
  </div>
+ 
 
- <script type="text/javascript" src="/target/scala-2.12/quizleague-js-fastopt.js"></script>
- <script>Site.main()</script>
+ <script type="text/javascript" src="/quizleague-js-opt.js"></script>
+ <script>Maintain.main()</script>
 </body>
 </html>
 

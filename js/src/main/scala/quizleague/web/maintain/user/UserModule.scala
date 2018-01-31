@@ -17,8 +17,8 @@ import com.felstar.scalajs.vue._
 
 object UserModule extends Module{
   override val routes = @@(
-      RouteConfig(path = "/maintain/user", components = Map("default" -> UserListComponent, "sidenav" -> MaintainMenuComponent)),
-      RouteConfig(path="/maintain/user/:id", components = Map("default" -> UserComponent, "sidenav" -> MaintainMenuComponent))
+      RouteConfig(path = "/maintain/user", components = Map("default" -> UserListComponent)),
+      RouteConfig(path="/maintain/user/:id", components = Map("default" -> UserComponent))
        )
       
 }

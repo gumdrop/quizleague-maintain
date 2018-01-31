@@ -17,15 +17,15 @@ object SeasonModule extends Module {
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:id/calendar",
-        components = Map("default" -> CalendarComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> CalendarComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:id",
-        components = Map("default" -> SeasonComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> SeasonComponent)
       ),
       RouteConfig(
         path = "/maintain/season",
-        components = Map("default" -> SeasonListComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> SeasonListComponent)
       ))
 }
 

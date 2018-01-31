@@ -24,11 +24,11 @@ object FixturesModule extends Module {
   override val routes = @@(     
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/fixtures",
-        components = Map("default" -> FixturesListComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> FixturesListComponent)
       ),
       RouteConfig(
         path = "/maintain/season/:seasonId/competition/:id/fixtures/:fixturesId",
-        components = Map("default" -> FixturesComponent, "sidenav" -> MaintainMenuComponent)
+        components = Map("default" -> FixturesComponent)
       ),
       
   )

@@ -19,7 +19,7 @@ import quizleague.web.maintain.season.SeasonService
 
 object ApplicationContextModule extends Module{
   override val routes = @@(
-      RouteConfig(path = "/maintain/applicationcontext", components = Map("default" -> ApplicationContextComponent, "sidenav" -> MaintainMenuComponent))
+      RouteConfig(path = "/maintain/applicationcontext", components = Map("default" -> ApplicationContextComponent))
        )
       
 }

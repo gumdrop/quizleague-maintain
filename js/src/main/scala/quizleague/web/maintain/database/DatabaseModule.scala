@@ -13,7 +13,7 @@ import quizleague.web.util.Logging._
 
 object DatabaseModule extends Module {
   override val routes = @@(
-    RouteConfig(path = "/maintain/database", components = Map("default" -> DatabaseComponent, "sidenav" -> MaintainMenuComponent)))
+    RouteConfig(path = "/maintain/database", components = Map("default" -> DatabaseComponent)))
 
 }
 

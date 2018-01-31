@@ -14,8 +14,8 @@ import com.felstar.scalajs.vue._
 
 object VenueModule extends Module{
   override val routes = @@(
-      RouteConfig(path = "/maintain/venue", components = Map("default" -> VenueListComponent, "sidenav" -> MaintainMenuComponent)),
-      RouteConfig(path="/maintain/venue/:id", components = Map("default" -> VenueComponent, "sidenav" -> MaintainMenuComponent))
+      RouteConfig(path = "/maintain/venue", components = Map("default" -> VenueListComponent)),
+      RouteConfig(path="/maintain/venue/:id", components = Map("default" -> VenueComponent))
        )
       
 }
