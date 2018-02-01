@@ -10,7 +10,6 @@ import quizleague.domain._
 import javax.ws.rs.ext._
 import org.apache.commons.io.IOUtils
 import java.nio.charset.StandardCharsets
-import quizleague.util.encrypt.Crypto
 import java.io.ByteArrayInputStream
 import java.util.concurrent.ConcurrentHashMap
 import quizleague.util.encrypt.QLSessionInfo
@@ -37,33 +36,33 @@ class SecureEndpoint(
   }
 }
 
-class EncryptionDynamicBinding extends DynamicFeature {
- 
-
-   override def configure( resourceInfo:ResourceInfo,  context:FeatureContext):Unit = {
-        if (classOf[SecureEndpoint].equals(resourceInfo.getResourceClass())){
-            context.register(classOf[EncryptionInterceptor]);
-        }
-    }
-}
-
-class EncryptionInterceptor extends ReaderInterceptor with WriterInterceptor {
- 
-    override def aroundReadFrom(context:ReaderInterceptorContext) = {
-        val sessionId = context.getHeaders.get(QLSessionInfo.headerName).head
-        val content = IOUtils.toString(context.getInputStream, StandardCharsets.UTF_8)
-        val decrypted = Crypto.decrypt(content, SessionStore.get(sessionId).password)
-        context.setInputStream(new ByteArrayInputStream(decrypted.getBytes(StandardCharsets.UTF_8)));
-        context.proceed();
-    }
-    
-    override def aroundWriteTo(context:WriterInterceptorContext):Unit = {
-      
-       val sessionId = context.getHeaders.get(QLSessionInfo.headerName).head.toString
-       context.setEntity(Crypto.encrypt(context.getEntity.toString(), SessionStore.get(sessionId).password))
-       context.proceed()
-    }
-}
+//class EncryptionDynamicBinding extends DynamicFeature {
+// 
+//
+//   override def configure( resourceInfo:ResourceInfo,  context:FeatureContext):Unit = {
+//        if (classOf[SecureEndpoint].equals(resourceInfo.getResourceClass())){
+//            context.register(classOf[EncryptionInterceptor]);
+//        }
+//    }
+//}
+//
+//class EncryptionInterceptor extends ReaderInterceptor with WriterInterceptor {
+// 
+//    override def aroundReadFrom(context:ReaderInterceptorContext) = {
+//        val sessionId = context.getHeaders.get(QLSessionInfo.headerName).head
+//        val content = IOUtils.toString(context.getInputStream, StandardCharsets.UTF_8)
+//        val decrypted = Crypto.decrypt(content, SessionStore.get(sessionId).password)
+//        context.setInputStream(new ByteArrayInputStream(decrypted.getBytes(StandardCharsets.UTF_8)));
+//        context.proceed();
+//    }
+//    
+//    override def aroundWriteTo(context:WriterInterceptorContext):Unit = {
+//      
+//       val sessionId = context.getHeaders.get(QLSessionInfo.headerName).head.toString
+//       context.setEntity(Crypto.encrypt(context.getEntity.toString(), SessionStore.get(sessionId).password))
+//       context.proceed()
+//    }
+//}
 
 case class Session(password:String)
 

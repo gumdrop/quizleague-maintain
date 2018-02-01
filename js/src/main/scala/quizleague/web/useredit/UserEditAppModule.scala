@@ -11,8 +11,8 @@ object UserEditAppModule extends Module {
   override val modules = @@(CommonModule)
   
     override val routes = @@(
-      RouteConfig(path="/team/:id", components = Map("default" -> TeamEditPage )),
-      RouteConfig(path = "/:token",components = Map("default" -> TokenCheckComponent))
+      RouteConfig(path="/useredit/team/:id", components = Map("default" -> TeamEditPage )),
+      RouteConfig(path = "/useredit/:token",components = Map("default" -> TokenCheckComponent))
       )
  
   override val components = @@(UserEditAppComponent)

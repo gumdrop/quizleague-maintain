@@ -1,5 +1,6 @@
 package quizleague.web.useredit
 import scala.scalajs.js
+import js.Dynamic._
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
