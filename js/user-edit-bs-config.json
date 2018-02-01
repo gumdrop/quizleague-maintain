@@ -1,6 +1,5 @@
 {
   "server": {
-  	"baseDir" : ".", 
-  	"index": "/useredit.html" 
+  	"baseDir" : "useredit"
   }
 }
