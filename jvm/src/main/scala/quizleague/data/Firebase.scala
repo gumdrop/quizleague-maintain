@@ -20,6 +20,10 @@ object Storage {
 
   lazy val datastore = options.getService
 
+  def delete[T <: Entity](entity: T)(implicit tag: ClassTag[T]): Unit ={
+    val kind = makeKind
+    datastore.document(s"$kind/${entity.id}").delete()
+  }
   
   def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Unit = {
     val kind = makeKind

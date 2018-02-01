@@ -1,6 +1,7 @@
 package quizleague.util.json.codecs
 
 import quizleague.domain._
+import quizleague.domain.stats._
 import ScalaTimeCodecs._
 import quizleague.domain.container.DomainContainer
 
@@ -48,7 +49,15 @@ object DomainCodecs{
   implicit val userEncoder: Encoder[User] = deriveEncoder
   implicit val domainContainerDecoder: Decoder[DomainContainer] = deriveDecoder
   implicit val domainContainerEncoder: Encoder[DomainContainer] = deriveEncoder
-
+  
+  
+  implicit val seasonStatsDecoder: Decoder[SeasonStats] = deriveDecoder
+  implicit val seasonStatsEncoder: Encoder[SeasonStats] = deriveEncoder
+  implicit val weekStatsDecoder: Decoder[WeekStats] = deriveDecoder
+  implicit val weekStatsEncoder: Encoder[WeekStats] = deriveEncoder
+  
+  implicit val statisticsDecoder: Decoder[Statistics] = deriveDecoder
+  implicit val statisticsEncoder: Encoder[Statistics] = deriveEncoder
   
   
   

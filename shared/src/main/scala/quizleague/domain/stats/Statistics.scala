@@ -1,4 +1,4 @@
-package quizleague.domain.statistics
+package quizleague.domain.stats
 
 import java.util.logging.Logger
 import quizleague.domain._
@@ -13,7 +13,45 @@ case class Statistics(
   weekStats:Map[String,WeekStats],
   retired:Boolean = false
 
-) extends Entity
+) extends Entity{
+  
+    private def updateFromCurrent(stats:WeekStats, pointsFor:Int = 0, pointsAgainst:Int = 0) = {
+    
+      val week = stats.copy(
+          cumuPointsFor = seasonStats.runningPointsFor + pointsFor,
+          cumuPointsAgainst = seasonStats.runningPointsAgainst + pointsAgainst,
+  
+
+      cumuPointsDifference = seasonStats.runningPointsDifference + stats.pointsDifference    
+        )  
+      val season = seasonStats.copy(
+          runningPointsFor  = stats.cumuPointsFor,
+          runningPointsAgainst = stats.cumuPointsAgainst,
+          runningPointsDifference = stats.cumuPointsDifference
+          
+          )
+
+    copy(seasonStats = season, weekStats = weekStats + ((week.date.toString(), week)))
+  }
+  def addWeekStats(date:LocalDate,pointsFor:Int,pointsAgainst:Int):Unit = {
+   
+    val newStats = WeekStats(date,pointsFor = pointsFor,pointsAgainst = pointsAgainst, pointsDifference = pointsFor - pointsAgainst)  
+    
+    updateFromCurrent(newStats, pointsFor, pointsAgainst)
+    
+  }
+  def statsForDate(date:LocalDate) = {
+    weekStats(date.toString())
+
+  }
+  
+  def addLeaguePosition(date:LocalDate, leaguePosition:Int) = {
+    val stats = statsForDate(date)
+    
+    copy(seasonStats = seasonStats.copy(currentLeaguePosition = leaguePosition), weekStats = weekStats + ((stats.date.toString, stats.copy(leaguePosition = leaguePosition))))
+  }
+  
+}
   
 
  
@@ -99,7 +137,7 @@ case class SeasonStats(
   runningPointsDifference:Int = 0
 )
 
-class WeekStats(
+case class WeekStats(
   date:LocalDate,
   leaguePosition:Int = 0,
   pointsFor:Int = 0,
