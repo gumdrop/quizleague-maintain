@@ -15,7 +15,7 @@ object Storage {
   val log = Logger.getLogger(this.getClass.toString())
   
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
-  .setProjectId("ql-firestore-trial").build
+  .setProjectId("ql-firestore-2").build
 
 
   lazy val datastore = options.getService
@@ -35,7 +35,7 @@ object Storage {
      
      val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}"),asMap(encoder(e).asObject.get)))
      
-     val batchSets = objrefs.grouped(499)
+     val batchSets = objrefs.grouped(400)
      
      batchSets.foreach( l => {
      
@@ -52,7 +52,7 @@ object Storage {
      
      val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}")))
      
-     val batchSets = objrefs.grouped(499)
+     val batchSets = objrefs.grouped(400)
      
      batchSets.foreach( l => {
      
