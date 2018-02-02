@@ -1,12 +1,15 @@
 package quizleague.rest.endpoint
 
 import quizleague.domain._
-import quizleague.domain.statistics._
+import quizleague.domain.stats._
+import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.data.Storage._
 import java.util.logging.Logger
 import quizleague.conversions.RefConversions._
 import javax.servlet.http._
 import quizleague.domain.LeagueCompetition
+import quizleague.domain.util.LeagueTableRecalculator
+
 
 //class StatsQueueHandler extends HttpServlet {
 //  val LOG: Logger = Logger.getLogger(this.getClass.getName)
@@ -26,15 +29,17 @@ import quizleague.domain.LeagueCompetition
 
 object StatsWorker {
 
-  def toComp(c:Ref[Competition]):Competition = c
-  
-  def perform(fixture: Fixture, season: Season) = new StatsWorker(fixture, season, season.competitions.map(toComp _).filter((c:Competition) => c match{
+  def leagueComp(season:Season) = season.competitions.map(toComp _).filter((c:Competition) => c match{
     case a:LeagueCompetition => true
     case _  => false
-  }).head.asInstanceOf[LeagueCompetition]).doIt
+  }).head.asInstanceOf[LeagueCompetition]
+  
+  def toComp(c:Ref[Competition]):Competition = c
+  
+  def perform(fixture: Fixture, season: Season) = new StatsWorker(fixture, season, leagueComp(season)).doIt
 }
 
-class StatsWorker(fixture: Fixture, season: Season, competition: LeagueCompetition) {
+class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable]) {
 
   implicit val context = StorageContext()
   
@@ -43,17 +48,14 @@ class StatsWorker(fixture: Fixture, season: Season, competition: LeagueCompetiti
   def doIt = {
 
     LOG.warning(s"Building stats for  ${fixture.home.shortName} vs ${fixture.away.shortName} on ${fixture.date}")
-    val homeStats = stats(fixture.home, season)
-    val awayStats = stats(fixture.away, season)
+    val homeStats = stats(fixture.home, season).addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.get.awayScore)
+    val awayStats = stats(fixture.away, season).addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.get.homeScore)
 
-    homeStats.addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.awayScore)
     save(homeStats)
-    awayStats.addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.homeScore)
     save(awayStats)
 
-    for (t <- competition.leagueTables; row <- t.rows) {
-      val s = stats(row.team, season)
-      s.addLeaguePosition(result.fixture.start, leaguePosition(row.team, competition))
+    for (t <- tables; row <- t.rows) {
+      val s = stats(row.team, season).addLeaguePosition(fixture.date, leaguePosition(row.team, tables))
       save(s)
     }
 
@@ -65,12 +67,11 @@ class StatsWorker(fixture: Fixture, season: Season, competition: LeagueCompetiti
 
   }
 
-  private def leaguePosition(team: Team, competition: LeagueCompetition): Int = {
-    import org.chilternquizleague.util.StringUtils.StringImprovements
+  private def leaguePosition(team: Team, tables: List[LeagueTable]): Int = {
 
     val res = for {
-      l <- competition.leagueTables
-      row <- l.rows if row.team.getKey.getId == team.id
+      l <- tables;
+      row <- l.rows if row.team.id == team.id
       pos = String.valueOf(row.position).replace("=", "").toIntOpt.getOrElse(l.rows.indexOf(row) + 1)
     } yield {
       pos
@@ -84,26 +85,29 @@ object HistoricalStatsAggregator {
 
   def perform(season: Season) = {
 
-    val seasonStats = new ArrayList(entityList(classOf[Statistics]).filter(_.season.id == season.id))
+    val seasonStats = list[Statistics].filter(_.season.id == season.id)
 
     for (s <- seasonStats) {
 
-      transaction(() => delete(s))
+      delete(s)
 
     }
 
-    val c: LeagueCompetition = season.competition(CompetitionType.LEAGUE)
-    val dummyComp = c.copyAsInitial
+    val c = StatsWorker.leagueComp(season)
+    var dummyTables:List[LeagueTable] = c.tables.map(t => refToObj(t).copy(rows = t.rows.map(r => r.copy(team = r.team))))
 
+    
+    
     for {
-      r <- c.results.sortBy(_.date)
-      result <- r.results
+      f <- c.fixtures.sortBy(f => f.date.toString);
+      r <- f.fixtures
+ 
     } {
-      dummyComp.addResult(result)
+      dummyTables = LeagueTableRecalculator.recalculate(dummyTables,List(r))
 
-      new StatsWorker(result, season, dummyComp).doIt
+      new StatsWorker(r, season, dummyTables).doIt
     }
-    entityList(classOf[Statistics])
+    list[Statistics]
   }
 
 }
