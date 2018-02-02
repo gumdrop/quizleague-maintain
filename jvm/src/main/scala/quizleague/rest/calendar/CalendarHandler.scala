@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse
 import quizleague.data.Storage._
 import quizleague.data._
 import quizleague.domain._
-import java.text.SimpleDateFormat
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import org.threeten.bp.LocalDateTime
@@ -102,12 +101,12 @@ END:VEVENT
       //.append("X-WR-TIMEZONE:UTC\n")
       
         def teamCompetitions(season:Season) = {
-        season.competitions.flatMap(refToObject(_) match {
-          case c:TeamCompetition => List(c)
-          case _ => List()
+          season.competitions.flatMap(refToObject(_) match {
+            case c:TeamCompetition => List(c)
+            case _ => List()
+          }
+          )
         }
-        )
-      }
       
       def singletonCompetitions(season:Season) = {
         season.competitions.flatMap(refToObject(_) match {

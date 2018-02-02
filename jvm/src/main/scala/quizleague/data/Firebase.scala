@@ -35,13 +35,30 @@ object Storage {
      
      val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}"),asMap(encoder(e).asObject.get)))
      
-     val batchSets = objrefs.grouped(400)
+     val batchSets = objrefs.grouped(499)
      
      batchSets.foreach( l => {
      
        val batch = datastore.batch()
        
        l.foreach({case (r,o) => batch.set(r,o)})
+       
+       batch.commit()
+     })
+  }
+  
+    def deleteAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T]):Unit = {
+     val kind = makeKind
+     
+     val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}")))
+     
+     val batchSets = objrefs.grouped(499)
+     
+     batchSets.foreach( l => {
+     
+       val batch = datastore.batch()
+       
+       l.foreach(d => batch.delete(d))
        
        batch.commit()
      })

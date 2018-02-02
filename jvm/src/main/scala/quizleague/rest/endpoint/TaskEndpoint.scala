@@ -4,15 +4,21 @@ package quizleague.rest.endpoint
 import javax.ws.rs.core._
 import javax.ws.rs._
 import quizleague.data.Storage
+import Storage._
 import quizleague.util.json.codecs.CommandCodecs._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import quizleague.domain._
+import quizleague.domain.stats._
 import quizleague.domain.command._
 import quizleague.domain.util._
 import java.util.UUID.{randomUUID => uuid}
 import java.util.logging.Logger
 import quizleague.rest._
+import io.circe._
+import com.google.appengine.api.taskqueue._
+import com.google.appengine.api.taskqueue.TaskOptions.Builder._
+import javax.ws.rs.PathParam
 
 
 
@@ -39,8 +45,61 @@ class TaskEndpoint {
    
    logger.finest(s"haveResults : $haveResults") 
    
-   if(!haveResults) updateTables(result)
+   if(!haveResults) {
+     updateTables(result)
+     fireStatsUpdate(result.fixtures.map(f => load[Fixture](f.fixtureId)).filter(leagueFixture _))
+   }
    
+  }
+  
+  @POST
+  @Path("stats/update/{seasonId}")
+  def statsUpdate(body:String, @PathParam("seasonId") seasonId:String){
+    
+    val fixtures = deser[List[Fixture]](body)
+    val season = load[Season](seasonId)
+    
+    fixtures.foreach(StatsWorker.perform(_, season))
+    
+  }
+  
+  @POST
+  @Path("stats/regenerate/{seasonId}")
+  def statsRegenerate(@PathParam("seasonId") seasonId:String){
+    
+     val season = load[Season](seasonId)
+     
+     HistoricalStatsAggregator.perform(season)
+    
+  }
+  
+  
+  private def leagueFixture(fixture:Fixture) = {
+     
+    def comp(c:Ref[Competition]):Competition = c
+    
+    load[ApplicationContext](ApplicationContext.singletonId)
+     .currentSeason
+     .competitions
+     .map(comp _)
+     .flatMap(_ match {
+       case c:LeagueCompetition => List(c)
+       case _ => List()
+     })
+     .flatMap(_.fixtures)
+     .flatMap(_.fixtures)
+     .exists(_.id == fixture.id)
+  }
+  
+  
+  private def fireStatsUpdate(fixtures:List[Fixture]){
+   import io.circe._, io.circe.syntax._
+    
+   val queue: Queue = QueueFactory.getQueue("stats");
+    
+   val season =  load[ApplicationContext](ApplicationContext.singletonId).currentSeason
+    
+   queue.add(withUrl(s"/rest/task/stats/update/${season.id}").payload(fixtures.asJson.toString));
   }
   
   private def updateTables(result:ResultsSubmitCommand){
