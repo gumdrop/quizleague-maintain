@@ -3,6 +3,7 @@ package quizleague.rest.endpoint
 
 import javax.ws.rs.core._
 import javax.ws.rs._
+import quizleague.data._
 import quizleague.data.Storage
 import Storage._
 import quizleague.util.json.codecs.CommandCodecs._
@@ -78,7 +79,7 @@ class TaskEndpoint {
      
     def comp(c:Ref[Competition]):Competition = c
     
-    load[ApplicationContext](ApplicationContext.singletonId)
+    applicationContext()
      .currentSeason
      .competitions
      .map(comp _)
@@ -97,7 +98,7 @@ class TaskEndpoint {
     
    val queue: Queue = QueueFactory.getQueue("stats");
     
-   val season =  load[ApplicationContext](ApplicationContext.singletonId).currentSeason
+   val season =  applicationContext().currentSeason
     
    queue.add(withUrl(s"/rest/task/stats/update/${season.id}").payload(fixtures.asJson.toString));
   }
@@ -113,7 +114,7 @@ class TaskEndpoint {
     
     logger.finest(s"entering updateTables : \nresult:$result") 
     
-    val tables = Storage.load[ApplicationContext](ApplicationContext.singletonId)
+    val tables = applicationContext()
     .currentSeason
     .competitions
     .flatMap(compTables _)

@@ -11,6 +11,7 @@ import quizleague.domain.LeagueCompetition
 import quizleague.domain.util.LeagueTableRecalculator
 import quizleague.util.StringUtils._
 import java.util.UUID.{randomUUID => uuid}
+import scala.collection.mutable.Map
 
 
 object StatsWorker {
@@ -22,40 +23,44 @@ object StatsWorker {
   
   def toComp(c:Ref[Competition]):Competition = c
   
+  def seasonStats(season:Season) = list[Statistics].filter(s => s.season.id == season.id)
+  
   def perform(fixture: Fixture, season: Season){
-    val stats = new StatsWorker(fixture, season, leagueComp(season).tables).doIt
+    val stats = new StatsWorker(fixture, season, leagueComp(season).tables, seasonStats(season)).doIt
     saveAll(stats)
   }
 }
 
-class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable]) {
+class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable], stats:List[Statistics])(implicit context:StorageContext = StorageContext()) {
 
-  implicit val context = StorageContext()
-  
   val LOG: Logger = Logger.getLogger(this.getClass.getName)
+  
+  val cache = Map(stats.map(s => (s.team.id,s)): _*)
 
-  def doIt = {
+  def doIt:List[Statistics] = {
 
-    LOG.warning(s"Building stats for  ${fixture.home.shortName} vs ${fixture.away.shortName} on ${fixture.date}")
-    val homeStats = find(fixture.home, season).addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.get.awayScore)
-    val awayStats = find(fixture.away, season).addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.get.homeScore)
-
-//    save(homeStats)
-//    save(awayStats)
-
-    homeStats :: awayStats :: (for (t <- tables; row <- t.rows) yield find(row.team, season).addLeaguePosition(fixture.date, leaguePosition(row.team, tables)))
+    if(fixture.result.isDefined){
+    
+      LOG.warning(s"Building stats for  ${fixture.home.shortName} vs ${fixture.away.shortName} on ${fixture.date}")
+      val homeStats = find(fixture.home).addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.get.awayScore)
+      val awayStats = find(fixture.away).addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.get.homeScore)
+  
+      val allStats = (for (t <- tables; row <- t.rows if row.team.id != homeStats.team.id && row.team.id != awayStats.team.id) yield find(row.team))
+      
+      (homeStats :: awayStats :: allStats).map(s => s.addLeaguePosition(fixture.date, leaguePosition(s.team, tables)))
+    }
+    else stats
 
   }
 
-  private def find(team: Team, season: Season): Statistics = {
+  private def find(team: Ref[Team]): Statistics = {
 
     def comp = StatsWorker.leagueComp(season)
     def table = comp.tables.filter(t => t.rows.exists(_.team.id == team.id)).head
     
+    cache.getOrElseUpdate(team.id, Statistics(uuid.toString,team, Ref[Season]("season", season.id), table))
     
-    list[Statistics].filter(s => s.season.id == season.id && s.team.id == team.id)
-    .headOption
-    .getOrElse(Statistics(uuid.toString,Ref[Team]("team", team.id), Ref[Season]("season", season.id), table))
+
 
   }
 
@@ -77,6 +82,8 @@ object HistoricalStatsAggregator {
 
   def perform(season: Season) = {
 
+    implicit val context = StorageContext()
+    
     val seasonStats = list[Statistics].filter(_.season.id == season.id)
 
     deleteAll(seasonStats)
@@ -84,7 +91,7 @@ object HistoricalStatsAggregator {
     val c = StatsWorker.leagueComp(season)
     var dummyTables:List[LeagueTable] = c.tables.map(t => refToObject(t).copy(rows = t.rows.map(r => r.copy(team = r.team))))
 
-    
+    var startingStats:List[Statistics] = List()
     
     val stats = for (
       f <- c.fixtures.sortBy(f => f.date.toString);
@@ -93,9 +100,10 @@ object HistoricalStatsAggregator {
   ) yield {
       dummyTables = LeagueTableRecalculator.recalculate(dummyTables,List(r))
 
-      new StatsWorker(r, season, dummyTables).doIt
+      startingStats = new StatsWorker(r, season, dummyTables, startingStats).doIt
+      
     }
-    saveAll(stats.flatten)
+    saveAll(startingStats)
   }
 
 }
