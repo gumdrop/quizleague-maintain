@@ -67,7 +67,7 @@ lazy val server = quizleague.jvm.settings(
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
 ).enablePlugins(AppenginePlugin)
 lazy val web = quizleague.js.settings(
-	//scalaJSUseMainModuleInitializer := true,
+	scalaJSUseMainModuleInitializer := false,
 	scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 ).enablePlugins(ScalaJSPlugin)

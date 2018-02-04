@@ -21,7 +21,7 @@ trait GetService[T <: Model] {
 
   lazy val uriRoot = typeName
 
-  val db = Firestore.db
+  protected val db = Firestore.db
   private[service] val items: Map[String, T] = Map()
   private val observables = Map[String, Observable[U]]()
   private val refObsCache = Map[String, RefObservable[T]]()
@@ -31,24 +31,29 @@ trait GetService[T <: Model] {
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
 
   def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
+  
+  protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutSparse _)) 
 
   def flush() = items.clear()
 
   protected def filterList(u:U) = true
   
   protected final def listFromStorage(): Observable[js.Array[U]] = {
-
-    val obs = listObservable.getOrElse({
-
-      val subject = ReplaySubject[QuerySnapshot]()
-
-      db.collection(uriRoot).onSnapshot(subject.inner)
-
-      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u))).map(_.filter(filterList _))
-    })
+    
+    val obs = listObservable.getOrElse({listFromQuery(db.collection(uriRoot))})
 
     listObservable = Option(obs)
     obs
+  }
+  
+  protected final def listFromQuery(query:Query): Observable[js.Array[U]] = {
+
+      val subject = ReplaySubject[QuerySnapshot]()
+
+      query.onSnapshot(subject.inner)
+
+      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u))).map(_.filter(filterList _))
+   
   }
 
   protected final def add(item: T) = { items += ((item.id, item)); item }
