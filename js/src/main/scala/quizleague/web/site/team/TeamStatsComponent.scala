@@ -108,7 +108,7 @@ object SeasonMatchScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="data" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
+              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -118,7 +118,8 @@ object SeasonMatchScoresComponent extends Component{
     components(ChartComponent)
   
   prop("stats")
-  data("data")(c => StatisticsService.matchScoresData(c.stats))
+  method("data")({(c:facade) => StatisticsService.matchScoresData(c.stats)}:js.ThisFunction)
+  //data("data")(c => StatisticsService.matchScoresData(c.stats))
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
@@ -133,7 +134,7 @@ object SeasonCumulativeScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="data" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart></v-flex>
+              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -142,7 +143,9 @@ object SeasonCumulativeScoresComponent extends Component{
     components(ChartComponent)
     
   prop("stats")
-  data("data")(c => StatisticsService.cumuScoresData(c.stats))
+  method("data")({(c:facade) => StatisticsService.cumuScoresData(c.stats)}:js.ThisFunction)
+  //data("data")(c => StatisticsService.cumuScoresData(c.stats))
+  watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
 object TeamStatsTitle extends RouteComponent{

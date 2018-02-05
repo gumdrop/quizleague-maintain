@@ -22,7 +22,7 @@ object SiteApp{
     Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
     Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
     Vue.filter("refobs", (obs:Observable[js.Any]) => RefObservable(obs.hashCode.toString, () => obs))
-    Vue.use(VueChart.default)
+    //Vue.use(VueChart.default)
   new Vue(
         literal(el="#app",
         router = Router(SiteModule())
