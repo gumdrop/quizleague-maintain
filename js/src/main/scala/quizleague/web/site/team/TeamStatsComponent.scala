@@ -4,6 +4,7 @@ import quizleague.web.core._
 import scalajs.js
 import com.felstar.scalajs.vue._
 import quizleague.web.model._
+import vuechart._
 
 object TeamStatsPage extends RouteComponent{
   
@@ -45,7 +46,7 @@ object TeamStatsSeasonComponent extends Component{
   val name = "season-stats"
   
   val template = """
-  <v-layout row wrap v-if="teamId && seasonId && stats">     
+  <v-layout row wrap v-if="teamId && seasonId && stats" justify-space-around>     
     <v-flex >
       <season-league-position :stats="stats"></season-league-position>
     </v-flex>
@@ -79,18 +80,21 @@ object SeasonLeaguePositionComponent extends Component{
         <v-card>  
           <v-card-title>League Position</v-card-title>
           <v-card-text>
-          <v-container fluid grid-list-xl>
+          <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex style="width:500px;height:500px"><vue-chart v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></vue-chart></v-flex>
+              <v-flex ><chart width="300px" height="200px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
         </v-card>
 """
-    
+  
+  components(ChartComponent)
+  
   prop("stats")
   method("data")({(c:facade) => StatisticsService.positionData(c.stats)}:js.ThisFunction)
   subscription("teamCount")(c => StatisticsService.teamsInTable(c.stats))
+  watch("stats")((c:facade,x:js.Any) => c.$forceUpdate())
 }
 
 object SeasonMatchScoresComponent extends Component{
@@ -101,18 +105,21 @@ object SeasonMatchScoresComponent extends Component{
   val template = """
         <v-card>
         <v-card-title>Match Points</v-card-title>
-          <v-card-text >
-          <v-container fluid grid-list-xl>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex style="width:500px;height:500px"><vue-chart v-if="data" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></vue-chart></v-flex>
+              <v-flex ><chart width="300px" height="200px" v-if="data" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
         </v-card>
 """
-    
+  
+    components(ChartComponent)
+  
   prop("stats")
   data("data")(c => StatisticsService.matchScoresData(c.stats))
+  watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
 object SeasonCumulativeScoresComponent extends Component{
@@ -123,15 +130,16 @@ object SeasonCumulativeScoresComponent extends Component{
   val template = """
         <v-card>
         <v-card-title>Cumulative Points Difference</v-card-title>
-          <v-card-text >
-          <v-container fluid grid-list-xl>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex style="width:500px;height:500px"><vue-chart v-if="data" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></vue-chart></v-flex>
+              <v-flex ><chart width="300px" height="200px" v-if="data" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
         </v-card>
 """
+    components(ChartComponent)
     
   prop("stats")
   data("data")(c => StatisticsService.cumuScoresData(c.stats))

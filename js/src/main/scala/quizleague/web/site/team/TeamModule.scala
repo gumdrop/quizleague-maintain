@@ -86,6 +86,7 @@ object StatisticsService extends StatisticsGetService{
   def teamsInTable(stats:Statistics):Observable[Int] = stats.table.map(_.rows.size)
   
   def positionData(stats:Statistics):ChartData = {
+    println("In positionData")
     ChartData(
         datasets = js.Array(DataSet("League Position", data = stats.weekStats.map(_.leaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
         xLabels = stats.weekStats.map(_.date),

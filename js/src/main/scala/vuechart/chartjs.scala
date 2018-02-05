@@ -54,6 +54,7 @@ object Padding {
 @js.native trait ChartJs extends js.Object {
   def update(): Unit = js.native
   val data: ChartData = js.native
+  def destroy():Unit = js.native
 }
 
 @js.native object Chart extends ChartJs {
@@ -61,7 +62,7 @@ object Padding {
 }
 
 @js.native class Chart protected () extends ChartJs {
-  def this(canvasId: String, data: ChartParam, options: js.Any = js.undefined) = this()
+  def this(canvasId: String|js.Any, data: ChartParam, options: js.Any = js.undefined) = this()
 }
 
 
@@ -127,13 +128,13 @@ object AnimationOption {
 }
 
 @js.native trait ChartParam extends js.Object {
-  var `type`: ChartType = js.native
+  var `type`: ChartType|String = js.native
   var options: ChartOptions = js.native
   var data: ChartData = js.native
 }
 
 object ChartParam {
-  def apply(`type`: ChartType , options: ChartOptions , data: ChartData = ChartData()): ChartParam = {
+  def apply(`type`: ChartType|String , options: ChartOptions , data: ChartData = ChartData()): ChartParam = {
     js.Dynamic.literal(
       `type` = `type`.toString,
       options = options,
