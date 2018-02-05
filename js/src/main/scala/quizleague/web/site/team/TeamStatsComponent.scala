@@ -17,16 +17,40 @@ object TeamStatsPage extends RouteComponent{
 object TeamStatsComponent extends Component with GridSizeComponentConfig{
   val name = "ql-team-stats"
   val template = """
+    <v-tabs>
+      <v-tabs-bar>
+        <v-tabs-item ripple key="1" href="#tab1" >
+          Single Season
+        </v-tabs-item>
+        <v-tabs-item ripple key="2" href="#tab2" >
+          All Seasons
+        </v-tabs-item>
+        <v-tabs-slider color="yellow"></v-tabs-slider>
+      </v-tabs-bar>
+      <v-tabs-items>
+        <v-tabs-content key="1" id="tab1">
+          <v-card flat>
+          <v-container v-bind="gridSize" fluid>
+            <v-layout column>
+            <v-flex><ql-season-select :season="season" label="Season"></ql-season-select></v-flex>
+            <v-flex><season-stats v-if="id && s" :teamId="id" :seasonId="s.id"></season-stats><v-flex>
+            </v-layout>
+          </v-container>
+          </v-card>
+        </v-tabs-content>
+        <v-tabs-content key="2" id="tab2">
+          <v-container v-bind="gridSize" fluid>
+            <v-layout column>
+            <v-flex><all-season-stats v-if="id" :teamId="id"></all-season-stats><v-flex>
+            </v-layout>
+          </v-container>
+        </v-tabs-content>
+      </v-tabs-items>
+    </v-tabs>
 
-    <v-container v-bind="gridSize" fluid>
-      <v-layout column>
-      <v-flex><ql-season-select :season="season" label="Season"></ql-season-select></v-flex>
-      <v-flex><season-stats v-if="id && s" :teamId="id" :seasonId="s.id"></season-stats><v-flex>
-      </v-layout>
-    </v-container>
 
 """
-  components(TeamStatsSeasonComponent)
+  components(TeamStatsSeasonComponent,TeamStatsAllSeasonsComponent)
   
   prop("id")
   data("season", TeamViewService.season)
@@ -54,15 +78,42 @@ object TeamStatsSeasonComponent extends Component{
       <season-match-scores :stats="stats"></season-match-scores>
     </v-flex>
     <v-flex >
+      <season-cumu-diff :stats="stats"></season-cumu-diff>
+    </v-flex>
+    <v-flex >
       <season-cumu-scores :stats="stats"></season-cumu-scores>
     </v-flex>
   </v-layout>
 """
-  components(SeasonLeaguePositionComponent, SeasonMatchScoresComponent, SeasonCumulativeScoresComponent)
+  components(SeasonLeaguePositionComponent, SeasonMatchScoresComponent, SeasonCumulativeScoresComponent,SeasonCumulativeDifferenceComponent)
   
   props("teamId","seasonId")
   
   subscription("stats","teamId","seasonId")( c => StatisticsService.teamStats(c.teamId, c.seasonId))
+  
+}
+
+object TeamStatsAllSeasonsComponent extends Component{
+  
+  type facade = TeamStatsSeasonComponent
+  
+  val name = "all-season-stats"
+  
+  val template = """
+  <v-layout row wrap v-if="teamId && stats" justify-space-around>     
+    <v-flex >
+      <seasons-mean-scores :stats="stats"></seasons-mean-scores>
+    </v-flex>
+    <v-flex >
+      <seasons-mean-scores :stats="stats"></seasons-mean-scores>
+    </v-flex>
+  </v-layout>
+"""
+  components(AllSeasonsAverageScoreComponent)
+  
+  props("teamId")
+  
+  subscription("stats","teamId")( c => StatisticsService.allTeamStats(c.teamId))
   
 }
 
@@ -123,11 +174,11 @@ object SeasonMatchScoresComponent extends Component{
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
-object SeasonCumulativeScoresComponent extends Component{
+object SeasonCumulativeDifferenceComponent extends Component{
   
   type facade = SeasonGraphComponent
   
-  val name = "season-cumu-scores"
+  val name = "season-cumu-diff"
   val template = """
         <v-card>
         <v-card-title>Cumulative Points Difference</v-card-title>
@@ -143,9 +194,61 @@ object SeasonCumulativeScoresComponent extends Component{
     components(ChartComponent)
     
   prop("stats")
-  method("data")({(c:facade) => StatisticsService.cumuScoresData(c.stats)}:js.ThisFunction)
-  //data("data")(c => StatisticsService.cumuScoresData(c.stats))
+  method("data")({(c:facade) => StatisticsService.cumuDiffData(c.stats)}:js.ThisFunction)
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
+}
+
+object SeasonCumulativeScoresComponent extends Component{
+  
+  type facade = SeasonGraphComponent
+  
+  val name = "season-cumu-scores"
+  val template = """
+        <v-card>
+        <v-card-title>Cumulative Scores</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart></v-flex>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+    components(ChartComponent)
+    
+  prop("stats")
+  method("data")({(c:facade) => StatisticsService.cumuScoresData(c.stats)}:js.ThisFunction)
+  watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
+}
+
+
+@js.native
+trait AllSeasonsGraphComponent extends VueRxComponent{
+  val stats:js.Array[Statistics]
+}
+object AllSeasonsAverageScoreComponent extends Component{
+  
+  type facade = AllSeasonsGraphComponent
+  
+  val name = "seasons-mean-scores"
+  val template = """
+        <v-card>
+        <v-card-title>Avearage Scores</v-card-title>
+          <v-card-text v-if="data" style="max-width:300px;max-height:200px;">
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <v-flex>a<chart width="300px" height="200px" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+    components(ChartComponent)
+    
+  prop("stats")
+  subscription("data","stats")(c => StatisticsService.allSeasonsAverageData(c.stats))
+
 }
 
 object TeamStatsTitle extends RouteComponent{

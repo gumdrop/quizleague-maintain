@@ -20,6 +20,7 @@ import quizleague.domain.command.TeamEmailCommand
 import chartjs.chart._
 import language.postfixOps
 import org.scalajs.dom.ext.Color
+import quizleague.web.site.season._
 
 object TeamModule extends Module{
   
@@ -83,10 +84,16 @@ object StatisticsService extends StatisticsGetService{
     query(q).map(_.head)
   }
   
+  def allTeamStats(teamId:String):Observable[js.Array[Statistics]] = {
+   
+    val q = db.collection(uriRoot).where("team.id","==", teamId)
+    
+    query(q)
+  }
+  
   def teamsInTable(stats:Statistics):Observable[Int] = stats.table.map(_.rows.size)
   
   def positionData(stats:Statistics):ChartData = {
-    println("In positionData")
     ChartData(
         datasets = js.Array(DataSet("League Position", data = stats.weekStats.map(_.leaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
         xLabels = stats.weekStats.map(_.date),
@@ -103,11 +110,47 @@ object StatisticsService extends StatisticsGetService{
     )
   }
   
-  def cumuScoresData(stats:Statistics):ChartData = {
+  def cumuDiffData(stats:Statistics):ChartData = {
     ChartData(
         datasets = js.Array(DataSet("", data = stats.weekStats.map(_.cumuPointsDifference.asInstanceOf[js.Any]),lineTension=.2)), 
         xLabels = stats.weekStats.map(_.date),
     )
+  }
+  
+  def cumuScoresData(stats:Statistics):ChartData = {
+    ChartData(
+        datasets = js.Array(
+            DataSet("For", data = stats.weekStats.map(_.cumuPointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
+            DataSet("Against", data = stats.weekStats.map(_.cumuPointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
+        ), 
+        xLabels = stats.weekStats.map(_.date),
+    )
+  }
+  
+  def allSeasonsPositionData(stats:js.Array[Statistics]):Observable[ChartData] = {
+    
+    Observable.combineLatest(stats.map(_.season.obs).toSeq)
+      .map(seasons => 
+       ChartData(
+        datasets = js.Array(DataSet("League Position", data = stats.map(_.seasonStats.currentLeaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
+        xLabels = seasons.map(SeasonFormat.format _).toJSArray
+        )
+      )
+  }
+  
+    def allSeasonsAverageData(stats:js.Array[Statistics]):Observable[ChartData] = {
+    
+    Observable.combineLatest(stats.map(_.season.obs).toSeq)
+      .map(seasons => 
+       ChartData(
+        datasets = js.Array(
+            DataSet("Average For", data = stats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2),
+            DataSet("Average Against", data = stats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2)
+    
+        ), 
+        xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
+        )
+      )
   }
   
 }
