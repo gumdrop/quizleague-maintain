@@ -131,29 +131,38 @@ object StatisticsService extends StatisticsGetService{
     )
   }
   
+  private def sortStats(stats:js.Array[Statistics], seasons:Seq[Season]) = {
+     val seasonYears = seasons.map(s => ((s.id,s.startYear))).toMap
+     stats.sortBy(s => seasonYears(s.season.id))
+  }
+  
   def allSeasonsPositionData(stats:js.Array[Statistics]):Observable[ChartData] = {
     
     Observable.combineLatest(stats.map(_.season.obs).toSeq)
-      .map(seasons => 
-       ChartData(
-        datasets = js.Array(DataSet("League Position", data = stats.map(_.seasonStats.currentLeaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
+      .map(seasons => {
+       val sortedStats = sortStats(stats,seasons)
+        
+        ChartData(
+        datasets = js.Array(DataSet("League Position", data = sortedStats.map(_.seasonStats.currentLeaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
         xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
         )
-      )
+      })
   }
   
     def allSeasonsAverageData(stats:js.Array[Statistics]):Observable[ChartData] = {
     
     Observable.combineLatest(stats.map(_.season.obs).toSeq)
-      .map(seasons => 
+      .map(seasons => {
+       val sortedStats = sortStats(stats,seasons)
        ChartData(
         datasets = js.Array(
-            DataSet("Average For", data = stats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,borderColor=new Color(50,50,50),backgroundColor="rgba(150,150,150,.5)"),
-            DataSet("Average Against", data = stats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,borderColor=Color.Red,backgroundColor="rgba(150,150,150,.7)")
+            DataSet("Average For", data = sortedStats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=new Color(50,50,50),backgroundColor="rgba(150,150,150,.5)"),
+            DataSet("Average Against", data = sortedStats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=Color.Red,backgroundColor="rgba(150,150,150,.7)")
     
         ), 
         xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
         )
+      }
       )
   }
   

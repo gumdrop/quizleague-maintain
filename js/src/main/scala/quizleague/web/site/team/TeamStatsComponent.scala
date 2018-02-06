@@ -133,7 +133,7 @@ object SeasonLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -159,7 +159,7 @@ object SeasonMatchScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -185,7 +185,7 @@ object SeasonCumulativeDifferenceComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -209,7 +209,7 @@ object SeasonCumulativeScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="300px" height="200px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -234,11 +234,11 @@ object AllSeasonsAverageScoreComponent extends Component{
   val name = "seasons-mean-scores"
   val template = """
         <v-card>
-        <v-card-title>Avearage Scores</v-card-title>
+        <v-card-title>Average Scores</v-card-title>
           <v-card-text v-if="data" >
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex><chart width="400px" height="300px" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -262,7 +262,7 @@ object AllSeasonsLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex ><chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart></v-flex>
+              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
