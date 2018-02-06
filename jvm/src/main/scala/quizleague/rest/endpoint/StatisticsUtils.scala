@@ -89,7 +89,7 @@ object HistoricalStatsAggregator {
     deleteAll(seasonStats)
 
     val c = StatsWorker.leagueComp(season)
-    var dummyTables:List[LeagueTable] = c.tables.map(t => refToObject(t).copy(rows = t.rows.map(r => r.copy(team = r.team))))
+    var dummyTables:List[LeagueTable] = c.tables.map(t => refToObject(t).copy(rows = t.rows.map(r => r.copy(team = r.team, "",0,0,0,0,0,0,0))))
 
     var startingStats:List[Statistics] = List()
     
