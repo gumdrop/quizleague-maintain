@@ -102,14 +102,14 @@ object TeamStatsAllSeasonsComponent extends Component{
   val template = """
   <v-layout row wrap v-if="teamId && stats" justify-space-around>     
     <v-flex >
-      <seasons-mean-scores :stats="stats"></seasons-mean-scores>
+      <seasons-league-position :stats="stats"></seasons-league-position>
     </v-flex>
     <v-flex >
       <seasons-mean-scores :stats="stats"></seasons-mean-scores>
     </v-flex>
   </v-layout>
 """
-  components(AllSeasonsAverageScoreComponent)
+  components(AllSeasonsAverageScoreComponent,AllSeasonsLeaguePositionComponent)
   
   props("teamId")
   
@@ -235,10 +235,10 @@ object AllSeasonsAverageScoreComponent extends Component{
   val template = """
         <v-card>
         <v-card-title>Avearage Scores</v-card-title>
-          <v-card-text v-if="data" style="max-width:300px;max-height:200px;">
+          <v-card-text v-if="data" >
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <v-flex>a<chart width="300px" height="200px" type="line" :data="data" :options="{maintainAspectRatio:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
+              <v-flex><chart width="400px" height="300px" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart></v-flex>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -249,6 +249,31 @@ object AllSeasonsAverageScoreComponent extends Component{
   prop("stats")
   subscription("data","stats")(c => StatisticsService.allSeasonsAverageData(c.stats))
 
+}
+
+object AllSeasonsLeaguePositionComponent extends Component{
+  
+  type facade = AllSeasonsGraphComponent
+  
+  val name = "seasons-league-position"
+  val template = """
+        <v-card>  
+          <v-card-title>League Position</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <v-flex ><chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart></v-flex>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+  
+  components(ChartComponent)
+  
+  prop("stats")
+  subscription("data")(c => StatisticsService.allSeasonsPositionData(c.stats))
+  subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats))
 }
 
 object TeamStatsTitle extends RouteComponent{

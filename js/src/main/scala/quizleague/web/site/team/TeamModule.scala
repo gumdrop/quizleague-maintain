@@ -93,6 +93,10 @@ object StatisticsService extends StatisticsGetService{
   
   def teamsInTable(stats:Statistics):Observable[Int] = stats.table.map(_.rows.size)
   
+  def teamsInTables(stats:js.Array[Statistics]):Observable[Int] = Observable.combineLatest(
+      stats.map(_.table.obs).toSeq)
+      .map(_.foldLeft(0)((max,t) => if(max > t.rows.size) max else t.rows.size))
+  
   def positionData(stats:Statistics):ChartData = {
     ChartData(
         datasets = js.Array(DataSet("League Position", data = stats.weekStats.map(_.leaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
@@ -133,7 +137,7 @@ object StatisticsService extends StatisticsGetService{
       .map(seasons => 
        ChartData(
         datasets = js.Array(DataSet("League Position", data = stats.map(_.seasonStats.currentLeaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
-        xLabels = seasons.map(SeasonFormat.format _).toJSArray
+        xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
         )
       )
   }
@@ -144,8 +148,8 @@ object StatisticsService extends StatisticsGetService{
       .map(seasons => 
        ChartData(
         datasets = js.Array(
-            DataSet("Average For", data = stats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2),
-            DataSet("Average Against", data = stats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2)
+            DataSet("Average For", data = stats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,borderColor=new Color(50,50,50),backgroundColor="rgba(150,150,150,.5)"),
+            DataSet("Average Against", data = stats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,borderColor=Color.Red,backgroundColor="rgba(150,150,150,.7)")
     
         ), 
         xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
