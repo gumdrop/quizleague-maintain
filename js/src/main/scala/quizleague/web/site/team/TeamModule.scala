@@ -107,8 +107,8 @@ object StatisticsService extends StatisticsGetService{
   def matchScoresData(stats:Statistics):ChartData = {
     ChartData(
         datasets = js.Array(
-            DataSet("For", data = stats.weekStats.map(_.pointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
-            DataSet("Against", data = stats.weekStats.map(_.pointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
+            DataSet("For", data = stats.weekStats.map(s => if(s.ignorable) null else s.pointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
+            DataSet("Against", data = stats.weekStats.map(s => if(s.ignorable) null else s.pointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
         ), 
         xLabels = stats.weekStats.map(_.date),
     )
@@ -116,16 +116,19 @@ object StatisticsService extends StatisticsGetService{
   
   def cumuDiffData(stats:Statistics):ChartData = {
     ChartData(
-        datasets = js.Array(DataSet("", data = stats.weekStats.map(_.cumuPointsDifference.asInstanceOf[js.Any]),lineTension=.2)), 
+        datasets = js.Array(DataSet("", data = stats.weekStats.map(s => if(s.ignorable) null else s.cumuPointsDifference.asInstanceOf[js.Any]),lineTension=.2)), 
         xLabels = stats.weekStats.map(_.date),
     )
   }
   
   def cumuScoresData(stats:Statistics):ChartData = {
+    
+    val weekStats = stats.weekStats.filter(!_.ignorable)
+    
     ChartData(
         datasets = js.Array(
-            DataSet("For", data = stats.weekStats.map(_.cumuPointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
-            DataSet("Against", data = stats.weekStats.map(_.cumuPointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
+            DataSet("For", data = weekStats.map(s => if(s.ignorable) null else s.cumuPointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
+            DataSet("Against", data = weekStats.map(s => if(s.ignorable) null else s.cumuPointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
         ), 
         xLabels = stats.weekStats.map(_.date),
     )

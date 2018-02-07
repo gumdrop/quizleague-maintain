@@ -33,13 +33,14 @@ case class Statistics(
     updateFromCurrent(newStats, pointsFor, pointsAgainst)
 
   }
-  def statsForDate(date: LocalDate) = {
-    weekStats.getOrElse(date.toString(), WeekStats(date))
+  def statsForDate(date: LocalDate, alwaysNew:Boolean = true) = {
+    
+    if(alwaysNew) WeekStats(date) else weekStats.getOrElse(date.toString(), WeekStats(date, ignorable = true))
 
   }
 
   def addLeaguePosition(date: LocalDate, leaguePosition: Int) = {
-    val stats = statsForDate(date)
+    val stats = statsForDate(date, false)
 
     copy(seasonStats = seasonStats.copy(currentLeaguePosition = leaguePosition), weekStats = weekStats + ((stats.date.toString, stats.copy(leaguePosition = leaguePosition))))
   }

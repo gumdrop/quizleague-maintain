@@ -29,14 +29,12 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
       </v-tabs-bar>
       <v-tabs-items>
         <v-tabs-content key="1" id="tab1">
-          <v-card flat>
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
             <v-flex><ql-season-select :season="season" label="Season"></ql-season-select></v-flex>
             <v-flex><season-stats v-if="id && s" :teamId="id" :seasonId="s.id"></season-stats><v-flex>
             </v-layout>
           </v-container>
-          </v-card>
         </v-tabs-content>
         <v-tabs-content key="2" id="tab2">
           <v-container v-bind="gridSize" fluid>
@@ -159,7 +157,7 @@ object SeasonMatchScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -185,7 +183,7 @@ object SeasonCumulativeDifferenceComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -209,7 +207,7 @@ object SeasonCumulativeScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
