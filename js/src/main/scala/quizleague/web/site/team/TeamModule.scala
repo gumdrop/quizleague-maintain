@@ -21,6 +21,8 @@ import chartjs.chart._
 import language.postfixOps
 import org.scalajs.dom.ext.Color
 import quizleague.web.site.season._
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 object TeamModule extends Module{
   
@@ -76,12 +78,9 @@ object StatisticsService extends StatisticsGetService{
   
   def teamStats(teamId:String, seasonId:String):Observable[Statistics] = {
     
-    println(s"teamId : $teamId")
-    println(s"seasonId : $seasonId")
-    
     val q = db.collection(uriRoot).where("team.id","==", teamId).where("season.id","==",seasonId)
     
-    query(q).map(_.head)
+    query(q).map(_.headOption.fold[Statistics](null)(identity))
   }
   
   def allTeamStats(teamId:String):Observable[js.Array[Statistics]] = {
@@ -97,10 +96,17 @@ object StatisticsService extends StatisticsGetService{
       stats.map(_.table.obs).toSeq)
       .map(_.foldLeft(0)((max,t) => if(max > t.rows.size) max else t.rows.size))
   
-  def positionData(stats:Statistics):ChartData = {
+  private val dateFormat = DateTimeFormatter.ofPattern("d MMM")
+  
+     private def formatDate(date:String):String = LocalDate.parse(date).format(dateFormat)
+  
+  private def formatDate(stats:WeekStats):String = formatDate(stats.date)
+      
+      
+ def positionData(stats:Statistics):ChartData = {
     ChartData(
         datasets = js.Array(DataSet("League Position", data = stats.weekStats.map(_.leaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
-        xLabels = stats.weekStats.map(_.date),
+        xLabels = stats.weekStats.map(formatDate _),
     )
   }
   
@@ -110,27 +116,25 @@ object StatisticsService extends StatisticsGetService{
             DataSet("For", data = stats.weekStats.map(s => if(s.ignorable) null else s.pointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
             DataSet("Against", data = stats.weekStats.map(s => if(s.ignorable) null else s.pointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
         ), 
-        xLabels = stats.weekStats.map(_.date),
+        xLabels = stats.weekStats.map(formatDate _),
     )
   }
   
   def cumuDiffData(stats:Statistics):ChartData = {
     ChartData(
         datasets = js.Array(DataSet("", data = stats.weekStats.map(s => if(s.ignorable) null else s.cumuPointsDifference.asInstanceOf[js.Any]),lineTension=.2)), 
-        xLabels = stats.weekStats.map(_.date),
+        xLabels = stats.weekStats.map(formatDate _),
     )
   }
   
   def cumuScoresData(stats:Statistics):ChartData = {
     
-    val weekStats = stats.weekStats.filter(!_.ignorable)
-    
     ChartData(
         datasets = js.Array(
-            DataSet("For", data = weekStats.map(s => if(s.ignorable) null else s.cumuPointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
-            DataSet("Against", data = weekStats.map(s => if(s.ignorable) null else s.cumuPointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
+            DataSet("For", data = stats.weekStats.map(s => if(s.ignorable) null else s.cumuPointsFor.asInstanceOf[js.Any]),lineTension=.2, fill=true, backgroundColor="rgba(150,150,150,.5)",borderColor=new Color(50,50,50)),
+            DataSet("Against", data = stats.weekStats.map(s => if(s.ignorable) null else s.cumuPointsAgainst.asInstanceOf[js.Any]),lineTension=.2,fill=true, backgroundColor="rgba(150,150,150,.7)", borderColor=Color.Red)    
         ), 
-        xLabels = stats.weekStats.map(_.date),
+        xLabels = stats.weekStats.map(formatDate _),
     )
   }
   

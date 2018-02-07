@@ -131,7 +131,7 @@ object SeasonLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -142,7 +142,7 @@ object SeasonLeaguePositionComponent extends Component{
   
   prop("stats")
   method("data")({(c:facade) => StatisticsService.positionData(c.stats)}:js.ThisFunction)
-  subscription("teamCount")(c => StatisticsService.teamsInTable(c.stats))
+  subscription("teamCount","stats")(c => StatisticsService.teamsInTable(c.stats))
   watch("stats")((c:facade,x:js.Any) => c.$forceUpdate())
 }
 
@@ -183,7 +183,7 @@ object SeasonCumulativeDifferenceComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -260,7 +260,7 @@ object AllSeasonsLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
+              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
