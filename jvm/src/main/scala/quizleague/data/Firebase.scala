@@ -15,11 +15,15 @@ object Storage {
   val log = Logger.getLogger(this.getClass.toString())
   
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
-  .setProjectId("ql-firestore-trial").build
+  .setProjectId("ql-firestore-2").build
 
 
   lazy val datastore = options.getService
 
+  def delete[T <: Entity](entity: T)(implicit tag: ClassTag[T]): Unit ={
+    val kind = makeKind
+    datastore.document(s"$kind/${entity.id}").delete()
+  }
   
   def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Unit = {
     val kind = makeKind
@@ -38,6 +42,23 @@ object Storage {
        val batch = datastore.batch()
        
        l.foreach({case (r,o) => batch.set(r,o)})
+       
+       batch.commit()
+     })
+  }
+  
+    def deleteAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T]):Unit = {
+     val kind = makeKind
+     
+     val objrefs = entities.map(e => (datastore.document(s"$kind/${e.id}")))
+     
+     val batchSets = objrefs.grouped(400)
+     
+     batchSets.foreach( l => {
+     
+       val batch = datastore.batch()
+       
+       l.foreach(d => batch.delete(d))
        
        batch.commit()
      })

@@ -4,8 +4,6 @@ import quizleague.web.core._
 import quizleague.web.core.Component
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.core.IdComponent
-import scalajs.js
-import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.IdComponent
 import quizleague.web.core.IdComponent

@@ -13,9 +13,9 @@ trait PostService {
 
 
   
-  protected def command[R,V](pathParts:List[String],i:Option[V])(implicit decoder:Decoder[R],encoder:Encoder[V]):Observable[R] = {
+  protected def command[R,V](pathParts:List[String],i:Option[V] = None)(implicit decoder:Decoder[R],encoder:Encoder[V]):Observable[R] = {
     
-    val path = ("rest"::pathParts).mkString("/")
+    val path = ("/rest"::pathParts).mkString("/")
     
     val request = Request(
         path,

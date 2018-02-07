@@ -6,6 +6,7 @@ import javax.ws.rs.POST
 import quizleague.domain.container.DomainContainer
 import scala.reflect.ClassTag
 import quizleague.data.Storage
+import Storage._
 import quizleague.domain.Entity
 import javax.ws.rs.PathParam
 import quizleague.domain._
@@ -16,6 +17,9 @@ import quizleague.rest._
 import io.circe._
 import javax.ws.rs.GET
 import javax.ws.rs.Produces
+import com.google.appengine.api.taskqueue._
+import com.google.appengine.api.taskqueue.TaskOptions.Builder._
+import quizleague.rest.endpoint.HistoricalStatsAggregator
 
 @Path("/entity")
 class EntityEndpoint extends MaintainPostEndpoints{
@@ -91,5 +95,20 @@ class EntityEndpoint extends MaintainPostEndpoints{
         val recalcTable = LeagueTableRecalculator.recalculate(List(blankTable), competition.fixtures.flatMap(_.fixtures))
         
         recalcTable.foreach(Storage.save(_))
+  }
+  
+  @POST
+  @Path("/regenerate-stats/{seasonId}")
+  def regenerateStats(@PathParam("seasonId") seasonId: String) {
+
+   val queue: Queue = QueueFactory.getQueue("stats");
+    
+   queue.add(withUrl(s"/rest/task/stats/regenerate/$seasonId"));
+    
+//    val season = load[Season](seasonId)
+//    
+//    HistoricalStatsAggregator.perform(season)
+   
+
   }
 }

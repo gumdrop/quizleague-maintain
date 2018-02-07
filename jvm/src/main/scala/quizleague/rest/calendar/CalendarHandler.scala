@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse
 import quizleague.data.Storage._
 import quizleague.data._
 import quizleague.domain._
-import java.text.SimpleDateFormat
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
 import org.threeten.bp.LocalDateTime
@@ -27,7 +26,7 @@ class CalendarHandler extends HttpServlet{
       val head = bits.head
       val id = bits.tail.head
       
-      implicit val context = StorageContext
+      implicit val context = StorageContext()
       
       
       
@@ -43,7 +42,7 @@ class CalendarHandler extends HttpServlet{
       resp.getWriter.flush()
     }
     
-    private def formatEvent(event:BaseEvent, text:String):String = {
+    private def formatEvent(event:BaseEvent, text:String)(implicit context:StorageContext):String = {
       val now = toUtc(LocalDateTime.now())
       val uidPart = text.replaceAll("\\s", "") 
       val address = event.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
@@ -60,7 +59,7 @@ END:VEVENT
 """
 
     }
-    private def formatFixture(fixture:Fixture, description:String) = {
+    private def formatFixture(fixture:Fixture, description:String)(implicit context:StorageContext) = {
       
       val text = s"${fixture.home.shortName} - ${fixture.away.shortName} : $description"
       
@@ -80,7 +79,7 @@ END:VEVENT
 """
 
     }
-    private def formatBlankFixtures(fixtures:Fixtures) = {
+    private def formatBlankFixtures(fixtures:Fixtures)(implicit context:StorageContext) = {
       
       val now = toUtc(LocalDateTime.now)
       val uidPart = fixtures.description.replaceAll("\\s", "") 
@@ -97,17 +96,17 @@ END:VEVENT
 
     }
 
-    private def makeICal(team:Team):String = {
+    private def makeICal(team:Team)(implicit context:StorageContext):String = {
       val builder = new StringBuilder("BEGIN:VCALENDAR\nVERSION:2.0\n")
       //.append("X-WR-TIMEZONE:UTC\n")
       
         def teamCompetitions(season:Season) = {
-        season.competitions.flatMap(refToObject(_) match {
-          case c:TeamCompetition => List(c)
-          case _ => List()
+          season.competitions.flatMap(refToObject(_) match {
+            case c:TeamCompetition => List(c)
+            case _ => List()
+          }
+          )
         }
-        )
-      }
       
       def singletonCompetitions(season:Season) = {
         season.competitions.flatMap(refToObject(_) match {

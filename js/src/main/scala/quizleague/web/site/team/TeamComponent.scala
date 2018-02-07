@@ -41,7 +41,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
               <v-card-actions>
                 <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
-                <v-btn flat><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
+                <v-btn flat :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
               </v-card-actions>
             </v-card>
             </v-flex>      
@@ -75,7 +75,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,seasonId,5))
-  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId,seasonId,5)) 
+  method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
   method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))
 
 }

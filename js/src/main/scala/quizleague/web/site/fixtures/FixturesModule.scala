@@ -23,7 +23,9 @@ import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.PostService
 import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
+import LocalDate.{now => today}
 import java.time.LocalTime
+import rxscalajs.Observable
 
 object FixturesModule extends Module {
 
@@ -33,8 +35,18 @@ object FixturesModule extends Module {
 object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
 
-  def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = activeFixtures(seasonId,1)
-  def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = spentFixtures(seasonId,1)
+  def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = {
+    val today = LocalDate.now.toString()
+    
+    val q = db.collection(uriRoot).where("date", ">=" , today).orderBy("date").limit(1)
+    query(q)
+    
+  }
+  def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = {
+    val today = LocalDate.now.toString()
+    val q = db.collection(uriRoot).where("date", "<=" , today).orderBy("date","desc").limit(1)
+    query(q)
+  }
   
   def activeFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
     val today = LocalDate.now.toString()
@@ -64,11 +76,21 @@ object FixtureService extends FixtureGetService with PostService{
   override val userService = UserService
   override val reportsService = ReportsService
 
+    
   def teamFixtures(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+    val q = db.collection(uriRoot).where("date",">=", today.toString).orderBy("date").limit(take)
+    val home = query(q.where("home.id","==",teamId))
+    val away = query(q.where("away.id","==",teamId))
     
-    val fixtures = FixturesService.activeFixtures(seasonId)
+    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date).take(take).toJSArray)
+  }
+  
+  def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+    val q = db.collection(uriRoot).where("date","<=", today.toString).orderBy("date","desc").limit(take)
+    val home = query(q.where("home.id","==",teamId))
+    val away = query(q.where("away.id","==",teamId))
     
-    fixturesFrom(fixtures, teamId, take)
+    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date)(Desc).take(take).toJSArray)
   }
   
   private def fixturesFrom(fixtures:Observable[js.Array[Fixtures]], teamId:String, take:Int, sortOrder:Ordering[String] = Asc[String]) = {

@@ -54,3 +54,7 @@ trait UserNames extends ComponentNames {
 trait VenueNames extends ComponentNames {
   override val typeName = "venue"
 }
+
+trait StatisticsNames extends ComponentNames {
+  override val typeName = "statistics"
+}

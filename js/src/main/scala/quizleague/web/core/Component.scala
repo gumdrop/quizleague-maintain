@@ -49,6 +49,7 @@ trait Component {
   def created:js.Function = null
   def beforeCreate:js.Function = null
   def updated:js.Function = null
+  def beforeDestroy:js.Function = null
 
   val empty = new js.Object
   
@@ -176,7 +177,8 @@ trait Component {
       activated = activated,
       created = created,
       beforeCreate = beforeCreate,
-      updated = updated
+      updated = updated,
+      beforeDestroy = beforeDestroy
            
     )
     
