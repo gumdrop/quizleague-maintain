@@ -162,10 +162,11 @@ object StatisticsService extends StatisticsGetService{
     Observable.combineLatest(stats.map(_.season.obs).toSeq)
       .map(seasons => {
        val sortedStats = sortStats(stats,seasons)
+       def fixCount(weekStats:js.Array[WeekStats]) = weekStats.count(!_.ignorable)
        ChartData(
         datasets = js.Array(
-            DataSet("Average For", data = sortedStats.map(s => (s.seasonStats.runningPointsFor/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=new Color(50,50,50),backgroundColor="rgba(150,150,150,.5)"),
-            DataSet("Average Against", data = sortedStats.map(s => (s.seasonStats.runningPointsAgainst/s.weekStats.size).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=Color.Red,backgroundColor="rgba(150,150,150,.7)")
+            DataSet("Average For", data = sortedStats.map(s => (s.seasonStats.runningPointsFor/fixCount(s.weekStats)).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=new Color(50,50,50),backgroundColor="rgba(150,150,150,.5)"),
+            DataSet("Average Against", data = sortedStats.map(s => (s.seasonStats.runningPointsAgainst/fixCount(s.weekStats)).asInstanceOf[js.Any]),lineTension=.2,fill=true,borderColor=Color.Red,backgroundColor="rgba(150,150,150,.7)")
     
         ), 
         xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)

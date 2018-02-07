@@ -4,7 +4,6 @@ import scalajs.js
 import js.Dynamic.literal
 import js.JSConverters._
 import com.felstar.scalajs.vue._
-import vuechart.VueChart
 
 import org.threeten.bp.format.DateTimeFormatter
 import quizleague.web.util.rx._
