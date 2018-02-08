@@ -115,12 +115,23 @@ object TeamStatsAllSeasonsComponent extends Component{
   
 }
 
+trait GraphSizeComponentConfig extends Component{
+  import js.DynamicImplicits._
+  
+  type facade <: VueRxComponent with VuetifyComponent
+  
+  def width(c:facade) = if(c.$vuetify.breakpoint.xsOnly) "300px" else "400px"
+  computed("width")({width _}:js.ThisFunction)
+
+}
+
+
 @js.native
-trait SeasonGraphComponent extends VueRxComponent{
+trait SeasonGraphComponent extends VueRxComponent with VuetifyComponent{
   val stats:Statistics
 }
 
-object SeasonLeaguePositionComponent extends Component{
+object SeasonLeaguePositionComponent extends Component with GraphSizeComponentConfig{
   
   type facade = SeasonGraphComponent
   
@@ -131,7 +142,7 @@ object SeasonLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
+              <chart :width="width" height="300px" v-if="stats && teamCount" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -146,9 +157,9 @@ object SeasonLeaguePositionComponent extends Component{
   watch("stats")((c:facade,x:js.Any) => c.$forceUpdate())
 }
 
-object SeasonMatchScoresComponent extends Component{
+object SeasonMatchScoresComponent extends Component with GraphSizeComponentConfig{
   
-  type facade = SeasonGraphComponent
+  type facade = SeasonGraphComponent 
   
   val name = "season-match-scores"
   val template = """
@@ -157,7 +168,7 @@ object SeasonMatchScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
+              <chart :width="width" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -172,7 +183,7 @@ object SeasonMatchScoresComponent extends Component{
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
-object SeasonCumulativeDifferenceComponent extends Component{
+object SeasonCumulativeDifferenceComponent extends Component with GraphSizeComponentConfig{
   
   type facade = SeasonGraphComponent
   
@@ -183,7 +194,7 @@ object SeasonCumulativeDifferenceComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
+              <chart :width="width" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:50}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -196,7 +207,7 @@ object SeasonCumulativeDifferenceComponent extends Component{
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
-object SeasonCumulativeScoresComponent extends Component{
+object SeasonCumulativeScoresComponent extends Component with GraphSizeComponentConfig{
   
   type facade = SeasonGraphComponent
   
@@ -207,7 +218,7 @@ object SeasonCumulativeScoresComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart>
+              <chart :width="width" height="300px" v-if="stats" type="line" :data="data()" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,scales:{yAxes:[{type:'linear', ticks:{stepSize:200}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -222,10 +233,10 @@ object SeasonCumulativeScoresComponent extends Component{
 
 
 @js.native
-trait AllSeasonsGraphComponent extends VueRxComponent{
+trait AllSeasonsGraphComponent extends VueRxComponent with VuetifyComponent{
   val stats:js.Array[Statistics]
 }
-object AllSeasonsAverageScoreComponent extends Component{
+object AllSeasonsAverageScoreComponent extends Component with GraphSizeComponentConfig{
   
   type facade = AllSeasonsGraphComponent
   
@@ -236,7 +247,7 @@ object AllSeasonsAverageScoreComponent extends Component{
           <v-card-text v-if="data" >
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
+              <chart :width="width" height="300px" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,scales:{yAxes:[{type:'linear', ticks:{stepSize:10}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
@@ -249,7 +260,7 @@ object AllSeasonsAverageScoreComponent extends Component{
 
 }
 
-object AllSeasonsLeaguePositionComponent extends Component{
+object AllSeasonsLeaguePositionComponent extends Component with GraphSizeComponentConfig{
   
   type facade = AllSeasonsGraphComponent
   
@@ -260,7 +271,7 @@ object AllSeasonsLeaguePositionComponent extends Component{
           <v-card-text>
           <v-container fluid grid-list-sm>
             <v-layout row justify-space-around>
-              <chart width="400px" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
+              <chart :width="width" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,legend:{display:false},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
             </v-layout>
           </v-container>
           </v-card-text>
