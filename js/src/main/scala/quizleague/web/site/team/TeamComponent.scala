@@ -102,7 +102,7 @@ object TeamTitle extends Component {
       v-if="team">
       <ql-title>{{team.name}}</ql-title>
       <v-toolbar-title class="white--text" >
-        {{team.name}}
+      <ql-r-team-name :team="team"></ql-r-team-name>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=true"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>

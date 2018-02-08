@@ -27,7 +27,7 @@ import quizleague.web.useredit.TeamEditPage
 
 object TeamModule extends Module{
   
-  override val components = @@(TeamComponent,TeamTitle, TeamFixturesComponent, TeamNameComponent, TeamResultsComponent)
+  override val components = @@(TeamComponent,TeamTitle, TeamFixturesComponent, TeamNameComponent, TeamResultsComponent,ResponsiveTeamNameComponent)
   
   override val routes = @@(      
       

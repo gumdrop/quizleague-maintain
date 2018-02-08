@@ -51,7 +51,7 @@ object TeamResultsTitleComponent extends Component with SeasonFormatComponent{
       clipped-left>
      <ql-title>{{team.name}} : Results {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" v-if="team">
-        {{team.name}} : Results 
+        <ql-r-team-name :team="team"></ql-r-team-name> : Results 
        </v-toolbar-title>
       &nbsp;
       <ql-season-select :season="season"></ql-season-select>

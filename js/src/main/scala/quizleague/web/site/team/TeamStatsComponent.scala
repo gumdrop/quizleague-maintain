@@ -289,7 +289,7 @@ object TeamStatsTitleComponent extends Component{
       clipped-left v-if="team">
      <ql-title>{{team.name}} : Graphs and Statistics</ql-title>
       <v-toolbar-title class="white--text">
-        {{team.name}} : Graphs and Statistics 
+        <ql-r-team-name :team="team"></ql-r-team-name> : Graphs and Statistics 
        </v-toolbar-title>
     </v-toolbar>"""
   

@@ -53,7 +53,7 @@ object TeamFixturesTitleComponent extends Component{
       clipped-left>
      <ql-title>{{team.name}} : Fixtures</ql-title>
       <v-toolbar-title class="white--text" v-if="team">
-        {{team.name}} : Fixtures 
+        <ql-r-team-name :team="team"></ql-r-team-name> : Fixtures 
        </v-toolbar-title>
     </v-toolbar>"""
   

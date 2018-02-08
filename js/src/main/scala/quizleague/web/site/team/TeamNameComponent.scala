@@ -22,3 +22,12 @@ object TeamNameComponent extends Component{
 
   
 }
+
+object ResponsiveTeamNameComponent extends Component{
+  
+  val name = "ql-r-team-name"
+  val template = """<span >{{$vuetify.breakpoint.xsOnly ? team.shortName : team.name}}</span>"""
+  props("team")
+
+  
+}
