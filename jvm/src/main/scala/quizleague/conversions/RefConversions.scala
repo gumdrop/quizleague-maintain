@@ -19,6 +19,7 @@ object RefConversions {
   object StorageContext{
     
     def apply() = new StorageContext(Map())
+    def apply(entities:Map[String,Entity]) = new StorageContext(entities)
     
   }
   
