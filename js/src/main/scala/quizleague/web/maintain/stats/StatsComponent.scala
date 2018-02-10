@@ -50,7 +50,7 @@ object StatsComponent extends RouteComponent{
   
     def regenerate(c:facade){
       
-      StatsService.rebuild(c.season.id).subscribe(x => {c.resultText = "Completed";c.complete = true}, e => {c.resultText = e.toString;c.complete = true}, () => c.complete = true)
+      StatsService.rebuild(c.season.id).subscribe(x => x)
   
     }
   

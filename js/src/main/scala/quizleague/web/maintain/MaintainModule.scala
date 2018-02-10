@@ -11,12 +11,28 @@ import quizleague.web.maintain.globaltext.GlobalTextModule
 import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.database.DatabaseModule
 import quizleague.web.maintain.stats.StatsModule
+import quizleague.web.service.notification.NotificationGetService
+import org.threeten.bp.LocalDateTime
+import quizleague.web.model.MaintainMessagePayload
+import rxscalajs.Observable
+import scalajs.js
+import js.JSConverters._
 
-object MaintainModule extends Module{
-  
+object MaintainModule extends Module {
+
   override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule, DatabaseModule, StatsModule)
-  
+
   override val routes = @@(
-    RouteConfig(path = "/maintain/*", components = Map("sidenav"-> MaintainMenuComponent))    
-  )
+    RouteConfig(path = "/maintain/*", components = Map("sidenav" -> MaintainMenuComponent)))
+
+}
+
+object NotificationService extends NotificationGetService {
+  def messages(threshold: LocalDateTime): Observable[String] = super.messages("maintain", threshold)
+    .map(_.map(m => {
+      m.payload match {
+        case p: MaintainMessagePayload => p
+        case _ => throw new Exception("invalid payload")
+      }
+    }).foldLeft("")((s, p) => s + p.message))
 }

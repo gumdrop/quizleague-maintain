@@ -1,11 +1,11 @@
 package quizleague.web.maintain
 
 import quizleague.web.core.Component
-import scalajs.js
 
 
 object MaintainAppComponent extends Component {
-     val name = "ql-maintain-app"
+  
+  val name = "ql-maintain-app"
 
      val template="""
   <v-app
@@ -40,10 +40,13 @@ object MaintainAppComponent extends Component {
          <p></p>
          <router-view ></router-view>
         </v-layout>
+        <notifications></notifications>
       </v-container>
     </v-content>
   </v-app>"""
  
-     components(MaintainMenuComponent)
+     components(MaintainMenuComponent,MaintainNotificationsComponent)
+
+     
 }
 

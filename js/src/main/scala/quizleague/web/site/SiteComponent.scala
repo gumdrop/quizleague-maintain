@@ -3,7 +3,6 @@ package quizleague.web.site
 import quizleague.web.core.Component
 import scalajs.js
 
-
 object SiteComponent extends Component {
      val name = "ql-app"
 
@@ -62,9 +61,12 @@ object SiteComponent extends Component {
          <p></p>
          <router-view ></router-view>
         </v-layout>
+      <notifications></notifications>
       </v-container>
     </v-content>
   </v-app>"""
+     
+  components(ResultNotificationsComponent)
   
   data("menu",true)
   subscription("appData")(c => ApplicationContextService.get())
@@ -81,3 +83,4 @@ trait SideMenu{
   this:Component =>
   override val mounted:js.Function = () => SiteService.sidemenu.next(true)
 }
+

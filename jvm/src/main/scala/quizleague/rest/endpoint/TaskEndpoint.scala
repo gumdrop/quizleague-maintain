@@ -57,7 +57,7 @@ class TaskEndpoint {
          uuid.toString(), 
          NotificationTypeNames.result, 
          LocalDateTime.now(), 
-         resultPayload(f.fixtureId)   
+         ResultPayload(f.fixtureId)   
       ))  
    )
    }
