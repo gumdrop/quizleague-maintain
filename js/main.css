@@ -1,4 +1,4 @@
-	.tabs__item{text-transform:none;}
+	.tabs__item{text-transform:none !important;}
 
   button.btn{text-transform:none;}
   a.btn{text-transform:none;}

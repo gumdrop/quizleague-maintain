@@ -29,9 +29,9 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
   override val template="""
    <v-container v-bind="gridSize" v-if="appData">
      <ql-title>Home</ql-title>
-     <v-layout v-bind="align">
+     <v-layout v-bind="align" justify-space-around>
       <v-flex xs12 smAndUp5>
-      <!--div>
+      <div>
       <v-tabs grow :scrollable="false">
         <v-tabs-bar ripple>
         <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -52,16 +52,27 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
-      </div-->  
+      </div>  
 
-      <v-carousel light style="min-height:35em"  :cycle="true">
+      <!--v-carousel light style="min-height:35em"  :cycle="true" >
           <v-carousel-item src="" style="align-item:start;">
+          <v-container fluid>
+          <v-layout column>
             <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
+          <v-layout>
+          </v-container>
           </v-carousel-item>
-          <v-carousel-item src=""><ql-latest-results :seasonId="appData.currentSeason.id"></ql-latest-results>
+          <v-carousel-item src="">
+          <v-container>
+              <ql-latest-results :seasonId="appData.currentSeason.id"></ql-latest-results>
+          <v-container>
           </v-carousel-item>
-          <v-carousel-item src=""><ql-next-fixtures :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
-        </v-carousel>
+           <v-carousel-item src="">
+          <v-container>
+              <ql-next-fixtures :seasonId="appData.currentSeason.id"></ql-next-fixtures>
+          </v-container>
+          </v-carousel-item>
+        </v-carousel-->
       </v-flex>
       <v-flex>
         <ql-named-text name="front-page"></ql-named-text>
@@ -160,7 +171,7 @@ object HomePageLeagueTable extends Component{
   override val name = "ql-home-page-table"
   
   override val template ="""
-            <v-card v-if="tables">
+            <v-card flat v-if="tables">
               <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
               <v-card-text>
               <ql-league-table v-for="table in tables"  :key="table.id" :id="table.id"></ql-league-table>
