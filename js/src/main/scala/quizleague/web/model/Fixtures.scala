@@ -12,7 +12,7 @@ class Fixtures(
     val date:String,
     val start:String,
     val duration:Float,
-    val fixtures:js.Array[RefObservable[Fixture]]) extends js.Object with Model
+    val fixtures:js.Array[RefObservable[Fixture]]) extends Model
     
 object Fixtures{
   def apply(id:String, 
@@ -36,7 +36,7 @@ class Fixture(
   val time: String,
   val duration : Float,
   val result: Result
-) extends js.Object with Model
+) extends Model
 
 object Fixture{
   def apply(  id:String,

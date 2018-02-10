@@ -4,7 +4,7 @@ package quizleague.web.model
 import scalajs.js
 
 
-class GlobalText(val id:String, val name:String, val text:js.Array[TextEntry], val retired:Boolean=false) extends js.Object with Model
+class GlobalText(val id:String, val name:String, val text:js.Array[TextEntry], val retired:Boolean=false) extends Model
 
 object GlobalText{
   def apply(id:String, name:String, text:js.Array[TextEntry], retired:Boolean=false) = new GlobalText(id,name,text,retired)

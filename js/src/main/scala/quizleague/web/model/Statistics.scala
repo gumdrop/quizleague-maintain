@@ -11,7 +11,7 @@ class Statistics(
   val table: RefObservable[LeagueTable],
   val seasonStats: SeasonStats = new SeasonStats(),
   val weekStats: js.Array[WeekStats] = js.Array())
-  extends js.Object with Model
+  extends Model
 
 class SeasonStats(
   val currentLeaguePosition: Int = 0,

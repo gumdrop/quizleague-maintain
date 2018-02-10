@@ -7,7 +7,7 @@ class LeagueTable(
   val id: String,
   val description: String,
   val rows: js.Array[LeagueTableRow]
-) extends js.Object with Model
+) extends Model
 
 object LeagueTable{
   def apply( 

@@ -1,5 +1,4 @@
 package quizleague.util
-
 import scala.language.implicitConversions
 
 object StringUtils {

@@ -2,6 +2,7 @@ package quizleague.util.json.codecs
 
 import quizleague.domain._
 import quizleague.domain.stats._
+import quizleague.domain.notification._
 import ScalaTimeCodecs._
 import quizleague.domain.container.DomainContainer
 
@@ -58,6 +59,9 @@ object DomainCodecs{
   
   implicit val statisticsDecoder: Decoder[Statistics] = deriveDecoder
   implicit val statisticsEncoder: Encoder[Statistics] = deriveEncoder
+  
+  implicit val notifDecoder: Decoder[Notification] = deriveDecoder
+  implicit val notifEncoder: Encoder[Notification] = deriveEncoder
   
   
   

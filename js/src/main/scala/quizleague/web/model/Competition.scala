@@ -15,7 +15,7 @@ import CompetitionType._
 import scala.scalajs.js.annotation.ScalaJSDefined
 import quizleague.web.util.rx.RefObservable
 
-sealed trait Competition extends js.Object with Model{
+sealed trait Competition extends Model{
   val id: String
   val name: String
   val typeName: String

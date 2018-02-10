@@ -31,6 +31,12 @@ object ScalaTimeCodecs {
   implicit val decodeDuration: Decoder[Duration] = Decoder.decodeLong.emap { str =>
     Either.catchNonFatal(Duration.ofSeconds(str)).leftMap(t => "Duration")
   }
+    
+  implicit val encodeLocalDateTime: Encoder[LocalDateTime] = Encoder.encodeString.contramap[LocalDateTime](_.toString)
+
+  implicit val decodeLocalDateTime: Decoder[LocalDateTime] = Decoder.decodeString.emap { str =>
+    Either.catchNonFatal(LocalDateTime.parse(str)).leftMap(t => "LocalDateTime")
+  }
 
 
 }

@@ -20,6 +20,8 @@ import io.circe._
 import com.google.appengine.api.taskqueue._
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import javax.ws.rs.PathParam
+import quizleague.domain.notification._
+import org.threeten.bp.LocalDateTime
 
 
 
@@ -35,7 +37,7 @@ class TaskEndpoint {
    
    val result = deser[ResultsSubmitCommand](body)
     
-   logger.finest(s"submit result arrived : $result") 
+   logger.finest(() => s"submit result arrived : $result") 
    
    val haveResults = result.fixtures.exists(f => {
      val fix = Storage.load[Fixture](f.fixtureId)
@@ -44,11 +46,20 @@ class TaskEndpoint {
    
    userFromEmail(result.email).foreach(u => result.fixtures.foreach(saveFixture(u,result.reportText) _))
    
-   logger.finest(s"haveResults : $haveResults") 
+   logger.finest(() => s"haveResults : $haveResults") 
    
    if(!haveResults) {
      updateTables(result)
      fireStatsUpdate(result.fixtures.map(f => load[Fixture](f.fixtureId)).filter(leagueFixture _))
+     
+     result.fixtures.foreach(f =>
+       Storage.save(Notification(
+         uuid.toString(), 
+         NotificationTypeNames.result, 
+         LocalDateTime.now(), 
+         resultPayload(f.fixtureId)   
+      ))  
+   )
    }
    
   }
@@ -71,6 +82,13 @@ class TaskEndpoint {
      val season = load[Season](seasonId)
      
      HistoricalStatsAggregator.perform(season)
+     
+     Storage.save(Notification(
+         uuid.toString(), 
+         NotificationTypeNames.maintain, 
+         LocalDateTime.now(), 
+         MaintainMessagePayload(s"Stats regenerated for ${season.startYear}/${season.endYear}")   
+      ))
     
   }
   
@@ -112,30 +130,30 @@ class TaskEndpoint {
       }
     }
     
-    logger.finest(s"entering updateTables : \nresult:$result") 
+    logger.finest(() => s"entering updateTables : \nresult:$result") 
     
     val tables = applicationContext()
     .currentSeason
     .competitions
     .flatMap(compTables _)
     
-    logger.finest(s"tables : \n$tables") 
+    logger.finest(() => s"tables : \n$tables") 
     
     val fixtures = result.fixtures.map(f => Storage.load[Fixture](f.fixtureId))
     
-    logger.finest(s"fixtures : \n$fixtures") 
+    logger.finest(() => s"fixtures : \n$fixtures") 
     
     val newTables = LeagueTableRecalculator.recalculate(tables, fixtures)
     
-    logger.finest(s"new tables : \n$newTables") 
+    logger.finest(() => s"new tables : \n$newTables") 
     
-    newTables.foreach(Storage.save(_))
+    Storage.saveAll(newTables)
     
   }
 
   private def saveFixture(user:User,report:Option[String])(result:ResultValues) = {
        
-    logger.finest(s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
+    logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
     def newText(reportText:String) = {
       val text = new Text(uuid.toString(), reportText, "text/plain")
@@ -174,11 +192,11 @@ class TaskEndpoint {
     
     val fixture = Storage.load[Fixture](result.fixtureId)
     
-    logger.finest(s"fixture : \n:$fixture") 
+    logger.finest(() => s"fixture : \n:$fixture") 
     
     val res = fixture.copy(result = fixture.result.fold(newResult())(oldResult _))
     
-    logger.finest(s"made result : \nresult:$res") 
+    logger.finest(() => s"made result : \nresult:$res") 
     
     Storage.save(res)
 
@@ -188,11 +206,11 @@ class TaskEndpoint {
 
     val users = Storage.list[User]
     
-    logger.finest(s"users : \n$users") 
+    logger.finest(() => s"users : \n$users") 
     
     val user = users.filter(_.email.toLowerCase == email.toLowerCase).headOption
     
-    logger.finest(s"user : \n$user")
+    logger.finest(() => s"user : \n$user")
     
     user
   }
@@ -201,11 +219,11 @@ class TaskEndpoint {
     
     val teams = Storage.list[Team]
     
-    logger.finest(s"teams : \n$teams") 
+    logger.finest(() => s"teams : \n$teams") 
     
     val team = teams.filter(t => t.users.exists(_.id == user.id)).head
     
-    logger.finest(s"team : \n$team")
+    logger.finest(() => s"team : \n$team")
     
     team
   }
