@@ -52,6 +52,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
          </v-layout>
          <v-layout column>
            <div><v-btn flat v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
+           <div><v-btn flat v-on:click="item.rows=sort().rows" color="primary">Sort</v-btn></div>
           <table>
             <thead>
               <th></th>
@@ -66,7 +67,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
               <th>Points</th>
             </thead>
             <tbody>
-              <tr v-for="(row,i) in sort(item.rows)" :key="row.team.id">
+              <tr v-for="(row,i) in item.rows" :key="row.team.id">
                 <td>
                   <v-btn icon v-on:click="removeRow(row)"><v-icon >delete</v-icon></v-btn>
                 </td>
@@ -118,8 +119,8 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
       service.recalculateTable(c.item, c.competition)
     }
     
-    def sort(c:facade,rows:js.Array[LeagueTableRow]) = rows.sortBy(r =>(r.leaguePoints, r.matchPointsFor, r.won, (r.matchPointsAgainst * -1)))(Desc)
-          
+    def sort(c:facade) = LeagueTableService.sortTable(c.item)
+    
       
 
   def unusedTeams(c:facade) = teamManager(c).unusedTeams(null)

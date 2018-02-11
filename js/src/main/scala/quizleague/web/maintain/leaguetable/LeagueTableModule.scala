@@ -9,7 +9,9 @@ import quizleague.domain.{LeagueTable => Dom}
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
-import quizleague.web.maintain.MaintainMenuComponent
+import quizleague.util.collection._
+import scalajs.js
+import js.JSConverters._
 
 object LeagueTableModule extends Module{
     override val routes = @@(     
@@ -30,4 +32,7 @@ object LeagueTableService extends LeagueTableGetService with LeagueTablePutServi
   def recalculateTable(table:LeagueTable, competition:Competition) = {
     command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => x)
   }
+  
+  def sort(rows:js.Array[LeagueTableRow]) = rows.sortBy(r =>(r.leaguePoints, r.matchPointsFor, r.won, (r.matchPointsAgainst * -1)))(Desc)
+
 }
