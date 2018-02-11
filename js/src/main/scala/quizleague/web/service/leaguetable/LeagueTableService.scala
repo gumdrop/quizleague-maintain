@@ -27,6 +27,7 @@ import quizleague.web.names.LeagueTableNames
 import io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.web.util.rx.RefObservable
+import quizleague.util.collection._
 
 
 
@@ -65,9 +66,9 @@ trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService
   def sortTable(table:Model) = {
     val dom = mapIn(table)
     
-    val rows = dom.rows.sortBy(l => (l.leaguePoints * -1, (l.matchPointsFor - l.matchPointsAgainst) * -1, l.won * -1, l.drawn * -1))
+    val rows = dom.rows.sortBy(l => (l.leaguePoints, l.matchPointsFor, l.matchPointsAgainst * -1, l.won, l.drawn))(Desc)
     
-    mapOutSparse(Dom(dom.id, dom.description, rows, dom.retired))
+    mapOutSparse(dom.copy(rows = rows))
     
   }
   

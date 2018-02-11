@@ -30,7 +30,7 @@ object LeagueTableRecalculator
          rows.filter(_.team == r.team)
          .foldLeft(r)((a,b) => a + b)
       })
-      .sortBy(r => (r.leaguePoints,r.matchPointsFor,r.won, r.drawn))(Desc)
+      .sortBy(r => (r.leaguePoints,r.matchPointsFor,r.matchPointsAgainst * -1, r.won, r.drawn))(Desc)
       .zipWithIndex
       .map{case(r,i) => r.copy(position = (i + 1).toString())}
       

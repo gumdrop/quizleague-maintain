@@ -52,7 +52,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
          </v-layout>
          <v-layout column>
            <div><v-btn flat v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
-           <div><v-btn flat v-on:click="item.rows=sort().rows" color="primary">Sort</v-btn></div>
+           <div><v-btn flat v-on:click="item=sort()" color="primary">Sort</v-btn></div>
           <table>
             <thead>
               <th></th>

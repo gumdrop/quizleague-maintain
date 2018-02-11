@@ -33,6 +33,5 @@ object LeagueTableService extends LeagueTableGetService with LeagueTablePutServi
     command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => x)
   }
   
-  def sort(rows:js.Array[LeagueTableRow]) = rows.sortBy(r =>(r.leaguePoints, r.matchPointsFor, r.won, (r.matchPointsAgainst * -1)))(Desc)
 
 }
