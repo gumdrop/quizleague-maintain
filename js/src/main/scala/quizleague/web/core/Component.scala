@@ -46,6 +46,7 @@ trait Component {
   def components: js.Array[Component] = addedComponents.toJSArray
   def mounted: js.Function = null
   def activated:js.Function = null
+  def deactivated:js.Function = null
   def created:js.Function = null
   def beforeCreate:js.Function = null
   def updated:js.Function = null
@@ -175,6 +176,7 @@ trait Component {
       components = addedComponents.map(c => ((c.name, c()))).toMap.toJSDictionary,
       mounted = mounted,
       activated = activated,
+      deactivated = deactivated,
       created = created,
       beforeCreate = beforeCreate,
       updated = updated,
