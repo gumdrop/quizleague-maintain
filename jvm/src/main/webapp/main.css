@@ -1,4 +1,11 @@
-	.tabs__item{text-transform:none !important;}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(/fonts/Nunito/nunito700.woff) format('woff');
+}
+
+.tabs__item{text-transform:none !important;}
 
   button.btn{text-transform:none;}
   a.btn{text-transform:none;}
@@ -50,3 +57,28 @@
  	 .ql-calendar .panel-component .view-btn{
  	 	top:-13px;
  	 }
+ 	 
+.page-header{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 150% !important;
+		text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
+	20px rgb(63,81,181), 0 0 30px #1565C0, 0 0 40px #1565C0, 0 0 50px #1565C0 !important;
+	color: darkblue !important;
+
+	transition:all 1s ease-out;
+	margin-left:.2em;
+	margin-right:.2em;
+}
+
+.page-header-small{
+	font-family: 'Nunito', sans-serif !important;
+	font-size: 100% !important;
+	color: white !important;
+	transition:all 1s ease-out;
+}
+
+.page-header:hover {
+	
+	color: white !important;
+	
+}

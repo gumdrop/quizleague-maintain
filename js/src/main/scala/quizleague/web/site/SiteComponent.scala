@@ -41,7 +41,7 @@ object SiteComponent extends Component {
       <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
-        <span v-if="appData">{{appData.leagueName}}</span>
+        <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':''">{{appData.leagueName}}</span>
       </v-toolbar-title>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
