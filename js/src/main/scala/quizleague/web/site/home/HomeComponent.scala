@@ -46,13 +46,13 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
 
         <v-tabs-items>
           <v-tabs-content id="league">
-           <ql-home-page-table style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
+           <ql-home-page-table style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-tabs-content>
           <v-tabs-content id="results">
-            <ql-latest-results style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-latest-results>
+            <ql-latest-results style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-latest-results>
           </v-tabs-content>
           <v-tabs-content id="fixtures">
-            <ql-next-fixtures style="min-width:400px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
+            <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
