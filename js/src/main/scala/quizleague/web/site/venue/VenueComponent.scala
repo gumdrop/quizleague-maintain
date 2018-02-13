@@ -54,7 +54,7 @@ object VenueComponent extends Component with GridSizeComponentConfig{
                       </v-flex>
                      </v-layout>
                      <v-flex v-if="venue.imageURL" class="hidden-xs-only text-xs-left text-sm-left text-md-right text-lg-right text-xl-right" >
-                        <img :src="venue.imageURL">
+                        <img :src="venue.imageURL" style="max-width:275px;max-height:200px">
                      </v-flex>
                    </v-layout>
                   </v-container>

@@ -74,6 +74,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   props("id")
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
+  subscription("standings")(c => TeamService.standings(c.id))
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,5))
   method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
   method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))

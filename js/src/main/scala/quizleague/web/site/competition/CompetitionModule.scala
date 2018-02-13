@@ -25,6 +25,8 @@ import quizleague.web.model.Fixtures
 import quizleague.util.collection._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.util.Logging._
+import scala.reflect.ClassTag
+import scala.reflect.api.TypeTags
 
 object CompetitionModule extends Module {
   
@@ -49,6 +51,13 @@ object CompetitionService extends CompetitionGetService{
   
   def firstClassCompetitions(seasonId:String) = competitions(seasonId).map(c => c.filter(_.typeName != CompetitionType.subsidiary.toString()))
   
+ 
+  def competitionsOfType[T <: Competition:ClassTag](seasonId:String):Observable[js.Array[T]] = {
+    competitions(seasonId).map(_ collect { case element: T => element })
+  }
+  
+  def competition[T <: Competition:ClassTag](seasonId:String, typeName:String) = 
+    competitionsOfType[T](seasonId).map(_.filter(_.typeName == typeName).head)
   
   def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten.map(_.toJSArray)
 }

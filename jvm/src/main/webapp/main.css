@@ -62,7 +62,7 @@
 	font-family: 'Nunito', sans-serif !important;
 	font-size: 150% !important;
 		text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
-	20px rgb(63,81,181), 0 0 30px #1565C0, 0 0 40px #1565C0, 0 0 50px #1565C0 !important;
+	20px rgba(0,0,0,0), 0 0 30px rgba(0,0,0,0), 0 0 40px rgba(0,0,0,0), 0 0 50px rgba(0,0,0,0) !important;
 	color: darkblue !important;
 
 	transition:all 1s ease-out;

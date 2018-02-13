@@ -14,16 +14,19 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.leaguetable.LeagueTableService
 import quizleague.web.service._
 import quizleague.web.model._
+import quizleague.web.util.rx._
 import rxscalajs.Observable
 import quizleague.web.service.PostService
 import quizleague.domain.command.TeamEmailCommand
 import chartjs.chart._
-import language.postfixOps
 import org.scalajs.dom.ext.Color
 import quizleague.web.site.season._
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import quizleague.web.useredit.TeamEditPage
+import quizleague.web.site.ApplicationContextService
+import quizleague.web.site.competition.CompetitionService
+import quizleague.web.model.CompetitionType
 
 object TeamModule extends Module{
   
@@ -67,6 +70,19 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
     val cmd = TeamEmailCommand(sender,text,team.id)
     command[String,TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
   }
+  
+  def leagueStanding(teamId:String):Observable[String] = ApplicationContextService.get.flatMap(
+    s => {
+      CompetitionService.competition[LeagueCompetition](s.currentSeason.id, CompetitionType.league.toString)
+        .flatMap(c => zip(c.tables))
+        .map(_.flatMap(_.rows))
+        .map(_.filter(_.team.id == teamId).foldLeft("")((r,row) => row.position))
+     
+    }
+  )
+  def cupStanding(teamId:String):Observable[String] = Observable.just("")
+  
+  def standings(teamId:String) = combineLatest(leagueStanding(teamId),cupStanding(teamId))
   
 }
 
