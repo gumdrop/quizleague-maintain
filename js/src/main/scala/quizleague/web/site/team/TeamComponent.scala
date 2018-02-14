@@ -32,7 +32,17 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               <v-layout column>
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
-
+            <v-flex v-if="standings && standings.length > 0"><v-card>
+              <v-card-title primary-title><h3 class="headline mb-0">Standings</h3></v-card-title>
+              <v-card-text>
+                <table>
+                  <tr v-for="s in standings">
+                    <td>{{s.name}}</td><td> : </td><td>{{s.standing}}</td>
+                  </tr>
+                </table>
+              </v-card-text>
+            </v-card>
+            </v-flex>      
             <v-flex><v-card >
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
