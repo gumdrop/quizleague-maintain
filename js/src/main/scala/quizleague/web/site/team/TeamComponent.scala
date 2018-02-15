@@ -33,52 +33,17 @@ object TeamComponent extends Component with GridSizeComponentConfig{
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
             <v-flex><standings :id="team.id"></standings></v-flex>
-            <v-flex><v-card >
-              <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
-              <v-card-title >Last few results</v-card-title>
-              <v-card-text>
-                <ql-fixtures-simple :fixtures="results(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
-                <v-btn flat :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
-              </v-card-actions>
-            </v-card>
+            <v-flex><team-results :id="team.id" :seasonId="appConfig.currentSeason.id"></team-results>
             </v-flex>      
-            <v-flex><v-card >
-              <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
-              <v-card-title >Next few fixtures</v-card-title>
-              <v-card-text>
-                <ql-fixtures-simple :fixtures="fixtures(id, appConfig.currentSeason.id)" :inlineDetails="true"></ql-fixtures-simple>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
-                <v-menu offset-y>
-                  <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
-                   <v-list>
-                    <v-list-tile v-on:click="copy(team.id)">
-                      <v-list-tile-action v-on:click="copy(team.id)"><v-icon left>content_copy</v-icon></v-list-tile-action>
-                      <v-list-tile-content ><v-list-tile-title>Copy Calendar URL</v-list-tile-title></v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile :href="'calendar/team/' + team.id + '/calendar.ics'" target="_blank">
-                      <v-list-tile-action ><v-icon left>mdi-download</v-icon></v-list-tile-action>
-                      <v-list-tile-content><v-list-tile-title>Download Calendar File</v-list-tile-title></v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu offset-y>              
-              </v-card-actions>
-            </v-card>
+            <v-flex><team-fixtures :id="team.id" :seasonId="appConfig.currentSeason.id"></team-fixtures>
             </v-flex>
           </v-layout>
           </v-container>"""
   props("id")
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
-  method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,5))
-  method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
-  method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))
 
-  components(TeamStandings)
+  components(TeamStandings,TeamResults,TeamFixtures)
 }
 
 object TeamTitleComponent extends RouteComponent {
@@ -108,6 +73,58 @@ object TeamStandings extends Component {
       </v-card>"""
   props("id")
   subscription("standings","id")(c => TeamService.standings(c.id))
+}
+
+object TeamResults extends Component{
+  val name = "team-results"
+  val template = """
+    <v-card>
+      <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
+      <v-card-title >Last few results</v-card-title>
+      <v-card-text>
+        <ql-fixtures-simple :fixtures="results(id, seasonId)" :inlineDetails="true"></ql-fixtures-simple>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
+        <v-btn flat :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
+      </v-card-actions>
+    </v-card>"""
+  
+  props("id","seasonId")
+  method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
+
+}
+
+object TeamFixtures extends Component{
+  val name = "team-fixtures"
+  val template = """
+    <v-card >
+      <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
+      <v-card-title >Next few fixtures</v-card-title>
+      <v-card-text>
+        <ql-fixtures-simple :fixtures="fixtures(id, seasonId)" :inlineDetails="true"></ql-fixtures-simple>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
+        <v-menu offset-y>
+          <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+           <v-list>
+            <v-list-tile v-on:click="copy(id)">
+              <v-list-tile-action v-on:click="copy(id)"><v-icon left>content_copy</v-icon></v-list-tile-action>
+              <v-list-tile-content ><v-list-tile-title>Copy Calendar URL</v-list-tile-title></v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile :href="'calendar/team/' + id + '/calendar.ics'" target="_blank">
+              <v-list-tile-action ><v-icon left>mdi-download</v-icon></v-list-tile-action>
+              <v-list-tile-content><v-list-tile-title>Download Calendar File</v-list-tile-title></v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-menu>              
+      </v-card-actions>
+    </v-card>"""
+  props("id","seasonId")
+  method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,5))
+  method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))
+
 }
 
 object TeamTitle extends Component {
