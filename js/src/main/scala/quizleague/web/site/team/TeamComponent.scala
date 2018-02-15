@@ -32,17 +32,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
               <v-layout column>
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
-            <v-flex v-if="standings && standings.length > 0"><v-card>
-              <v-card-title primary-title><h3 class="headline mb-0">Standings</h3></v-card-title>
-              <v-card-text>
-                <table>
-                  <tr v-for="s in standings">
-                    <td>{{s.name}}</td><td> : </td><td>{{s.standing}}</td>
-                  </tr>
-                </table>
-              </v-card-text>
-            </v-card>
-            </v-flex>      
+            <v-flex><standings :id="team.id"></standings></v-flex>
             <v-flex><v-card >
               <v-card-title primary-title><h3 class="headline mb-0">Results</h3></v-card-title>
               <v-card-title >Last few results</v-card-title>
@@ -84,11 +74,11 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   props("id")
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("appConfig")(c => ApplicationContextService.get)
-  subscription("standings","id")(c => TeamService.standings(c.id))
   method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,5))
   method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
   method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))
 
+  components(TeamStandings)
 }
 
 object TeamTitleComponent extends RouteComponent {
@@ -98,6 +88,26 @@ object TeamTitleComponent extends RouteComponent {
 @js.native
 trait TeamTitle extends IdComponent{
   var contact:Boolean
+}
+
+object TeamStandings extends Component {
+  
+  type facade = IdComponent
+  
+  val name = "standings"
+  val template ="""        
+      <v-card v-if="standings && standings.length > 0">
+        <v-card-title primary-title><h3 class="headline mb-0">Standings</h3></v-card-title>
+        <v-card-text>
+          <table>
+            <tr v-for="s in standings">
+              <td>{{s.name}}</td><td> : </td><td>{{s.standing}}</td>
+            </tr>
+          </table>
+        </v-card-text>
+      </v-card>"""
+  props("id")
+  subscription("standings","id")(c => TeamService.standings(c.id))
 }
 
 object TeamTitle extends Component {
