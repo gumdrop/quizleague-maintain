@@ -65,14 +65,27 @@ object TeamStandings extends Component {
         <v-card-title primary-title><h3 class="headline mb-0">Standings</h3></v-card-title>
         <v-card-text>
           <table>
-            <tr v-for="s in standings">
-              <td>{{s.name}}</td><td> : </td><td>{{s.standing}}</td>
-            </tr>
+            <standing v-for="s in standings" :standing="s"></standing>
           </table>
         </v-card-text>
       </v-card>"""
   props("id")
   subscription("standings","id")(c => TeamService.standings(c.id))
+  
+  components(StandingComponent)
+}
+
+object StandingComponent extends Component {
+  val name = "standing"
+  val template = """
+    <tr v-if="standing.name">
+      <td>{{standing.name}}</td><td> : </td><td>{{standing.standing}}</td>
+    </tr>
+    <tr v-else>
+      <td colspan="3">{{standing.standing}}</td>
+    </tr>
+    """
+  prop("standing")
 }
 
 object TeamResults extends Component{

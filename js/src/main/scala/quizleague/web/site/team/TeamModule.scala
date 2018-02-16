@@ -28,6 +28,8 @@ import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.model.CompetitionType
 import quizleague.util.StringUtils._
+import quizleague.web.site.fixtures.FixtureService
+import quizleague.web.site.fixtures.FixturesService
 
 object TeamModule extends Module{
   
@@ -76,12 +78,19 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
     s => {
       CompetitionService.competition[LeagueCompetition](s.currentSeason.id, CompetitionType.league.toString)
         .flatMap(c => zip(c.tables))
-        .map(_.flatMap(_.rows))
-        .map(_.filter(_.team.id == teamId).map(row => new Standing("League", toOrdinal(row.position.toInt))))
+        .map(_.flatMap(t => t.rows
+          .filter(_.team.id == teamId)
+          .map(row => new Standing(s"League ${t.description}", toOrdinal(row.position.toInt)))))
      
     }
   )
-  def cupStandings(teamId:String):Observable[js.Array[Standing]] = Observable.just(js.Array())
+  def cupStandings(teamId:String):Observable[js.Array[Standing]] = ApplicationContextService.get.flatMap(
+    s => {
+      FixtureService.fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitionsOfType[CupCompetition](s.currentSeason.id)), teamId)
+        .map(_.filter(_.result == null).map(f => new Standing(f.parentDescription,f.description)))
+    }
+  )
+
   def standings(teamId:String):Observable[js.Array[Standing]] = combineLatest(leagueStanding(teamId),cupStandings(teamId))
       .map(_.flatMap(x => x))
   

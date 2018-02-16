@@ -64,7 +64,7 @@ object FixturesService extends FixturesGetService {
     competitionFixtures(CompetitionService.firstClassCompetitions(seasonId))
   }
   
-  def competitionFixtures(competitions:Observable[js.Array[Competition]]):Observable[js.Array[Fixtures]] = {
+  def competitionFixtures(competitions:Observable[js.Array[_ <: Competition]]):Observable[js.Array[Fixtures]] = {
       competitions.map(_.flatMap(_.fixtures.map(_.obs))).flatMap(o => combineLatest(o).map(_.toJSArray))
   }
 
@@ -93,7 +93,7 @@ object FixtureService extends FixtureGetService with PostService{
     Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date)(Desc).take(take).toJSArray)
   }
   
-  private def fixturesFrom(fixtures:Observable[js.Array[Fixtures]], teamId:String, take:Int, sortOrder:Ordering[String] = Asc[String]) = {
+  def fixturesFrom(fixtures:Observable[js.Array[Fixtures]], teamId:String, take:Int = Integer.MAX_VALUE, sortOrder:Ordering[String] = Asc[String]) = {
     val tf = fixtures.flatMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
     .map(_.filter(f => f.home.id == teamId || f.away.id == teamId).sortBy(_.date)(sortOrder))
       
