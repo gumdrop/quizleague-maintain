@@ -15,7 +15,8 @@ object MaintainAppComponent extends Component {
   <v-navigation-drawer
       clipped
       fixed
-      app>
+      app
+      v-model="drawer">
     <ql-maintain-menu></ql-maintain-menu>
   </v-navigation-drawer>
     <v-toolbar      
@@ -26,7 +27,7 @@ object MaintainAppComponent extends Component {
       clipped-left
       scroll-off-screen
       >
-      <v-toolbar-side-icon></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
         <span>Data Maintenance</span>
@@ -45,7 +46,9 @@ object MaintainAppComponent extends Component {
     </v-content>
   </v-app>"""
  
-     components(MaintainMenuComponent,MaintainNotificationsComponent)
+  data("drawer",true)
+     
+  components(MaintainMenuComponent,MaintainNotificationsComponent)
 
      
 }
