@@ -30,7 +30,7 @@ object LeagueTableService extends LeagueTableGetService with LeagueTablePutServi
   
     
   def recalculateTable(table:LeagueTable, competition:Competition) = {
-    command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => x)
+    command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => Unit)
   }
   
 

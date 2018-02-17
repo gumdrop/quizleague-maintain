@@ -54,8 +54,8 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   override val venueService:VenuePutService
   override val teamService:TeamPutService
   
-  def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue]) = {
-    val dom = Dom(newId,fx.description, fx.parentDescription,venueService.ref(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None)
+  def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue], subsidiary:Boolean) = {
+    val dom = Dom(newId,fx.description, fx.parentDescription,venueService.ref(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None,subsidiary)
     mapOutSparse(dom)
   }
   

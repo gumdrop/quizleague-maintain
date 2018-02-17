@@ -78,7 +78,7 @@ object FixtureService extends FixtureGetService with PostService{
 
     
   def teamFixtures(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-    val q = db.collection(uriRoot).where("date",">=", today.toString).orderBy("date").limit(take)
+    val q = db.collection(uriRoot).where("date",">=", today.toString).where("subsidiary","==", false).orderBy("date").limit(take)
     val home = query(q.where("home.id","==",teamId))
     val away = query(q.where("away.id","==",teamId))
     
@@ -86,7 +86,7 @@ object FixtureService extends FixtureGetService with PostService{
   }
   
   def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-    val q = db.collection(uriRoot).where("date","<=", today.toString).orderBy("date","desc").limit(take)
+    val q = db.collection(uriRoot).where("date","<=", today.toString).where("subsidiary","==", false).orderBy("date","desc").limit(take)
     val home = query(q.where("home.id","==",teamId))
     val away = query(q.where("away.id","==",teamId))
     

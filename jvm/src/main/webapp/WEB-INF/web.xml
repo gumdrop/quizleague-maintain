@@ -70,14 +70,7 @@
     <url-pattern>/calendar/*</url-pattern>
   </servlet-mapping>
   <!-->
-  <servlet>
-    <servlet-name>statshandler</servlet-name>
-    <servlet-class>org.chilternquizleague.web.StatsQueueHandler</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>statshandler</servlet-name>
-    <url-pattern>/tasks/stats</url-pattern>
-  </servlet-mapping>
+
   <servlet>
     <servlet-name>tokenhandler</servlet-name>
     <servlet-class>org.chilternquizleague.web.TokenQueueHandler</servlet-class>
@@ -114,11 +107,11 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 
-  <!-- security-constraint>
+  <security-constraint>
     <web-resource-collection>
       <web-resource-name>maintenance</web-resource-name>
       <url-pattern>/maintain/*</url-pattern>
-      <url-pattern>/entity/*</url-pattern>
+      <url-pattern>/rest/entity/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
@@ -130,10 +123,10 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>tasks</web-resource-name>
-      <url-pattern>/tasks/*</url-pattern>
+      <url-pattern>/rest/task/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
     </auth-constraint>
-  </security-constraint-->
+  </security-constraint>
 </web-app>

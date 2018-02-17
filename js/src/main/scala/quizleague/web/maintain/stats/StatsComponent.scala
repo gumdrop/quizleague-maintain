@@ -36,7 +36,6 @@ object StatsComponent extends RouteComponent{
         </v-select>
        <v-btn flat color="primary" :disabled="!season" v-on:click="regenerate" ><v-icon left>refresh</v-icon>Regenerate</v-btn> 
        </div>
-       {{resultText}}
         <v-dialog v-model="complete" max-width="400px">
           <v-card>
             <v-card-text>{{resultText}}</v-card-text>
@@ -50,7 +49,7 @@ object StatsComponent extends RouteComponent{
   
     def regenerate(c:facade){
       
-      StatsService.rebuild(c.season.id).subscribe(x => x)
+      StatsService.rebuild(c.season.id).subscribe(x => Unit)
   
     }
   

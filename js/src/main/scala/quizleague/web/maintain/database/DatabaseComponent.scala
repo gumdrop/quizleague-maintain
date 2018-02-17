@@ -22,8 +22,8 @@ object DatabaseComponent extends RouteComponent{
     <v-container grid-list-lg>
       <v-layout column fluid>
        <div>
-        <input type="file" id="upload-text-field" label="Database dump file" v-on:change="(e) => uploadFileSelected=e.isTrusted">
         <v-btn flat color="primary" v-on:click="upload" :disabled="!uploadFileSelected"><v-icon left>file_upload</v-icon>Upload</v-btn> 
+        <input type="file" id="upload-text-field" label="Database dump file" v-on:change="(e) => uploadFileSelected=e.isTrusted">
         <v-dialog v-model="uploadComplete" max-width="400px">
           <v-card>
             <v-card-text>{{uploadText}}</v-card-text>

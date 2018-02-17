@@ -85,7 +85,8 @@ object FixturesComponent extends CompetitionComponentConfig{
       c.fxs,
       teamManager(c).take(c.homeTeam), 
       teamManager(c).take(c.awayTeam),
-      c.venue)
+      c.venue,
+      c.item.typeName == CompetitionType.subsidiary.toString)
       c.fxs.fixtures +++= (f.id, f)
       fixtureService.cache(f)
 

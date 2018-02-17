@@ -7,9 +7,10 @@ import quizleague.domain.container.DomainContainer
 import scala.reflect.ClassTag
 import quizleague.data.Storage
 import Storage._
-import quizleague.domain.Entity
+import quizleague.domain._
 import javax.ws.rs.PathParam
 import quizleague.domain._
+import quizleague.domain.stats._
 import quizleague.domain.util._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
@@ -19,10 +20,12 @@ import javax.ws.rs.GET
 import javax.ws.rs.Produces
 import com.google.appengine.api.taskqueue._
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
-import quizleague.rest.endpoint.HistoricalStatsAggregator
+import java.util.logging.Logger
 
 @Path("/entity")
 class EntityEndpoint extends MaintainPostEndpoints{
+  
+  val LOG:Logger = Logger.getLogger(this.getClass.getName)
   
   implicit val context = StorageContext()
   
@@ -33,6 +36,27 @@ class EntityEndpoint extends MaintainPostEndpoints{
     def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
       Storage.saveAll[T](list)(tag,encoder)
     }
+    
+    def deleteAll[T <: Entity](implicit tag:ClassTag[T], decoder:Decoder[T]){
+      try{
+        Storage.deleteAll(Storage.list[T])
+      }
+      catch{case e:Throwable => LOG.info(s"exception deleting collection $tag")}
+    }
+    
+    deleteAll[ApplicationContext]
+    deleteAll[Competition]
+    deleteAll[Fixture]
+    deleteAll[Fixtures]
+    deleteAll[GlobalText]
+    deleteAll[LeagueTable]
+    deleteAll[Reports]
+    deleteAll[Season]
+    deleteAll[Team]
+    deleteAll[Text]
+    deleteAll[User]
+    deleteAll[Venue]
+    deleteAll[Statistics]
     
     val container = deser[DomainContainer](json)
     
