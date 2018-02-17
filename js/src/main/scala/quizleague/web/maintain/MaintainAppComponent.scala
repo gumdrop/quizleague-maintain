@@ -46,7 +46,7 @@ object MaintainAppComponent extends Component {
     </v-content>
   </v-app>"""
  
-  data("drawer",true)
+  data("drawer",null)
      
   components(MaintainMenuComponent,MaintainNotificationsComponent)
 
