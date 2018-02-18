@@ -30,7 +30,7 @@ object MaintainAppComponent extends Component {
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
-        <span>Data Maintenance</span>
+        <span>Quizleague Data Maintenance</span>
       </v-toolbar-title>
 
     </v-toolbar>
