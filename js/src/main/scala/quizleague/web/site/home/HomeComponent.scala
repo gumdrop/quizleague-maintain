@@ -36,25 +36,19 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
       <div>
-      <v-tabs  :scrollable="true" ripple v-model="activeTab" >
-        <v-tabs-bar ripple @click.native="haltTabs()">
-        <v-tabs-slider color="yellow"></v-tabs-slider>
-          <v-tabs-item href="#league">Tables</v-tabs-item>
-          <v-tabs-item href="#results">Results</v-tabs-item>
-          <v-tabs-item href="#fixtures">Fixtures</v-tabs-item>
-        </v-tabs-bar>
-
-        <v-tabs-items>
-          <v-tabs-content id="league">
+      <v-tabs ripple v-model="activeTab" slider-color="yellow">
+          <v-tab key="league">Tables</v-tab>
+          <v-tab key="results">Results</v-tab>
+          <v-tab key="fixtures">Fixtures</v-tab>
+          <v-tab-item key="league">
            <ql-home-page-table style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
-          </v-tabs-content>
-          <v-tabs-content id="results">
+          </v-tab-item>
+          <v-tab-item key="results">
             <ql-latest-results style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-latest-results>
-          </v-tabs-content>
-          <v-tabs-content id="fixtures">
+          </v-tab-item>
+          <v-tab-item key="fixtures">
             <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
-          </v-tabs-content>
-        </v-tabs-items>
+          </v-tab-item>
       </v-tabs>
       </div>  
 
