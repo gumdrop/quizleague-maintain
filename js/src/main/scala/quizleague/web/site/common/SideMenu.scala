@@ -6,18 +6,13 @@ object SideMenu extends Component{
   val name = "ql-side-menu"
   
   val template = """
-     <v-list >
-     <v-list-group no-action :value="true">
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>{{icon}}</v-icon>
-              </v-list-tile-action>
+     <v-list>
+     <v-list-group no-action :prepend-icon="icon" :key="title" v-model="active">
+            <v-list-tile slot="activator">
               <v-list-tile-content>
                 <v-list-tile-title>{{title}}</v-list-tile-title>
               </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
+
             </v-list-tile>
             <slot></slot>
       </v-list-group>
@@ -25,6 +20,6 @@ object SideMenu extends Component{
 
 
 """
-  
+  data("active",true)
   props("title","icon")
 }

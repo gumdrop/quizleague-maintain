@@ -33,10 +33,10 @@ object TeamComponent extends Component with GridSizeComponentConfig{
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
             <v-flex><standings :id="team.id"></standings></v-flex>
-            <v-flex><team-results :id="team.id" :seasonId="appConfig.currentSeason.id"></team-results>
-            </v-flex>      
-            <v-flex><team-fixtures :id="team.id" :seasonId="appConfig.currentSeason.id"></team-fixtures>
-            </v-flex>
+            <!--v-flex><team-results :id="team.id" :seasonId="appConfig.currentSeason.id"></team-results>
+            </v-flex-->      
+            <!--v-flex><team-fixtures :id="team.id" :seasonId="appConfig.currentSeason.id"></team-fixtures>
+            </v-flex-->
           </v-layout>
           </v-container>"""
   props("id")
