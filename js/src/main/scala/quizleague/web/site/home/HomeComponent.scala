@@ -36,7 +36,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
       <div>
-      <v-tabs ripple v-model="activeTab" slider-color="yellow">
+      <v-tabs ripple v-model="activeTab" slider-color="yellow" centered>
           <v-tab key="league">Tables</v-tab>
           <v-tab key="results">Results</v-tab>
           <v-tab key="fixtures">Fixtures</v-tab>
