@@ -19,12 +19,18 @@ import rxscalajs.Observable
 import quill.VueQuillEditor
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
+import firebase._
+import quizleague.web.store.Firestore
 
 @JSExportTopLevel("Maintain")
 object MaintainApp{
   
   @JSExport
   def main():Unit = {
+  
+  //set up firebase auth context
+   Firestore.setAuthContext()
+    
   Vue.use(VueQuillEditor)
   Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
   Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))

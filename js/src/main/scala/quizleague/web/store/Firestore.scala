@@ -1,16 +1,12 @@
 package quizleague.web.store
 
-import scalajs.js.Dynamic.literal
+import scalajs.js
+import js.Dynamic.literal
 import firebase._
+
 
 object Firestore {
     val config = literal(      
-//     apiKey = "AIzaSyAzKh8FB6M7DEF8bTsjNOnJWTRKzimUaWk",
-//    authDomain ="ql-firestore-trial.firebaseapp.com",
-//    databaseURL = "https://ql-firestore-trial.firebaseio.com",
-//    projectId = "ql-firestore-trial",
-//    storageBucket = "ql-firestore-trial.appspot.com",
-//    messagingSenderId = "401855810413"
     apiKey= "AIzaSyCTnCW1euWGpRohoEBESIdNEASM7rQ5gkY",
     authDomain= "ql-firestore-2.firebaseapp.com",
     databaseURL= "https=//ql-firestore-2.firebaseio.com",
@@ -22,4 +18,16 @@ object Firestore {
    Firebase.initializeApp(config)
       
    val db = Firebase.firestore()
+   
+   def setAuthContext(){
+
+    Firebase.auth().onAuthStateChanged({ (user: User) =>
+
+      if (user == null) {
+        val provider = new auth.GoogleAuthProvider()
+        Firebase.auth().signInWithRedirect(provider)
+      }
+
+    }: js.Function)
+  }
 }
