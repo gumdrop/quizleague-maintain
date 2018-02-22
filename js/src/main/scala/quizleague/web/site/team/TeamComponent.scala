@@ -13,8 +13,9 @@ import scala.scalajs.js
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.util.Clipboard
 import org.scalajs.dom
+import quizleague.web.site.SideMenu
 
-object TeamPage extends RouteComponent{
+object TeamPage extends RouteComponent with SideMenu{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
 }
 

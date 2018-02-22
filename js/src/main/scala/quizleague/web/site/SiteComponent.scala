@@ -6,8 +6,15 @@ import js.DynamicImplicits._
 import com.felstar.scalajs.vue.VuetifyComponent
 import com.felstar.scalajs.vue.VueRxComponent
 
+@js.native
+trait SiteComponent extends VueRxComponent with VuetifyComponent{
+  var sidemenu:Boolean
+  var drawer:Boolean
+  var showMenu:Boolean
+}
+
 object SiteComponent extends Component {
-     type facade = VueRxComponent with VuetifyComponent
+     type facade = SiteComponent
   
      val name = "ql-app"
 
@@ -20,7 +27,8 @@ object SiteComponent extends Component {
       clipped
       fixed
       app
-      disable-resize-watcher
+      :disable-resize-watcher="true"
+      :disable-route-watcher="true"
 	  v-model="drawer">
 	  <v-list :expand="true">
     <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
@@ -44,7 +52,7 @@ object SiteComponent extends Component {
       clipped-left
       scroll-off-screen
       >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="menu"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="showMenu = !showMenu" v-show="$vuetify.breakpoint.mdAndDown"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
         <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':''">{{appData.leagueName}}</span>
@@ -74,19 +82,26 @@ object SiteComponent extends Component {
      
   components(ResultNotificationsComponent)
   
-  data("menu",true)
+  def drawerGet(c:facade) = {
+       val res = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
+       println(s"drawer get : $res")
+       res    
+     }
+  
+  data("showMenu",false)
   subscription("appData")(c => ApplicationContextService.get())
-  subscription("drawer")(c => SiteService.sidemenu.map(_ && c.$vuetify.breakpoint.mdAndUp))
-
+  subscription("sidemenu")(c => SiteService.sidemenu)
+  computedGetSet("drawer")({drawerGet _}:js.ThisFunction)({(c:facade, showMenu:Boolean) => {println(s"incoming : $showMenu");}}:js.ThisFunction)
+  //watch("drawer")((c:facade, drawer:js.Any) => println(s"drawer : ${c.drawer}"))
 }
 
 trait NoSideMenu{
   this:Component =>
-  override val beforeCreate:js.Function = () => SiteService.sidemenu.next(false)
+  override def mounted:js.Function = () => { SiteService.sidemenu.next(false)}
 }
 
 trait SideMenu{
   this:Component =>
-  override val beforeCreate:js.Function = () => SiteService.sidemenu.next(true)
+  override def mounted:js.Function = () => {SiteService.sidemenu.next(true)}
 }
 

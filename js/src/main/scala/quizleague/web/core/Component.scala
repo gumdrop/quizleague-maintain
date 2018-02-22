@@ -118,7 +118,7 @@ trait Component {
     addedComputed = addedComputed + ((name, fn))
   }
   
-  protected final def computedGetSet(name:String)(get:js.Function, set:js.Function){
+  protected final def computedGetSet(name:String)(get:js.Function)(set:js.Function){
     addedComputed = addedComputed + ((name, js.Dynamic.literal(get = get, set = set)))
   }
   

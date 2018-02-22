@@ -101,6 +101,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
   method("haltTabs")({haltTabs _}:js.ThisFunction)
 
   override val mounted = ({(c:facade) => {
+    super.mounted.call(c);
     setTimeout(5000)(c.sponsorMessage = true);
     c.tabsHandle = setInterval(5000)(nextTab(c))
   }}:js.ThisFunction)
