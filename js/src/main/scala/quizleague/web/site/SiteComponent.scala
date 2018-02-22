@@ -2,8 +2,13 @@ package quizleague.web.site
 
 import quizleague.web.core.Component
 import scalajs.js
+import js.DynamicImplicits._
+import com.felstar.scalajs.vue.VuetifyComponent
+import com.felstar.scalajs.vue.VueRxComponent
 
 object SiteComponent extends Component {
+     type facade = VueRxComponent with VuetifyComponent
+  
      val name = "ql-app"
 
      val template="""
@@ -17,6 +22,7 @@ object SiteComponent extends Component {
       app
       disable-resize-watcher
 	  v-model="drawer">
+	  <v-list :expand="true">
     <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
         <v-list-tile to="/home" ><v-list-tile-action><v-icon flat left>home</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Home</v-list-tile-title></v-list-tile-content></v-list-tile>  
         <v-list-tile to="/team" ><v-list-tile-action><v-icon flat left>people</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Teams</v-list-tile-title></v-list-tile-content></v-list-tile>  
@@ -27,8 +33,8 @@ object SiteComponent extends Component {
         <v-list-tile to="/rules" ><v-list-tile-action><v-icon flat left>mdi-book-open-page-variant</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Rules</v-list-tile-title></v-list-tile-content></v-list-tile>  
         <v-list-tile to="/links" ><v-list-tile-action><v-icon flat left>link</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Links</v-list-tile-title></v-list-tile-content></v-list-tile>  
     </ql-side-menu>
-
     <router-view name="sidenav"></router-view>
+    </v-list>
   </v-navigation-drawer>
     <v-toolbar      
       color="blue darken-3"
@@ -70,7 +76,7 @@ object SiteComponent extends Component {
   
   data("menu",true)
   subscription("appData")(c => ApplicationContextService.get())
-  subscription("drawer")(c => SiteService.sidemenu)
+  subscription("drawer")(c => SiteService.sidemenu.map(_ && c.$vuetify.breakpoint.mdAndUp))
 
 }
 
@@ -81,6 +87,6 @@ trait NoSideMenu{
 
 trait SideMenu{
   this:Component =>
-  override val mounted:js.Function = () => SiteService.sidemenu.next(true)
+  override val beforeCreate:js.Function = () => SiteService.sidemenu.next(true)
 }
 

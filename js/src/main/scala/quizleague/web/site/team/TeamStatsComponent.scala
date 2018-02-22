@@ -17,33 +17,31 @@ object TeamStatsPage extends RouteComponent{
 object TeamStatsComponent extends Component with GridSizeComponentConfig{
   val name = "ql-team-stats"
   val template = """
-    <v-tabs>
-      <v-tabs-bar>
-        <v-tabs-item ripple key="1" href="#tab1" >
+    <v-tabs ripple slider-color="yellow" >
+
+        <v-tab key="1">
           Single Season
-        </v-tabs-item>
-        <v-tabs-item ripple key="2" href="#tab2" >
+        </v-tab>
+        <v-tab key="2" >
           All Seasons
-        </v-tabs-item>
-        <v-tabs-slider color="yellow"></v-tabs-slider>
-      </v-tabs-bar>
-      <v-tabs-items>
-        <v-tabs-content key="1" id="tab1">
+        </v-tab>
+
+        <v-tab-item key="1">
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
             <v-flex><ql-season-select :season="season" label="Season"></ql-season-select></v-flex>
             <v-flex><season-stats v-if="id && s" :teamId="id" :seasonId="s.id"></season-stats><v-flex>
             </v-layout>
           </v-container>
-        </v-tabs-content>
-        <v-tabs-content key="2" id="tab2">
+        </v-tab-item>
+        <v-tab-item key="2" >
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
             <v-flex><all-season-stats v-if="id" :teamId="id"></all-season-stats><v-flex>
             </v-layout>
           </v-container>
-        </v-tabs-content>
-      </v-tabs-items>
+        </v-tab-item>
+
     </v-tabs>
 
 

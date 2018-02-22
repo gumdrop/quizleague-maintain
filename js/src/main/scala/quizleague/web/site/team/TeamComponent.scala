@@ -28,20 +28,20 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   
   override val name = "ql-team"
   override val template = """
-            <v-container v-if="team && appConfig" v-bind="gridSize" fluid>
+            <v-container v-if="team && seasonId" v-bind="gridSize" fluid>
               <v-layout column>
 
            <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
             <v-flex><standings :id="team.id"></standings></v-flex>
-            <!--v-flex><team-results :id="team.id" :seasonId="appConfig.currentSeason.id"></team-results>
-            </v-flex-->      
-            <!--v-flex><team-fixtures :id="team.id" :seasonId="appConfig.currentSeason.id"></team-fixtures>
-            </v-flex-->
+            <v-flex><team-results :id="team.id" :seasonId="seasonId"></team-results>
+            </v-flex>      
+            <v-flex><team-fixtures :id="team.id" :seasonId="seasonId"></team-fixtures>
+            </v-flex>
           </v-layout>
           </v-container>"""
   props("id")
   subscription("team","id")(v => TeamService.get(v.id))
-  subscription("appConfig")(c => ApplicationContextService.get)
+  subscription("seasonId")(c => ApplicationContextService.get.map(_.currentSeason.id))
 
   components(TeamStandings,TeamResults,TeamFixtures)
 }
