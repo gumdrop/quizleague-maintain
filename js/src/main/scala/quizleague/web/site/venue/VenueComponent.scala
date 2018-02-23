@@ -17,6 +17,7 @@ import scala.scalajs.js.ThisFunction0
 import quizleague.web.core.Component
 import quizleague.web.core.IdComponent
 import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.site.SideMenu
 
 
 
@@ -108,7 +109,7 @@ object VenueTitle extends Component {
 
 }
 
-object VenueMenuComponent extends Component {
+object VenueMenuComponent extends Component with SideMenu{
 
   override val name = ""  
   

@@ -4,6 +4,7 @@ package quizleague.web.site.competition
 import quizleague.web.core._
 import quizleague.web.core.IdComponent
 import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.site.SideMenu
 
 
 

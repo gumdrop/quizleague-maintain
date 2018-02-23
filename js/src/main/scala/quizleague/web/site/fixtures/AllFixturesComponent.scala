@@ -4,6 +4,7 @@ import quizleague.web.core._
 import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.site.ApplicationContextService
 import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.site.SideMenu
 
 
 

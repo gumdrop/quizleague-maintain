@@ -6,9 +6,10 @@ import quizleague.web.site.season._
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.model.Competition
+import quizleague.web.site.SideMenu
 
 
-object CompetitionMenu extends RouteComponent{
+object CompetitionMenu extends RouteComponent with SideMenu{
   val template = """
         <ql-competition-menu></ql-competition-menu>
   """

@@ -8,6 +8,7 @@ import quizleague.web.site.season.SeasonIdComponent
 import quizleague.web.core.GridSizeComponentConfig
 import com.felstar.scalajs.vue.VuetifyComponent
 import quizleague.web.site.season.SeasonFormatComponent
+import quizleague.web.site.SideMenu
 
 
 

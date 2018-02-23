@@ -2,9 +2,10 @@ package quizleague.web.site.results
 
 import scalajs.js
 import quizleague.web.core.RouteComponent
+import quizleague.web.site.SideMenu
 
 
-object ResultsMenuComponent extends RouteComponent{
+object ResultsMenuComponent extends RouteComponent with SideMenu{
   val template = """
   <ql-side-menu title="Results" icon="check">
   <v-list-tile to="/results/all">

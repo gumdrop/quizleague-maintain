@@ -15,7 +15,7 @@ import quizleague.web.util.Clipboard
 import org.scalajs.dom
 import quizleague.web.site.SideMenu
 
-object TeamPage extends RouteComponent with SideMenu{
+object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
 }
 
@@ -218,7 +218,7 @@ object ContactDialog extends Component with DialogComponentConfig{
 
 }
 
-object TeamMenuComponent extends RouteComponent {
+object TeamMenuComponent extends RouteComponent with SideMenu{
    override val template = """
      <ql-side-menu title="Teams" icon="people">
        <v-list-tile to="/team/start">

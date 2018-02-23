@@ -2,8 +2,9 @@ package quizleague.web.site.team
 
 import quizleague.web.core.RouteComponent
 import quizleague.web.core.GridSizeComponentConfig
+import quizleague.web.site.SideMenu
 
-object TeamsComponent extends RouteComponent with GridSizeComponentConfig{
+object TeamsComponent extends RouteComponent with GridSizeComponentConfig {
     val template="""
       <v-container v-bind="gridSize" fluid>
         <v-layout>
