@@ -19,7 +19,7 @@ import quizleague.web.core.GridSizeComponentConfig
 @js.native
 trait HomeComponent extends VueRxComponent with VuetifyComponent{
   var sponsorMessage:Boolean
-  var activeTab:String
+  var activeTab:Int
   var tabsHandle:SetIntervalHandle
 }
 
@@ -36,17 +36,17 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
       <div>
-      <v-tabs ripple v-model="activeTab" slider-color="yellow" centered>
-          <v-tab key="league">Tables</v-tab>
-          <v-tab key="results">Results</v-tab>
-          <v-tab key="fixtures">Fixtures</v-tab>
-          <v-tab-item key="league">
+      <v-tabs ripple :value="activeTab" slider-color="yellow" centered>
+          <v-tab key="1">Tables</v-tab>
+          <v-tab key="2">Results</v-tab>
+          <v-tab key="3">Fixtures</v-tab>
+          <v-tab-item key="1">
            <ql-home-page-table style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
           </v-tab-item>
-          <v-tab-item key="results">
+          <v-tab-item key="2">
             <ql-latest-results style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-latest-results>
           </v-tab-item>
-          <v-tab-item key="fixtures">
+          <v-tab-item key="3">
             <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
           </v-tab-item>
       </v-tabs>
@@ -88,12 +88,12 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
 """
   components(HomePageLeagueTable, NextFixturesComponent, LatestResultsComponent)
   data("sponsorMessage", false)
-  data("activeTab", null)
+  data("activeTab", 0)
   data("tabsHandle", null)
 
   subscription("appData")(c => ApplicationContextService.get())
   
-  def nextTab(c:facade) = c.activeTab = tabs((tabs.indexOf(c.activeTab) + 1) % tabs.length)
+  def nextTab(c:facade) = c.activeTab = ((c.activeTab + 1) % tabs.length)
   def haltTabs(c:facade) = clearInterval(c.tabsHandle)
 
   def align(c: facade) = js.Dictionary("column" -> c.$vuetify.breakpoint.smAndDown)

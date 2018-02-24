@@ -25,10 +25,9 @@ object SiteComponent extends Component {
   >
   <v-navigation-drawer
       clipped
-      fixed
+      
       app
       :disable-resize-watcher="true"
-      :disable-route-watcher="true"
 	  v-model="drawer">
 	  <v-list :expand="true">
     <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
@@ -52,7 +51,7 @@ object SiteComponent extends Component {
       clipped-left
       scroll-off-screen
       >
-      <v-toolbar-side-icon @click.stop="showMenu = !showMenu" v-show="$vuetify.breakpoint.mdAndDown"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
         <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':''">{{appData.leagueName}}</span>
@@ -82,17 +81,14 @@ object SiteComponent extends Component {
      
   components(ResultNotificationsComponent)
   
-  def drawerGet(c:facade) = {
-       val res = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
-       println(s"drawer get : $res")
-       res    
-     }
+  def drawerGet(c:facade) = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
+  def drawerSet(c:facade, showMenu:Boolean){c.showMenu = if(c.$vuetify.breakpoint.mdAndDown) showMenu else c.showMenu}
+
   
   data("showMenu",false)
   subscription("appData")(c => ApplicationContextService.get())
   subscription("sidemenu")(c => SiteService.sidemenu)
-  computedGetSet("drawer")({drawerGet _}:js.ThisFunction)({(c:facade, showMenu:Boolean) => {println(s"incoming : $showMenu");}}:js.ThisFunction)
-  //watch("drawer")((c:facade, drawer:js.Any) => println(s"drawer : ${c.drawer}"))
+  computedGetSet("drawer")({drawerGet _}:js.ThisFunction)({drawerSet _}:js.ThisFunction)
 }
 
 trait NoSideMenu{
