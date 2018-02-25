@@ -5,7 +5,6 @@ import js.annotation._
 import js.|
 import firebase.Promise
 import firebase.firestore.Firestore.{DocumentData,FirestoreErrorCode,DocumentChangeType,LogLevel,OrderByDirection,UpdateData,WhereFilterOp, Uint8Array}
-import firebase.firestore.Firestore
 
 @js.native
 trait Settings extends js.Object {

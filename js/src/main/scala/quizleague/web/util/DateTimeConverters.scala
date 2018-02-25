@@ -1,9 +1,9 @@
 package quizleague.web.util
 
-import org.threeten.bp._
+import java.time._
 import scalajs.js
-import org.threeten.bp.temporal.TemporalUnit
-import org.threeten.bp.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
+import java.time.temporal.ChronoUnit
 
 object DateTimeConverters{
   import scala.language.implicitConversions

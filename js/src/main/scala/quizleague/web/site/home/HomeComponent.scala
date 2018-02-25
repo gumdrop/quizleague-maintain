@@ -35,42 +35,22 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
      <ql-title>Home</ql-title>
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
-      <div>
-      <v-tabs ripple :value="activeTab" slider-color="yellow" centered>
-          <v-tab key="1">Tables</v-tab>
-          <v-tab key="2">Results</v-tab>
-          <v-tab key="3">Fixtures</v-tab>
-          <v-tab-item key="1">
-           <ql-home-page-table style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
-          </v-tab-item>
-          <v-tab-item key="2">
-            <ql-latest-results style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-latest-results>
-          </v-tab-item>
-          <v-tab-item key="3">
-            <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
-          </v-tab-item>
-      </v-tabs>
-      </div>  
-
-      <!--v-carousel light style="min-height:35em"  :cycle="true" >
-          <v-carousel-item src="" style="align-item:start;">
-          <v-container fluid>
-          <v-layout column>
-            <ql-home-page-table :seasonId="appData.currentSeason.id"></ql-home-page-table>
-          <v-layout>
-          </v-container>
-          </v-carousel-item>
-          <v-carousel-item src="">
-          <v-container>
-              <ql-latest-results :seasonId="appData.currentSeason.id"></ql-latest-results>
-          <v-container>
-          </v-carousel-item>
-           <v-carousel-item src="">
-          <v-container>
-              <ql-next-fixtures :seasonId="appData.currentSeason.id"></ql-next-fixtures>
-          </v-container>
-          </v-carousel-item>
-        </v-carousel-->
+        <div>
+          <v-tabs ripple :value="activeTab" slider-color="yellow" centered @click.native="haltTabs()">
+              <v-tab key="1">Tables</v-tab>
+              <v-tab key="2">Results</v-tab>
+              <v-tab key="3">Fixtures</v-tab>
+              <v-tab-item key="1">
+               <ql-home-page-table style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-home-page-table>
+              </v-tab-item>
+              <v-tab-item key="2">
+                <ql-latest-results style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-latest-results>
+              </v-tab-item>
+              <v-tab-item key="3">
+                <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
+              </v-tab-item>
+          </v-tabs>
+        </div>  
       </v-flex>
       <v-flex offset-xs0 offset-md1 xs12>
         <ql-named-text name="front-page"></ql-named-text>

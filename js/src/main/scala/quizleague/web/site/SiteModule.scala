@@ -34,7 +34,7 @@ import quizleague.web.site.calendar.CalendarModule
 import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
 import quizleague.web.site.common._
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 import rxscalajs.Observable
 
 

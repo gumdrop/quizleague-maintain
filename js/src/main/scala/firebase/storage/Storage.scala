@@ -118,7 +118,7 @@ import firebase.Promise
 
       var snapshot: firebase.storage.UploadTaskSnapshot = js.native
 
-      def then(onFulfilled: js.Function1[firebase.storage.UploadTaskSnapshot, Any] | Null = ???, onRejected: js.Function1[Error, Any] | Null = ???): Promise[js.Any] = js.native
+      def `then`(onFulfilled: js.Function1[firebase.storage.UploadTaskSnapshot, Any] | Null = ???, onRejected: js.Function1[Error, Any] | Null = ???): Promise[js.Any] = js.native
     }
 
     @js.native

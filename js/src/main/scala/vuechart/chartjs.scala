@@ -51,17 +51,22 @@ object Padding {
   def apply(p: Int): Padding = apply(p.toString)
 }
 
+
 @js.native trait ChartJs extends js.Object {
   def update(): Unit = js.native
   val data: ChartData = js.native
   def destroy():Unit = js.native
 }
 
-@js.native object Chart extends ChartJs {
+@JSGlobal
+@js.native 
+object Chart extends ChartJs {
   var defaults: js.Any = js.native // FIXME "{"responsive":true,"responsiveAnimationDuration":0,"maintainAspectRatio":true,"events":["mousemove","mouseout","click","touchstart","touchmove"],"hover":{"onHover":null,"mode":"nearest","intersect":true,"animationDuration":400},"onClick":null,"defaultColor":"rgba(0,0,0,0.1)","defaultFontColor":"#666","defaultFontFamily":"'Helvetica Neue', 'Helvetica', 'Arial', sans-serif","defaultFontSize":12,"defaultFontStyle":"normal","showLines":true,"elements":{"arc":{"backgroundColor":"rgba(0,0,0,0.1)","borderColor":"#fff","borderWidth":2},"line":{"tension":0.4,"backgroundColor":"rgba(0,0,0,0.1)","borderWidth":3,"borderColor":"rgba(0,0,0,0.1)","borderCapStyle":"butt","borderDash":[],"borderDashOffset":0,"borderJoinStyle":"miter","capBezierPoints":true,"fill":true},"point":{"radius":3,"pointStyle":"circle","backgroundColor":"rgba(0,0,0,0.1)","borderWidth":1,"borderColor":"rgba(0,0,0,0.1)","hitRadius":1,"hoverRadius":4,"hoverBorderWidth":1},"rectangle":{"backgroundColor":"rgba(0,0,0,0.1)","borderWidth":0,"borderColor":"rgba(0,0,0,0.1)","borderSkipped":"bottom"}},"animation":{"duration":1000,"easing":"easeOutQuart"},"title":{"display":false,"position":"top","fullWidth":true,"fontStyle":"bold","padding":10,"text":""},"legend":{"display":true,"position":"top","fullWidth":true,"reverse":false,"onHover":null,"labels":{"boxWidth":40,"padding":10}},"tooltips":{"enabled":true,"custom":null,"mode":"nearest","position":"average","intersect":true,"backgroundColor":"rgba(0,0,0,0.8)","titleFontStyle":"bold","titleSpacing":2,"titleMarginBottom":6,"titleFontColor":"#fff","titleAlign":"left","bodySpacing":2,"bodyFontColor":"#fff","bodyAlign":"left","footerFontStyle":"bold","footerSpacing":2,"footerMarginTop":6,"footerFontColor":"#fff","footerAlign":"left","yPadding":6,"xPadding":6,"caretSize":5,"cornerRadius":6,"multiKeyBackground":"#fff","displayColors":true,"callbacks":{}}}"
 }
 
-@js.native class Chart protected () extends ChartJs {
+@JSGlobal
+@js.native 
+class Chart protected () extends ChartJs {
   def this(canvasId: String|js.Any, data: ChartParam, options: js.Any = js.undefined) = this()
 }
 

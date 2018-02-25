@@ -5,7 +5,7 @@ import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter
 
 import com.felstar.scalajs.vue._
 

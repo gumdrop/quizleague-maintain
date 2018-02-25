@@ -1,7 +1,7 @@
 package quizleague.web.model
 
 import quizleague.web.util.rx._
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import scalajs.js
 
 class Statistics(

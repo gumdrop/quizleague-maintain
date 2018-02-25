@@ -2,7 +2,7 @@ package quizleague.domain.notification
 
 import quizleague.domain._
 import io.circe.generic.JsonCodec
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 
 object NotificationTypeNames{

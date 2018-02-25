@@ -2,7 +2,7 @@ package quizleague.domain.util
 
 import org.scalatest._
 import quizleague.domain._
-import org.threeten.bp._
+import java.time._
 import quizleague.util.conversions.Conversions._
 import org.scalactic.source.Position.apply
 import java.util.UUID.{randomUUID => uuid}

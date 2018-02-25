@@ -20,7 +20,7 @@ import rxscalajs.subjects.ReplaySubject
 import quizleague.web.model.Season
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonWatchService
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import quizleague.web.model.Fixtures
 import quizleague.util.collection._
 import quizleague.web.site.season.SeasonService

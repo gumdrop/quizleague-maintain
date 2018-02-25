@@ -8,11 +8,11 @@ import quizleague.data._
 import quizleague.domain._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.conversions.RefConversions._
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import quizleague.domain.TeamCompetition
 import quizleague.domain.SingletonCompetition
-import org.threeten.bp._
+import java.time._
 
 
 class CalendarHandler extends HttpServlet{

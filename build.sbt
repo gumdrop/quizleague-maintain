@@ -47,18 +47,15 @@ lazy val quizleague = crossProject.in(file(".")).
 	libraryDependencies += "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
     libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1",
     libraryDependencies += "org.mortbay.jetty" % "jetty" % "6.1.22" % "container",
-	libraryDependencies += "io.netty" % "netty-tcnative-boringssl-static" % "2.0.7.Final",
-    libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "0.34.0-beta"/*,
-    libraryDependencies += "io.grpc" % "grpc-netty" % "1.7.0",
-    libraryDependencies += "io.grpc" % "grpc-protobuf" % "1.7.0",
-    libraryDependencies += "io.grpc" % "grpc-stub" % "1.7.0"*/
-
+	//libraryDependencies += "io.netty" % "netty-tcnative-boringssl-static" % "2.0.7.Final",
+    libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "0.35.0-beta"
 
   ).
   jsSettings(
     name := "quizleague-js",
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.2",
-    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12",
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M13",
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-M13_2018c",
     libraryDependencies += "com.github.lukajcb" %%% "rxscala-js" % "0.15.0"
 
   )

@@ -28,7 +28,7 @@ import rxscalajs.Observable.combineLatest
 //import quizleague.web.site.season.SeasonModule
 //import quizleague.web.model.Season
 //import quizleague.web.site.season.SeasonService
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 //import quizleague.web.model.Competition
 //import quizleague.web.model.SingletonCompetition
 import js.JSConverters._

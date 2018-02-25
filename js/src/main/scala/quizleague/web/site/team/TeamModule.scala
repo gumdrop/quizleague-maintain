@@ -21,8 +21,8 @@ import quizleague.domain.command.TeamEmailCommand
 import chartjs.chart._
 import org.scalajs.dom.ext.Color
 import quizleague.web.site.season._
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import quizleague.web.useredit.TeamEditPage
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.competition.CompetitionService

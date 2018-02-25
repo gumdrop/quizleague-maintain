@@ -9,7 +9,7 @@ import shapeless._
 import quizleague.web.names.NotificationNames
 import io.circe._,io.circe.parser._,io.circe.syntax._,io.circe.scalajs.convertJsToJson
 import quizleague.util.json.codecs.DomainCodecs._
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 
 trait NotificationGetService extends GetService[Notification] with NotificationNames {

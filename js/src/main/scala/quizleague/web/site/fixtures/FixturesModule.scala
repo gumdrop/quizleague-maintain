@@ -12,7 +12,7 @@ import js.JSConverters._
 import rxscalajs.Observable
 import rxscalajs.Observable._
 import quizleague.web.model.CompetitionType
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import quizleague.web.util.Logging._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition.CompetitionService
@@ -105,7 +105,17 @@ object FixtureService extends FixtureGetService with PostService{
     val fixtures = FixturesService.spentFixtures(seasonId)
     
     val tf = fixtures.switchMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
-    .map(_.filter(f => f.result != null && (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date)(Desc))
+    .map(_.filter(f => (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date)(Desc))
+      
+    tf.map(_.take(take).toJSArray)
+  }
+    
+  def teamFixturesForSeason(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+    
+    val fixtures = FixturesService.activeFixtures(seasonId)
+    
+    val tf = fixtures.switchMap(fx => combineLatest(fx.flatMap(_.fixtures).map(_.obs)))
+    .map(_.filter(f => f.home.id == teamId || f.away.id == teamId).sortBy(_.date))
       
     tf.map(_.take(take).toJSArray)
   }

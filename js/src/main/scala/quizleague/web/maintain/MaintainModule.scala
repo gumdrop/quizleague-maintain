@@ -12,7 +12,7 @@ import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.database.DatabaseModule
 import quizleague.web.maintain.stats.StatsModule
 import quizleague.web.service.notification.NotificationGetService
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 import quizleague.web.model.MaintainMessagePayload
 import rxscalajs.Observable
 import scalajs.js

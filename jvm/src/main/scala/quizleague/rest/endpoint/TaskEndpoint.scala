@@ -21,7 +21,7 @@ import com.google.appengine.api.taskqueue._
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import javax.ws.rs.PathParam
 import quizleague.domain.notification._
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 
 

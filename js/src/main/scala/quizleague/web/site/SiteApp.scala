@@ -5,7 +5,7 @@ import js.Dynamic.literal
 import js.JSConverters._
 import com.felstar.scalajs.vue._
 
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter
 import quizleague.web.util.rx._
 import rxscalajs.Observable
 import scala.scalajs.js.annotation.JSExport

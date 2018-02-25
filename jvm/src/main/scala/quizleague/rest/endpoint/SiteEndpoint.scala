@@ -8,7 +8,7 @@ import quizleague.conversions.RefConversions._
 import quizleague.domain._
 import quizleague.rest._
 import quizleague.util.collection._
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import io.circe.syntax._
 
 

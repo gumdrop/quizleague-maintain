@@ -1,7 +1,7 @@
 package quizleague.web.maintain
 
 import quizleague.web.core._
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 import com.felstar.scalajs.vue.VueRxComponent
 import scalajs.js
 

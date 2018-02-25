@@ -105,7 +105,7 @@ object TeamResults extends Component{
     </v-card>"""
   
   props("id","seasonId")
-  method("results")((teamId:String, seasonId:String) => FixtureService.recentTeamResults(teamId,5)) 
+  method("results")((teamId:String, seasonId:String) => FixtureService.teamResults(teamId, seasonId, 5)) 
 
 }
 
@@ -136,7 +136,7 @@ object TeamFixtures extends Component{
       </v-card-actions>
     </v-card>"""
   props("id","seasonId")
-  method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixtures(teamId,5))
+  method("fixtures")((teamId:String, seasonId:String) => FixtureService.teamFixturesForSeason(teamId,seasonId,5))
   method("copy")((teamId:String) => Clipboard.copy(s"${dom.document.location.origin}/calendar/team/$teamId"))
 
 }

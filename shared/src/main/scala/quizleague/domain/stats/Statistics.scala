@@ -1,7 +1,7 @@
 package quizleague.domain.stats
 
 import quizleague.domain._
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 case class Statistics(
   id: String,
