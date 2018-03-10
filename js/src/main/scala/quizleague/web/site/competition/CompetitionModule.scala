@@ -38,7 +38,7 @@ object CompetitionModule extends Module {
         RouteConfig(path="/competition/:id/results", components=Map("default" -> ResultsPage, "title" -> CompetitionResultsTitle, "sidenav" -> CompetitionMenu)),
         RouteConfig(path="/competition/:id/fixtures", components=Map("default" -> FixturesPage, "title" -> CompetitionFixturesTitle, "sidenav" -> CompetitionMenu)),
 
-        RouteConfig(path="/competition", components=Map(/*"default" -> CompetitionsComponent, */"title" -> CompetitionsTitleComponent, "sidenav" -> CompetitionMenu)
+        RouteConfig(path="/competition", components=Map("default" -> CompetitionsComponent, "title" -> CompetitionsTitleComponent, "sidenav" -> CompetitionMenu)
   ))
 }
 
