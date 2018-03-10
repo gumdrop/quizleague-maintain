@@ -17,7 +17,7 @@ trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with
   var fixtures:js.Array[Fixture]
   val appData:ApplicationContext
   var hasResults:Boolean
-  val reportText:String
+  var reportText:String
   var confirm:Boolean
   var showProgress:Boolean
 }
@@ -91,7 +91,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   def submit(c:facade){
     c.confirm = false
     FixtureService.submitResult(c.fixtures, c.reportText, c.email)
-    c.email = ""
+    c.reportText = ""
     c.fixtures = js.Array()
     c.hasResults = false
   }

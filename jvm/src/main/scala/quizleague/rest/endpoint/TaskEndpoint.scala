@@ -46,11 +46,13 @@ class TaskEndpoint {
    
    userFromEmail(result.email).foreach(u => result.fixtures.foreach(saveFixture(u,result.reportText) _))
    
-   logger.finest(() => s"haveResults : $haveResults") 
    
    if(!haveResults) {
-     updateTables(result)
-     fireStatsUpdate(result.fixtures.map(f => load[Fixture](f.fixtureId)).filter(leagueFixture _))
+     
+     val leagueFixtures = result.fixtures.map(f => load[Fixture](f.fixtureId)).filter(leagueFixture _)
+     
+     updateTables(leagueFixtures)
+     fireStatsUpdate(leagueFixtures)
      
      result.fixtures.foreach(f =>
        Storage.save(Notification(
@@ -121,7 +123,7 @@ class TaskEndpoint {
    queue.add(withUrl(s"/rest/task/stats/update/${season.id}").payload(fixtures.asJson.toString));
   }
   
-  private def updateTables(result:ResultsSubmitCommand){
+  private def updateTables(fixtures:List[Fixture]){
     
     def compTables(comp:Ref[Competition]):List[LeagueTable] = {
       refToObject(comp) match {
@@ -130,7 +132,7 @@ class TaskEndpoint {
       }
     }
     
-    logger.finest(() => s"entering updateTables : \nresult:$result") 
+    logger.finest(() => s"entering updateTables : \nfixtures:$fixtures") 
     
     val tables = applicationContext()
     .currentSeason
@@ -138,10 +140,6 @@ class TaskEndpoint {
     .flatMap(compTables _)
     
     logger.finest(() => s"tables : \n$tables") 
-    
-    val fixtures = result.fixtures.map(f => Storage.load[Fixture](f.fixtureId))
-    
-    logger.finest(() => s"fixtures : \n$fixtures") 
     
     val newTables = LeagueTableRecalculator.recalculate(tables, fixtures)
     
