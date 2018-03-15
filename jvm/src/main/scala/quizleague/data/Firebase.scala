@@ -74,16 +74,16 @@ object Storage {
 
   private def save(kind: String, id: String, json: Json): Unit = {
 
-    // val t = datastore.beginTransaction()
-
-    val res = json.asObject.map(obj => {
+    val t = datastore.runTransaction( tr => {
+      val res = json.asObject.map(obj => {
       val ent = asMap(obj)
       val ref = datastore.document(s"$kind/$id")
-      ref.set(ent)
-
-      //log.warning(s"$kind/$id : @${res.get.get.getUpdateTime}")
-
+      ref.set(ent)})
+      res
     })
+
+    t.get()
+
   }
   
   private def asMap(obj: JsonObject) = {
