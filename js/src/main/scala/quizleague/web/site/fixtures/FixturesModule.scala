@@ -26,6 +26,7 @@ import quizleague.domain.command.ResultValues
 import LocalDate.{now => today}
 import java.time.LocalTime
 import rxscalajs.Observable
+import java.time.LocalDateTime
 
 object FixturesModule extends Module {
 
@@ -36,16 +37,22 @@ object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
 
   def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = {
-    val today = LocalDate.now.toString()
+    val today = LocalDate.now.toString
+    val now = LocalDateTime.now.toString
     
-    val q = db.collection(uriRoot).where("date", ">=" , today).orderBy("date").limit(1)
-    query(q)
+    val q = db.collection(uriRoot).where("date", ">=" , today).orderBy("date").limit(5)
+      
+    query(q).map(_.filter(f => now <= s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1).headOption.fold(js.Array[Fixtures]())(_._2))
     
   }
   def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = {
-    val today = LocalDate.now.toString()
-    val q = db.collection(uriRoot).where("date", "<=" , today).orderBy("date","desc").limit(1)
-    query(q)
+    val today = LocalDate.now.toString
+    
+    val now = LocalDateTime.now.toString
+    
+    val q = db.collection(uriRoot).where("date", "<=" , today).orderBy("date","desc").limit(5)
+    
+    query(q).map(_.filter(f => now > s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1)(Desc).headOption.fold(js.Array[Fixtures]())(_._2))
   }
   
   def activeFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
