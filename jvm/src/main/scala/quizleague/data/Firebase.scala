@@ -72,17 +72,13 @@ object Storage {
 
   private def makeKind(implicit tag: ClassTag[_]) = tag.runtimeClass.getSimpleName.toLowerCase
 
-  private def save(kind: String, id: String, json: Json): Unit = {
+  private def save(kind: String, id: String, json: Json):Unit = {
 
-    val t = datastore.runTransaction( tr => {
-      val res = json.asObject.map(obj => {
+    val res = json.asObject.map(obj => {
       val ent = asMap(obj)
       val ref = datastore.document(s"$kind/$id")
-      ref.set(ent)})
-      res
+      ref.set(ent).get
     })
-
-    t.get()
 
   }
   
