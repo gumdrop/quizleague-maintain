@@ -50,7 +50,7 @@ object TeamFixturesTitleComponent extends Component{
   val template = """<v-toolbar      
       color="amber darken-3"
       dark
-      clipped-left>
+      clipped-left v-if="team">
      <ql-title>{{team.name}} : Fixtures</ql-title>
       <v-toolbar-title class="white--text" v-if="team">
         <ql-r-team-name :team="team"></ql-r-team-name> : Fixtures 
