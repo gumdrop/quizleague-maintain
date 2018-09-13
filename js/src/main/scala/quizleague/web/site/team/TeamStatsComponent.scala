@@ -25,7 +25,9 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
         <v-tab key="2" >
           All Seasons
         </v-tab>
-
+        <v-tab key="3" >
+          Head-to-head
+        </v-tab>
         <v-tab-item key="1">
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
@@ -38,6 +40,13 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
             <v-flex><all-season-stats v-if="id" :teamId="id"></all-season-stats><v-flex>
+            </v-layout>
+          </v-container>
+        </v-tab-item>
+        <v-tab-item key="2" >
+          <v-container v-bind="gridSize" fluid>
+            <v-layout column>
+            <v-flex>Nothing here yet<v-flex>
             </v-layout>
           </v-container>
         </v-tab-item>
