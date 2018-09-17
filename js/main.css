@@ -5,7 +5,7 @@
   src: local('Nunito-Bold'), url(/fonts/Nunito/nunito700.woff) format('woff');
 }
 
-.v-tabs__item{text-transform:none !important;}
+  .v-tabs__item{text-transform:none !important;}
 
   .v-btn__content span{text-transform:none !important;}
   button.btn{text-transform:none;}

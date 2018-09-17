@@ -25,7 +25,7 @@ object AllFixturesComponent extends Component with GridSizeComponentConfig{
     <v-layout column>
       <v-flex v-for="fixs in fixtures" :key="fixs.id">
         <v-card>
-          <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} {{fixs.description}}</h3></v-card-title>
+          <v-card-title primary-title><h3 class="headline mb-0">{{fixs.date | date('d MMM yyyy')}} - {{fixs.parentDescription}} {{fixs.description}}</h3></v-card-title>
           <v-card-text>
             <ql-fixtures-simple :fixtures="fixs.fixtures| combine"></ql-fixtures-simple>
           </v-card-text>

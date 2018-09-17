@@ -91,7 +91,7 @@ object FixturesEventComponent extends EventComponentConfig{
   val name = "ql-fixtures-event"
    val template = s"""         
       <v-layout column align-start class="panel-component">
-          <v-flex align-start><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.description}}</router-link>
+          <v-flex align-start><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link>
             <v-btn icon v-on:click="togglePanel" class="#view-btn">
              <v-icon v-if="!panelVisible">visibility</v-icon>
              <v-icon v-if="panelVisible">visibility_off</v-icon>

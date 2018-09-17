@@ -106,7 +106,7 @@ object NextFixturesComponent extends Component{
      <v-card-title primary-title><h3 class="headline mb-0">Next Fixtures</h3></v-card-title>
      <v-card-text v-if="fixtures">
         <div v-for="f in fixtures" :key="f.id" style="margin-bottom:1em;">
-        <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
+        <h4>{{f.parentDescription}} {{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
         <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
         </div>
      </v-card-text>
@@ -132,7 +132,7 @@ object LatestResultsComponent extends Component{
      <v-card-title primary-title><h3 class="headline mb-0">Latest Results</h3></v-card-title>
      <v-card-text v-if="fixtures">
         <div v-for="f in fixtures" :key="f.id" style="margin-bottom:1em;">
-        <h4>{{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
+        <h4>{{f.parentDescription}} {{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
         <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
         </div>
      </v-card-text>
