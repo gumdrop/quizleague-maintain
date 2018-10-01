@@ -46,6 +46,7 @@ object SiteModule extends Module {
   override val routes = @@(
       RouteConfig(path="/links", components = Map("default" -> LinksComponent, "title" -> LinksTitleComponent)),
       RouteConfig(path="/rules", components = Map("default" -> RulesComponent)),
+      RouteConfig(path="/contact", components = Map("default" -> ContactUsComponent)),
       RouteConfig(path = "",redirect = "/home")
       )
   

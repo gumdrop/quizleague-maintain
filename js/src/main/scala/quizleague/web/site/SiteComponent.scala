@@ -38,7 +38,8 @@ object SiteComponent extends Component {
         <v-list-tile to="/venue" ><v-list-tile-action><v-icon flat left>location_on</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Venues</v-list-tile-title></v-list-tile-content></v-list-tile>  
         <v-list-tile to="/calendar" ><v-list-tile-action><v-icon flat left>mdi-calendar</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Calendar</v-list-tile-title></v-list-tile-content></v-list-tile>  
         <v-list-tile to="/rules" ><v-list-tile-action><v-icon flat left>mdi-book-open-page-variant</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Rules</v-list-tile-title></v-list-tile-content></v-list-tile>  
-        <v-list-tile to="/links" ><v-list-tile-action><v-icon flat left>link</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Links</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/links" ><v-list-tile-action><v-icon flat left>link</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Links</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/contact" ><v-list-tile-action><v-icon flat left>contact_mail</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Contact Us</v-list-tile-title></v-list-tile-content></v-list-tile>  
     </ql-side-menu>
     <router-view name="sidenav"></router-view>
     </v-list>
@@ -65,6 +66,7 @@ object SiteComponent extends Component {
       	<v-btn to="/calendar" flat ><v-icon left>mdi-calendar</v-icon><span>Calendar</span></v-btn>
       	<v-btn to="/rules" flat ><v-icon left>mdi-book-open-page-variant</v-icon><span>Rules</span></v-btn>
       	<v-btn to="/links" flat ><v-icon left>link</v-icon><span>Links</span></v-btn>
+      	<v-btn to="/contact" flat ><v-icon left>contact_mail</v-icon><span>Contact Us</span></v-btn>
       </div>
     </v-toolbar>
     <v-content>

@@ -34,3 +34,13 @@ object RulesComponent extends RouteComponent with NoSideMenu with GridSizeCompon
   </v-container>"""  
 }
 
+object ContactUsComponent extends RouteComponent with NoSideMenu with GridSizeComponentConfig{
+  val template = """
+  <v-container v-bind="gridSize" fluid>
+  <ql-title>Contact Us</ql-title>
+    <v-layout>
+    <v-flex><ql-named-text name="contact-content"></ql-named-text></v-flex>
+    </v-layout>
+  </v-container>"""  
+}
+

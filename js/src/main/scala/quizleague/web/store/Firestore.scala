@@ -27,6 +27,7 @@ object Firestore {
    Firebase.initializeApp(config)
       
    val db = Firebase.firestore()
+   db.enablePersistence(literal(experimentalTabSynchronization=true))
    
    def setAuthContext(){
 
