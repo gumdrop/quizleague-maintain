@@ -23,14 +23,14 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
         ></v-text-field>
         <quill-editor v-if="item.mimeType=='text/html'" v-model="item.text">
 		    </quill-editor>
-        <v-text-field v-if="item.mimeType=='text/plain'"
+        <v-textarea v-if="item.mimeType=='text/plain'"
           label="Text"
           v-model="item.text"
           :rules=${valRequired("Text")}
           required
-          textarea
+          outline
           auto-grow
-        ></v-text-field>
+        ></v-textarea>
         </div>
      </v-layout>
      $formButtons

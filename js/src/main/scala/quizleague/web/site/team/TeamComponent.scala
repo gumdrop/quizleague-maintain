@@ -192,7 +192,7 @@ object ContactDialog extends Component with DialogComponentConfig{
                 <v-container>
                   <v-layout column>
                     <v-text-field required label="Your email address" v-model="email" type="email" :rules="[required('Your email address'), isEmail('Your email address')]"></v-text-field>
-                    <v-text-field label="Message" v-model="text" textarea auto-grow :rules="[required('Message')]" required></v-text-field>
+                    <v-textarea label="Message" v-model="text" outline auto-grow :rules="[required('Message')]" required></v-textarea>
                   </v-layout>
                 </v-container>
                 </v-form>

@@ -44,7 +44,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
         <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
       </v-flex>
       <v-flex v-if="fixtures.length > 0">
-        <v-text-field v-model="reportText" textarea auto-grow label="Match Report"></v-text-field>
+        <v-textarea v-model="reportText" outline auto-grow label="Match Report"></v-textarea>
         <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
       </v-flex>
      <v-dialog v-model="confirm" persistent lazy max-width="60%" v-bind="dialogSize" >

@@ -3,6 +3,7 @@ package quizleague.web.store
 import scalajs.js
 import js.Dynamic.literal
 import firebase._
+import scala.scalajs.js.JSConverters._
 
 
 object Firestore {
@@ -11,7 +12,7 @@ object Firestore {
     authDomain= "chiltern-ql-firestore.firebaseapp.com",
     databaseURL= "https://chiltern-ql-firestore.firebaseio.com",
     projectId= "chiltern-ql-firestore",
-    storageBucket= "hiltern-ql-firestore.appspot.com",
+    storageBucket= "chiltern-ql-firestore.appspot.com",
     messagingSenderId= "891716942638"
 )
 
@@ -26,8 +27,11 @@ object Firestore {
   
    Firebase.initializeApp(config)
       
-   val db = Firebase.firestore()
-   db.enablePersistence(literal(experimentalTabSynchronization=true))
+   private val firestore = Firebase.firestore()
+//   firestore.enablePersistence(literal(experimentalTabSynchronization=true)).`then`(x => {
+//       println("Woohoo! Multi-Tab Persistence!")})
+   
+   val db = firestore
    
    def setAuthContext(){
 
