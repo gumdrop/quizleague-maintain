@@ -38,7 +38,7 @@ object LatestResults extends Component{
       <v-card-text  v-if="latestResults">
         <v-container grid-list-sm v-for="results in latestResults" :key="results.id">
           <v-layout column>
-            <v-flex><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></v-flex>
+            <v-flex><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}} : {{results.description}}</h3></v-flex>
             <v-flex><ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple></v-flex>
           </v-layout>
         </v-container>
@@ -63,7 +63,7 @@ object NextFixtures extends Component{
       <v-card-text  v-if="nextFixtures">
         <v-container grid-list-sm fluid v-for="fixtures in nextFixtures" :key="fixtures.id">
           <v-layout column>
-            <v-flex><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}}</h3></v-flex>
+            <v-flex><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}} : {{fixtures.description}}</h3></v-flex>
             <v-flex><ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple></v-flex>
           </v-layout>
         </v-container>
@@ -140,7 +140,7 @@ object AllResults extends ResultsComponent with GridSizeComponentConfig{
     <v-layout column>
     <v-flex v-for="results in latestResults" :key="results.id">
       <v-card>
-        <v-card-title primary-title><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}}</h3></v-card-title>
+        <v-card-title primary-title><h3 class="headline mb-0">{{results.date | date("d MMMM yyyy")}} : {{results.description}}</h3></v-card-title>
         <v-card-text>
             <ql-fixtures-simple :fixtures="results.fixtures | combine" ></ql-fixtures-simple>
           </div>
@@ -166,7 +166,7 @@ object RemainingFixtures extends Component with GridSizeComponentConfig{
       <v-layout column>
         <v-flex v-for="fixtures in nextFixtures" :key="fixtures.id">
           <v-card>
-            <v-card-title primary-title><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}}</h3></v-card-title>
+            <v-card-title primary-title><h3 class="headline mb-0">{{fixtures.date | date("d MMMM yyyy")}} : {{fixtures.description}}</h3></v-card-title>
             <v-card-text>
                 <ql-fixtures-simple :fixtures="fixtures.fixtures | combine" ></ql-fixtures-simple>
             </v-card-text>
