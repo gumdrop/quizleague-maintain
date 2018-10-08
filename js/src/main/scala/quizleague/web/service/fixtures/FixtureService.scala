@@ -59,6 +59,13 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
     mapOutSparse(dom)
   }
   
+  def copy(in:Fixture, parentDescription:String, subsidiary:Boolean):Fixture = {
+    val fx = mapIn(in)
+    val dom = Dom(newId,fx.description, parentDescription,fx.venue,fx.home,fx.away,fx.date,fx.time,fx.duration,None,subsidiary)
+    save(dom)
+    mapOutSparse(dom)
+  }
+  
   private def mapInResult(r:Result):Option[DomResult]  = {
     if(r != null) {
       Some(DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note), reportsService.refOption(r.reports)))

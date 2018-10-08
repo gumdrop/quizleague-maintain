@@ -49,9 +49,12 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
       (fixtures.sortBy(_.date)(Desc)).headOption.map(x => LocalDate parse(x.date).plusWeeks(1)).getOrElse(dateToLocalDate(new Date(Date.now())))
     }
     
+    def weekText = s"Week ${fixtures.length + 1}"
+    
+    
     add(
     competition match {
-      case c:LeagueCompetition => Dom(newId, "", c.name, findNextDate(c), c.startTime, c.duration, List())
+      case c:LeagueCompetition => Dom(newId, weekText, c.name, findNextDate(c), c.startTime, c.duration, List())
       case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now,c.startTime,c.duration,List())
       case _ => null
     })

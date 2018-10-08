@@ -13,7 +13,9 @@ import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.season.SeasonService
-
+import quizleague.web.util.rx.RefObservable
+import quizleague.web.maintain.fixtures.FixturesService
+import quizleague.web.maintain.fixtures.FixtureService
 
 
 
@@ -39,6 +41,7 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
           <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
           <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
           <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
+          <div><v-btn flat v-if="item.subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item)"><v-icon>file_copy</v-icon>Copy fixtures to subsidiary</v-btn></div>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
@@ -63,9 +66,23 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
      
   }
   
+  def copyFixturesToSubsidiary(item:LeagueCompetition) = {
+    
+    item.subsidiary.obs.first.flatMap(sub => {
+      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name))
+      
+    }).subscribe(sf =>{
+        val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
+        FixturesService.saveAllDirty()
+        FixtureService.saveAllDirty()
+        CompetitionService.save(newsub)
+      })
+  }
+  
   
   
   subscription("subsidiaries")(c => subsidiaries(c.$route.params("seasonId")))
+  method("copyFixturesToSubsidiary")(copyFixturesToSubsidiary _)
   
  
 
