@@ -25,7 +25,7 @@ trait LeagueCompetitionComponent extends CompetitionComponent{
 }
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
   override type facade = LeagueCompetitionComponent
-  val   template = s"""
+  val template = s"""
   <v-container v-if="item && season && subsidiaries">
     <h2>League Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
 
@@ -62,19 +62,13 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
   
   def subsidiaries(seasonId:String):Observable[js.Array[SelectWrapper[Competition]]] = {
     SeasonService.get(seasonId).flatMap(season => SelectUtils.model(season.competitions, CompetitionService)(_.name)(filterSubs _))
-    
-     
   }
   
   def copyFixturesToSubsidiary(item:LeagueCompetition) = {
-    
     item.subsidiary.obs.first.flatMap(sub => {
-      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name))
-      
+      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
     }).subscribe(sf =>{
         val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
-        FixturesService.saveAllDirty()
-        FixtureService.saveAllDirty()
         CompetitionService.save(newsub)
       })
   }

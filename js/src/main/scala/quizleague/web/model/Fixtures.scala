@@ -12,7 +12,8 @@ class Fixtures(
     val date:String,
     val start:String,
     val duration:Float,
-    val fixtures:js.Array[RefObservable[Fixture]]) extends Model
+    val fixtures:js.Array[RefObservable[Fixture]],
+    val subsidiary:Boolean) extends Model
     
 object Fixtures{
   def apply(id:String, 
@@ -21,7 +22,8 @@ object Fixtures{
     date:String,
     start:String,
     duration:Float,
-    fixtures:js.Array[RefObservable[Fixture]]) = new Fixtures(id,description,parentDescription,date,start,duration,fixtures)
+    fixtures:js.Array[RefObservable[Fixture]],
+    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration,fixtures, subsidiary)
 }
     
 

@@ -31,7 +31,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     
   val fixtureService:FixtureGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,refObsList(dom.fixtures, fixtureService))
+  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,refObsList(dom.fixtures, fixtureService), dom.subsidiary.getOrElse(false))
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
  
@@ -40,7 +40,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
 trait FixturesPutService extends PutService[Fixtures] with FixturesGetService with DirtyListService[Model] {
   
   override val fixtureService:FixturePutService
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures))
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures),Option(model.subsidiary))
   override protected def make() = Dom(newId, "","",LocalDate.now,LocalTime.of(20,30), Duration.ofSeconds(5400),List())
   
   def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
@@ -58,6 +58,13 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
       case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now,c.startTime,c.duration,List())
       case _ => null
     })
+  }
+  
+  def copy(in:Fixtures, parentDescription:String, fixtures:js.Array[RefObservable[Fixture]], subsidiary:Boolean):Fixtures = {
+    val fx = mapIn(in)
+    val dom = Dom(newId,fx.description, parentDescription,fx.date,fx.start,fx.duration,fixtureService.ref(fixtures),Some(subsidiary))
+    save(dom)
+    mapOutSparse(dom)    
   }
 
   override def enc(item: Dom) = item.asJson

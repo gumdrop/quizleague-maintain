@@ -40,9 +40,9 @@ object FixturesService extends FixturesGetService {
     val today = LocalDate.now.toString
     val now = LocalDateTime.now.toString
     
-    val q = db.collection(uriRoot).where("date", ">=" , today).orderBy("date").limit(5)
+    val q = db.collection(uriRoot).where("date", ">=" , today).orderBy("date").limit(10)
       
-    query(q).map(_.filter(f => now <= s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1).headOption.fold(js.Array[Fixtures]())(_._2))
+    query(q).map(_.filter(!_.subsidiary).filter(f => now <= s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1).headOption.fold(js.Array[Fixtures]())(_._2))
     
   }
   def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = {
@@ -50,9 +50,9 @@ object FixturesService extends FixturesGetService {
     
     val now = LocalDateTime.now.toString
     
-    val q = db.collection(uriRoot).where("date", "<=" , today).orderBy("date","desc").limit(5)
+    val q = db.collection(uriRoot).where("date", "<=" , today).orderBy("date","desc").limit(10)
     
-    query(q).map(_.filter(f => now > s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1)(Desc).headOption.fold(js.Array[Fixtures]())(_._2))
+    query(q).map(_.filter(!_.subsidiary).filter(f => now > s"${f.date}T${f.start}").groupBy(_.date).toSeq.sortBy(_._1)(Desc).headOption.fold(js.Array[Fixtures]())(_._2))
   }
   
   def activeFixtures(seasonId: String, take:Int = Integer.MAX_VALUE) = {
