@@ -68,7 +68,8 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
     item.subsidiary.obs.first.flatMap(sub => {
       Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
     }).subscribe(sf =>{
-        val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
+      println("making new sub")  
+      val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
         CompetitionService.save(newsub)
       })
   }

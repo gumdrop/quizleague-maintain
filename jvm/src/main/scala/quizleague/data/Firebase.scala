@@ -15,7 +15,7 @@ object Storage {
   val log = Logger.getLogger(this.getClass.toString())
   
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
-  .setProjectId("chiltern-ql-firestore").build
+  .setProjectId("ql-firestore-2").build
 
 
   lazy val datastore = options.getService

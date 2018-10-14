@@ -36,7 +36,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val userService:UserGetService
   val reportsService:ReportsGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,refObs(dom.venue, venueService),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration, mapResult(dom.result))
+  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,refObs(dom.venue, venueService),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration, mapResult(dom.result), dom.subsidiary)
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
   
@@ -48,7 +48,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 }
 
 trait FixturePutService extends PutService[Fixture] with FixtureGetService with DirtyListService[Model]{
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.ref(model.venue), teamService.ref(model.home), teamService.ref(model.away), model.date, model.time, model.duration, mapInResult(model.result))
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.ref(model.venue), teamService.ref(model.home), teamService.ref(model.away), model.date, model.time, model.duration, mapInResult(model.result), model.subsidiary)
   override protected def make() = ???
   
   override val venueService:VenuePutService

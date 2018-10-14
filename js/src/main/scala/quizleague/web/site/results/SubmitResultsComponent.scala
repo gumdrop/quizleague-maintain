@@ -36,7 +36,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
       <p></p>
       <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>   
       <v-flex v-for="fixture in fixtures" v-if="!hasResults">
-          {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
+          {{fixture.parentDescription}} {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
           <v-text-field v-model.number="fixture.result.homeScore"  :rules="[required('Home Score')]" :label="async(fixture.home).name" type="number" ></v-text-field>
           <v-text-field v-model.number="fixture.result.awayScore"  :rules="[required('Away Score')]" :label="async(fixture.away).name" type="number" ></v-text-field>
       </v-flex>

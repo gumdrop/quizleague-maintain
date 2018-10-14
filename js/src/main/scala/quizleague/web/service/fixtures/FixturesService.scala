@@ -61,6 +61,8 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   }
   
   def copy(in:Fixtures, parentDescription:String, fixtures:js.Array[RefObservable[Fixture]], subsidiary:Boolean):Fixtures = {
+    println("copy fixtures")
+    
     val fx = mapIn(in)
     val dom = Dom(newId,fx.description, parentDescription,fx.date,fx.start,fx.duration,fixtureService.ref(fixtures),Some(subsidiary))
     save(dom)
