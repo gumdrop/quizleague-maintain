@@ -30,40 +30,45 @@ class TaskEndpoint {
   
   val logger = Logger.getLogger(this.getClass.getName)
   implicit val context = StorageContext
-  
+
   @POST
   @Path("/submitresult")
-  def resultSubmit(body:String) = {
-   
-   val result = deser[ResultsSubmitCommand](body)
-    
-   logger.finest(() => s"submit result arrived : $result") 
-   
-   val haveResults = result.fixtures.exists(f => {
-     val fix = Storage.load[Fixture](f.fixtureId)
-     fix.result.isDefined
-   })
-   
-   userFromEmail(result.email).foreach(u => result.fixtures.foreach(saveFixture(u,result.reportText) _))
-   
-   
-   if(!haveResults) {
-     
-     val leagueFixtures = result.fixtures.map(f => load[Fixture](f.fixtureId)).filter(leagueFixture _)
-     
-     updateTables(leagueFixtures)
-     fireStatsUpdate(leagueFixtures)
-     
-     result.fixtures.foreach(f =>
-       Storage.save(Notification(
-         uuid.toString(), 
-         NotificationTypeNames.result, 
-         LocalDateTime.now(), 
-         ResultPayload(f.fixtureId)   
-      ))  
-   )
-   }
-   
+  def resultSubmit(body: String) = {
+
+    val result = deser[ResultsSubmitCommand](body)
+
+    logger.finest(() => s"submit result arrived : $result")
+
+    val haveResults = result.fixtures.exists(f => {
+      val fix = Storage.load[Fixture](f.fixtureId)
+      fix.result.isDefined
+    })
+
+    userFromEmail(result.email).foreach(u => result.fixtures.foreach(saveFixture(u, result.reportText) _))
+
+    if (!haveResults) {
+
+      result.fixtures.foreach(f => {
+        val fixture = load[Fixture](f.fixtureId)
+        val leagueTables = tables(fixture)
+        if (!leagueTables.isEmpty) {
+          updateTables(leagueTables, fixture)
+
+          if (!fixture.subsidiary) {
+            fireStatsUpdate(fixture)
+          }
+        }
+        if (!fixture.subsidiary) {
+          Storage.save(Notification(
+            uuid.toString(),
+            NotificationTypeNames.result,
+            LocalDateTime.now(),
+            ResultPayload(fixture.id)))
+        }
+      })
+
+    }
+
   }
   
   @POST
@@ -94,9 +99,8 @@ class TaskEndpoint {
     
   }
   
-  
-  private def leagueFixture(fixture:Fixture) = {
-     
+  private def tables(fixture:Fixture):List[LeagueTable] =   { 
+    
     def comp(c:Ref[Competition]):Competition = c
     
     applicationContext()
@@ -104,44 +108,33 @@ class TaskEndpoint {
      .competitions
      .map(comp _)
      .flatMap(_ match {
-       case c:LeagueCompetition => List(c)
+       case c:FixturesCompetition with CompetitionTables => List(c)
        case _ => List()
      })
-     .flatMap(_.fixtures)
-     .flatMap(_.fixtures)
-     .exists(_.id == fixture.id)
+     .filter(_.fixtures.flatMap(_.fixtures).exists(_.id == fixture.id))
+     .flatMap(_.tables)
   }
   
+ 
   
-  private def fireStatsUpdate(fixtures:List[Fixture]){
+  
+  private def fireStatsUpdate(fixture:Fixture){
    import io.circe._, io.circe.syntax._
     
    val queue: Queue = QueueFactory.getQueue("stats");
     
    val season =  applicationContext().currentSeason
     
-   queue.add(withUrl(s"/rest/task/stats/update/${season.id}").payload(fixtures.asJson.toString));
+   queue.add(withUrl(s"/rest/task/stats/update/${season.id}").payload(List(fixture).asJson.toString));
   }
   
-  private def updateTables(fixtures:List[Fixture]){
+  private def updateTables(tables:List[LeagueTable], fixture:Fixture){
     
-    def compTables(comp:Ref[Competition]):List[LeagueTable] = {
-      refToObject(comp) match {
-        case c:CompetitionTables => c.tables
-        case _ => List()
-      }
-    }
-    
-    logger.finest(() => s"entering updateTables : \nfixtures:$fixtures") 
-    
-    val tables = applicationContext()
-    .currentSeason
-    .competitions
-    .flatMap(compTables _)
+    logger.finest(() => s"entering updateTables : \nfixture:$fixture") 
     
     logger.finest(() => s"tables : \n$tables") 
     
-    val newTables = LeagueTableRecalculator.recalculate(tables, fixtures)
+    val newTables = LeagueTableRecalculator.recalculate(tables, List(fixture))
     
     logger.finest(() => s"new tables : \n$newTables") 
     
@@ -149,8 +142,11 @@ class TaskEndpoint {
     
   }
 
-  private def saveFixture(user:User,report:Option[String])(result:ResultValues) = {
+  private def saveFixture(user:User,reportIn:Option[String])(result:ResultValues) = {
        
+    val fixture = Storage.load[Fixture](result.fixtureId)
+    val report = reportIn.filter(r => !fixture.subsidiary)
+    
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
     def newText(reportText:String) = {
@@ -187,8 +183,6 @@ class TaskEndpoint {
 
     }
     
-    
-    val fixture = Storage.load[Fixture](result.fixtureId)
     
     logger.finest(() => s"fixture : \n:$fixture") 
     

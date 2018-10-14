@@ -127,7 +127,7 @@ END:VEVENT
           f <- fixtures.fixtures if(f.home.id == team.id || f.away.id == team.id)
         }
         yield{
-          builder.append(formatFixture(f, fixtures.description))
+          builder.append(formatFixture(f, s"${fixtures.parentDescription} ${fixtures.description}"))
         }
         for{
           c <- singletonCompetitions(gap.currentSeason)

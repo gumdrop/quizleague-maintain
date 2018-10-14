@@ -13,7 +13,9 @@ import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.season.SeasonService
-
+import quizleague.web.util.rx.RefObservable
+import quizleague.web.maintain.fixtures.FixturesService
+import quizleague.web.maintain.fixtures.FixtureService
 
 
 
@@ -23,7 +25,7 @@ trait LeagueCompetitionComponent extends CompetitionComponent{
 }
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
   override type facade = LeagueCompetitionComponent
-  val   template = s"""
+  val template = s"""
   <v-container v-if="item && season && subsidiaries">
     <h2>League Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
 
@@ -39,6 +41,7 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
           <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
           <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
           <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
+          <div><v-btn flat v-if="item.subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item)"><v-icon>file_copy</v-icon>Copy fixtures to subsidiary</v-btn></div>
 
       <div><v-btn flat v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
       <div><v-btn flat v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
@@ -59,13 +62,22 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
   
   def subsidiaries(seasonId:String):Observable[js.Array[SelectWrapper[Competition]]] = {
     SeasonService.get(seasonId).flatMap(season => SelectUtils.model(season.competitions, CompetitionService)(_.name)(filterSubs _))
-    
-     
+  }
+  
+  def copyFixturesToSubsidiary(item:LeagueCompetition) = {
+    item.subsidiary.obs.first.flatMap(sub => {
+      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
+    }).subscribe(sf =>{
+      println("making new sub")  
+      val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
+        CompetitionService.save(newsub)
+      })
   }
   
   
   
   subscription("subsidiaries")(c => subsidiaries(c.$route.params("seasonId")))
+  method("copyFixturesToSubsidiary")(copyFixturesToSubsidiary _)
   
  
 

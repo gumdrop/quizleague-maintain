@@ -17,8 +17,10 @@ import js.JSConverters._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
-import quizleague.web.model.Fixture
+import quizleague.web.model._
 import quizleague.domain.Result
+import quizleague.web.util.rx.RefObservable
+import rxscalajs.Observable
 
 object FixturesModule extends Module {
   override val routes = @@(     
@@ -45,12 +47,36 @@ object FixtureService extends FixtureGetService with FixturePutService{
     val fx = mapIn(fixture)
     add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
   }
+  
+  def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixture]]] = {
+    combineLatest(fxs.fixtures.map(_.obs.map(fx => {
+      val x = copy(fx, parentDescription,subsidiary)
+      getRefObs(x.id)
+    }))).map(_.toJSArray)
+  }
+  
 }
 
 object FixturesService extends FixturesGetService with FixturesPutService{
   override val fixtureService = FixtureService
   
   def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
+
+  def copy(fixtures:js.Array[RefObservable[Fixtures]], parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixtures]]] = {
+    Observable.combineLatest(fixtures.map(f => copy(f,parentDescription, subsidiary)).toSeq).map(_.toJSArray)
+  }
+  
+  private def copy(fixtures:RefObservable[Fixtures], parentDescription:String, subsidiary:Boolean):Observable[RefObservable[Fixtures]] = {
+    
+    val model = get(fixtures.id)
+    
+    model.flatMap(fxs => Observable.of(fxs).combineLatest(fixtureService.copy(fxs, parentDescription, subsidiary)).map(x => {
+      val f = copy(fxs,parentDescription,x._2, true)
+      getRefObs(f.id)
+    }))
+    
+  }
+
 }
 
 object ReportsService extends ReportsGetService with ReportsPutService{

@@ -64,6 +64,11 @@ class SubsidiaryLeagueCompetition(
   val icon:String) extends Competition {
   override val typeName = subsidiary.toString()
 }
+object SubsidiaryLeagueCompetition {
+  def addFixtures(sub:Competition, fixtures:js.Array[RefObservable[Fixtures]]) = {
+    new SubsidiaryLeagueCompetition(sub.id,sub.name, fixtures, sub.tables, sub.text, sub.textName, sub.icon)
+  }
+}
 
 class SingletonCompetition(
   override val id: String,

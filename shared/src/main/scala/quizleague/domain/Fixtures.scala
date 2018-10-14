@@ -13,6 +13,7 @@ case class Fixtures(
     start:LocalTime,
     duration:Duration,
     fixtures:List[Ref[Fixture]],
+    subsidiary:Option[Boolean] = None,
     retired:Boolean = false) extends Entity
     
 case class Fixture(
