@@ -22,13 +22,14 @@ import quizleague.web.maintain.fixtures.FixtureService
 @js.native
 trait LeagueCompetitionComponent extends CompetitionComponent{
   var subsidiaries:js.Array[SelectWrapper[Competition]]
+  var showProgress:Boolean
 }
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
   override type facade = LeagueCompetitionComponent
   val template = s"""
   <v-container v-if="item && season && subsidiaries">
     <h2>League Competition Detail {{season.startYear}}/{{season.endYear}}</h2>
-
+    <div style="position:absolute;top:2em;right:2em;" v-if="showProgress"><v-progress-circular indeterminate="true"></v-progress-circular></div>
     <v-form v-model="valid"  >
       <v-layout column>
    
@@ -64,20 +65,22 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
     SeasonService.get(seasonId).flatMap(season => SelectUtils.model(season.competitions, CompetitionService)(_.name)(filterSubs _))
   }
   
-  def copyFixturesToSubsidiary(item:LeagueCompetition) = {
+  def copyFixturesToSubsidiary(c:facade, item:LeagueCompetition) = {
+    
+    c.showProgress = true
     item.subsidiary.obs.first.flatMap(sub => {
       Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
     }).subscribe(sf =>{
-      println("making new sub")  
       val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
-        CompetitionService.save(newsub)
-      })
+      CompetitionService.save(newsub)
+      c.showProgress = false
+    })
   }
   
   
-  
+  data("showProgress", false)
   subscription("subsidiaries")(c => subsidiaries(c.$route.params("seasonId")))
-  method("copyFixturesToSubsidiary")(copyFixturesToSubsidiary _)
+  method("copyFixturesToSubsidiary")({copyFixturesToSubsidiary _}:js.ThisFunction)
   
  
 
