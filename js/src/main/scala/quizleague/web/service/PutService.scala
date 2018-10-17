@@ -31,7 +31,8 @@ trait PutService[T <: Model] {
   
   
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
-  def delete(item:T) = {items -= mapIn(item).id} 
+  def delete(item:T):Unit = delete(item.id)
+  def delete(id:String):Unit = {items -= id; db.doc(s"$uriRoot/$id").delete()}
   def instance() = add(mapOutSparse(make()))
   def getId(item:T) = if (item != null ) item.id else null
   protected final def newId() = UUID.randomUUID.toString()

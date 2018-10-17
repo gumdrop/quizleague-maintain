@@ -72,6 +72,12 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
   override def enc(item: Dom) = item.asJson
   
   override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
+  override def delete(id:String) = {
+    get(id).first.subscribe( fix => {
+      fix.fixtures.foreach(f => {fixtureService.delete(f.id)});
+      super.delete(id)  
+    })
+  }
 
 }
 

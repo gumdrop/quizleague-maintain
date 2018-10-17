@@ -12,6 +12,11 @@ trait DirtyListService[T <: Model] extends PutService[T] {
     dirtyIds = dirtyIds + item.id
     super.cache(item)
   }
+  
+  override def delete(id:String) = {
+    dirtyIds = dirtyIds - id
+    super.delete(id)
+  }
 
 
   override def deCache(item: U) = {
