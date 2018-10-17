@@ -46,7 +46,7 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
         <v-tab-item key="2" >
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
-            <v-flex>Nothing here yet<v-flex>
+            <v-flex><stats-head-to-head v-if="id" :teamId="id"></stats-head-to-head><v-flex>
             </v-layout>
           </v-container>
         </v-tab-item>
@@ -55,7 +55,7 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
 
 
 """
-  components(TeamStatsSeasonComponent,TeamStatsAllSeasonsComponent)
+  components(TeamStatsSeasonComponent,TeamStatsAllSeasonsComponent, HeadToHeadComponent)
   
   prop("id")
   data("season", TeamViewService.season)
@@ -291,6 +291,41 @@ object AllSeasonsLeaguePositionComponent extends Component with GraphSizeCompone
   subscription("data")(c => StatisticsService.allSeasonsPositionData(c.stats))
   subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats))
 }
+
+@js.native
+trait HeadToHeadComponent extends VueRxComponent{
+  val teamId:String
+  
+}
+
+object HeadToHeadComponent extends Component{
+  type facade = HeadToHeadComponent
+  val name = "stats-head-to-head"
+  val template = """
+  <v-layout row wrap v-if="teamId && stats" justify-space-around>     
+    <v-flex >
+      <seasons-league-position :stats="stats"></seasons-league-position>
+    </v-flex>
+    <v-flex >
+      <seasons-mean-scores :stats="stats"></seasons-mean-scores>
+    </v-flex>
+  </v-layout>
+"""
+  components(AllSeasonsAverageScoreComponent,AllSeasonsLeaguePositionComponent)
+  
+  props("teamId")
+  
+  subscription("stats","teamId")( c => StatisticsService.allTeamStats(c.teamId))
+}
+
+
+
+@js.native
+trait HeadToHeadGraphComponent extends VueRxComponent with VuetifyComponent{
+  val allSeasons:Map[String,js.Array[Statistics]]
+  val currentSeason:Map[String,Statistics]
+}
+
 
 object TeamStatsTitle extends RouteComponent{
   val template = """<stats-title :id="$route.params.id"></stats-title>"""
