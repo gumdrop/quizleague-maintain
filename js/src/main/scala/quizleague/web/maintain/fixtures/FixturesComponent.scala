@@ -157,7 +157,7 @@ object FixtureComponent extends Component{
     c.fixtures.fixtures ---= fx.id
     c.teamManager.untake(fx.home)
     c.teamManager.untake(fx.away)
-    FixtureService.delete(fx)
+    FixtureService.delete(fx.id)
    
   }
   

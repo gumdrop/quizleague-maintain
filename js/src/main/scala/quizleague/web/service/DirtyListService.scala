@@ -7,6 +7,7 @@ trait DirtyListService[T <: Model] extends PutService[T] {
   this: GetService[T] with ComponentNames =>
 
   var dirtyIds = Set[String]()
+  var deleteIds = Set[String]()
 
   override def cache(item: T) = {
     dirtyIds = dirtyIds + item.id
@@ -15,7 +16,7 @@ trait DirtyListService[T <: Model] extends PutService[T] {
   
   override def delete(id:String) = {
     dirtyIds = dirtyIds - id
-    super.delete(id)
+    deleteIds = deleteIds + id
   }
 
 
@@ -37,7 +38,9 @@ trait DirtyListService[T <: Model] extends PutService[T] {
 
   def saveAllDirty() = {
     dirtyIds.map(getDom(_)).foreach { save(_) }
+    deleteIds.foreach {doDelete _}
     dirtyIds = Set()
+    deleteIds = Set()
   }
 
 }
