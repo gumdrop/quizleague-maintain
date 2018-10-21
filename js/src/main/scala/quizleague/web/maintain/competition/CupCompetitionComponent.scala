@@ -3,16 +3,18 @@ package quizleague.web.maintain.competition
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.model._
+
 import scala.scalajs.js
 import TemplateElements._
 import quizleague.web.maintain.season.SeasonService
 import rxscalajs.Observable._
+
 import js.JSConverters._
-import quizleague.web.maintain.component.SelectUtils
 import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.season.SeasonService
+import quizleague.web.util.component.SelectUtils
 
 
 object CupCompetitionComponent extends CompetitionComponentConfig{

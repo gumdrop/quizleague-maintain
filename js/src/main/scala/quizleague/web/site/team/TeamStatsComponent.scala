@@ -1,10 +1,15 @@
 package quizleague.web.site.team
 
 import quizleague.web.core._
+
 import scalajs.js
+import js.JSConverters._
 import com.felstar.scalajs.vue._
 import quizleague.web.model._
+import quizleague.web.util.component.{SelectUtils, SelectWrapper}
+import rxscalajs.Observable
 import vuechart._
+import quizleague.web.util.Logging._
 
 object TeamStatsPage extends RouteComponent{
   
@@ -295,6 +300,8 @@ object AllSeasonsLeaguePositionComponent extends Component with GraphSizeCompone
 @js.native
 trait HeadToHeadComponent extends VueRxComponent{
   val teamId:String
+  val currentSeason:js.Array[Statistics]
+  val chips:js.Array[SelectWrapper[Team]]
   
 }
 
@@ -302,28 +309,90 @@ object HeadToHeadComponent extends Component{
   type facade = HeadToHeadComponent
   val name = "stats-head-to-head"
   val template = """
-  <v-layout row wrap v-if="teamId && stats" justify-space-around>     
-    <v-flex >
-      <seasons-league-position :stats="stats"></seasons-league-position>
-    </v-flex>
-    <v-flex >
-      <seasons-mean-scores :stats="stats"></seasons-mean-scores>
-    </v-flex>
-  </v-layout>
+  <v-layout column >
+  <v-flex v-if="teams">
+   <v-combobox
+     v-model="chips"
+     :items="teams"
+     label="Teams"
+     chips
+     clearable
+     solo
+     multiple
+   >
+     <template slot="selection" slot-scope="data">
+       <v-chip
+         :selected="data.selected"
+         close
+         @input="remove(data.item)"
+       >
+         {{ data.item.text }}
+       </v-chip>
+     </template>
+   </v-combobox>
+   </v-flex>
+    <v-layout row wrap v-if="teamId && stats && allSeasons" justify-space-around>
+      <v-flex >
+        <head-to-head-league-position :stats="allSeasons"></head-to-head-league-position>
+      </v-flex>
+    </v-layout>
+    </v-layout>
 """
-  components(AllSeasonsAverageScoreComponent,AllSeasonsLeaguePositionComponent)
+  components(AllSeasonsAverageScoreComponent,HeadToHeadLeaguePositionComponent)
+
+  private def allSeasons(c:facade) = Observable
+    .combineLatest(
+      js.Array(c.teamId).concat
+        (c.chips
+        .map(_.value.id))
+        .map(StatisticsService.allTeamStats _)
+        .toSeq)
+    .map(_.toJSArray)
+
+  private def remove(c:facade, item:SelectWrapper[Team]): Unit ={
+    c.chips -= item
+  }
   
   props("teamId")
-  
+  data("chips",js.Array())
+
   subscription("stats","teamId")( c => StatisticsService.allTeamStats(c.teamId))
+  subscription("teams")(c => SelectUtils.model[Team](TeamService)(_.name).map(_.filter(_.value.id != c.teamId)))
+  subscription("allSeasons", "chips")(allSeasons _)
+
+  method("remove")({remove _}:js.ThisFunction)
 }
 
 
 
 @js.native
 trait HeadToHeadGraphComponent extends VueRxComponent with VuetifyComponent{
-  val allSeasons:Map[String,js.Array[Statistics]]
-  val currentSeason:Map[String,Statistics]
+  val stats:js.Array[js.Array[Statistics]]
+}
+
+object HeadToHeadLeaguePositionComponent extends Component with GraphSizeComponentConfig{
+
+  type facade = HeadToHeadGraphComponent
+
+  val name = "head-to-head-league-position"
+  val template = """
+        <v-card>
+          <v-card-title>League Position</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <chart :width="width" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,legend:{display:true,position:'right'},scales:{yAxes:[{type:'linear', ticks:{reverse:true,min:1,max:teamCount,stepSize:1}}]}}"></chart>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+
+  components(ChartComponent)
+
+  prop("stats")
+  subscription("data","stats")(c => StatisticsService.multipleTeamsAllSeasonsPositionData(c.stats))
+  subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats(0)))
 }
 
 

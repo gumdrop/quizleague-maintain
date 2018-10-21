@@ -5,12 +5,12 @@ import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.maintain.component.TemplateElements._
 import quizleague.web.model._
-import scala.scalajs.js
 
+import scala.scalajs.js
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
 
-import js.Dynamic.{ global => g }
+import js.Dynamic.{global => g}
 import quizleague.web.util.Logging._
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.util.TeamManager
@@ -18,11 +18,12 @@ import quizleague.web.util.rx._
 import rxscalajs.Observable
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.util.rx.RefObservable
-import quizleague.web.maintain.component.SelectWrapper
 import quizleague.web.core.RouteComponent
+
 import scalajs.js
 import js.JSConverters._
 import quizleague.util.collection._
+import quizleague.web.util.component.{SelectUtils, SelectWrapper}
 
 
 @js.native

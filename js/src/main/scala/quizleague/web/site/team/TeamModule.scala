@@ -2,6 +2,7 @@ package quizleague.web.site.team
 
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
+
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.service.team.TeamGetService
@@ -23,6 +24,7 @@ import org.scalajs.dom.ext.Color
 import quizleague.web.site.season._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
 import quizleague.web.useredit.TeamEditPage
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.competition.CompetitionService
@@ -30,6 +32,8 @@ import quizleague.web.model.CompetitionType
 import quizleague.util.StringUtils._
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.site.fixtures.FixturesService
+import quizleague.web.util.{UUID, rx}
+import quizleague.web.util.Logging._
 
 object TeamModule extends Module{
   
@@ -169,21 +173,54 @@ object StatisticsService extends StatisticsGetService{
      val seasonYears = seasons.map(s => ((s.id,s.startYear))).toMap
      stats.sortBy(s => seasonYears(s.season.id))
   }
+
+  private def sortAndPadStats(stats:js.Array[Statistics], seasons:Seq[Season]) = {
+    val seasonYears = seasons.map(s => ((s.id,s.startYear))).toMap
+    val padded = seasons.map(s => stats.find(_.season.id == s.id).getOrElse(Statistics.stub(s)))
+
+    padded.sortBy(s => seasonYears(s.season.id)).toJSArray
+  }
   
   def allSeasonsPositionData(stats:js.Array[Statistics]):Observable[ChartData] = {
     
     Observable.combineLatest(stats.map(_.season.obs).toSeq)
       .map(seasons => {
        val sortedStats = sortStats(stats,seasons)
-        
+       val data:js.Array[js.Any] =  sortedStats.map(x => (if(x.seasonStats.currentLeaguePosition == 0) null else x.seasonStats.currentLeaguePosition).asInstanceOf[js.Any])
         ChartData(
-        datasets = js.Array(DataSet("League Position", data = sortedStats.map(_.seasonStats.currentLeaguePosition.asInstanceOf[js.Any]),lineTension=.2)), 
+        datasets = js.Array(DataSet("League Position", data = data,lineTension=.2)),
         xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
         )
       })
   }
-  
-    def allSeasonsAverageData(stats:js.Array[Statistics]):Observable[ChartData] = {
+
+
+  def multipleTeamsAllSeasonsPositionData(stats:js.Array[js.Array[Statistics]]):Observable[ChartData] = {
+    Observable.combineLatest(stats(0).map(_.season.obs).toSeq)
+      .flatMap(seasons => {
+
+        val datasets = stats.map(s => {
+          val sortedStats = sortAndPadStats(s,seasons)
+          val team = sortedStats.find(_.team != null).get.team.obs
+          val data:js.Array[js.Any] =  sortedStats.map(x => (if(x.seasonStats.currentLeaguePosition == 0) null else x.seasonStats.currentLeaguePosition).asInstanceOf[js.Any])
+          team.map(t => {
+            val colour = randomColor
+
+            DataSet(t.shortName, data = data, lineTension = .2, borderColor = colour, backgroundColor = colour)
+          })}).toSeq
+
+        Observable.combineLatest(datasets).map(d => ChartData(
+          datasets = d.toJSArray,
+          xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
+        ))
+
+
+      })
+  }
+
+  private def randomColor = new Color((Math.random*255).toInt, (Math.random*255).toInt, (Math.random*255).toInt)
+
+  def allSeasonsAverageData(stats:js.Array[Statistics]):Observable[ChartData] = {
     
     Observable.combineLatest(stats.map(_.season.obs).toSeq)
       .map(seasons => {

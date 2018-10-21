@@ -3,20 +3,21 @@ package quizleague.web.maintain.season
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.model._
+
 import scala.scalajs.js
 import js.JSConverters._
 import quizleague.web.maintain.venue.VenueService
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
 
-import js.Dynamic.{ global => g }  
-
+import js.Dynamic.{global => g}
 import quizleague.web.util.Logging
 import quizleague.web.model.CompetitionType
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.core.RouteComponent
+import quizleague.web.util.component.SelectUtils
 
 
 //@Component(

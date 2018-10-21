@@ -5,9 +5,9 @@ import quizleague.web.maintain.component.TemplateElements._
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import quizleague.web.maintain.component.SelectUtils
 import quizleague.web.maintain.venue._
 import quizleague.web.maintain.user.UserService
+import quizleague.web.util.component.SelectUtils
 
 object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
 

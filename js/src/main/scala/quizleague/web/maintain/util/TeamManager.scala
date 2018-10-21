@@ -1,8 +1,8 @@
 package quizleague.web.maintain.util
 import scalajs.js
 import quizleague.web.model.Team
+import quizleague.web.util.component.SelectWrapper
 import quizleague.web.util.rx.RefObservable
-import quizleague.web.maintain.component.SelectWrapper
 
 class TeamManager(var teams: js.Array[SelectWrapper[Team]]) {
   

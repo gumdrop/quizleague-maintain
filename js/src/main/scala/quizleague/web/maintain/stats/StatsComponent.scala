@@ -6,9 +6,9 @@ import org.scalajs.dom
 import org.scalajs.dom.raw.HTMLInputElement
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.maintain.component.SelectUtils
 import quizleague.web.maintain.season.SeasonService
 import quizleague.web.model._
+import quizleague.web.util.component.SelectUtils
 import quizleague.web.util.rx.RefObservable
 
 

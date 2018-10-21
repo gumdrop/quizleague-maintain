@@ -4,11 +4,12 @@ package quizleague.web.maintain.fixtures
 
 import quizleague.web.maintain.component._
 import quizleague.web.model._
+
 import scala.scalajs.js
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
 
-import js.Dynamic.{ global => g }
+import js.Dynamic.{global => g}
 import quizleague.web.util.Logging
 import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.maintain.team.TeamService
@@ -24,6 +25,7 @@ import quizleague.web.maintain.util.TeamManager
 import quizleague.web.maintain.component.ItemComponentConfig._
 import quizleague.web.core._
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.util.component.{SelectUtils, SelectWrapper}
 
 
 

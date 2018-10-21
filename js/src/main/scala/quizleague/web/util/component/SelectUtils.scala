@@ -1,12 +1,13 @@
-package quizleague.web.maintain.component
+package quizleague.web.util.component
 
-import scalajs.js
-import quizleague.web.util.rx.RefObservable
-import quizleague.web.service.GetService
-import rxscalajs.Observable._
-import rxscalajs.Observable
 import quizleague.web.model.Model
-import js.JSConverters._
+import quizleague.web.service.GetService
+import quizleague.web.util.rx.RefObservable
+import rxscalajs.Observable
+import rxscalajs.Observable._
+
+import scala.scalajs.js
+import scala.scalajs.js.JSConverters._
 
 object SelectUtils {
   def model[T <: Model](service:GetService[T])(nameMaker: T => String):Observable[js.Array[SelectWrapper[T]]] = service.list.map(_.map(o => new SelectWrapper(nameMaker(o),service.refObs(o.id)))).map(_.sortBy(_.text))

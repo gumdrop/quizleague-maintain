@@ -5,17 +5,18 @@ import quizleague.web.maintain.component.TemplateElements._
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.model._
-import quizleague.web.maintain.component.SelectUtils
 import quizleague.web.maintain.venue._
 import quizleague.web.maintain.user.UserService
 import quizleague.web.maintain.globaltext.GlobalTextService
 import rxscalajs.Observable
+
 import scalajs.js
 import js.JSConverters._
-import quizleague.web.maintain.component.SelectWrapper
+import quizleague.web.util.component.SelectWrapper
 import quizleague.web.maintain.season.SeasonService
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.util.component.SelectUtils
 import quizleague.web.util.rx.RefObservable
 
 

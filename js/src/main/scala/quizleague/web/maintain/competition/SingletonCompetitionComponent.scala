@@ -3,14 +3,13 @@ package quizleague.web.maintain.competition
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component._
 import quizleague.web.model._
-import scala.scalajs.js
 
+import scala.scalajs.js
 import TemplateElements._
 import quizleague.web.maintain.text.TextService
-
 import quizleague.web.util.Logging
-
 import quizleague.web.maintain.venue.VenueService
+import quizleague.web.util.component.SelectUtils
 
 
 object SingletonCompetitionComponent extends CompetitionComponentConfig{
