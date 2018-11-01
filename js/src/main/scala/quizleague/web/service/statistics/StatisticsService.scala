@@ -6,6 +6,7 @@ import quizleague.web.service._
 import quizleague.web.model.Statistics
 import quizleague.web.model.SeasonStats
 import quizleague.web.model.WeekStats
+import quizleague.web.model.HeadToHead
 import quizleague.domain.stats.{ Statistics => Dom }
 import shapeless._
 import quizleague.web.names.StatisticsNames
@@ -29,7 +30,9 @@ trait StatisticsGetService extends GetService[Statistics] with StatisticsNames {
             s.seasonStats.currentLeaguePosition,
             s.seasonStats.runningPointsFor,
             s.seasonStats.runningPointsAgainst,
-            s.seasonStats.runningPointsDifference),
+            s.seasonStats.runningPointsDifference,
+          s.seasonStats.headToHead.map(h => new HeadToHead(refObs(h.team,teamService), h.win,h.lose,h.draw)).toJSArray
+        ),
          s.weekStats.values.map(w => new WeekStats(
            w.date.toString,
            w.leaguePosition,

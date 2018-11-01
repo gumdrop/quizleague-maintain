@@ -20,6 +20,11 @@ object StatsWorker {
     case a:LeagueCompetition => List(a)
     case _  => List()
   }).head
+
+  def cupComps(season:Season) = season.competitions.map(toComp _).flatMap((c:Competition) => c match{
+    case a:KnockoutCompetition => List(a)
+    case _  => List()
+  })
   
   def toComp(c:Ref[Competition]):Competition = c
   
@@ -42,12 +47,27 @@ class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable], s
     if(fixture.result.isDefined){
     
       LOG.warning(s"Building stats for  ${fixture.home.shortName} vs ${fixture.away.shortName} on ${fixture.date}")
-      val homeStats = find(fixture.home).addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.get.awayScore)
-      val awayStats = find(fixture.away).addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.get.homeScore)
+      val homeStats = find(fixture.home).addWeekStats(fixture.date, fixture.result.get.homeScore, fixture.result.get.awayScore).addToHeadToHead(fixture)
+      val awayStats = find(fixture.away).addWeekStats(fixture.date, fixture.result.get.awayScore, fixture.result.get.homeScore).addToHeadToHead(fixture)
   
       val allStats = (for (t <- tables; row <- t.rows if row.team.id != homeStats.team.id && row.team.id != awayStats.team.id) yield find(row.team))
       
       (homeStats :: awayStats :: allStats).map(s => s.addLeaguePosition(fixture.date, leaguePosition(s.team, tables)))
+    }
+    else stats
+
+  }
+
+  def doCup = {
+    if(fixture.result.isDefined){
+
+      LOG.warning(s"Building stats for  ${fixture.home.shortName} vs ${fixture.away.shortName} on ${fixture.date}")
+      val homeStats = find(fixture.home).addToHeadToHead(fixture)
+      val awayStats = find(fixture.away).addToHeadToHead(fixture)
+
+      val allStats = (for (t <- tables; row <- t.rows if row.team.id != homeStats.team.id && row.team.id != awayStats.team.id) yield find(row.team))
+
+      List(homeStats,awayStats).map(s => s.addLeaguePosition(fixture.date, leaguePosition(s.team, tables)))
     }
     else stats
 
@@ -101,6 +121,7 @@ object HistoricalStatsAggregator {
       dummyTables = LeagueTableRecalculator.recalculate(dummyTables,List(r))
 
       startingStats = new StatsWorker(r, season, dummyTables, startingStats).doIt
+
       
     }
     saveAll(startingStats)

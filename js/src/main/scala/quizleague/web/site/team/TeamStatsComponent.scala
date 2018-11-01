@@ -3,6 +3,8 @@ package quizleague.web.site.team
 import quizleague.web.core._
 
 import scalajs.js
+import js.Dynamic.literal
+import js.DynamicImplicits._
 import js.JSConverters._
 import com.felstar.scalajs.vue._
 import quizleague.web.model._
@@ -10,6 +12,7 @@ import quizleague.web.util.component.{SelectUtils, SelectWrapper}
 import rxscalajs.Observable
 import vuechart._
 import quizleague.web.util.Logging._
+import quizleague.web.util.rx.RefObservable
 
 object TeamStatsPage extends RouteComponent{
   
@@ -334,11 +337,12 @@ object HeadToHeadComponent extends Component{
     <v-layout row wrap v-if="teamId && stats && allSeasons" justify-space-around>
       <v-flex >
         <head-to-head-league-position :stats="allSeasons"></head-to-head-league-position>
+        <head-to-head-results :stats="allSeasons[0]" :teams="chips"></head-to-head-results>
       </v-flex>
     </v-layout>
     </v-layout>
 """
-  components(AllSeasonsAverageScoreComponent,HeadToHeadLeaguePositionComponent)
+  components(AllSeasonsAverageScoreComponent,HeadToHeadLeaguePositionComponent, HeadToHeadResultsComponent)
 
   private def allSeasons(c:facade) = Observable
     .combineLatest(
@@ -393,6 +397,61 @@ object HeadToHeadLeaguePositionComponent extends Component with GraphSizeCompone
   prop("stats")
   subscription("data","stats")(c => StatisticsService.multipleTeamsAllSeasonsPositionData(c.stats))
   subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats(0)))
+}
+
+
+@js.native
+trait HeadToHeadResultsComponent extends VueRxComponent with VuetifyComponent{
+  val stats:js.Array[Statistics]
+  val teams:js.Array[SelectWrapper[Team]]
+  var rows:js.Array[_]
+}
+
+object HeadToHeadResultsComponent extends Component with GraphSizeComponentConfig{
+
+  type facade = HeadToHeadResultsComponent
+
+  val name = "head-to-head-results"
+  val template = """
+        <v-card>
+          <v-card-title>Results</v-card-title>
+          <v-card-text v-if="rows">
+           <v-container fluid grid-list-sm >
+            <v-layout row justify-space-around>
+              <v-data-table :headers="headers"
+              :items="rows">
+               <template slot="items" slot-scope="props">
+               <td>{{props.item.team}}</td>
+       <td >{{ props.item.win }}</td>
+       <td >{{ props.item.lose }}</td>
+       <td >{{ props.item.draw }}</td>
+
+     </template>
+              </v-data-table>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+
+  components(TeamNameComponent)
+
+  private def filter(c:facade):js.Array[HeadToHead] = c.stats
+    .flatMap(_.seasonStats.headToHead)
+    .groupBy(_.team.id).filter(h => c.teams.exists(_.value.id == h._1))
+    .values.map(_.fold(new HeadToHead(null,0,0,0))((h1:HeadToHead,h2:HeadToHead) => h1 plus h2)).toJSArray
+
+  private def items(items:js.Array[HeadToHead]) = Observable.combineLatest(items.map(x => x.team.obs.map(t => literal(team=t.shortName, win=x.win,lose=x.lose,draw=x.draw))).toSeq).map(_.toJSArray)
+
+
+  prop("stats")
+  prop("teams")
+  data("rows", js.Array())
+  data("headers", js.Array(literal(text="Team", value="team", sortable=false),literal(text="Won", value="win"), literal(text="Lost", value="lose"),literal(text="Drawn", value="draw")))
+  subscription("rows", "teams")(c => {items(filter(c)).map(y => {c.rows = y;y})})
+
+
+
 }
 
 

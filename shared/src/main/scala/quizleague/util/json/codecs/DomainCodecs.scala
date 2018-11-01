@@ -56,6 +56,8 @@ object DomainCodecs{
   implicit val seasonStatsEncoder: Encoder[SeasonStats] = deriveEncoder
   implicit val weekStatsDecoder: Decoder[WeekStats] = deriveDecoder
   implicit val weekStatsEncoder: Encoder[WeekStats] = deriveEncoder
+  implicit val headToHeadDecoder: Decoder[HeadToHead] = deriveDecoder
+  implicit val headToHeadEncoder: Encoder[HeadToHead] = deriveEncoder
   
   implicit val statisticsDecoder: Decoder[Statistics] = deriveDecoder
   implicit val statisticsEncoder: Encoder[Statistics] = deriveEncoder

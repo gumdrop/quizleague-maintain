@@ -29,18 +29,20 @@ object Statistics {
 }
 
 class HeadToHead(
-  val teamdId:String,
+  val team:RefObservable[Team],
   val win:Int = 0,
   val lose:Int = 0,
-  val draw:Int = 0
-                ) extends js.Object
+  val draw:Int = 0) extends js.Object{
+
+  def plus (other:HeadToHead):HeadToHead = new HeadToHead(other.team, other.win + win, other.lose + lose, other.draw + draw)
+}
 
 class SeasonStats(
   val currentLeaguePosition: Int = 0,
   val runningPointsFor: Int = 0,
   val runningPointsAgainst: Int = 0,
   val runningPointsDifference: Int = 0,
-  val headToHead:js.Dictionary[HeadToHead] = js.Dictionary()) extends js.Object
+  val headToHead:js.Array[HeadToHead] = js.Array()) extends js.Object
 
 class WeekStats(
   val date: String,
