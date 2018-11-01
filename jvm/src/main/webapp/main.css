@@ -8,7 +8,6 @@
   .v-tabs__item{text-transform:none !important;}
 
   .v-btn__content span{text-transform:none !important;}
-
   button.btn{text-transform:none;}
   a.btn{text-transform:none;}
   .ql-league-table {
@@ -60,27 +59,34 @@
  	 	top:-13px;
  	 }
  	 
-.page-header{
-	font-family: 'Nunito', sans-serif !important;
+.page-header {
 	font-size: 150% !important;
-		text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0
-	20px rgba(0,0,0,0), 0 0 30px rgba(0,0,0,0), 0 0 40px rgba(0,0,0,0), 0 0 50px rgba(0,0,0,0) !important;
-	color: darkblue !important;
+	font-weight:bold;
+    margin-left:.3em;
+    margin-right:.3em;
+}
+.page-header-first{
+    color:#202020;text-shadow: 0 0 2px #dfdfdf;
+    transition:all 1s ease-out;
 
-	transition:all 1s ease-out;
-	margin-left:.2em;
-	margin-right:.2em;
+}
+.page-header-rest{
+    color:#dfdfdf;text-shadow: 0 0 2px #0c0c0c;
+    transition:all 1s ease-out;
 }
 
-.page-header-small{
-	font-family: 'Nunito', sans-serif !important;
+.page-header-small > {
 	font-size: 100% !important;
-	color: white !important;
-	transition:all 1s ease-out;
 }
 
-.page-header:hover {
+.page-header:hover .page-header-first {
 	
-	color: white !important;
+	color:#dfdfdf;text-shadow: 0 0 2px #0c0c0c;
 	
+}
+
+.page-header:hover .page-header-rest {
+
+    color:#202020;text-shadow: 0 0 2px #dfdfdf;
+
 }

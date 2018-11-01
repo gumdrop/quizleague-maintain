@@ -55,7 +55,7 @@ object SiteComponent extends Component {
       <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
-        <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':''">{{appData.leagueName}}</span>
+        <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':'page-header-small'"><ql-title :title="appData.leagueName"></ql-title></span>
       </v-toolbar-title>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
@@ -81,7 +81,7 @@ object SiteComponent extends Component {
     </v-content>
   </v-app>"""
      
-  components(ResultNotificationsComponent)
+  components(ResultNotificationsComponent,TitleComponent)
   
   def drawerGet(c:facade) = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
   def drawerSet(c:facade, showMenu:Boolean){c.showMenu = if(c.$vuetify.breakpoint.mdAndDown) showMenu else c.showMenu}
@@ -101,5 +101,20 @@ trait NoSideMenu{
 trait SideMenu{
   this:Component =>
   override def mounted:js.Function = () => {SiteService.sidemenu.next(true)}
+}
+
+object TitleComponent extends Component{
+  val name = "ql-title"
+  val template =
+    """
+      <span>
+        <span class="page-header-first">{{first(title)}}</span>
+        <span class="page-header-rest"> {{rest(title)}}</span>
+      </span>"""
+
+  prop("title")
+
+  method("first")((title:String) => title.split(" ")(0))
+  method("rest")((title:String) => title.split(" ").drop(1).mkString(" "))
 }
 
