@@ -82,13 +82,13 @@ END:VEVENT
     private def formatBlankFixtures(fixtures:Fixtures)(implicit context:StorageContext) = {
       
       val now = toUtc(LocalDateTime.now)
-      val uidPart = fixtures.description.replaceAll("\\s", "") 
+      val uidPart = (fixtures.parentDescription + fixtures.description).replaceAll("\\s", "")
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
 UID:${fixtures.date}.$uidPart.chilternquizleague.uk
-DESCRIPTION:${fixtures.description}
-SUMMARY:${fixtures.description}
+DESCRIPTION:${fixtures.parentDescription} ${fixtures.description}
+SUMMARY:${fixtures.parentDescription} ${fixtures.description}
 DTSTART:${toUtc(fixtures.date.atTime(fixtures.start))}
 DTEND:${toUtc(fixtures.date.atTime(fixtures.start plus fixtures.duration))}
 END:VEVENT
