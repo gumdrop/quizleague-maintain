@@ -1,9 +1,4 @@
-@font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Nunito-Bold'), url(/fonts/Nunito/nunito700.woff) format('woff');
-}
+@import url('https://fonts.googleapis.com/css?family=Cabin:400,600|Comfortaa:700|Cuprum:700|Hind+Siliguri:600|Philosopher:700');
 
   .v-tabs__item{text-transform:none !important;}
 
@@ -58,9 +53,10 @@
  	 .ql-calendar .panel-component .view-btn{
  	 	top:-13px;
  	 }
- 	 
+
 .page-header {
-	font-size: 150% !important;
+	font-family:'Philosopher',sans-serif;
+	font-size: 200% !important;
 	font-weight:bold;
     margin-left:.3em;
     margin-right:.3em;
@@ -75,8 +71,9 @@
     transition:all 1s ease-out;
 }
 
-.page-header-small > {
-	font-size: 100% !important;
+.page-header-small {
+	font-family:'Philosopher',sans-serif;
+	font-size: 125% !important;
 }
 
 .page-header:hover .page-header-first {
