@@ -337,6 +337,8 @@ object HeadToHeadComponent extends Component{
     <v-layout row wrap v-if="teamId && stats && allSeasons" justify-space-around>
       <v-flex >
         <head-to-head-league-position :stats="allSeasons"></head-to-head-league-position>
+      </v-flex>
+      <v-flex>
         <head-to-head-results :stats="allSeasons[0]" :teams="chips"></head-to-head-results>
       </v-flex>
     </v-layout>
