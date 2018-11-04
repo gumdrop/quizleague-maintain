@@ -13,14 +13,17 @@ import quizleague.web.maintain.database.DatabaseModule
 import quizleague.web.maintain.stats.StatsModule
 import quizleague.web.service.notification.NotificationGetService
 import java.time.LocalDateTime
+
+import quizleague.web.maintain.competitionstatistics.CompetitionStatisticsModule
 import quizleague.web.model.MaintainMessagePayload
 import rxscalajs.Observable
+
 import scalajs.js
 import js.JSConverters._
 
 object MaintainModule extends Module {
 
-  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule, DatabaseModule, StatsModule)
+  override val modules = @@(UserModule, VenueModule, TextModule, TeamModule, ApplicationContextModule, GlobalTextModule, SeasonModule, DatabaseModule, StatsModule, CompetitionStatisticsModule)
 
   override val routes = @@(
     RouteConfig(path = "/maintain/*", components = Map("sidenav" -> MaintainMenuComponent)))

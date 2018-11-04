@@ -1,15 +1,18 @@
 package quizleague.web.site
 
 import com.felstar.scalajs.vue._
+
 import scalajs.js.Dynamic.literal
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.site.home.HomeModule
 import quizleague.web.core._
 import quizleague.web.site.team.TeamModule
-
 import quizleague.web.store.Firestore
-import io.circe._,io.circe.parser._,io.circe.syntax._,io.circe.scalajs.convertJsToJson
+import io.circe._
+import io.circe.parser._
+import io.circe.syntax._
+import io.circe.scalajs.convertJsToJson
 import quizleague.domain.ApplicationContext
 import quizleague.util.json.codecs.DomainCodecs._
 import rxscalajs.subjects.BehaviorSubject
@@ -35,13 +38,15 @@ import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
 import quizleague.web.site.common._
 import java.time.LocalDateTime
+
+import quizleague.web.site.competition.statistics.CompetitionStatisticsModule
 import rxscalajs.Observable
 
 
 
 object SiteModule extends Module {
   
-  override val modules = @@(CommonModule, HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule)
+  override val modules = @@(CommonModule, HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule, CompetitionStatisticsModule)
   
   override val routes = @@(
       RouteConfig(path="/links", components = Map("default" -> LinksComponent, "title" -> LinksTitleComponent)),

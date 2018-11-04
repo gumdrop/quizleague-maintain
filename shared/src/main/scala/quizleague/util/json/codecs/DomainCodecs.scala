@@ -61,6 +61,8 @@ object DomainCodecs{
   
   implicit val statisticsDecoder: Decoder[Statistics] = deriveDecoder
   implicit val statisticsEncoder: Encoder[Statistics] = deriveEncoder
+  implicit val competitonStatisticsDecoder: Decoder[CompetitionStatistics] = deriveDecoder
+  implicit val competitonStatisticsEncoder: Encoder[CompetitionStatistics] = deriveEncoder
   
   implicit val notifDecoder: Decoder[Notification] = deriveDecoder
   implicit val notifEncoder: Encoder[Notification] = deriveEncoder

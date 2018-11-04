@@ -12,7 +12,9 @@ class Season(
     val text:RefObservable[Text],
     val competitions:js.Array[RefObservable[Competition]],
     val calendar:js.Array[CalendarEvent]
-) extends Model
+) extends Model{
+  def toText() = s"$startYear / $endYear"
+}
 
 object Season{
   def apply(    id:String,

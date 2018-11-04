@@ -15,7 +15,8 @@ object MaintainMenuComponent extends Component{
         <v-list-tile to="/maintain/user"><v-list-tile-content><v-list-tile-title>Users</v-list-tile-title></v-list-tile-content></v-list-tile>
         <v-list-tile to="/maintain/venue"><v-list-tile-content><v-list-tile-title>Venues</v-list-tile-title></v-list-tile-content></v-list-tile>        
         <v-list-tile to="/maintain/database"><v-list-tile-content><v-list-tile-title>Database</v-list-tile-title></v-list-tile-content></v-list-tile>        
-        <v-list-tile to="/maintain/stats"><v-list-tile-content><v-list-tile-title>Statistics</v-list-tile-title></v-list-tile-content></v-list-tile>        
+        <v-list-tile to="/maintain/stats"><v-list-tile-content><v-list-tile-title>Statistics</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-tile to="/maintain/competitionstatistics"><v-list-tile-content><v-list-tile-title>Competition Statistics</v-list-tile-title></v-list-tile-content></v-list-tile>
 
      </v-list>
 """

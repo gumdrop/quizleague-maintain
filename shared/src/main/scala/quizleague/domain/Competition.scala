@@ -13,8 +13,6 @@ import quizleague.util.json.codecs.DomainCodecs._
 @JsonCodec
 sealed trait Competition extends Entity
 {
-
-  
   val name:String
   val text:Ref[Text]
   val icon:Option[String]
