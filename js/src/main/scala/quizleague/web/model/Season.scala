@@ -13,7 +13,7 @@ class Season(
     val competitions:js.Array[RefObservable[Competition]],
     val calendar:js.Array[CalendarEvent]
 ) extends Model{
-  def toText() = s"$startYear / $endYear"
+  def toText() = if(startYear==endYear) s"$startYear" else s"$startYear/$endYear"
 }
 
 object Season{

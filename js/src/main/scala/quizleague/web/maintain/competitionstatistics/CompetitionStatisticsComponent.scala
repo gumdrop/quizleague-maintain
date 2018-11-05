@@ -43,6 +43,7 @@ object CompetitionStatisticsComponent extends ItemComponentConfig[CompetitionSta
           </v-card>
           <br>
         </div>
+        <div><v-btn v-on:click="addResult(item)" button><v-icon >add</v-icon></v-btn></div>
      </v-layout>
      $formButtons
     </v-form>
