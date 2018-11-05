@@ -72,11 +72,12 @@ object ResultSeasonComponent extends Component{
     <span v-if="!competition">
     {{result.seasonText}}
     </span>
+    </span>
   """
 
   prop("result")
   //watch("result"){(c:facade,x:Any) => c.competition = null}
-  data("competition",null)
+  //data("competition",null)
 
   subscription("competition", "result")(c => if(c.result.competition != null) c.result.competition.obs else Observable.just(null))
 
