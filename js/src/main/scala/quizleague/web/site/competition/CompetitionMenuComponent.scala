@@ -8,7 +8,8 @@ import scalajs.js
 import js.JSConverters._
 import quizleague.web.model.Competition
 import quizleague.web.site.SideMenu
-import quizleague.web.site.competition.statistics.CompetitionStatisticsService
+import quizleague.web.site.competition.statistics.{CompetitionStatisticsMenuComponent, CompetitionStatisticsService}
+import statistics._
 
 
 object CompetitionMenu extends RouteComponent with SideMenu{
@@ -31,15 +32,11 @@ object CompetitionMenuComponent extends Component with SeasonFormatComponent{
       </v-list-tile>
     </ql-side-menu>
     <v-divider></v-divider>
-    <ql-side-menu title="Roll Of Honour" icon="mdi-script">
-       <v-list-tile v-for="stats in rollofhonour" :key="stats.id" :to="'/competition/rollofhonour/' + stats.id">
-           <v-list-tile-content><v-list-tile-title>{{stats.competitionName}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-    </ql-side-menu>
+    <comp-stats-menu></comp-stats-menu>
     </div>
     """
+  components(CompetitionStatisticsMenu)
 
   subscription("competitions")(c => CompetitionViewService.competitions().map(_.sortBy(_.name)))
-  subscription("rollofhonour")(c => CompetitionStatisticsService.list().map(_.sortBy(_.competitionName)))
   subscription("season")(c => CompetitionViewService.season)
 }

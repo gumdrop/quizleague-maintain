@@ -13,7 +13,7 @@ import rxscalajs.Observable
 
 object CompetitionStatisticsModule extends Module{
   override val routes = @@(
-    RouteConfig(path="/competition/rollofhonour/:id", components=Map("default" -> CompetitionStatisticsPage, "title" -> CompetitionStatisticsTitle, "sidenav" -> CompetitionMenuComponent)),
+    RouteConfig(path="/competition/rollofhonour/:id", components=Map("default" -> CompetitionStatisticsPage, "title" -> CompetitionStatisticsTitle, "sidenav" -> CompetitionStatisticsMenuComponent)),
 
        )
       

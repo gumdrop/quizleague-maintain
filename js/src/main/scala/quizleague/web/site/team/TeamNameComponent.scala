@@ -5,11 +5,13 @@ import quizleague.web.core.IdComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.rx.RefObservable
 import quizleague.web.model.Team
+
+import scala.scalajs.js.UndefOr
 import scalajs.js
 
 @js.native
 trait TeamNameComponent extends IdComponent{
-  val team:RefObservable[Team]
+  val team:UndefOr[RefObservable[Team]]
 }
 
 object TeamNameComponent extends Component{
@@ -18,7 +20,7 @@ object TeamNameComponent extends Component{
   val name = "ql-team-name"
   val template = """<span v-if="t">{{short ? t.shortName : t.name}}</span>"""
   props("team","short","id")
-  subscription("t","team", "id")(c => if(c.team != null) c.team.obs else TeamService.get(c.id))
+  subscription("t","team", "id")(c => c.team.toOption.fold(TeamService.get(c.id))(_.obs))
 
   
 }

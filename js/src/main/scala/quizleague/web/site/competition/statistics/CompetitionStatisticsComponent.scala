@@ -4,10 +4,10 @@ import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.core._
 import quizleague.web.core.IdComponent
 import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.site.SideMenu
 import quizleague.web.site.team.TeamNameComponent
 import quizleague.web.model._
-import rxscalajs.Observable
+import quizleague.web.util.rx.RefObservable
+import quizleague.web.site.competition.CompetitionService
 
 import scalajs.js
 
@@ -28,7 +28,7 @@ object CompetitionStatisticsComponent extends Component with GridSizeComponentCo
       <v-card-text>
       <table class="roll-of-honour">
       <thead>
-        <tr><th>Season</th><th>Winner</th></tr>
+        <th>Season</th><th>Winner</th>
       </thead>
       <tr v-for="result in sortResults(item.results)" :key="result.competitionName">
         <td><result-season :result="result"></result-season></td><td><result-team :result="result"></result-team></td>
@@ -66,20 +66,39 @@ object ResultSeasonComponent extends Component{
   val name = "result-season"
   val template="""
   <span>
-    <router-link :to="'/competition/' + competition.id + '/' + competition.typeName" v-if="competition">
+    <competition-link :competition="result.competition" v-if="result.competition">
      {{result.seasonText}}
-    </router-link>
-    <span v-if="!competition">
+    </competition-link>
+    <span v-if="!result.competition">
     {{result.seasonText}}
     </span>
     </span>
   """
+  components(CompetitionLinkComponent)
 
   prop("result")
-  //watch("result"){(c:facade,x:Any) => c.competition = null}
-  //data("competition",null)
 
-  subscription("competition", "result")(c => if(c.result.competition != null) c.result.competition.obs else Observable.just(null))
+}
+
+
+@js.native
+trait CompetitionLinkComponent extends VueRxComponent{
+  val competition:RefObservable[Competition]
+}
+
+object CompetitionLinkComponent extends Component{
+
+  type facade = CompetitionLinkComponent
+
+val name = "competition-link"
+val template="""
+    <router-link :to="'/competition/' + comp.id + '/' + comp.typeName" v-if="comp">
+     <slot></slot>
+    </router-link>
+  """
+
+prop("competition")
+subscription("comp")(c => CompetitionService.get(c.competition.id))
 
 }
 
@@ -88,15 +107,26 @@ object ResultTeamComponent extends Component{
   val name = "result-team"
   val template="""
   <span>
-    <router-link :to="'/team/' + result.team.id" v-if="result.team">
-     <ql-team-name :team="result.team"></ql-team-name>
-    </router-link>
+    <team-link v-if="result.team" :team="result.team"></team-link>
     <span v-if="!result.team">
     {{result.teamText}}
     </span>
+    </span>
   """
-  components(TeamNameComponent)
+  components(TeamLinkComponent)
 
   prop("result")
 
+}
+
+object TeamLinkComponent extends Component{
+  val name = "team-link"
+  val template = """
+    <router-link :to="'/team/' + team.id">
+     <ql-team-name :id="team.id"></ql-team-name>
+    </router-link>"""
+
+  components(TeamNameComponent)
+
+  prop("team")
 }
