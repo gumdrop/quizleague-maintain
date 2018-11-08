@@ -21,10 +21,10 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
-    <v-timeline >
-      <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events[0].eventType) + ' darken-4'">
+    <v-timeline v-bind="dense">
+      <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events[0].eventType)">
         <v-card>
-           <v-card-title :class="colour(item.events[0].eventType) + ' darken-4'"><h4 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h4></v-card-title>
+           <v-card-title :class="colour(item.events[0].eventType)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
            <v-card-text>
             <div v-for="event in item.events">
                 <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
@@ -39,7 +39,9 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   props("seasonId")
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
-  method("colour"){s:String => s match {case "fixtures" => "green" case "calendar" => "blue" case "competition" => "purple"}}
+  method("colour"){s:String => (s match {case "fixtures" => "green" case "calendar" => "blue" case "competition" => "purple"}) + " darken-3"}
+  def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
+  computed("dense")({dense _}:js.ThisFunction)
   
 }
 
