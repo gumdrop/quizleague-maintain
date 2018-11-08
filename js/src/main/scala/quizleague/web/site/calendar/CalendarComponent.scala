@@ -21,10 +21,10 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
-    <v-layout column>
-      <v-flex v-for="item in items" :key="item.date">
+    <v-timeline >
+      <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events[0].eventType) + ' darken-4'">
         <v-card>
-           <v-card-title primary-title><h3 class="headline mb-0">{{item.date | date("EEEE d MMMM yyyy")}}</h3></v-card-title>
+           <v-card-title :class="colour(item.events[0].eventType) + ' darken-4'"><h4 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h4></v-card-title>
            <v-card-text>
             <div v-for="event in item.events">
                 <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
@@ -33,12 +33,13 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
             </div>
            </v-card-text>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-timeline-item>
+    </v-timeline>
   </v-container>"""
   props("seasonId")
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
+  method("colour"){s:String => s match {case "fixtures" => "green" case "calendar" => "blue" case "competition" => "purple"}}
   
 }
 
@@ -107,7 +108,11 @@ object FixturesEventComponent extends EventComponentConfig{
 object CalendarEventComponent extends EventComponentConfig{
   
   val name = "ql-calendar-event"
-  val template = """<div v-if="event.event"><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>"""
+  val template = """
+    <v-layout column align-start class="panel-component">
+      <div v-if="event.event"><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>
+     </v-layout>
+      """
 
 }
 
