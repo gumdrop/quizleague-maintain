@@ -4,7 +4,7 @@ import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.core._
 import quizleague.web.core.IdComponent
 import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.site.team.TeamNameComponent
+import quizleague.web.site.team.{ResponsiveTeamNameComponent, TeamNameComponent, TeamService}
 import quizleague.web.model._
 import quizleague.web.util.rx.RefObservable
 import quizleague.web.site.competition.CompetitionService
@@ -66,7 +66,7 @@ object ResultSeasonComponent extends Component{
   val name = "result-season"
   val template="""
   <span>
-    <competition-link :competition="result.competition" v-if="result.competition">
+    <competition-link :id="result.competition.id" v-if="result.competition">
      {{result.seasonText}}
     </competition-link>
     <span v-if="!result.competition">
@@ -83,7 +83,7 @@ object ResultSeasonComponent extends Component{
 
 @js.native
 trait CompetitionLinkComponent extends VueRxComponent{
-  val competition:RefObservable[Competition]
+  val id:String
 }
 
 object CompetitionLinkComponent extends Component{
@@ -92,13 +92,13 @@ object CompetitionLinkComponent extends Component{
 
 val name = "competition-link"
 val template="""
-    <router-link :to="'/competition/' + comp.id + '/' + comp.typeName" v-if="comp">
+    <router-link :to="'/competition/' + id + '/' + comp.typeName" v-if="comp">
      <slot></slot>
     </router-link>
   """
 
-prop("competition")
-subscription("comp")(c => CompetitionService.get(c.competition.id))
+prop("id")
+subscription("comp")(c => CompetitionService.get(c.id))
 
 }
 
@@ -107,7 +107,7 @@ object ResultTeamComponent extends Component{
   val name = "result-team"
   val template="""
   <span>
-    <team-link v-if="result.team" :team="result.team"></team-link>
+    <team-link v-if="result.team" :id="result.team.id"></team-link>
     <span v-if="!result.team">
     {{result.teamText}}
     </span>
@@ -120,13 +120,16 @@ object ResultTeamComponent extends Component{
 }
 
 object TeamLinkComponent extends Component{
+
+  type facade = IdComponent
+
   val name = "team-link"
   val template = """
-    <router-link :to="'/team/' + team.id">
-     <ql-team-name :id="team.id"></ql-team-name>
+    <router-link :to="'/team/' + id">
+     <ql-r-team-name :id="id"></ql-r-team-name>
     </router-link>"""
 
-  components(TeamNameComponent)
+  components(ResponsiveTeamNameComponent)
 
-  prop("team")
+  prop("id")
 }
