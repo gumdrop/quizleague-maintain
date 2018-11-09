@@ -92,9 +92,9 @@ trait EventComponentConfig extends Component{
 object FixturesEventComponent extends EventComponentConfig{
   
   val name = "ql-fixtures-event"
-   val template = s"""         
+   val template = s"""
       <v-layout column align-start class="panel-component">
-          <v-flex align-start><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName">{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link>
+          <v-flex align-start><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link>
             <v-btn icon v-on:click="togglePanel" class="#view-btn">
              <v-icon v-if="!panelVisible">visibility</v-icon>
              <v-icon v-if="panelVisible">visibility_off</v-icon>
@@ -111,8 +111,10 @@ object CalendarEventComponent extends EventComponentConfig{
   
   val name = "ql-calendar-event"
   val template = """
-    <v-layout column align-start class="panel-component">
-      <div v-if="event.event"><b>{{event.event.description}}</b>  {{event.event.time}}  Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>
+    <v-layout column align-start>
+      <v-flex><b>{{event.event.description}}</b></v-flex>
+      <v-flex>Time : {{event.event.time}}</v-flex>
+      <v-flex>Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></v-flex>
      </v-layout>
       """
 
@@ -121,7 +123,13 @@ object CalendarEventComponent extends EventComponentConfig{
 object CompetitionEventComponent extends EventComponentConfig{
   
   val name = "ql-competition-event"
-  val template = """<div><router-link :to="'/competition/' + event.competition.id+'/'+event.competition.typeName">{{event.competition.name}}</router-link>  {{event.event.time}}  Venue : <router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></div>"""
+  val template =
+    """
+      <v-layout column align-start >
+        <v-flex><router-link :to="'/competition/' + event.competition.id+'/'+event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.competition.name}}</router-link></v-flex>
+        <v-flex>Time : {{event.event.time}}</v-flex>
+        <v-flex>Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></v-flex>
+       </v-layout>"""
 
 }
 
