@@ -65,17 +65,16 @@ object CalendarViewService extends SeasonWatchService{
     
     val comps = CompetitionService.firstClassCompetitions(seasonId)
     
-    val fixtures:Observable[js.Array[EventWrapper]] = comps.flatMap(cs => combineLatest(cs.flatMap(c => c.fixtures.map(_.obs).map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray)
+    def fixtures:Observable[js.Array[EventWrapper]] = comps.flatMap(cs => combineLatest(cs.flatMap(c => c.fixtures.map(_.obs).map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray)
     
-    val singletons = comps.map(cs => cs.flatMap(singletonEvents _))
+    def singletons = comps.map(cs => cs.flatMap(singletonEvents _))
     
-    val seasons = season.map(s => s.calendar.map(e => EventWrapper(e)))
+    def seasons = season.map(s => s.calendar.map(e => EventWrapper(e)))
 
     combineLatest(Seq(fixtures,singletons,seasons))
         .map(lists =>  
           lists.flatMap(_.toSeq).toJSArray
           .groupBy(_.date)
-          .toIterable
           .map{case(d,e) => new DateWrapper(d, e)}
           .toJSArray
           .sortBy(_.date)
