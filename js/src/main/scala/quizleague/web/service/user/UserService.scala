@@ -3,11 +3,13 @@ package quizleague.web.service.user
 
 import quizleague.web.service._
 import quizleague.web.model.User
-import quizleague.domain.{ User => Dom }
-
+import quizleague.domain.{TeamTenure, User => Dom}
 import quizleague.web.names.UserNames
-import io.circe.parser._,io.circe.syntax._
+import io.circe.parser._
+import io.circe.syntax._
+import quizleague.domain.util.CollectionRef
 import quizleague.util.json.codecs.DomainCodecs._
+
 import scalajs.js
 
 
@@ -23,7 +25,7 @@ trait UserGetService extends GetService[User] with UserNames {
 }
 
 trait UserPutService extends PutService[User] with UserGetService {
-  override protected def mapIn(user: User) = Dom(user.id, user.name, user.email, user.retired)
+  override protected def mapIn(user: User) = Dom(user.id, user.name, user.email, CollectionRef[TeamTenure], user.retired)
 
   override protected def make(): Dom = Dom(newId(), "", "")
 
