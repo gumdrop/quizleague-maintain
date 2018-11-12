@@ -31,7 +31,9 @@ trait GetService[T <: Model] {
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
 
   def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
-  
+
+  protected def query(obj:T) = db.doc(s"$uriRoot/${obj.id}")
+
   protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutSparse _)) 
 
   def flush() = items.clear()
@@ -96,11 +98,26 @@ trait GetService[T <: Model] {
 
 trait ChildGetService[T <: Model]{
 
+  this:GetService[T] =>
+
   type U <: Entity
   type Parent <: Model
   val parentService:GetService[Parent]
+  val name:String
 
-  def get(parent:Parent, id:String):T = ???
+  private var listObservable: Option[Observable[js.Array[U]]] = None
+
+  def get(parent:Parent, id:String):Observable[T] = ???
+  def list(parent:Parent):Observable[js.Array[T]] = listFromStorage(parent).map(c => c.map(u => mapOutSparse(u)))
+
+
+  protected final def listFromStorage(parent:Parent): Observable[js.Array[U]] = {
+
+    val obs = listObservable.getOrElse({listFromQuery(parentService.query(parent).collection(name))})
+
+    listObservable = Option(obs)
+    obs
+  }
 }
 
 
