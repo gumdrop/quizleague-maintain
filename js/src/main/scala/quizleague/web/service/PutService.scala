@@ -46,3 +46,9 @@ trait PutService[T <: Model] {
 
 
 }
+
+trait ChildPutService[T <: Model]{
+  this: ChildGetService[T] =>
+
+  def save(parent:Parent, model:T):Unit = ???
+}

@@ -17,7 +17,7 @@ object User{
   def apply(id:String,
     name:String,
     email:String,
-    retired:Boolean = false) = new User(id,name,email,retired)
+    retired:Boolean = false) = new User(id,name,email,Observable.just(js.Array()),retired)
 }
 
 class TeamTenure(

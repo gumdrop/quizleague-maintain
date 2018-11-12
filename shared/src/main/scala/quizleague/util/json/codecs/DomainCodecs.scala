@@ -5,6 +5,7 @@ import quizleague.domain.stats._
 import quizleague.domain.notification._
 import ScalaTimeCodecs._
 import quizleague.domain.container.DomainContainer
+import quizleague.domain.util.CollectionRef
 
 object DomainCodecs{
   import io.circe._, io.circe.generic.semiauto._,io.circe.generic.auto._
@@ -66,8 +67,7 @@ object DomainCodecs{
   
   implicit val notifDecoder: Decoder[Notification] = deriveDecoder
   implicit val notifEncoder: Encoder[Notification] = deriveEncoder
-  
-  
-  
+
+
   
 }

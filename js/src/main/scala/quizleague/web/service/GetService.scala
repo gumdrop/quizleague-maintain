@@ -94,4 +94,13 @@ trait GetService[T <: Model] {
 
 }
 
+trait ChildGetService[T <: Model]{
+
+  type U <: Entity
+  type Parent <: Model
+  val parentService:GetService[Parent]
+
+  def get(parent:Parent, id:String):T = ???
+}
+
 

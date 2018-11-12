@@ -14,7 +14,7 @@ object Firestore {
 //    projectId= "chiltern-ql-firestore",
 //    storageBucket= "chiltern-ql-firestore.appspot.com",
 //    messagingSenderId= "891716942638"
-)
+//)
 
     val config = literal(
     apiKey= "AIzaSyCTnCW1euWGpRohoEBESIdNEASM7rQ5gkY",
