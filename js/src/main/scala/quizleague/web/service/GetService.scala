@@ -3,25 +3,34 @@ package quizleague.web.service
 import scala.collection.mutable._
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
-
 import firebase.firestore._
 import io.circe._
 import io.circe.scalajs.convertJsToJson
-import quizleague.domain.{ Entity, Ref }
-import quizleague.web.model.Model
+import quizleague.domain.{Entity, Ref}
+import quizleague.web.model.{Child, Model}
 import quizleague.web.names.ComponentNames
 import quizleague.web.store.Firestore
 import quizleague.web.util.rx.RefObservable
 import rxscalajs._
 import rxscalajs.subjects._
 
-trait GetService[T <: Model] {
-  this: ComponentNames =>
+
+trait BaseGetService[T <: Model] {
   type U <: Entity
+  protected val db = Firestore.db
+}
+
+
+
+
+
+
+
+trait GetService[T <: Model] extends BaseGetService[T] {
+  this: ComponentNames =>
 
   lazy val uriRoot = typeName
 
-  protected val db = Firestore.db
   private[service] val items: Map[String, T] = Map()
   private val observables = Map[String, Observable[U]]()
   private val refObsCache = Map[String, RefObservable[T]]()
@@ -32,7 +41,8 @@ trait GetService[T <: Model] {
 
   def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
 
-  protected def query(obj:T) = db.doc(s"$uriRoot/${obj.id}")
+  private[service] def query(obj:T) = db.doc(s"$uriRoot/${obj.id}")
+  private[service] def path(obj:T) = uriRoot
 
   protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutSparse _)) 
 
@@ -96,7 +106,7 @@ trait GetService[T <: Model] {
 
 }
 
-trait ChildGetService[T <: Model]{
+trait ChildGetService[T <: Model with Child]{
 
   this:GetService[T] =>
 
@@ -108,8 +118,9 @@ trait ChildGetService[T <: Model]{
   private var listObservable: Option[Observable[js.Array[U]]] = None
 
   def get(parent:Parent, id:String):Observable[T] = ???
-  def list(parent:Parent):Observable[js.Array[T]] = listFromStorage(parent).map(c => c.map(u => mapOutSparse(u)))
+  def list(parent:Parent):Observable[js.Array[T]] = listFromStorage(parent).map(c => c.map(u => mapOutSparse(u)).map(m => withPath(m, parent)))
 
+  private def withPath(model:T, parent:Parent) = {model.path = parentService.path(parent);model}
 
   protected final def listFromStorage(parent:Parent): Observable[js.Array[U]] = {
 

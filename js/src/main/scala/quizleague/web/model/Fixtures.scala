@@ -79,7 +79,7 @@ object Result{
 class Reports(
     val id:String,
     val reports:js.Array[Report],
-    val isEmpty:Boolean) extends Model
+    val isEmpty:Boolean) extends Model with Child
     
 object Reports{
   def apply(id:String,
