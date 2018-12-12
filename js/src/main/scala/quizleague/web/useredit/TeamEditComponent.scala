@@ -12,11 +12,9 @@ import quizleague.web.model.{Team, Text, User}
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.util.component.SelectUtils
-import rxscalajs.Observable
-import quizleague.web.maintain.component.TemplateElements._
-
 import js.Dynamic.literal
 import scala.scalajs.js.UndefOr
+import org.scalajs.dom._
 
 object TeamEditPage extends RouteComponent{
   
@@ -118,7 +116,9 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
   subscription("team","id")(v => TeamService.get(v.id))
   subscription("text", "id")(c => TeamService.get(c.id).flatMap(team => TextService.get(team.text.id)))
   subscription("users")(c => SelectUtils.model[User](UserService)(_.name))
+
   method("newUser")({c:facade => {c.user = UserService.instance();c.dialog = true}}:js.ThisFunction)
+
   method("addUser")({c:facade => {
     UserService.userForEmail(c.user.email).subscribe { x =>
       val user = x.getOrElse(c.user)
@@ -130,10 +130,13 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
     }
 
   }}:js.ThisFunction)
+
   method("submit")({c:facade => {
     TeamService.save(c.team)
     TextService.save(c.text)
+    window.close()
   }}:js.ThisFunction)
 
+  method("cancel"){() => window.close()}
 }
 
