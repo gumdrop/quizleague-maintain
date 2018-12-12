@@ -6,23 +6,17 @@ import scalajs.js
 import org.scalajs.dom._
 import firebase.Firebase
 import firebase.auth._
+import quizleague.web.site.team.TeamService
 import quizleague.web.store.Firestore
 
 object LoginCheckComponent extends RouteComponent {
   
   val template = """<div>{{check($route.params.id)}}</div>"""
-  
-  //override val activated = ((c:facade) => {println("activated");c.$router.push("/team/5715999101812736")}):js.ThisFunction
 
   method("check"){check _ :js.ThisFunction}
 
   def check(c:facade,id:String): Unit ={
     Firestore.db
-    println("before auth")
-    c.$router.push(s"team/5715999101812736")
-    return
-
-    //val url = """https://chiltern-ql-firestore.firebaseapp.com/__/auth/action?apiKey=AIzaSyBs6LpcOSpLMlKlzw0aPB6Ie-39mqlKrm8&mode=signIn&oobCode=12B-SYqGxMiia6Eu5PZ7iAyUvV3KXuQM-Vgj5JKCbrEAAAFnYXoQRw&continueUrl=http://localhost:3000/useredit/login/5715999101812736&lang=en"""//window.location.href
     val url = window.location.href
     if (Firebase.auth().isSignInWithEmailLink(url)) {
       // Additional state parameters can also be passed via URL.
@@ -40,18 +34,12 @@ object LoginCheckComponent extends RouteComponent {
       Firebase.auth().signInWithEmailLink(email, url)
         .`then`(result => {
 
-          println(s"auth success! : id = $id")
+          TeamService.teamForEmail(email).map(_.headOption).subscribe(
+            _.foreach{ id =>
+              window.localStorage.removeItem("emailForSignIn")
+              c.$router.push(s"team/$id")}
 
-          val testid = "5715999101812736"
-
-          // Clear email from storage.
-          window.localStorage.removeItem("emailForSignIn")
-          c.$router.push(s"team/$testid")
-          // You can access the new user via result.user
-          // Additional user info profile not available via:
-          // result.additionalUserInfo.profile == null
-          // You can check if the user is new or existing:
-          // result.additionalUserInfo.isNewUser
+          )
         })
       .`catch`( (error:js.Any) => {
         println(error)
