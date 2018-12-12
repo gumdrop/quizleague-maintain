@@ -58,4 +58,5 @@ object TemplateElements {
 """
   
   def valRequired(name:String) = s""""[(v) => !!v || '$name is required']""""
+
 }

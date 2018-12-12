@@ -20,7 +20,6 @@ object UserEditAppComponent extends Component {
       clipped-left
       scroll-off-screen
       >
-      <v-toolbar-side-icon></v-toolbar-side-icon>
       <v-toolbar-title class="white--text" >
         
         <span>Edit Team Details</span>

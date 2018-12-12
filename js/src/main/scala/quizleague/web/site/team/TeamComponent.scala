@@ -38,6 +38,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
             </v-flex>      
             <v-flex><team-fixtures :id="team.id" :seasonId="seasonId"></team-fixtures>
             </v-flex>
+            <v-flex><v-layout row><v-btn flat :to="'edit/' + id">Edit</v-btn></v-layout>
           </v-layout>
           </v-container>"""
   props("id")

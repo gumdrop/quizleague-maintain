@@ -36,6 +36,8 @@ import firebase.User
 
       def sendPasswordResetEmail(email: String): Promise[js.Any] = js.native
 
+      def sendSignInLinkToEmail(email:String, actionCodeSettings:ActionCodeSettings)
+
       def signInAnonymously(): Promise[js.Any] = js.native
 
       def signInWithCredential(credential: firebase.auth.AuthCredential): Promise[js.Any] = js.native
@@ -53,6 +55,10 @@ import firebase.User
       def verifyIdToken(idToken: String): Promise[js.Any] = js.native
 
       def verifyPasswordResetCode(code: String): Promise[js.Any] = js.native
+
+      def isSignInWithEmailLink(href:String):Boolean = js.native
+
+      def signInWithEmailLink(email:String, href:String):Promise[js.Any] = js.native
     }
 
     @js.native
@@ -63,6 +69,14 @@ import firebase.User
     @js.native
     trait AuthProvider extends js.Object {
       var providerId: String = js.native
+    }
+
+    @js.native
+    trait ActionCodeSettings extends js.Object {
+      var url:String = js.native
+      var iOS:js.Object = js.native
+      var android:js.Object = js.native
+      var handleCodeInApp:Boolean = js.native
     }
 
     @js.native
