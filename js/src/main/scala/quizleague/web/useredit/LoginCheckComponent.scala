@@ -35,9 +35,9 @@ object LoginCheckComponent extends RouteComponent {
         .`then`(result => {
 
           TeamService.teamForEmail(email).map(_.headOption).subscribe(
-            _.foreach{ id =>
+            _.foreach{ team =>
               window.localStorage.removeItem("emailForSignIn")
-              c.$router.push(s"team/$id")}
+              c.$router.push(s"/useredit/team/${team.id}")}
 
           )
         })

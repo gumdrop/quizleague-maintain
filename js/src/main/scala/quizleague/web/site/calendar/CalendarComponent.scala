@@ -117,7 +117,7 @@ object FixturesEventComponent extends EventComponentConfig{
              <v-icon v-if="panelVisible">visibility_off</v-icon>
             </v-btn>
           </v-flex> 
-      <v-flex v-if="panelVisible"><ql-fixtures-simple :fixtures="event.fixtures.fixtures | combine"></ql-fixtures-simple></v-flex>
+          <v-flex><v-slide-y-transition><ql-fixtures-simple v-if="panelVisible" :fixtures="event.fixtures.fixtures | combine"></ql-fixtures-simple></v-slide-y-transition></v-flex>
 
      </v-layout>
 """

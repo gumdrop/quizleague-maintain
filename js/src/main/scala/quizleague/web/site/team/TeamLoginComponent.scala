@@ -1,15 +1,12 @@
-package quizleague.web.useredit
+package quizleague.web.site.team
 
-import scala.scalajs.js
-import com.felstar.scalajs.vue.VueRxComponent
 import firebase.Firebase
 import firebase.auth._
-import quizleague.web.core._
-import quizleague.web.model.Team
-import quizleague.web.site.text.TextService
-import quizleague.web.site.team.TeamService
-import js.Dynamic.literal
 import org.scalajs.dom._
+import quizleague.web.core._
+import quizleague.web.useredit.TeamEditComponent
+
+import scala.scalajs.js.Dynamic.literal
 
 object TeamLoginPage extends RouteComponent{
   
@@ -18,6 +15,7 @@ object TeamLoginPage extends RouteComponent{
     <v-layout column>
     <v-card>
       <v-card-text>
+      <ql-named-text name="login-text"></ql-named-text>
       <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="showAlert = login(email)" :disabled="!email">Submit</v-btn>
       <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
      </v-card-text>
@@ -51,5 +49,20 @@ object TeamLoginPage extends RouteComponent{
   
 }
 
+object LoginTitleComponent extends RouteComponent{
+  val  template="""
+    <v-toolbar
+      color="amber darken-3"
+      dark
+      clipped-left>
+      <ql-title>Login</ql-title>
+      <v-toolbar-title class="white--text" >
+        Login
+      </v-toolbar-title>
+    </v-toolbar>"""
+
+
+
+}
 
 

@@ -134,7 +134,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
   method("submit")({c:facade => {
     TeamService.save(c.team)
     TextService.save(c.text)
-    window.close()
+    //window.close()
   }}:js.ThisFunction)
 
   method("cancel"){() => window.close()}
