@@ -12,9 +12,11 @@ import quizleague.web.model.{Team, Text, User}
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.util.component.SelectUtils
+
 import js.Dynamic.literal
 import scala.scalajs.js.UndefOr
 import org.scalajs.dom._
+import rxscalajs.Observable
 
 object TeamEditPage extends RouteComponent{
   
@@ -132,8 +134,9 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
   }}:js.ThisFunction)
 
   method("submit")({c:facade => {
-    TeamService.save(c.team)
-    TextService.save(c.text)
+    TeamService.save(c.team).combineLatest(TextService.save(c.text)).subscribe(x => window.close())
+
+
     //window.close()
   }}:js.ThisFunction)
 

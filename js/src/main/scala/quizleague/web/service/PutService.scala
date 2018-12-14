@@ -9,6 +9,8 @@ import io.circe.Json
 import io.circe.scalajs._
 import quizleague.web.util.Logging._
 import quizleague.web.model.Model
+import rxscalajs.Observable
+import rxscalajs.subjects.ReplaySubject
 
 trait PutService[T <: Model] {
   this: GetService[T] with ComponentNames=>
@@ -17,16 +19,19 @@ trait PutService[T <: Model] {
   
   protected def add(entity:U):T = add(mapOutSparse(entity))
   
-  def save(item: T):Unit = save(mapIn(item))
+  def save(item: T):Observable[Unit] = save(mapIn(item))
   
   def save(obs:RefObservable[T]):Unit = obs.subscribe(save(_))
   
-  protected def save(item:U):Unit = saveDom(item)
+  protected def save(item:U):Observable[Unit] = saveDom(item)
   
-  private[service] def saveDom(i:U) = {
-    db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
+  private[service] def saveDom(i:U):Observable[Unit] = {
+    val promise = db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
+    val obs = ReplaySubject[Unit]()
+    promise.`then`({obs.next(_)}, {obs.error(_)})
     log(i,s"saved $uriRoot/${i.id} to firestore")
     deCache(i)
+    obs
   }
   
   

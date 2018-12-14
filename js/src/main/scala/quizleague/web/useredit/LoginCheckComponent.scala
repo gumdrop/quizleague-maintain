@@ -11,11 +11,11 @@ import quizleague.web.store.Firestore
 
 object LoginCheckComponent extends RouteComponent {
   
-  val template = """<div>{{check($route.params.id)}}</div>"""
+  val template = """<v-layout align-center justify-center row fill-height style="font-size:72pt;opacity:0.6;">Please Wait...{{check()}}</v-layout>"""
 
   method("check"){check _ :js.ThisFunction}
 
-  def check(c:facade,id:String): Unit ={
+  def check(c:facade): Unit ={
     Firestore.db
     val url = window.location.href
     if (Firebase.auth().isSignInWithEmailLink(url)) {

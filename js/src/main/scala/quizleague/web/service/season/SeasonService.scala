@@ -59,7 +59,7 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
 
   override def enc(item: Dom) = item.asJson
   
-  override def save(season:Season) = {super.save(season); textService.saveAllDirty()}
+  override def save(season:Season) = { textService.saveAllDirty();super.save(season)}
 
 }
 

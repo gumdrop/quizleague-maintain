@@ -32,7 +32,7 @@ object TeamLoginPage extends RouteComponent{
 
     val actionCodeSettings = literal().asInstanceOf[ActionCodeSettings]
     import window.location
-     val url = s"https://${location.hostname}/useredit/login/5715999101812736"
+     val url = s"https://${location.hostname}/useredit/login"
      actionCodeSettings.url = url
      actionCodeSettings.handleCodeInApp = true
 
