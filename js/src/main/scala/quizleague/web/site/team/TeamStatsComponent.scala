@@ -123,9 +123,12 @@ object TeamStatsAllSeasonsComponent extends Component{
     <v-flex >
       <seasons-mean-scores :stats="stats"></seasons-mean-scores>
     </v-flex>
+    <v-flex >
+      <seasons-result-types :stats="stats"></seasons-result-types>
+    </v-flex>
   </v-layout>
 """
-  components(AllSeasonsAverageScoreComponent,AllSeasonsLeaguePositionComponent)
+  components(AllSeasonsAverageScoreComponent,AllSeasonsLeaguePositionComponent,AllSeasonsResultTypeComponent)
   
   props("teamId")
   
@@ -269,7 +272,7 @@ val template = """
 components(ChartComponent)
 
 prop("stats")
-method("data")({(c:facade) => StatisticsService.resultTypeData(c.stats)}:js.ThisFunction)
+method("data")({(c:facade) => StatisticsService.resultTypeData(js.Array(c.stats))}:js.ThisFunction)
 watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
@@ -300,6 +303,30 @@ object AllSeasonsAverageScoreComponent extends Component with GraphSizeComponent
   prop("stats")
   subscription("data","stats")(c => StatisticsService.allSeasonsAverageData(c.stats))
 
+}
+
+object AllSeasonsResultTypeComponent extends Component with GraphSizeComponentConfig{
+
+  type facade = AllSeasonsGraphComponent
+
+  val name = "seasons-result-types"
+  val template = """
+        <v-card>
+        <v-card-title>Results</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <chart :width="width" height="300px" v-if="stats" type="pie" :data="data()" :options="{maintainAspectRatio:true,responsive:false}"></chart>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+  components(ChartComponent)
+
+  prop("stats")
+  method("data")({(c:facade) => StatisticsService.resultTypeData(c.stats)}:js.ThisFunction)
+  watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
 object AllSeasonsLeaguePositionComponent extends Component with GraphSizeComponentConfig{

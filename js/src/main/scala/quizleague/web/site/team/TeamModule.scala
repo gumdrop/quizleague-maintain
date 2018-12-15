@@ -169,11 +169,11 @@ object StatisticsService extends StatisticsGetService{
     )
   }
 
-  def resultTypeData(stats:Statistics):ChartData = {
+  def resultTypeData(stats:js.Array[Statistics]):ChartData = {
 
-    def wins = stats.weekStats.foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor > b.pointsAgainst) 1 else 0)})
-    def draws = stats.weekStats.filter(!_.ignorable).foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor == b.pointsAgainst) 1 else 0)})
-    def losses =  stats.weekStats.foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor < b.pointsAgainst) 1 else 0)})
+    def wins = stats.flatMap(_.weekStats).filter(x => x.pointsFor > x.pointsAgainst).length
+    def draws = stats.flatMap(_.weekStats).filter(!_.ignorable).filter(x => x.pointsFor == x.pointsAgainst).length
+    def losses = stats.flatMap(_.weekStats).filter(x => x.pointsFor < x.pointsAgainst).length
 
     ChartData(
       datasets = js.Array(DataSet("",
