@@ -96,9 +96,12 @@ object TeamStatsSeasonComponent extends Component{
     <v-flex >
       <season-cumu-scores :stats="stats"></season-cumu-scores>
     </v-flex>
+    <v-flex >
+      <season-result-types :stats="stats"></season-result-types>
+    </v-flex>
   </v-layout>
 """
-  components(SeasonLeaguePositionComponent, SeasonMatchScoresComponent, SeasonCumulativeScoresComponent,SeasonCumulativeDifferenceComponent)
+  components(SeasonLeaguePositionComponent, SeasonMatchScoresComponent, SeasonCumulativeScoresComponent,SeasonCumulativeDifferenceComponent, SeasonResultTypeComponent)
   
   props("teamId","seasonId")
   
@@ -246,6 +249,30 @@ object SeasonCumulativeScoresComponent extends Component with GraphSizeComponent
   watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
+object SeasonResultTypeComponent extends Component with GraphSizeComponentConfig{
+
+type facade = SeasonGraphComponent
+
+val name = "season-result-types"
+val template = """
+        <v-card>
+        <v-card-title>Results</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <chart :width="width" height="300px" v-if="stats" type="pie" :data="data()" :options="{maintainAspectRatio:true,responsive:false}"></chart>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+components(ChartComponent)
+
+prop("stats")
+method("data")({(c:facade) => StatisticsService.resultTypeData(c.stats)}:js.ThisFunction)
+watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
+}
+
 
 @js.native
 trait AllSeasonsGraphComponent extends VueRxComponent with VuetifyComponent{
@@ -298,6 +325,7 @@ object AllSeasonsLeaguePositionComponent extends Component with GraphSizeCompone
   prop("stats")
   subscription("data")(c => StatisticsService.allSeasonsPositionData(c.stats))
   subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats))
+  watch("stats")((c:facade, x:js.Any) => c.$forceUpdate())
 }
 
 @js.native

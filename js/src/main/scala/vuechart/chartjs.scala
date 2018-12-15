@@ -104,13 +104,14 @@ object Palette {
 }
 
 object DataSet {
-  def apply(label: String , data: js.Array[js.Any] = js.Array(), fill: Boolean = false, lineTension: Double = 0.0, backgroundColor: Color|String = Palette.backGround, borderWidth: Int = 2, borderColor: Color = Color(0,0,0), borderCapStyle: CapStyle = Round): DataSet = {
+  def apply(label: String , data: js.Array[js.Any] = js.Array(), fill: Boolean = false, lineTension: Double = 0.0, backgroundColor: Color|String|js.Array[Color] = Palette.backGround, hoverBackgroundColor: Color|String|js.Array[Color] = Palette.backGround, borderWidth: Int = 2, borderColor: Color = Color(0,0,0), borderCapStyle: CapStyle = Round): DataSet = {
     js.Dynamic.literal(
       label = label,
       data = data,
       fill = fill,
       lineTension = lineTension,
-      backgroundColor = backgroundColor.toString,
+      backgroundColor = if(backgroundColor.isInstanceOf[js.Array[Color]]) backgroundColor.asInstanceOf[js.Array[Color]] else backgroundColor.toString,
+      hoverBackgroundColor = if(hoverBackgroundColor.isInstanceOf[js.Array[Color]]) hoverBackgroundColor.asInstanceOf[js.Array[Color]] else hoverBackgroundColor.toString,
       borderWidth = borderWidth,
       borderColor = borderColor.toString,
       borderCapStyle = borderCapStyle.toString

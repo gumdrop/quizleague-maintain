@@ -168,6 +168,26 @@ object StatisticsService extends StatisticsGetService{
         xLabels = stats.weekStats.map(formatDate _),
     )
   }
+
+  def resultTypeData(stats:Statistics):ChartData = {
+
+    def wins = stats.weekStats.foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor > b.pointsAgainst) 1 else 0)})
+    def draws = stats.weekStats.filter(!_.ignorable).foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor == b.pointsAgainst) 1 else 0)})
+    def losses =  stats.weekStats.foldLeft(0)((a:Int,b:WeekStats) => {a + (if(b.pointsFor < b.pointsAgainst) 1 else 0)})
+
+    ChartData(
+      datasets = js.Array(DataSet("",
+        data = js.Array(wins,draws,losses),
+        backgroundColor = js.Array(Color.Green, Color.Blue, Color.Red),
+        hoverBackgroundColor = js.Array(Color(0,200,0), Color(0,0,200), Color(200,0,0)),
+        borderWidth = 1,
+        fill=true,
+        borderColor = Color.White)
+
+      ),
+      labels=js.Array("Won", "Drawn", "Lost"))
+
+  }
   
   private def sortStats(stats:js.Array[Statistics], seasons:Seq[Season]) = {
      val seasonYears = seasons.map(s => ((s.id,s.startYear))).toMap
