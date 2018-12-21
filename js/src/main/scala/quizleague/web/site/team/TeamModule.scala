@@ -238,28 +238,6 @@ object StatisticsService extends StatisticsGetService{
       })
   }
 
-//  def allSeasonsResultsData(stats:js.Array[Statistics], teams:js.Array[RefObservable[Team]]):Observable[ChartData] = {
-//    Observable.combineLatest(stats.map(_.season.obs).toSeq)
-//      .flatMap(seasons => {
-//
-//        val datasets = stats.map(s => {
-//          val sortedStats = sortAndPadStats(s,seasons)
-//          val team = sortedStats.find(_.team != null).get.team.obs
-//          val data:js.Array[js.Any] =  sortedStats.map(x => ).asInstanceOf[js.Any])
-//          team.map(t => {
-//            val colour = randomColor
-//
-//            DataSet(t.shortName, data = data, lineTension = .2, borderColor = colour, backgroundColor = colour)
-//          })}).toSeq
-//
-//        Observable.combineLatest(datasets).map(d => ChartData(
-//          datasets = d.toJSArray,
-//          xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
-//        ))
-//
-//
-//      })
-//  }
 
   private def randomColor = new Color((Math.random*255).toInt, (Math.random*255).toInt, (Math.random*255).toInt)
 
@@ -280,5 +258,32 @@ object StatisticsService extends StatisticsGetService{
       }
       )
   }
-  
+
+  def multipleTeamsAllSeasonsAverageData(stats:js.Array[js.Array[Statistics]]):Observable[ChartData] = {
+
+    Observable.combineLatest(stats(0).map(_.season.obs).toSeq)
+      .flatMap(seasons => {
+        val datasets = stats.map(s => {
+          val sortedStats = sortStats(s, seasons)
+          val team = sortedStats.find(_.team != null).get.team.obs
+
+          def fixCount(weekStats: js.Array[WeekStats]) = weekStats.count(!_.ignorable)
+
+
+          team.map(t => {
+            val colour = randomColor
+
+            DataSet(t.shortName, data = sortedStats.map(s => (s.seasonStats.runningPointsFor / fixCount(s.weekStats)).asInstanceOf[js.Any]), lineTension = .2, borderColor = colour, backgroundColor = colour)
+          })
+        }).toSeq
+
+        Observable.combineLatest(datasets).map(d => ChartData(
+          datasets = d.toJSArray,
+          xLabels = seasons.map(SeasonFormat.format _).toJSArray.sortBy(identity)
+        ))
+
+
+      })
+  }
+
 }

@@ -394,12 +394,16 @@ object HeadToHeadComponent extends Component{
         <head-to-head-league-position :stats="allSeasons"></head-to-head-league-position>
       </v-flex>
       <v-flex>
+      <head-to-head-average-score :stats="allSeasons"></head-to-head-average-score>
+      </v-flex>
+      <v-flex>
         <head-to-head-results :stats="allSeasons[0]" :teams="chips"></head-to-head-results>
       </v-flex>
+
     </v-layout>
     </v-layout>
 """
-  components(AllSeasonsAverageScoreComponent,HeadToHeadLeaguePositionComponent, HeadToHeadResultsComponent)
+  components(AllSeasonsAverageScoreComponent,HeadToHeadLeaguePositionComponent, HeadToHeadResultsComponent, HeadToHeadAverageScoreComponent)
 
   private def allSeasons(c:facade) = Observable
     .combineLatest(
@@ -455,6 +459,33 @@ object HeadToHeadLeaguePositionComponent extends Component with GraphSizeCompone
   subscription("data","stats")(c => StatisticsService.multipleTeamsAllSeasonsPositionData(c.stats))
   subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats(0)))
 }
+
+object HeadToHeadAverageScoreComponent extends Component with GraphSizeComponentConfig{
+
+  type facade = HeadToHeadGraphComponent
+
+  val name = "head-to-head-average-score"
+  val template = """
+        <v-card>
+          <v-card-title>Average Score</v-card-title>
+          <v-card-text>
+          <v-container fluid grid-list-sm>
+            <v-layout row justify-space-around>
+              <chart :width="width" height="300px" v-if="stats && teamCount" type="line" :data="data" :options="{maintainAspectRatio:false,responsive:false,spanGaps:true,legend:{display:true,position:'right'},scales:{yAxes:[{type:'linear', ticks:{stepSize:2}}]}}"></chart>
+            </v-layout>
+          </v-container>
+          </v-card-text>
+        </v-card>
+"""
+
+  components(ChartComponent)
+
+  prop("stats")
+  subscription("data","stats")(c => StatisticsService.multipleTeamsAllSeasonsAverageData(c.stats))
+  subscription("teamCount")(c => StatisticsService.teamsInTables(c.stats(0)))
+}
+
+
 
 
 @js.native
