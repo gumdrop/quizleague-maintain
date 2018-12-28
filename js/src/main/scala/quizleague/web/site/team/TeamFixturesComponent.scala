@@ -33,7 +33,7 @@ object TeamFixturesComponent extends Component {
   type facade = SeasonIdComponent with IdComponent
   val name = "ql-all-team-fixtures"
   val template = """<ql-fixtures-simple :fixtures="fixtures(id,seasonId)" :inlineDetails="true"></ql-fixtures-simple>"""
-  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamFixtures(teamId))
+  method("fixtures")((teamId:String,seasonId:String) => FixtureService.teamFixturesForSeason(teamId,seasonId))
   props("id","seasonId")
   
 }

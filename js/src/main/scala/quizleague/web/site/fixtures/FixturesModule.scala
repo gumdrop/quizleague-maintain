@@ -23,7 +23,7 @@ import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.PostService
 import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
-import LocalDate.{now => today}
+import java.time.LocalDate.{now => today}
 import java.time.LocalTime
 import rxscalajs.Observable
 import java.time.LocalDateTime
@@ -83,8 +83,11 @@ object FixtureService extends FixtureGetService with PostService{
   override val userService = UserService
   override val reportsService = ReportsService
 
-    
+
   def teamFixtures(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+
+    val today = LocalDate.now.toString
+
     val q = db.collection(uriRoot).where("date",">=", today.toString).where("subsidiary","==", false).orderBy("date").limit(take)
     val home = query(q.where("home.id","==",teamId))
     val away = query(q.where("away.id","==",teamId))
