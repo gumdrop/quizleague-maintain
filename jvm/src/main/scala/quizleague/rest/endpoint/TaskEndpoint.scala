@@ -145,7 +145,7 @@ class TaskEndpoint {
   private def saveFixture(user:User,reportIn:Option[String])(result:ResultValues) = {
        
     val fixture = Storage.load[Fixture](result.fixtureId)
-    val report = reportIn.filter(r => !fixture.subsidiary)
+    val report = reportIn.filter(r => !r.trim.isEmpty && !fixture.subsidiary)
     
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
