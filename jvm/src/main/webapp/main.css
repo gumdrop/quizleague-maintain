@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cabin:400,600|Comfortaa:700|Cuprum:700|Hind+Siliguri:600|Philosopher:700');
+@import url('https://fonts.googleapis.com/css?family=Cabin:400,600|Comfortaa:700|Cuprum:700|Hind+Siliguri:600|Quicksand');
 
   .v-tabs__item{text-transform:none !important;}
 
@@ -55,7 +55,7 @@
  	 }
 
 .page-header {
-	font-family:'Philosopher',sans-serif;
+	font-family:'Quicksand',sans-serif;
 	font-size: 200% !important;
 	font-weight:bold;
     margin-left:.3em;
