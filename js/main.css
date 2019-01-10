@@ -72,8 +72,9 @@
 }
 
 .page-header-small {
-	font-family:'Philosopher',sans-serif;
-	font-size: 125% !important;
+	font-family:'Quicksand',sans-serif;
+	font-size: 150% !important;
+	font-weight:bold;
 }
 
 .page-header:hover .page-header-first {

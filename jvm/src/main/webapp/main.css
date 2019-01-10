@@ -28,8 +28,8 @@
       min-width:2em;
       text-align:right;
     }
-          
-          
+
+
     .ql-fixtures-simple .inline-details{
      font-style: italic;
       padding-right: .5em;
@@ -42,7 +42,7 @@
     .ql-fixtures-simple .away{
       padding-left:1em;
     }
-    
+
     .ql-results-simple,.ql-fixtures-simple .winner {
       	color:darkred;
         font-weight:600;
@@ -72,8 +72,9 @@
 }
 
 .page-header-small {
-	font-family:'Philosopher',sans-serif;
-	font-size: 125% !important;
+	font-family:'Quicksand',sans-serif;
+	font-size: 150% !important;
+	font-weight:bold;
 }
 
 .page-header:hover .page-header-first {
