@@ -264,7 +264,7 @@ object StatisticsService extends StatisticsGetService{
     Observable.combineLatest(stats(0).map(_.season.obs).toSeq)
       .flatMap(seasons => {
         val datasets = stats.map(s => {
-          val sortedStats = sortStats(s, seasons)
+          val sortedStats = sortAndPadStats(s, seasons)
           val team = sortedStats.find(_.team != null).get.team.obs
 
           def fixCount(weekStats: js.Array[WeekStats]) = weekStats.count(!_.ignorable)
@@ -273,7 +273,7 @@ object StatisticsService extends StatisticsGetService{
           team.map(t => {
             val colour = randomColor
 
-            DataSet(t.shortName, data = sortedStats.map(s => (s.seasonStats.runningPointsFor / fixCount(s.weekStats)).asInstanceOf[js.Any]), lineTension = .2, borderColor = colour, backgroundColor = colour)
+            DataSet(t.shortName, data = sortedStats.map(s => (if(s.seasonStats.runningPointsFor != 0)(s.seasonStats.runningPointsFor / fixCount(s.weekStats)) else null).asInstanceOf[js.Any]), lineTension = .2, borderColor = colour, backgroundColor = colour)
           })
         }).toSeq
 
