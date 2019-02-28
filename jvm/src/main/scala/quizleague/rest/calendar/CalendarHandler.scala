@@ -54,7 +54,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${toUtc(event.date.atTime(event.time))}
 DTEND:${toUtc(event.date.atTime(event.time plus event.duration))}
-LOCATION:${event.venue.map(_.name).getOrElse("")},$address
+${event.venue.map(v => s"""LOCATION:${v.name}, $address""").getOrElse("")}
 END:VEVENT
 """
 
@@ -74,7 +74,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${toUtc(fixture.date.atTime(fixture.time))}
 DTEND:${toUtc(fixture.date.atTime(fixture.time plus fixture.duration))}
-LOCATION:${fixture.venue.map(_.name).getOrElse("")},$address
+${fixture.venue.map(v => s"""LOCATION:${v.name}, $address""").getOrElse("")}
 END:VEVENT
 """
 
