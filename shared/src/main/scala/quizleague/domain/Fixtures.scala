@@ -20,7 +20,7 @@ case class Fixture(
   id:String,
   description:String,
   parentDescription:String,
-  venue: Ref[Venue],
+  venue: Option[Ref[Venue]],
   home: Ref[Team],
   away:Ref[Team],
   date: LocalDate,

@@ -45,7 +45,7 @@ class CalendarHandler extends HttpServlet{
     private def formatEvent(event:BaseEvent, text:String)(implicit context:StorageContext):String = {
       val now = toUtc(LocalDateTime.now())
       val uidPart = text.replaceAll("\\s", "") 
-      val address = event.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
+      val address = event.venue.map(_.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")).getOrElse("")
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
@@ -54,7 +54,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${toUtc(event.date.atTime(event.time))}
 DTEND:${toUtc(event.date.atTime(event.time plus event.duration))}
-LOCATION:${event.venue.name},$address
+LOCATION:${event.venue.map(_.name).getOrElse("")},$address
 END:VEVENT
 """
 
@@ -65,7 +65,7 @@ END:VEVENT
       
       val now = toUtc(LocalDateTime.now())
       val uidPart = fixture.home.shortName.replaceAll("\\s", "") 
-      val address = fixture.venue.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")
+      val address = fixture.venue.map(_.address.replaceAll("\\n\\r", ",").replaceAll("\\n", ",").replaceAll("\\r", ",")).getOrElse("")
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
@@ -74,7 +74,7 @@ DESCRIPTION:$text
 SUMMARY:$text
 DTSTART:${toUtc(fixture.date.atTime(fixture.time))}
 DTEND:${toUtc(fixture.date.atTime(fixture.time plus fixture.duration))}
-LOCATION:${fixture.venue.name},$address
+LOCATION:${fixture.venue.map(_.name).getOrElse("")},$address
 END:VEVENT
 """
 

@@ -131,7 +131,7 @@ object CalendarEventComponent extends EventComponentConfig{
     <v-layout column align-start>
       <v-flex><b>{{event.event.description}}</b></v-flex>
       <v-flex>Time : {{event.event.time}}</v-flex>
-      <v-flex>Venue : <router-link v-if="event.event.venue"router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></v-flex>
+      <v-flex v-if="event.event.venue">Venue : <router-link router-link :to="'/venue/' + event.event.venue.id">{{async(event.event.venue).name}}</router-link></v-flex>
      </v-layout>
       """
 

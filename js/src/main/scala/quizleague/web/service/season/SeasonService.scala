@@ -33,7 +33,7 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
   override def flush() = { textService.flush(); super.flush() }
   
   private def mapEvents(events:List[DomEvent]):js.Array[CalendarEvent] = {
-    events.map(event => CalendarEvent(refObs(event.venue, venueService), event.date,event.time,event.duration,event.description)).toJSArray
+    events.map(event => CalendarEvent(venueService.refObs(event.venue), event.date,event.time,event.duration,event.description)).toJSArray
   }
 
   protected def dec(json:js.Any) = decodeJson[U](json)
@@ -51,7 +51,7 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
       season.endYear, 
       textService.ref(season.text), 
       competitionService.ref(season.competitions), 
-      season.calendar.map(e=>DomEvent(venueService.ref(e.venue), e.date, e.time, e.duration, e.description)).toList
+      season.calendar.map(e=>DomEvent(venueService.refOption(e.venue), e.date, e.time, e.duration, e.description)).toList
   )
   override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())
 

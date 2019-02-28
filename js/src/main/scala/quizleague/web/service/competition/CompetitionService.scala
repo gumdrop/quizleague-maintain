@@ -94,7 +94,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.name,
           refObs(c.text, textService),
           c.textName,
-          c.event.fold[Event](null)(e => Event(refObs(e.venue,venueService),e.date,e.time,e.duration)),
+          c.event.fold[Event](null)(e => Event(venueService.refObs(e.venue),e.date,e.time,e.duration)),
           unwrapOption(c.icon)
         )
       }
@@ -206,7 +206,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
         case s: SingletonCompetition => DSiC(
           s.id,
           s.name,
-          if(s.event == null) None else Some(DomEvent(venueService.ref(s.event.venue), s.event.date, s.event.time, s.event.duration)),
+          if(s.event == null) None else Some(DomEvent(venueService.refOption(s.event.venue), s.event.date, s.event.time, s.event.duration)),
           s.textName,
           textService.ref(s.text),
           Option(s.icon))
