@@ -1,6 +1,7 @@
 package quizleague.web.site.calendar
 
 import quizleague.web.site.season.SeasonWatchService
+import rxscalajs.subjects.BehaviorSubject
 
 //import angulate2.std._
 //import angular.material.MaterialModule
@@ -52,6 +53,8 @@ object CalendarModule extends Module{
 
 object CalendarViewService extends SeasonWatchService{
   
+  var viewType:BehaviorSubject[String] = BehaviorSubject("timeline")
+
   def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
     import CompetitionType._

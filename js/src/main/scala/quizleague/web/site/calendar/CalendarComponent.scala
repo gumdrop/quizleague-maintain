@@ -21,7 +21,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
-    <v-timeline v-bind="dense">
+    <v-timeline v-bind="dense" v-if="viewType=='timeline'">
       <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events)" :icon="icon(item.events)" fill-dot>
         <v-card>
            <v-card-title :class="colour(item.events)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
@@ -35,6 +35,54 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
         </v-card>
       </v-timeline-item>
     </v-timeline>
+    <v-calendar v-if="viewType=='calendar'" ref="calendar"
+          :type="type"
+          :end="end"
+
+          color="primary"></v-calendar>
+      <v-layout wrap>
+      <v-flex
+      sm4
+      xs12
+      class="text-sm-left text-xs-center"
+    >
+      <v-btn @click="$refs.calendar.prev()">
+        <v-icon
+          dark
+          left
+        >
+          keyboard_arrow_left
+        </v-icon>
+        Prev
+      </v-btn>
+    </v-flex>
+    <v-flex
+      sm4
+      xs12
+      class="text-xs-center"
+    >
+      <v-select
+        v-model="type"
+        :items="typeOptions"
+        label="Type"
+      ></v-select>
+    </v-flex>
+    <v-flex
+      sm4
+      xs12
+      class="text-sm-right text-xs-center"
+    >
+      <v-btn @click="$refs.calendar.next()">
+        Next
+        <v-icon
+          right
+          dark
+        >
+          keyboard_arrow_right
+        </v-icon>
+      </v-btn>
+    </v-flex>
+    </v-layout>
   </v-container>"""
 
   def icon(events:js.Array[EventWrapper]) = events.headOption.fold("mdi-calendar")(e => e match {
@@ -52,8 +100,12 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
 
 
 
-  props("seasonId")
+  props("seasonId","viewType")
+  data("type", "month")
+  data("typeOptions", js.Array("day","week", "month"))
+  data("end", "2019-06-01")
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
+  subscription("viewType")(c => CalendarViewService.viewType)
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   method("colour"){colour _}
   method("icon"){icon _}
@@ -73,11 +125,13 @@ object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
-      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3>
+      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3> &nbsp;<v-btn-toggle v-model="viewType"><v-btn flat value="timeline">Timeline</v-btn><v-btn flat value="calendar">Calendar</v-btn></v-btn-toggle>
     </v-toolbar>"""
   
   data("season", CalendarViewService.season)
+  data("viewType","timeline")
   subscription("s")(c => CalendarViewService.season)
+  watch("viewType")((c,v) => CalendarViewService.viewType.next(v.toString))
 }
 
 
