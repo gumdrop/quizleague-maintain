@@ -6,6 +6,7 @@ import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
 import com.felstar.scalajs.vue._
 import quizleague.web.site.season.SeasonFormatComponent
+import js.JSConverters._
 
 object CalendarPage extends RouteComponent with NoSideMenu{
   
@@ -35,12 +36,30 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
         </v-card>
       </v-timeline-item>
     </v-timeline>
-    <v-calendar v-if="viewType=='calendar'" ref="calendar"
-          :type="type"
-          :end="end"
-
-          color="primary"></v-calendar>
-      <v-layout wrap>
+    <v-layout column v-if="viewType=='calendar'">
+    <v-flex>
+    <v-calendar v-if="dateMap"
+          ref="calendar"
+          v-model="start"
+          type="month"
+          color="primary">
+      <template v-slot:day="{ date }">
+              <v-layout
+                fill-height
+              >
+                <template v-if="dateMap[date]">
+                  <v-sheet
+                    v-for="(event, i) in dateMap[date].events"
+                    color="primary"
+                    height="100%"
+                    tile
+                  >{{event.eventType}}</v-sheet>
+                </template>
+              </v-layout>
+            </template>
+     </v-calendar>
+     </v-flex>
+      <v-layout row>
       <v-flex
       sm4
       xs12
@@ -59,20 +78,9 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
     <v-flex
       sm4
       xs12
-      class="text-xs-center"
-    >
-      <v-select
-        v-model="type"
-        :items="typeOptions"
-        label="Type"
-      ></v-select>
-    </v-flex>
-    <v-flex
-      sm4
-      xs12
       class="text-sm-right text-xs-center"
     >
-      <v-btn @click="$refs.calendar.next()">
+      <v-btn @click="$refs.calendar.nect()">
         Next
         <v-icon
           right
@@ -82,6 +90,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
         </v-icon>
       </v-btn>
     </v-flex>
+    </v-layout>
     </v-layout>
   </v-container>"""
 
@@ -103,12 +112,17 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   props("seasonId","viewType")
   data("type", "month")
   data("typeOptions", js.Array("day","week", "month"))
-  data("end", "2019-06-01")
+  data("start", null)
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
+  subscription( "dateMap", "seasonId")(c => CalendarViewService.events(c.seasonId).map(x => x.map( y => (y.date, y)).toMap.toJSDictionary))
   subscription("viewType")(c => CalendarViewService.viewType)
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   method("colour"){colour _}
   method("icon"){icon _}
+  method("next")({c:facade =>
+    //println(js.JSON.stringify(c.$refs.calendar));
+    c.$refs.selectDynamic("calendar").next()
+  }:js.ThisFunction)
   def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
   computed("dense")({dense _}:js.ThisFunction)
   
