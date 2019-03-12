@@ -37,25 +37,66 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
       </v-timeline-item>
     </v-timeline>
     <v-layout column v-if="viewType=='calendar'">
+    <style lang="stylus" scoped>
+
+ </style>
     <v-flex>
     <v-calendar v-if="dateMap"
           ref="calendar"
-          v-model="start"
+
           type="month"
           color="primary">
       <template v-slot:day="{ date }">
-              <v-layout
-                fill-height
-              >
-                <template v-if="dateMap[date]">
-                  <v-sheet
-                    v-for="(event, i) in dateMap[date].events"
-                    color="primary"
-                    height="100%"
-                    tile
-                  >{{event.eventType}}</v-sheet>
+        <template v-for="(event,i) in dateMap[date]">
+           <v-menu
+                 :key="i"
+                 v-model="event.open"
+                 full-width
+                 offset-x
+               >
+                 <template v-slot:activator="{ on }">
+                   <div
+                     v-ripple
+                     class="my-event"
+                     v-on="on"
+                     v-text=event.eventType
+                   >Event</div>
+                 </template>
+                 <v-card
+                   color="grey lighten-4"
+                   min-width="350px"
+                   flat
+                 >
+                   <v-toolbar
+                     color="primary"
+                     dark
+                   >
+                     <v-btn icon>
+                       <v-icon>edit</v-icon>
+                     </v-btn>
+                     <v-toolbar-title v-html="event.eventType"></v-toolbar-title>
+                     <v-spacer></v-spacer>
+                     <v-btn icon>
+                       <v-icon>favorite</v-icon>
+                     </v-btn>
+                     <v-btn icon>
+                       <v-icon>more_vert</v-icon>
+                     </v-btn>
+                   </v-toolbar>
+                   <v-card-title primary-title>
+                     <span ></span>
+                   </v-card-title>
+                   <v-card-actions>
+                     <v-btn
+                       flat
+                       color="secondary"
+                     >
+                       Cancel
+                     </v-btn>
+                   </v-card-actions>
+                 </v-card>
+               </v-menu>
                 </template>
-              </v-layout>
             </template>
      </v-calendar>
      </v-flex>
@@ -80,7 +121,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
       xs12
       class="text-sm-right text-xs-center"
     >
-      <v-btn @click="$refs.calendar.nect()">
+      <v-btn @click="$refs.calendar.next()">
         Next
         <v-icon
           right
