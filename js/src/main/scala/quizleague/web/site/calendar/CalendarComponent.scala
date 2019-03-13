@@ -53,14 +53,18 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                  v-model="event.open"
                  full-width
                  offset-x
+
                >
                  <template v-slot:activator="{ on }">
                    <div
                      v-ripple
                      class="my-event"
                      v-on="on"
-
-                   >{{event.eventType}}</div>
+                   >
+                <div v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</div>
+                <div v-if="event.eventType === 'calendar'">{{event.event.description}}</div>
+                <div v-if="event.eventType === 'competition'">{{event.competition.name}}</div>
+            </div>
                  </template>
                  <v-card
                    color="grey lighten-4"
@@ -68,13 +72,13 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                    flat
                  >
                    <v-toolbar
-                     color="primary"
+                     :color="colour([event])"
                      dark
                    >
                      <v-btn icon>
                        <v-icon>edit</v-icon>
                      </v-btn>
-                     <v-toolbar-title v-html="event.eventType"></v-toolbar-title>
+                     <v-toolbar-title>{{event.date | date("EEEE d MMMM yyyy")}}</v-toolbar-title>
                      <v-spacer></v-spacer>
                      <v-btn icon>
                        <v-icon>favorite</v-icon>
@@ -86,6 +90,11 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                    <v-card-title primary-title>
                      <span ></span>
                    </v-card-title>
+                   <v-card-text>
+                    <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
+                    <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
+                    <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
+                   </v-card-text>
                    <v-card-actions>
                      <v-btn
                        flat
