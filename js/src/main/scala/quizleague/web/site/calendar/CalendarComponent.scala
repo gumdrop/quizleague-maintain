@@ -43,11 +43,11 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
     <v-flex>
     <v-calendar v-if="dateMap"
           ref="calendar"
-
+          v-model="start"
           type="month"
           color="primary">
-      <template v-slot:day="{ date }">
-        <template v-for="(event,i) in dateMap[date]">
+      <template v-slot:day="{ date }" >
+        <template v-for="(event,i) in (dateMap[date]? dateMap[date].events : [])">
            <v-menu
                  :key="i"
                  v-model="event.open"
@@ -59,8 +59,8 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                      v-ripple
                      class="my-event"
                      v-on="on"
-                     v-text=event.eventType
-                   >Event</div>
+
+                   >{{event.eventType}}</div>
                  </template>
                  <v-card
                    color="grey lighten-4"
