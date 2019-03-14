@@ -1,11 +1,14 @@
 package quizleague.web.site.calendar
 
+import java.time._
+
 import scala.scalajs.js
 import quizleague.web.core._
 import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
 import com.felstar.scalajs.vue._
 import quizleague.web.site.season.SeasonFormatComponent
+
 import js.JSConverters._
 
 object CalendarPage extends RouteComponent with NoSideMenu{
@@ -15,10 +18,14 @@ object CalendarPage extends RouteComponent with NoSideMenu{
   subscription("season")(c => CalendarViewService.season)
 }
 
-
+@js.native
+trait CalendarComponent extends SeasonIdComponent with VuetifyComponent{
+  var items:js.Array[DateWrapper]
+  var now:String
+}
 
 object CalendarComponent extends Component with GridSizeComponentConfig{
-  type facade = SeasonIdComponent with VuetifyComponent
+  type facade = CalendarComponent
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
@@ -40,12 +47,14 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
     <style lang="stylus" scoped>
 
  </style>
-    <v-flex>
-    <v-calendar v-if="dateMap"
+    <v-flex>{{now}}
+    <v-calendar v-if="items"
           ref="calendar"
-          v-model="start"
+          v-model="now"
           type="month"
-          color="primary">
+          color="primary"
+
+          >
       <template v-slot:day="{ date }" >
         <template v-for="(event,i) in (dateMap[date]? dateMap[date].events : [])">
            <v-menu
@@ -58,12 +67,12 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                  <template v-slot:activator="{ on }">
                    <div
                      v-ripple
-                     class="my-event"
+                     :class="'my-event ' + colour([event])"
                      v-on="on"
-                   >
-                <div v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</div>
-                <div v-if="event.eventType === 'calendar'">{{event.event.description}}</div>
-                <div v-if="event.eventType === 'competition'">{{event.competition.name}}</div>
+                   ><v-icon class="white--text">{{icon([event])}}</v-icon>
+                <span v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</span>
+                <span v-if="event.eventType === 'calendar'">{{event.event.description}}</span>
+                <span v-if="event.eventType === 'competition'">{{event.competition.name}}</span>
             </div>
                  </template>
                  <v-card
@@ -76,7 +85,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                      dark
                    >
                     <v-icon>{{icon([event])}}</v-icon>
-                     <v-toolbar-title>{{event.date  date("EEEE d MMMM yyyy")}}</v-toolbar-title>
+                     <v-toolbar-title>{{event.date | date("EEEE d MMMM yyyy")}}</v-toolbar-title>
                      <v-spacer></v-spacer>
                    </v-toolbar>
                    <v-card-title primary-title>
@@ -109,6 +118,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
         Prev
       </v-btn>
     </v-flex>
+    <v-spacer></v-spacer>
     <v-flex
       sm4
       xs12
@@ -147,16 +157,14 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   data("type", "month")
   data("typeOptions", js.Array("day","week", "month"))
   data("start", null)
+  data("now", LocalDate.now.toString)
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
-  subscription( "dateMap", "seasonId")(c => CalendarViewService.events(c.seasonId).map(x => x.map( y => (y.date, y)).toMap.toJSDictionary))
+  subscription( "dateMap", "seasonId")(c => CalendarViewService.events(c.seasonId).map(x => {c.now = (x.headOption.fold(LocalDate.now)(d => LocalDate.parse(d.date)).toString);x.map( y => (y.date, y)).toMap.toJSDictionary}))
   subscription("viewType")(c => CalendarViewService.viewType)
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   method("colour"){colour _}
   method("icon"){icon _}
-  method("next")({c:facade =>
-    //println(js.JSON.stringify(c.$refs.calendar));
-    c.$refs.selectDynamic("calendar").next()
-  }:js.ThisFunction)
+  method("itemMap")({c:facade => c.items.map(y => (y.date,y)).toMap.toJSDictionary}:js.ThisFunction)
   def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
   computed("dense")({dense _}:js.ThisFunction)
   
@@ -173,7 +181,7 @@ object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
-      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3> &nbsp;<v-btn-toggle v-model="viewType"><v-btn flat value="timeline">Timeline</v-btn><v-btn flat value="calendar">Calendar</v-btn></v-btn-toggle>
+      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3> &nbsp;<v-btn-toggle v-model="viewType" ><v-btn flat value="timeline" color="yellow darken-3">Timeline</v-btn><v-btn flat value="calendar" color="yellow darken-3">Calendar</v-btn></v-btn-toggle>
     </v-toolbar>"""
   
   data("season", CalendarViewService.season)

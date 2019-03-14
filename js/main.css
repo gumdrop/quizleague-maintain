@@ -112,4 +112,9 @@
      padding: 3px;
      cursor: pointer;
      margin-bottom: 1px;
+
+   }
+   .my-event span {
+        padding-bottom: 8px;
+        vertical-align: middle;
    }
