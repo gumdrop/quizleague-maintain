@@ -75,34 +75,18 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                      :color="colour([event])"
                      dark
                    >
-                     <v-btn icon>
-                       <v-icon>edit</v-icon>
-                     </v-btn>
-                     <v-toolbar-title>{{event.date | date("EEEE d MMMM yyyy")}}</v-toolbar-title>
+                    <v-icon>{{icon([event])}}</v-icon>
+                     <v-toolbar-title>{{event.date  date("EEEE d MMMM yyyy")}}</v-toolbar-title>
                      <v-spacer></v-spacer>
-                     <v-btn icon>
-                       <v-icon>favorite</v-icon>
-                     </v-btn>
-                     <v-btn icon>
-                       <v-icon>more_vert</v-icon>
-                     </v-btn>
                    </v-toolbar>
                    <v-card-title primary-title>
                      <span ></span>
                    </v-card-title>
                    <v-card-text>
-                    <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
+                    <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event" :panelVisible="true"></ql-fixtures-event>
                     <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
                     <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
                    </v-card-text>
-                   <v-card-actions>
-                     <v-btn
-                       flat
-                       color="secondary"
-                     >
-                       Cancel
-                     </v-btn>
-                   </v-card-actions>
                  </v-card>
                </v-menu>
                 </template>
@@ -239,6 +223,8 @@ object FixturesEventComponent extends EventComponentConfig{
 
      </v-layout>
 """
+
+  prop("panelVisible")
 
 }
 
