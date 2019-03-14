@@ -35,7 +35,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
            <v-card-title :class="colour(item.events)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
            <v-card-text>
             <div v-for="event in item.events">
-                <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event"></ql-fixtures-event>
+                <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event" :panelVisible="false"></ql-fixtures-event>
                 <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
                 <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
             </div>
