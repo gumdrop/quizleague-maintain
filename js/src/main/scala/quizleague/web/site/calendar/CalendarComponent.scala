@@ -102,6 +102,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
             </template>
      </v-calendar>
      </v-flex>
+     <v-spacer></v-spacer>
       <v-layout row>
       <v-flex
       sm4
@@ -159,12 +160,12 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   data("start", null)
   data("now", LocalDate.now.toString)
   subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
-  subscription( "dateMap", "seasonId")(c => CalendarViewService.events(c.seasonId).map(x => {c.now = (x.headOption.fold(LocalDate.now)(d => LocalDate.parse(d.date)).toString);x.map( y => (y.date, y)).toMap.toJSDictionary}))
+  subscription( "dateMap")(c => CalendarViewService.allEvents())
   subscription("viewType")(c => CalendarViewService.viewType)
   components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
   method("colour"){colour _}
   method("icon"){icon _}
-  method("itemMap")({c:facade => c.items.map(y => (y.date,y)).toMap.toJSDictionary}:js.ThisFunction)
+
   def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
   computed("dense")({dense _}:js.ThisFunction)
   

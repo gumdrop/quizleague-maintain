@@ -86,6 +86,18 @@ object CalendarViewService extends SeasonWatchService{
 
   }
 
+  def allEvents():Observable[js.Dictionary[DateWrapper]] = {
+    def b = SeasonService.list()
+
+    def c = b.map(ss =>  ss.map(s => events(s.id)).toSeq)
+
+    def d = c.flatMap(s => combineLatest(s))
+
+    def e = d.map(_.toJSArray.flatMap(x => x))
+
+    e.map(_.map(x => (x.date, x)).toMap.toJSDictionary)
+  }
+
   def events:Observable[js.Array[DateWrapper]] = season.flatMap(s => events(s.id))
 }
 
