@@ -7,6 +7,7 @@ import quizleague.web.core._
 import quizleague.web.site._
 import quizleague.web.site.season.SeasonIdComponent
 import com.felstar.scalajs.vue._
+import quizleague.web.site.calendar.CalendarComponent.components
 import quizleague.web.site.season.SeasonFormatComponent
 
 import js.JSConverters._
@@ -18,18 +19,15 @@ object CalendarPage extends RouteComponent with NoSideMenu{
   subscription("season")(c => CalendarViewService.season)
 }
 
-@js.native
-trait CalendarComponent extends SeasonIdComponent with VuetifyComponent{
-  var items:js.Array[DateWrapper]
-  var now:String
-}
+
 
 object CalendarComponent extends Component with GridSizeComponentConfig{
-  type facade = CalendarComponent
+  type facade = SeasonIdComponent with VuetifyComponent
   val name = "ql-calendar" 
   val template = """
-  <v-container v-bind="gridSize"  v-if="items" class="ql-calendar" fluid >
-    <v-timeline v-bind="dense" v-if="viewType=='timeline'">
+  <v-container v-bind="gridSize" class="ql-calendar" fluid >
+    <transition name="fade">
+    <v-timeline v-bind="dense" v-if="items && viewType=='timeline'">
       <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events)" :icon="icon(item.events)" fill-dot>
         <v-card>
            <v-card-title :class="colour(item.events)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
@@ -43,20 +41,55 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
         </v-card>
       </v-timeline-item>
     </v-timeline>
-    <v-layout column v-if="viewType=='calendar'">
-    <style lang="stylus" scoped>
+    </transition>
+    <transition name="fade">
+    <ql-calendar-calendar v-if="viewType=='calendar'"></ql-calendar-calendar>
+    </transition>
+  </v-container>"""
 
- </style>
-    <v-flex>{{now}}
-    <v-calendar v-if="items"
-          ref="calendar"
-          v-model="now"
-          type="month"
-          color="primary"
+  def icon(events:js.Array[EventWrapper]) = events.headOption.fold("mdi-calendar")(e => e match {
+    case c: CalendarEventWrapper => "mdi-calendar"
+    case f: FixturesEventWrapper => f.competition.icon
+    case s: CompetitionEventWrapper => s.competition.icon
+  })
 
-          >
-      <template v-slot:day="{ date }" >
-        <template v-for="(event,i) in (dateMap[date]? dateMap[date].events : [])">
+  def colour(events:js.Array[EventWrapper]) = events.headOption.fold("gray")(e => (e match {
+    case c: CalendarEventWrapper => "blue"
+    case f: FixturesEventWrapper => f.competition.typeName match{case "league" => "green" case "cup" => "red"}
+    case s: CompetitionEventWrapper => "purple"
+  }) + " darken-3")
+
+
+
+
+  props("seasonId")
+  subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
+  subscription("viewType")(c => CalendarViewService.viewType)
+  components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent, CalendarCalendarComponent)
+  method("colour"){colour _}
+  method("icon"){icon _}
+
+  def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
+  computed("dense")({dense _}:js.ThisFunction)
+  
+}
+
+
+object CalendarCalendarComponent extends Component{
+
+  val name = "ql-calendar-calendar"
+
+  val template = """
+   <v-layout column >
+    <v-flex>
+      <v-calendar v-if="dateMap"
+            ref="calendar"
+            v-model="now"
+            type="month"
+            color="primary"
+       >
+        <template v-slot:day="{ date }" >
+          <template v-for="(event,i) in (dateMap[date]? dateMap[date].events : [])">
            <v-menu
                  :key="i"
                  v-model="event.open"
@@ -69,11 +102,12 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                      v-ripple
                      :class="'my-event ' + colour([event])"
                      v-on="on"
-                   ><v-icon class="white--text">{{icon([event])}}</v-icon>
-                <span v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</span>
-                <span v-if="event.eventType === 'calendar'">{{event.event.description}}</span>
-                <span v-if="event.eventType === 'competition'">{{event.competition.name}}</span>
-            </div>
+                   >
+                    <v-icon class="white--text">{{icon([event])}}</v-icon>
+                    <span v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</span>
+                    <span v-if="event.eventType === 'calendar'">{{event.event.description}}</span>
+                    <span v-if="event.eventType === 'competition'">{{event.competition.name}}</span>
+                  </div>
                  </template>
                  <v-card
                    color="grey lighten-4"
@@ -85,12 +119,9 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                      dark
                    >
                     <v-icon>{{icon([event])}}</v-icon>
-                     <v-toolbar-title>{{event.date | date("EEEE d MMMM yyyy")}}</v-toolbar-title>
-                     <v-spacer></v-spacer>
+                    <v-toolbar-title>{{event.date | date("EEEE d MMMM yyyy")}}</v-toolbar-title>
+                    <v-spacer></v-spacer>
                    </v-toolbar>
-                   <v-card-title primary-title>
-                     <span ></span>
-                   </v-card-title>
                    <v-card-text>
                     <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event" :panelVisible="true"></ql-fixtures-event>
                     <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
@@ -98,8 +129,8 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
                    </v-card-text>
                  </v-card>
                </v-menu>
-                </template>
-            </template>
+         </template>
+       </template>
      </v-calendar>
      </v-flex>
      <v-spacer></v-spacer>
@@ -137,38 +168,16 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
     </v-flex>
     </v-layout>
     </v-layout>
-  </v-container>"""
+  """
 
-  def icon(events:js.Array[EventWrapper]) = events.headOption.fold("mdi-calendar")(e => e match {
-    case c: CalendarEventWrapper => "mdi-calendar"
-    case f: FixturesEventWrapper => f.competition.icon
-    case s: CompetitionEventWrapper => s.competition.icon
-  })
-
-  def colour(events:js.Array[EventWrapper]) = events.headOption.fold("gray")(e => (e match {
-    case c: CalendarEventWrapper => "blue"
-    case f: FixturesEventWrapper => f.competition.typeName match{case "league" => "green" case "cup" => "red"}
-    case s: CompetitionEventWrapper => "purple"
-  }) + " darken-3")
-
-
-
-
-  props("seasonId","viewType")
-  data("type", "month")
-  data("typeOptions", js.Array("day","week", "month"))
-  data("start", null)
   data("now", LocalDate.now.toString)
-  subscription("items", "seasonId")(c => CalendarViewService.events(c.seasonId))
-  subscription( "dateMap")(c => CalendarViewService.allEvents())
-  subscription("viewType")(c => CalendarViewService.viewType)
-  components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
-  method("colour"){colour _}
-  method("icon"){icon _}
 
-  def dense(c:facade) = js.Dictionary("dense" -> c.$vuetify.breakpoint.xsOnly)
-  computed("dense")({dense _}:js.ThisFunction)
-  
+  subscription( "dateMap")(c => CalendarViewService.allEvents())
+
+  method("colour"){CalendarComponent.colour _}
+  method("icon"){CalendarComponent.icon _}
+
+  components(FixturesEventComponent,CalendarEventComponent,CompetitionEventComponent)
 }
 
 object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
@@ -182,7 +191,7 @@ object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
       <v-toolbar-title class="white--text" >
         Calendar
       </v-toolbar-title>
-      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3> &nbsp;<v-btn-toggle v-model="viewType" ><v-btn flat value="timeline" color="yellow darken-3">Timeline</v-btn><v-btn flat value="calendar" color="yellow darken-3">Calendar</v-btn></v-btn-toggle>
+      &nbsp;<h3 ><ql-season-select :season="season" :disabled="viewType !== 'timeline'" ></ql-season-select></h3> &nbsp;<v-btn-toggle v-model="viewType" light ><v-btn flat value="timeline" color="yellow darken-3">Timeline</v-btn><v-btn flat value="calendar" color="yellow darken-3">Calendar</v-btn></v-btn-toggle>
     </v-toolbar>"""
   
   data("season", CalendarViewService.season)
