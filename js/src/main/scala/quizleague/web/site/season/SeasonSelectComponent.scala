@@ -24,12 +24,13 @@ object SeasonSelectComponent extends Component with SeasonFormatComponent{
     :items="wrap(sort(seasons))"
     v-model="seasonId"
     :label="label"
+    :disabled="disabled"
     >
     </v-select>
   </h2>
 """
   
-  props("season","label")
+  props("season","label", "disabled")
   subscription("seasons")(c => SeasonService.list()) 
   subscription("seasonId")(_.season.map(_.id))
   
