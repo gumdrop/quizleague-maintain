@@ -99,7 +99,7 @@
     padding-left:2em;
 }
 
-   .my-event {
+.my-event {
      overflow: hidden;
      text-overflow: ellipsis;
      white-space: nowrap;
@@ -113,8 +113,8 @@
      cursor: pointer;
      margin-bottom: 1px;
 
-   }
-   .my-event span {
-        padding-bottom: 8px;
-        vertical-align: middle;
-   }
+}
+.my-event span {
+    padding-bottom: 8px;
+    vertical-align: middle;
+}
