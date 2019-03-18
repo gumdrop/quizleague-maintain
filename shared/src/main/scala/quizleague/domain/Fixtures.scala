@@ -1,8 +1,6 @@
 package quizleague.domain
 
-import java.time.LocalTime
-import java.time.Duration
-import java.time.LocalDate
+import java.time.{Duration, LocalDate, LocalDateTime, LocalTime}
 
 
 case class Fixtures(
@@ -46,4 +44,6 @@ case class Reports(
 
 case class Report(
     team:Ref[Team],
-    text:Ref[Text])
+    text:Ref[Text],
+    chat:Option[Ref[Chat]])
+
