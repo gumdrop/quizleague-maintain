@@ -195,9 +195,9 @@ object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
     </v-toolbar>"""
   
   data("season", CalendarViewService.season)
-  data("viewType","timeline")
+  data("viewType", CalendarViewService.getViewType())
   subscription("s")(c => CalendarViewService.season)
-  watch("viewType")((c,v) => CalendarViewService.viewType.next(v.toString))
+  watch("viewType")((c,v) => CalendarViewService.setViewType(v.toString))
 }
 
 

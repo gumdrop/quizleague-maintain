@@ -12,6 +12,7 @@ import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
+import org.scalajs.dom
 
 
 import quizleague.web.util.Logging._
@@ -21,8 +22,17 @@ object CalendarModule extends Module{
 }
 
 object CalendarViewService extends SeasonWatchService{
-  
-  var viewType:BehaviorSubject[String] = BehaviorSubject("timeline")
+
+  private val viewTypeKey: String = "calendar.viewType"
+  private def viewTypeFromStorage() = if(dom.window.localStorage.getItem(viewTypeKey) == null) "timeline" else dom.window.localStorage.getItem(viewTypeKey)
+  var viewType:BehaviorSubject[String] = BehaviorSubject(viewTypeFromStorage())
+
+  def setViewType(vt:String): Unit ={
+    dom.window.localStorage.setItem(viewTypeKey, vt)
+    viewType.next(vt)
+  }
+
+  def getViewType():String = viewTypeFromStorage
 
   def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
