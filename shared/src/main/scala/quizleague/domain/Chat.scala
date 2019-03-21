@@ -10,12 +10,12 @@ case class Chat(
                ) extends Entity
 
 case class ChatMessage(
-                        user: Ref[ChatUser],
+                        user: Ref[SiteUser],
                         message: String,
                         date: LocalDateTime
                       )
 
-case class ChatUser(
+case class SiteUser(
                      id: String,
                      handle: String,
                      avatar:String,

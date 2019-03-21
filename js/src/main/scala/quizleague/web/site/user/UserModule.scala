@@ -13,3 +13,7 @@ object UserService extends UserGetService{
   
 }
 
+object SiteUserService extends SiteUserGetService{
+  val userService = UserService
+}
+

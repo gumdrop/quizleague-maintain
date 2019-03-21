@@ -12,6 +12,7 @@ import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.user.UserService
 import quizleague.web.maintain.competition.CompetitionService
 import rxscalajs.Observable._
+
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.core._
@@ -19,6 +20,7 @@ import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.model._
 import quizleague.domain.Result
+import quizleague.web.maintain.chat.ChatService
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
 
@@ -82,4 +84,6 @@ object FixturesService extends FixturesGetService with FixturesPutService{
 object ReportsService extends ReportsGetService with ReportsPutService{
   override val teamService = TeamService
   override val textService = TextService
+  override val chatService = ChatService
 }
+

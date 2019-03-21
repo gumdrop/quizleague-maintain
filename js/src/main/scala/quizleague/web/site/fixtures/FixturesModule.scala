@@ -7,12 +7,14 @@ import quizleague.web.site.venue.VenueService
 import quizleague.web.model._
 import quizleague.web.site.team.TeamService
 import quizleague.web.core._
+
 import scalajs.js
 import js.JSConverters._
 import rxscalajs.Observable
 import rxscalajs.Observable._
 import quizleague.web.model.CompetitionType
 import java.time.LocalDate
+
 import quizleague.web.util.Logging._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition.CompetitionService
@@ -25,8 +27,11 @@ import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
 import java.time.LocalDate.{now => today}
 import java.time.LocalTime
+
 import rxscalajs.Observable
 import java.time.LocalDateTime
+
+import quizleague.web.site.chat.ChatService
 
 object FixturesModule extends Module {
 
@@ -168,5 +173,6 @@ object FixtureService extends FixtureGetService with PostService{
 object ReportsService extends ReportsGetService {
   val textService = TextService
   val teamService = TeamService
+  val chatService = ChatService
 }
 

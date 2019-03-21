@@ -79,12 +79,14 @@ object Result{
 class Reports(
     val id:String,
     val reports:js.Array[Report],
+    val chat:RefObservable[Chat],
     val isEmpty:Boolean) extends Model
     
 object Reports{
   def apply(id:String,
     reports:js.Array[Report],
-    isEmpty:Boolean) = new Reports(id, reports, isEmpty)
+    chat:RefObservable[Chat],
+    isEmpty:Boolean) = new Reports(id, reports, chat, isEmpty)
 }
     
 
@@ -95,7 +97,7 @@ class Report(
 }
     
 object Report{
-  def apply(    team:RefObservable[Team],
+  def apply(team:RefObservable[Team],
     text:RefObservable[Text]) = new Report(team,text) 
 }
     

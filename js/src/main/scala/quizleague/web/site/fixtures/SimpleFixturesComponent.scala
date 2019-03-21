@@ -78,6 +78,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                  </v-tooltip>
                </v-card-title>
               <ql-reports :id="fixture.result.reports.id"></ql-reports>
+              <v-card-actions><v-spacer></v-spacer><v-tooltip left v-if="!fixture.result.reports.chat"><template v-slot:activator="{ on }"><v-btn color="primary" fab small v-on="on"><v-icon>chat</v-icon></v-btn></template><span>Start Chat!</span></v-tooltip></v-card-actions>
             </v-card>
          </v-dialog>
         </td> 
