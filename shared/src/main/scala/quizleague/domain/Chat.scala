@@ -1,5 +1,6 @@
 package quizleague.domain
 
+import java.net.URL
 import java.time.LocalDateTime
 
 case class Chat(
@@ -9,7 +10,7 @@ case class Chat(
                ) extends Entity
 
 case class ChatMessage(
-                        user: ChatUser,
+                        user: Ref[ChatUser],
                         message: String,
                         date: LocalDateTime
                       )
@@ -17,6 +18,7 @@ case class ChatMessage(
 case class ChatUser(
                      id: String,
                      handle: String,
+                     avatar:String,
                      user: Option[Ref[User]],
                      retired: Boolean = false
 
