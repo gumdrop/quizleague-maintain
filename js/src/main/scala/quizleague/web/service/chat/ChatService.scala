@@ -23,16 +23,17 @@ import scalajs.js
 trait ChatGetService extends GetService[Chat] with ChatNames {
 
   override type U = Dom
-
-  val userService: SiteUserGetService
+  val chatMessageService: ChatMessageGetService
 
   override protected def mapOutSparse(chat: Dom) = new Chat(
     chat.id,
-    chat.messages.map(c => new ChatMessage(userService.refObs(c.user.id), c.message, c.date.toString)).toJSArray,
+    chatMessageService.list(key(chat.id)),
     chat.retired
     )
 
   protected def dec(json:js.Any) = decodeJson[U](json)
+
+  protected def key(id:String) = s"$uriRoot/id"
 
 
 }
@@ -41,10 +42,9 @@ trait ChatPutService extends PutService[Chat] with ChatGetService {
 
   override protected def mapIn(chat: Chat) = Dom(
     chat.id,
-    chat.messages.map(c => DomMessage(userService.ref(c.user), c.message, LocalDateTime.parse(c.date))).toList,
     chat.retired)
 
-  override protected def make() = Dom(newId(), List(), false)
+  override protected def make() = Dom(newId(), false)
 
   override def enc(item: Dom) = item.asJson
 

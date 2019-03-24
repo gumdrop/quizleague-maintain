@@ -5,15 +5,16 @@ import java.time.LocalDateTime
 
 case class Chat(
                  id: String,
-                 messages: List[ChatMessage],
                  retired: Boolean = false
                ) extends Entity
 
 case class ChatMessage(
+                        id:String,
                         user: Ref[SiteUser],
                         message: String,
-                        date: LocalDateTime
-                      )
+                        date: LocalDateTime,
+                        retired: Boolean = false
+                      ) extends Entity
 
 case class SiteUser(
                      id: String,

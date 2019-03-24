@@ -1,10 +1,8 @@
 package quizleague.web.site.fixtures
 
 import scala.scalajs.js
-
 import quizleague.web.model.Fixture
 import quizleague.web.util.rx._
-
 import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.core.IdComponent
@@ -13,6 +11,9 @@ import com.felstar.scalajs.vue._
 import quizleague.web.site.results.TableUtils
 import rxscalajs.Observable
 import quizleague.web.core.DialogComponentConfig
+import org.scalajs.dom
+import quizleague.web.site.chat.ChatService
+import quizleague.web.site.user.SiteUserService
 
 
 @js.native
@@ -78,18 +79,32 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                  </v-tooltip>
                </v-card-title>
               <ql-reports :id="fixture.result.reports.id"></ql-reports>
-              <v-card-actions><v-spacer></v-spacer><v-tooltip left v-if="!fixture.result.reports.chat"><template v-slot:activator="{ on }"><v-btn color="primary" fab small v-on="on"><v-icon>chat</v-icon></v-btn></template><span>Start Chat!</span></v-tooltip></v-card-actions>
+              <v-card-text>
+                <ql-chat id="fixture.result.reports.chat.id"></ql-chat>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <ql-chat-button></ql-chat-button>
+
+               </v-card-actions>
             </v-card>
          </v-dialog>
         </td> 
       </tr>"""
   components(ReportsComponent)
   data("showReports", false)
+  data("chatLogin", null)
   data("short")(c => c.$vuetify.breakpoint.smAndDown)
+  data("siteUserID", dom.window.localStorage.getItem("siteUserID"))
+  data("startChat", false)
   prop("fixture")
   prop("inlineDetails")
   method("nameClass")(nameClass _ )
+
+
 }
+
+
 
 object ReportsComponent extends Component{
   type facade = IdComponent
