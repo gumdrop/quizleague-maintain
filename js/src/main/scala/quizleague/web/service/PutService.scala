@@ -20,16 +20,20 @@ trait PutService[T <: Model] {
   protected def add(entity:U):T = add(mapOutSparse(entity))
   
   def save(item: T):Observable[Unit] = save(mapIn(item))
-  
+
+  def saveAsChild(item:T, parentKey:String) = save(mapIn(item), parentKey)
+
   def save(obs:RefObservable[T]):Unit = obs.subscribe(save(_))
-  
+
   protected def save(item:U):Observable[Unit] = saveDom(item)
-  
-  private[service] def saveDom(i:U):Observable[Unit] = {
-    val promise = db.doc(s"$uriRoot/${i.id}").set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
+  protected def save(item:U, parentKey:String = ""):Observable[Unit] = saveDom(item, parentKey)
+
+  private[service] def saveDom(i:U,parentKey:String =""):Observable[Unit] = {
+    val path = s"${if(parentKey.isEmpty)""else s"$parentKey/"}$uriRoot/${i.id}"
+    val promise = db.doc(path).set(convertJsonToJs(enc(i)).asInstanceOf[js.Dictionary[js.Any]])
     val obs = ReplaySubject[Unit]()
     promise.`then`({obs.next(_)}, {obs.error(_)})
-    log(i,s"saved $uriRoot/${i.id} to firestore")
+    log(i,s"saved $path to firestore")
     deCache(i)
     obs
   }

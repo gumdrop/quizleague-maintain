@@ -78,9 +78,9 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                    <span>Close</span>
                  </v-tooltip>
                </v-card-title>
-              <ql-reports :id="fixture.result.reports.id"></ql-reports>
+              <ql-reports :id="fixture.result.reports.id" ></ql-reports>
               <v-card-text>
-                <ql-chat id="fixture.result.reports.chat.id"></ql-chat>
+                <ql-chat :parentKey=parentKey(fixture.result.reports.id)></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -93,13 +93,11 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
       </tr>"""
   components(ReportsComponent)
   data("showReports", false)
-  data("chatLogin", null)
   data("short")(c => c.$vuetify.breakpoint.smAndDown)
-  data("siteUserID", dom.window.localStorage.getItem("siteUserID"))
-  data("startChat", false)
   prop("fixture")
   prop("inlineDetails")
   method("nameClass")(nameClass _ )
+  method("parentKey"){id:String => ReportsService.key(id)}
 
 
 }

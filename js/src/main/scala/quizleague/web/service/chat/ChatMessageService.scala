@@ -31,18 +31,13 @@ trait ChatMessageGetService extends GetService[ChatMessage] with ChatMessageName
     message.id,
     userService.refObs(message.user.id), message.message, message.date.toString)
 
-
-
   protected def dec(json:js.Any) = decodeJson[U](json)
-
-  def list(parentKey:String):Observable[js.Array[ChatMessage]] = listFromStorage(parentKey).map(c => c.map(u => mapOutSparse(u)))
-
-  protected final def listFromStorage(parentKey:String) = listFromQuery(db.collection(s"$parentKey/uriRoot"))
-
 
 }
 
 trait ChatMessagePutService extends PutService[ChatMessage] with ChatMessageGetService {
+
+  val chatService:ChatGetService
 
   override protected def mapIn(message: ChatMessage) = Dom(
     message.id,
@@ -52,5 +47,9 @@ trait ChatMessagePutService extends PutService[ChatMessage] with ChatMessageGetS
   override protected def make() = Dom(newId(), null,"", LocalDateTime.now())
 
   override def enc(item: Dom) = item.asJson
+
+  def saveMessage(text:String, siteUserID:String, chatID:String, parentKey:String) = {
+      save(make().copy(user=userService.ref(siteUserID), message=text), s"$parentKey/${chatService.key(chatID)}")
+  }
 
 }

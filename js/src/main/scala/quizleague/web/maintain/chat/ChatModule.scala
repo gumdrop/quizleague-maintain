@@ -6,6 +6,7 @@ import quizleague.web.service.chat.{ChatGetService, ChatMessageGetService, ChatM
 
 object ChatMessageService extends ChatMessageGetService with ChatMessagePutService{
   val userService = SiteUserService
+  val chatService = ChatService
 }
 
 object ChatService extends ChatGetService with ChatPutService {

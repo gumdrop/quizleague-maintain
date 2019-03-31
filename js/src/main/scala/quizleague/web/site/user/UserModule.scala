@@ -6,6 +6,9 @@ import quizleague.web.model.SiteUser
 import rxscalajs.{Observable, Subject}
 import rxscalajs.subjects.ReplaySubject
 import org.scalajs.dom
+import quizleague.web.service.PostService
+import scalajs.js
+import js.JSConverters._
 
 
 object UserService extends UserGetService{
@@ -17,15 +20,22 @@ object UserService extends UserGetService{
   
 }
 
-object SiteUserService extends SiteUserGetService{
+object SiteUserService extends SiteUserGetService with PostService{
   val userService = UserService
+
+  def siteUserForEmail(email:String):Observable[js.Array[SiteUser]] = {
+    import quizleague.util.json.codecs.DomainCodecs._
+    command[List[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
+  }
 }
 
 object SiteUserWatchService{
 
   private val _siteUser:Subject[SiteUser] = ReplaySubject()
 
-  setSiteUserID(dom.window.localStorage.getItem("siteUserID"))
+  val key = "siteUserID"
+
+  setSiteUserID(dom.window.localStorage.getItem(key))
 
   def siteUser:Observable[SiteUser] = _siteUser
 
@@ -33,6 +43,8 @@ object SiteUserWatchService{
     SiteUserService.get(id).take(1).subscribe(u => {_siteUser.next(u); dom.window.localStorage.setItem("siteUserID", id)})
 
   }
+
+  def getSiteUserID() = dom.window.localStorage.getItem("siteUserID")
 
 }
 

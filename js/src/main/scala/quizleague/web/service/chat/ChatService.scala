@@ -33,8 +33,6 @@ trait ChatGetService extends GetService[Chat] with ChatNames {
 
   protected def dec(json:js.Any) = decodeJson[U](json)
 
-  protected def key(id:String) = s"$uriRoot/id"
-
 
 }
 
@@ -47,5 +45,6 @@ trait ChatPutService extends PutService[Chat] with ChatGetService {
   override protected def make() = Dom(newId(), false)
 
   override def enc(item: Dom) = item.asJson
+
 
 }

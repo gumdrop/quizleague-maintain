@@ -40,7 +40,6 @@ case class Result(
 case class Reports(
     id:String,
     reports:List[Report],
-    chat:Option[Ref[Chat]],
     retired:Boolean = false) extends Entity
 
 case class Report(

@@ -71,7 +71,7 @@ trait ChatNames extends ComponentNames {
 }
 
 trait ChatMessageNames extends ComponentNames {
-  override val typeName = "chatmessgae"
+  override val typeName = "chatmessage"
 }
 
 trait SiteUserNames extends ComponentNames {

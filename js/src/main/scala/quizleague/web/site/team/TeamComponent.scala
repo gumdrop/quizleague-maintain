@@ -233,6 +233,6 @@ object TeamMenuComponent extends RouteComponent with SideMenu{
        </v-list-tile>
      </ql-side-menu>
      """
-   subscription("teams")(c => TeamService.list.map(_.sortBy(_.shortName)))
+   subscription("teams")(c => TeamService.list().map(_.sortBy(_.shortName)))
 }
 

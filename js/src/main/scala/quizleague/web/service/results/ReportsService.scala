@@ -19,6 +19,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.web.service.chat.{ChatGetService, ChatPutService}
+import rxscalajs.Observable
 
 
 trait ReportsGetService extends GetService[Model] with ReportsNames {
@@ -28,9 +29,17 @@ trait ReportsGetService extends GetService[Model] with ReportsNames {
   val teamService:TeamGetService
   val chatService:ChatGetService
 
-  override protected def mapOutSparse(dom: Dom) = Model(dom.id,mapReports(dom.reports), chatService.refObs(dom.chat), dom.reports.isEmpty)
+  override protected def mapOutSparse(dom: Dom) = Model(
+    dom.id,
+    mapReports(dom.reports),
+    chatService.list(key(dom.id)).flatMap(l => if(l.isEmpty) Observable.empty else Observable.just(l.head)),
+    dom.reports.isEmpty)
 
-  private def mapReports(reports:List[DomReport]) =  reports.map(r => Report(refObs(r.team, teamService),refObs(r.text, textService))).toJSArray
+  private def mapReports(reports:List[DomReport]) =
+    reports.map(r => Report(
+      refObs(r.team, teamService),
+      refObs(r.text, textService))
+    ).toJSArray
    
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
@@ -45,8 +54,7 @@ trait ReportsPutService extends PutService[Model] with ReportsGetService with Di
   
   override protected def mapIn(model: Model) = Dom(
       model.id, 
-      model.reports.map(r => DomReport(teamService.ref(r.team), textService.ref(r.text))).toList,
-      chatService.refOption(model.chat)
+      model.reports.map(r => DomReport(teamService.ref(r.team), textService.ref(r.text))).toList
       )
 
   override protected def make() = ???
