@@ -12,7 +12,7 @@ import scalajs.js
 
 object ChatModule extends Module {
 
-  override val components = @@(ChatComponent, ChatButton)
+  override val components = @@(ChatComponent, LoginButton)
 }
 
 object ChatMessageService extends ChatMessageGetService with ChatMessagePutService {

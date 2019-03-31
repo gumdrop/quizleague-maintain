@@ -27,6 +27,8 @@ object SiteUserService extends SiteUserGetService with PostService{
     import quizleague.util.json.codecs.DomainCodecs._
     command[List[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
+
+  def saveUser(user:SiteUser) = {}
 }
 
 object SiteUserWatchService{
