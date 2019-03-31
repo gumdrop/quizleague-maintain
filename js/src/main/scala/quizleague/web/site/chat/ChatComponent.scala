@@ -143,11 +143,10 @@ object ChatButton extends Component with DialogComponentConfig{
       <v-btn color="primary" fab small v-on:click.stop="login=true" slot="activator">
         <v-icon>chat</v-icon>
        </v-btn>
-      <span>Start Chat!</span>
+      <span>Login</span>
     </v-tooltip>
   </div>
   """
-  prop("parentKey")
   data("login",false)
   data("email", null)
   subscription("user")(c => SiteUserWatchService.siteUser)
