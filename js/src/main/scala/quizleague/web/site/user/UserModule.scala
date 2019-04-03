@@ -28,7 +28,10 @@ object SiteUserService extends SiteUserGetService with PostService{
     command[List[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
 
-  def saveUser(user:SiteUser) = {}
+  def saveUser(user:SiteUser){
+    import quizleague.util.json.codecs.DomainCodecs._
+    command[U,Unit](List("site","save-site-user"),Option(user)).subscribe(x => Unit)
+  }
 }
 
 object SiteUserWatchService{
@@ -42,11 +45,11 @@ object SiteUserWatchService{
   def siteUser:Observable[SiteUser] = _siteUser
 
   def setSiteUserID(id:String)  {
-    SiteUserService.get(id).take(1).subscribe(u => {_siteUser.next(u); dom.window.localStorage.setItem("siteUserID", id)})
+    SiteUserService.get(id).take(1).subscribe(u => {_siteUser.next(u); dom.window.localStorage.setItem(key, id)})
 
   }
 
-  def getSiteUserID() = dom.window.localStorage.getItem("siteUserID")
+  def getSiteUserID() = dom.window.localStorage.getItem(key)
 
 }
 

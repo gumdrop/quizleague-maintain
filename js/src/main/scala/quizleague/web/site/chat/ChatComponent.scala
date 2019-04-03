@@ -34,9 +34,10 @@ object ChatComponent extends Component{
           outline
           auto-grow
           v-model="text"
-          rows="1"
-          append-icon="send"
-          @click:append="text = addMessage(text)">
+          rows="1">
+
+          <template slot="append"><v-btn fab flat :disabled="!text" @click="text = addMessage(text)"><v-icon>send</v-icon></v-btn></template>
+
         </v-textarea>
        </div>
     </v-flex>
@@ -147,7 +148,7 @@ object LoginButton extends Component with DialogComponentConfig{
           <v-card-text>
             <v-text-field type="email" label="email address" v-model="email"></v-text-field>
           </v-card-text>
-          <v-card-actions><v-btn @click="loginToSite(email);login=false">Submit</v-btn></v-card-actions>
+          <v-card-actions><v-btn @click="loginToSite(email);login=false;profile=true">Login</v-btn></v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>

@@ -55,5 +55,17 @@ class SiteEndpoint extends SitePostEndpoints{
 
 
   }
-  
+
+  @POST
+  @Path("/save-site-user")
+  @Produces(Array("application/json"))
+  def saveSiteUser(body:String) ={
+
+    val in:SiteUser = deser[SiteUser](body)
+    val existing = load[SiteUser](in.id)
+
+    save(existing.copy(handle = in.handle, avatar = in.avatar))
+  }
+
+
 }
