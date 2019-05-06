@@ -16,11 +16,4 @@ case class ChatMessage(
                         retired: Boolean = false
                       ) extends Entity
 
-case class SiteUser(
-                     id: String,
-                     handle: String,
-                     avatar:String,
-                     user: Option[Ref[User]],
-                     retired: Boolean = false
 
-                   ) extends Entity

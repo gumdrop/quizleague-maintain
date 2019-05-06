@@ -70,6 +70,10 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
     import quizleague.util.json.codecs.DomainCodecs._
     command[List[U],String](List("site","team-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
+
+  def teamForUser(userID:String):Observable[Option[Team]] = {
+    list().map(_.filter(_.users.exists(_.id == userID)).headOption)
+  }
   
   def sendEmailToTeam(sender:String, text:String, team:Team){
     import quizleague.util.json.codecs.CommandCodecs._

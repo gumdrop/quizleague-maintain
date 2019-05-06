@@ -84,7 +84,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <ql-login-button label="Login for chat" icon="chat"></ql-login-button>
+                <ql-login-button label="Login for chat" ></ql-login-button>
 
                </v-card-actions>
             </v-card>

@@ -34,13 +34,13 @@ object Firestore {
    
    def setAuthContext(){
 
-    Firebase.auth().onAuthStateChanged({ (user: User) =>
+    Firebase.auth().onAuthStateChanged( (user: User) =>
 
       if (user == null) {
         val provider = new auth.GoogleAuthProvider()
         Firebase.auth().signInWithRedirect(provider)
       }
 
-    }: js.Function)
+    )
   }
 }

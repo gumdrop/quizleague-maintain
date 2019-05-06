@@ -30,7 +30,7 @@ import auth._
 
   @js.native
   @JSGlobal("Promise_Instance")
-  class Promise_Instance[T] protected() extends Thenable[js.Any] {
+  class Promise_Instance[T] protected() extends Thenable[T] {
     def this(resolver: js.Function2[js.Function1[T, Unit], js.Function1[Error, Unit], Any]) = this()
   }
 
@@ -38,7 +38,7 @@ import auth._
   trait Thenable[T] extends js.Object {
     def `catch`(onReject: js.Function1[Error, Any] = ???): js.Dynamic = js.native
 
-    def `then`(onResolve: js.Function1[T, Any] = ???, onReject: js.Function1[Error, Any] = ???): Thenable[js.Any] = js.native
+    def `then`(onResolve: js.Function1[T, Any] = ???, onReject: js.Function1[Error, Any] = ???): Thenable[T] = js.native
   }
 
   @js.native

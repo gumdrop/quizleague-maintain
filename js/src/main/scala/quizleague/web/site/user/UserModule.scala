@@ -28,9 +28,18 @@ object SiteUserService extends SiteUserGetService with PostService{
     command[List[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
 
+  def siteUserForUid(uid:String):Observable[Option[SiteUser]] = {
+    query(db.collection(uriRoot).where("uid","==", uid)).map(_.headOption)
+  }
+
   def saveUser(user:SiteUser){
     import quizleague.util.json.codecs.DomainCodecs._
     command[U,Unit](List("site","save-site-user"),Option(user)).subscribe(x => Unit)
+  }
+
+  def setUid(user:SiteUser, uid:String): Unit ={
+    val nu = new SiteUser(user.id, user.handle, user.avatar, user.user, Option(uid))
+    saveUser(nu);
   }
 }
 

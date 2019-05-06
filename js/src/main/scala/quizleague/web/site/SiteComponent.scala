@@ -1,10 +1,13 @@
 package quizleague.web.site
 
 import quizleague.web.core.Component
+
 import scalajs.js
 import js.DynamicImplicits._
 import com.felstar.scalajs.vue.VuetifyComponent
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.web.site.login.LoginService
+import quizleague.web.util.Logging._
 
 @js.native
 trait SiteComponent extends VueRxComponent with VuetifyComponent{
@@ -40,6 +43,8 @@ object SiteComponent extends Component {
         <v-list-tile to="/rules" ><v-list-tile-action><v-icon flat left>mdi-book-open-page-variant</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Rules</v-list-tile-title></v-list-tile-content></v-list-tile>  
         <v-list-tile to="/links" ><v-list-tile-action><v-icon flat left>link</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Links</v-list-tile-title></v-list-tile-content></v-list-tile>
         <v-list-tile to="/contact" ><v-list-tile-action><v-icon flat left>contact_mail</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Contact Us</v-list-tile-title></v-list-tile-content></v-list-tile>  
+        <v-list-tile to="/login" ><v-list-tile-action><v-icon flat left>mdi-login</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>Login</v-list-tile-title></v-list-tile-content></v-list-tile>
+
     </ql-side-menu>
     <router-view name="sidenav"></router-view>
     </v-list>
@@ -56,6 +61,8 @@ object SiteComponent extends Component {
       <v-toolbar-title class="white--text" >
         
         <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':'page-header-small'"><ql-title :title="appData.leagueName"></ql-title></span>
+
+        <span v-if="user">{{user.siteUser.handle}}<v-avatar size="24" title="Profile"><img :src="user.siteUser.avatar"></img></v-avatar></span>
       </v-toolbar-title>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
       	<v-btn to="/home" flat ><v-icon left>home</v-icon><span>Home</span></v-btn>
@@ -67,6 +74,7 @@ object SiteComponent extends Component {
       	<v-btn to="/rules" flat ><v-icon left>mdi-book-open-page-variant</v-icon><span>Rules</span></v-btn>
       	<v-btn to="/links" flat ><v-icon left>link</v-icon><span>Links</span></v-btn>
       	<v-btn to="/contact" flat ><v-icon left>contact_mail</v-icon><span>Contact Us</span></v-btn>
+      	<v-btn to="/login" flat ><v-icon left>mdi-login</v-icon><span>Login</span></v-btn>
       </div>
     </v-toolbar>
     <v-content>
@@ -90,6 +98,7 @@ object SiteComponent extends Component {
   data("showMenu",false)
   subscription("appData")(c => ApplicationContextService.get())
   subscription("sidemenu")(c => SiteService.sidemenu)
+  subscription("user")(c => LoginService.userProfile)
   computedGetSet("drawer")({drawerGet _}:js.ThisFunction)({drawerSet _}:js.ThisFunction)
 }
 

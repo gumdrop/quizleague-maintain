@@ -18,11 +18,4 @@ class ChatMessage(
                    val date: String
                  ) extends Model
 
-class SiteUser(
-                val id: String,
-                val handle: String,
-                val avatar: String,
-                val user: RefObservable[User],
-                val retired: Boolean = false
 
-              ) extends Model

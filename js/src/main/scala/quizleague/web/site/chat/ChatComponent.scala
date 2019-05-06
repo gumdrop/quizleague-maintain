@@ -6,6 +6,7 @@ import com.felstar.scalajs.vue.VueRxComponent
 import org.scalajs.dom
 import quizleague.web.core.{Component, DialogComponent, DialogComponentConfig}
 import quizleague.web.model._
+import quizleague.web.site.login.LoginService
 import quizleague.web.site.user.{SiteUserService, SiteUserWatchService}
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
@@ -17,6 +18,7 @@ trait ChatComponent extends VueRxComponent {
   val parentKey:String
   val chat:js.UndefOr[Chat]
   var messagesObs:js.UndefOr[Observable[js.Array[ChatMessage]]]
+  val user:SiteUser
 }
 
 object ChatComponent extends Component{
@@ -53,14 +55,14 @@ object ChatComponent extends Component{
       chats.headOption.fold
       (Observable.from(js.Array[Chat]()))
       (chat => Observable.just(chat))))
-  subscription("user")(c => SiteUserWatchService.siteUser)
+  subscription("user")(c => LoginService.userProfile.map(_.siteUser))
   method("addMessage")({addMessage _}:js.ThisFunction)
 
 
   def addMessage(c:facade, text:String) = {
 
     def saveMessage(chatID:String): Unit ={
-      ChatMessageService.saveMessage(text, SiteUserWatchService.getSiteUserID(), chatID, c.parentKey).subscribe(x => x)
+      ChatMessageService.saveMessage(text, c.user.id, chatID, c.parentKey).subscribe(x => x)
     }
 
     if(c.chat.isEmpty){
@@ -133,62 +135,16 @@ object LoginButton extends Component with DialogComponentConfig{
 
   val name = "ql-login-button"
   val template="""
-  <div >
-    <v-tooltip left v-if="!user">
-      <v-btn color="primary" fab small v-on:click.stop="login=true" slot="activator">
-        <v-icon>{{icon}}</v-icon>
+  <div v-if="!user">
+    <v-tooltip left>
+      <v-btn color="primary" fab small :to="'/login?forward=' + window.location.pathname" slot="activator">
+        <v-icon>mdi-login</v-icon>
        </v-btn>
       <span>{{label}}</span>
     </v-tooltip>
-    <v-dialog persistent v-model="login" lazy max-width="40%" v-bind="dialogSize" >
-      <v-card>
-        <v-form>
-          <v-card-title class="primary"><h5 class="display-1 white--text font-weight-light">Log In</h5>
-          </v-card-title>
-          <v-card-text>
-            <v-text-field type="email" label="email address" v-model="email"></v-text-field>
-          </v-card-text>
-          <v-card-actions><v-btn @click="loginToSite(email);login=false;profile=true">Login</v-btn></v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-if="user" persistent v-model="profile" lazy max-width="40%" v-bind="dialogSize" >
-      <v-card>
-      <v-form>
-        <v-card-title class="primary"><h5 class="display-1 white--text font-weight-light">Profile Settings</h5>
-        </v-card-title>
-        <v-card-text>
-          <v-layout column>
-            <v-text-field type="text" label="Handle" v-model="user.handle"></v-text-field>
-            <v-text-field type="url" label="Avatar" v-model="user.avatar">
-              <template slot="append" size="36">
-                <v-avatar><img :src="user.avatar"></v-avatar>
-              </template>
-            </v-text-field>
-          </v-layout>
-        </v-card-text>
-        <v-card-actions><v-btn @click="saveUser(user);profile=false">Save</v-btn><v-spacer></v-spacer><v-btn @click="profile=false">Cancel</v-btn></v-card-actions>
-      </v-card>
-      </v-form>
-    </v-dialog>
   </div>
   """
   prop("label")
-  prop("icon")
-  data("login",false)
-  data("profile",false)
-  data("email", null)
-  subscription("user")(c => SiteUserWatchService.siteUser)
-
-  method("loginToSite")({login _}:js.ThisFunction)
-  method("create")({create _}:js.ThisFunction)
-  method("saveUser"){user:SiteUser => SiteUserService.saveUser(user)}
-
-  def login(c:facade,email:String) = {
-    SiteUserService.siteUserForEmail(email).subscribe(su => su.headOption.map( u => SiteUserWatchService.setSiteUserID(u.id)).getOrElse({c.login = true;c.profile=true}))
-  }
-
-  def create(c:facade) = if(c.id.isEmpty){ChatService.add(c.parentKey)}
-
+  subscription("user")(c => LoginService.userProfile)
 
 }
