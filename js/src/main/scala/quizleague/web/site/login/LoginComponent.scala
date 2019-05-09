@@ -1,6 +1,8 @@
 package quizleague.web.site.login
 
 import com.felstar.scalajs.vue.VueRxComponent
+import firebase.Firebase
+import firebase.auth.Auth
 import quizleague.web.core._
 import quizleague.web.model.SiteUser
 import quizleague.web.site.SiteComponent.subscription

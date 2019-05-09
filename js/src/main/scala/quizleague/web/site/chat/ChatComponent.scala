@@ -6,12 +6,13 @@ import com.felstar.scalajs.vue.VueRxComponent
 import org.scalajs.dom
 import quizleague.web.core.{Component, DialogComponent, DialogComponentConfig}
 import quizleague.web.model._
-import quizleague.web.site.login.LoginService
+import quizleague.web.site.login.{LoggedInUser, LoginService}
 import quizleague.web.site.user.{SiteUserService, SiteUserWatchService}
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
 
 import scala.scalajs.js
+import scala.scalajs.js.UndefOr
 
 @js.native
 trait ChatComponent extends VueRxComponent {
@@ -82,6 +83,7 @@ object ChatComponent extends Component{
 trait ChatMessages extends VueRxComponent {
   val chatID:String
   val parentKey:String
+  val user:UndefOr[LoggedInUser]
 }
 
 object ChatMessages extends Component{
@@ -113,8 +115,9 @@ object ChatMessages extends Component{
   props("parentKey","chatID")
 
   subscription("messages","chatID")(c => ChatMessageService.list(c.parentKey,c.chatID))
+  subscription("user")(c => LoginService.userProfile)
 
-  method("isLeft")({c:ChatMessage => c.user.id != SiteUserWatchService.getSiteUserID() })
+  method("isLeft")({(c:facade,m:ChatMessage) => c.user.fold(true)(_.siteUser.id != m.user.id)}:js.ThisFunction)
   method("date"){d:String => LocalDateTime.parse(d).toLocalDate.toString}
   method("time"){d:String => LocalDateTime.parse(d).toLocalTime.toString}
 

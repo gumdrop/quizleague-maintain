@@ -63,6 +63,9 @@ object LoginService{
     }
   })
 
+  def logout() = {
+    Firebase.auth().signOut()
+  }
 
   def login(email:String, forward:String) = {
 
