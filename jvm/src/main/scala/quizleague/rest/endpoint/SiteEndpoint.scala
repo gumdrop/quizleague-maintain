@@ -36,7 +36,7 @@ class SiteEndpoint extends SitePostEndpoints{
   def siteUserForEmail(@PathParam("email") email:String) ={
 
     def createAndSave(user:Option[User]):SiteUser = {
-      val siteUser = SiteUser(UUID.randomUUID().toString,"","", user.map(u => new Ref[User]("user",u.id)))
+      val siteUser = SiteUser(UUID.randomUUID().toString,"","", user.map(u => new Ref[User]("user",u.id)), None)
       save(siteUser)
       siteUser
     }
