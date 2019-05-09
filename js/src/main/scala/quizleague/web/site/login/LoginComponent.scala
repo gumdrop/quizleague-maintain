@@ -1,18 +1,13 @@
 package quizleague.web.site.login
 
-import com.felstar.scalajs.vue.{VueComponent, VueRxComponent}
-import firebase.Firebase
-import firebase.auth._
-import org.scalajs.dom._
+import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.core._
-import quizleague.web.site.team.TeamService
+import quizleague.web.model.SiteUser
+import quizleague.web.site.SiteComponent.subscription
 import quizleague.web.site.user.SiteUserService
-import quizleague.web.store.Firestore
-import quizleague.web.useredit.LoginCheckComponent.{facade, method}
 import quizleague.web.useredit.TeamEditComponent
 
 import scala.scalajs.js
-import scala.scalajs.js.Dynamic.literal
 
 @js.native
 trait LoginPage extends VueRxComponent{
@@ -84,24 +79,47 @@ object LoginFailedComponent extends RouteComponent {
 
 }
 
-//<v-dialog v-if="user" persistent v-model="profile" lazy max-width="40%" v-bind="dialogSize" >
-//<v-card>
-//<v-form>
-//<v-card-title class="primary"><h5 class="display-1 white--text font-weight-light">Profile Settings</h5>
-//</v-card-title>
-//<v-card-text>
-//<v-layout column>
-//<v-text-field type="text" label="Handle" v-model="user.handle"></v-text-field>
-//<v-text-field type="url" label="Avatar" v-model="user.avatar">
-//<template slot="append" size="36">
-//<v-avatar><img :src="user.avatar"></v-avatar>
-//</template>
-//</v-text-field>
-//</v-layout>
-//</v-card-text>
-//<v-card-actions><v-btn @click="saveUser(user);profile=false">Save</v-btn><v-spacer></v-spacer><v-btn @click="profile=false">Cancel</v-btn></v-card-actions>
-//</v-card>
-//</v-form>
-//</v-dialog>
+object ProfileEditComponent extends RouteComponent {
+
+  val template="""
+
+<v-card>
+  <v-form>
+   <v-card-text>
+  <v-layout column>
+  <v-text-field type="text" label="Handle" v-model="user.handle"></v-text-field>
+  <v-text-field type="url" label="Avatar" v-model="user.avatar">
+  <template slot="append" size="36">
+  <v-avatar><img :src="user.avatar"></v-avatar>
+  </template>
+  </v-text-field>
+  </v-layout>
+  </v-card-text>
+  <v-card-actions><v-btn flat primary @click="saveUser(user);profile=false"><v-icon left>save</v-icon>Save</v-btn></v-card-actions>
+  </v-card>
+  </v-form>
+  </v-card>
+
+  """
+
+  method("saveUser"){user:SiteUser => SiteUserService.save(user)}
+  subscription("user")(c => LoginService.userProfile.map(_.siteUser))
+
+}
+
+object ProfileEditTitleComponent extends RouteComponent{
+  val  template="""
+    <v-toolbar
+      color="amber darken-3"
+      dark
+      clipped-left>
+      <ql-title>Profile Settings</ql-title>
+      <v-toolbar-title class="white--text" >
+        Profile Settings
+      </v-toolbar-title>
+    </v-toolbar>"""
+}
+
+
 
 

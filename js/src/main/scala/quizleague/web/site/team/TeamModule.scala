@@ -25,7 +25,6 @@ import quizleague.web.site.season._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import quizleague.web.useredit.TeamEditPage
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.model.CompetitionType
@@ -43,8 +42,8 @@ object TeamModule extends Module{
       
       RouteConfig(path = "/team/start", 
           components = Map("default" -> StartTeamPage, "title" -> StartTeamTitleComponent,"sidenav" -> TeamMenuComponent)),
-      RouteConfig(path = "/team/login",
-          components = Map("default" -> TeamLoginPage, "title" -> LoginTitleComponent,"sidenav" -> TeamMenuComponent)),
+      RouteConfig(path = "/team/edit",
+          components = Map("default" -> TeamEditPage, "sidenav" -> TeamMenuComponent)),
           RouteConfig(path = "/team/:id", 
           components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 

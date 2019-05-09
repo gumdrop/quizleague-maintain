@@ -22,13 +22,15 @@ import scala.scalajs.js.Dynamic.literal
 
 object LoginModule extends Module{
 
-  override val components = @@(LoginPage,LoginTitleComponent)
+  override val components = @@(LoginPage,LoginTitleComponent, ProfileEditComponent, ProfileEditTitleComponent)
 
   override val routes = @@(
     RouteConfig(path = "/login",
       components = Map("default" -> LoginPage, "title" -> LoginTitleComponent)),
     RouteConfig(path = "/login/signin",
       components = Map("default" -> LoginCheckComponent, "title" -> LoginTitleComponent)),
+    RouteConfig(path = "/login/profile",
+      components = Map("default" -> ProfileEditComponent, "title" -> ProfileEditTitleComponent)),
     RouteConfig(path = "/login/failed",
       components = Map("default" -> LoginFailedComponent, "title" -> LoginTitleComponent))
   )

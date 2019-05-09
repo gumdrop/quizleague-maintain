@@ -11,7 +11,7 @@ import scalajs.js
 import js.JSConverters._
 
 
-object UserService extends UserGetService{
+object UserService extends UserGetService with UserPutService{
   
   def userForEmail(email:String) = {
     val lc = email.toLowerCase
@@ -20,7 +20,7 @@ object UserService extends UserGetService{
   
 }
 
-object SiteUserService extends SiteUserGetService with PostService{
+object SiteUserService extends SiteUserGetService with SiteUserPutService with PostService{
   val userService = UserService
 
   def siteUserForEmail(email:String):Observable[js.Array[SiteUser]] = {

@@ -158,6 +158,24 @@ object FixtureService extends FixtureGetService with PostService{
     fixtures.map(_.filter(f => (f.date + f.time) <= now))
 
   }
+
+  def fixturesForResultSubmission(teamId:String) = {
+    val today = LocalDate.now.toString()
+    val now = today + LocalTime.now().toString()
+
+    val fixtures: Observable[js.Array[Fixture]] =
+      recentTeamResults(teamId,4).map(
+            _.groupBy(_.date)
+              .toList
+              .sortBy(_._1)(Desc)
+              .take(1)
+              .map { case (k, v) => v }
+              .toJSArray
+              .flatMap(x => x))
+      .map(_.sortBy(_.subsidiary))
+
+    fixtures.map(_.filter(f => (f.date + f.time) <= now))
+  }
   
 
   def submitResult(fixtures:js.Array[Fixture], reportText:String, email:String) = {

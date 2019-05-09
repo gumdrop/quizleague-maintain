@@ -4,10 +4,12 @@ import scalajs.js
 import js.Dynamic.literal
 import js.JSConverters._
 import com.felstar.scalajs.vue._
-
 import java.time.format.DateTimeFormatter
+
+import quill.VueQuillEditor
 import quizleague.web.util.rx._
 import rxscalajs.Observable
+
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
 
@@ -17,6 +19,7 @@ object SiteApp{
   
   @JSExport
   def main():Unit = {
+    Vue.use(VueQuillEditor)
     Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
     Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
     Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
