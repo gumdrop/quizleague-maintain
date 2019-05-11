@@ -31,6 +31,7 @@ import quizleague.web.model.CompetitionType
 import quizleague.util.StringUtils._
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.site.fixtures.FixturesService
+import quizleague.web.site.login.LoginService
 import quizleague.web.util.{UUID, rx}
 import quizleague.web.util.Logging._
 
@@ -43,8 +44,9 @@ object TeamModule extends Module{
       RouteConfig(path = "/team/start", 
           components = Map("default" -> StartTeamPage, "title" -> StartTeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/edit",
-          components = Map("default" -> TeamEditPage, "sidenav" -> TeamMenuComponent)),
-          RouteConfig(path = "/team/:id", 
+          components = Map("default" -> TeamEditPage, "sidenav" -> TeamMenuComponent),
+          beforeEnter = LoginService.routeGuard _),
+      RouteConfig(path = "/team/:id",
           components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 
           components = Map("default" -> TeamFixturesPage, "title" -> TeamFixturesTitle,"sidenav" -> TeamMenuComponent)),

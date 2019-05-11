@@ -18,6 +18,7 @@ import quizleague.web.util.Logging._
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
+import js.|
 
 
 object LoginModule extends Module{
@@ -26,11 +27,14 @@ object LoginModule extends Module{
 
   override val routes = @@(
     RouteConfig(path = "/login",
-      components = Map("default" -> LoginPage, "title" -> LoginTitleComponent)),
+      components = Map("default" -> LoginPage, "title" -> LoginTitleComponent),
+      beforeEnter = LoginService.noAuthRouteGuard _),
     RouteConfig(path = "/login/signin",
-      components = Map("default" -> LoginCheckComponent, "title" -> LoginTitleComponent)),
+      components = Map("default" -> LoginCheckComponent, "title" -> LoginTitleComponent),
+      beforeEnter = LoginService.noAuthRouteGuard _),
     RouteConfig(path = "/login/profile",
-      components = Map("default" -> ProfileEditComponent, "title" -> ProfileEditTitleComponent)),
+      components = Map("default" -> ProfileEditComponent, "title" -> ProfileEditTitleComponent),
+      beforeEnter = LoginService.routeGuard _),
     RouteConfig(path = "/login/failed",
       components = Map("default" -> LoginFailedComponent, "title" -> LoginTitleComponent))
   )
@@ -60,6 +64,9 @@ object LoginService{
       obs.subscribe(sto => sto.foreach(st => st match {
         case (s, t) => _loggedInUser.next(new LoggedInUser(s, String.valueOf(user.email), t))
       }))
+    }
+    else{
+      _loggedInUser.next(null)
     }
   })
 
@@ -113,15 +120,20 @@ object LoginService{
           siteUser.subscribe(su =>
             su.headOption.foreach(s => {SiteUserService.setUid(s, result.user.uid)
             window.localStorage.removeItem("emailForSignIn")
-            c.$router.push(forward)})
+              if(result.additionalUserInfo.fold(false)(_.isNewUser)){
+                c.$router.push(s"/login/profile?forward=$forward")
+              }
+              else{
+                c.$router.push(forward)
+              }
+            })
 
           )
 
         })
         .`catch`( (error:js.Any) => {
           println(error)
-          // Some error occurred, you can inspect the code: error.code
-          // Common errors could be invalid email and invalid or expired OTPs.
+            c.$router.push("/login/failed")
         })
     }
     else {
@@ -129,7 +141,13 @@ object LoginService{
     }
   }
 
+  def routeGuard(from:js.Any, to:js.Any, next:js.Function0[Unit]|js.Function1[Boolean | String | Exception, Unit]):Unit = {
+    userProfile.subscribe(u => if(u != null){next.asInstanceOf[js.Function0[Unit]]()})
+  }
 
+  def noAuthRouteGuard(from:js.Any, to:js.Any, next:js.Function0[Unit]|js.Function1[Boolean | String | Exception, Unit]):Unit = {
+    userProfile.subscribe(u => if(u == null){next.asInstanceOf[js.Function0[Unit]]()})
+  }
 
 }
 

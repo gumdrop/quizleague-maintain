@@ -56,43 +56,37 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
             <v-card class="mb-3">
             <v-card-title>Team Members</v-card-title>
               <v-card-text>
-            <v-dialog v-model="dialog" persistent max-width="600px">
-                <v-btn slot="activator" color="primary" @click="newUser()" dark><v-icon left>person</v-icon>New User</v-btn>
-                <v-card v-if="user">
-                  <v-card-title>
-                    <span class="headline"><v-icon>person</v-icon>&nbsp;New User</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container grid-list-md>
-                      <v-layout wrap>
-                        <v-flex xs12 sm6 md4>
-                          <v-text-field prepend-icon="person" label="Name" required :rules=[rules.required] v-model="user.name"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md4>
-                          <v-text-field prepend-icon="email" label="Email" type="email" required :rules=[rules.required,rules.email] v-model="user.email"></v-text-field>
-                        </v-flex>
+                <v-btn flat color="primary" @click="newUser()" dark><v-icon left>person</v-icon>Add User</v-btn>
+                <v-dialog v-model="dialog" persistent max-width="600px">
 
-                      </v-layout>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="dialog = false"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn>
-                    <v-btn color="blue darken-1" flat @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>add</v-icon>Add</v-btn>
-                  </v-card-actions>
-                </v-card>
-             </v-dialog>
+                  <v-card >
+                    <v-card-title>
+                      <span class="headline"><v-icon>person</v-icon>&nbsp;New User</span>
+                    </v-card-title>
+                    <v-card-text v-if="user">
+                      <v-container grid-list-md>
+                        <v-layout column>
+                          <v-flex xs12 sm6 md4>
+                            <v-text-field prepend-icon="person" label="Name" required :rules=[rules.required] v-model="user.name"></v-text-field>
+                          </v-flex>
+                          <v-flex xs12 sm6 md4>
+                            <v-text-field prepend-icon="email" label="Email" type="email" required :rules=[rules.required,rules.email] v-model="user.email"></v-text-field>
+                          </v-flex>
 
-             <v-select
-               :items="users"
-               v-model="team.users"
-               label="Team Members"
-               chips
-               autocomplete
-               multiple
-               prepend-icon="people"
-             >
-             </v-select>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click="dialog = false"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn>
+                      <v-btn color="blue darken-1" flat @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>add</v-icon>Add</v-btn>
+                    </v-card-actions>
+                  </v-card>
+               </v-dialog>
+
+               <v-flex>
+                <v-icon color="primary">people</v-icon>&nbsp;<v-chip v-for="usr in team.users" close @input="removeUser(usr.id)">{{async(usr).name}}</v-chip>
+               </v-flex>
              </v-card-text>
              </v-card>
             <v-card class="mb-3">
@@ -102,7 +96,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
              </v-card-text>
              </v-card>
   		    </v-form>
-  		    <v-layout row><v-btn button v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn><v-btn button v-on:click="cancel()"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn></v-layout>
+  		    <v-layout row><v-btn button v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn></v-layout>
         </v-layout>
        </v-container>"""
 
@@ -119,7 +113,6 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
     email = (value:String) => if(Pattern.matches(emailPattern, value)) true else "Valid email required"))
   subscription("team","id")(v => Service.get(v.id))
   subscription("text", "id")(c => Service.get(c.id).flatMap(team => TextService.get(team.text.id)))
-  subscription("users")(c => SelectUtils.model[User](UserService)(_.name))
 
   method("newUser")({c:facade => {c.user = UserService.instance();c.dialog = true}}:js.ThisFunction)
 
@@ -132,6 +125,11 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
         c.team.users += UserService.getRO(user.id)
       }
     }
+
+  }}:js.ThisFunction)
+
+  method("removeUser")({(c:facade, userID:String) => {
+        c.team.users -= UserService.getRO(userID)
 
   }}:js.ThisFunction)
 

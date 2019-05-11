@@ -56,7 +56,7 @@ object ChatComponent extends Component{
       chats.headOption.fold
       (Observable.from(js.Array[Chat]()))
       (chat => Observable.just(chat))))
-  subscription("user")(c => LoginService.userProfile.map(_.siteUser))
+  subscription("user")(c => LoginService.userProfile.filter(_ != null).map(_.siteUser))
   method("addMessage")({addMessage _}:js.ThisFunction)
 
 

@@ -36,7 +36,7 @@ class SiteEndpoint extends SitePostEndpoints{
   def siteUserForEmail(@PathParam("email") email:String) ={
 
     def createAndSave(user:Option[User]):SiteUser = {
-      val siteUser = SiteUser(UUID.randomUUID().toString,"","", user.map(u => new Ref[User]("user",u.id)), None)
+      val siteUser = SiteUser(UUID.randomUUID().toString,"https://storage.googleapis.com/chiltern-ql-firestore.appspot.com/files/631929649c.png","", user.map(u => new Ref[User]("user",u.id)), None)
       save(siteUser)
       siteUser
     }
@@ -62,9 +62,10 @@ class SiteEndpoint extends SitePostEndpoints{
   def saveSiteUser(body:String) ={
 
     val in:SiteUser = deser[SiteUser](body)
-    val existing = load[SiteUser](in.id)
+    val existing = load[SiteUser](in.id).copy(handle = in.handle, avatar = in.avatar)
 
-    save(existing.copy(handle = in.handle, avatar = in.avatar))
+    save(existing)
+    existing
   }
 
 

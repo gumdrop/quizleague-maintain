@@ -1,7 +1,7 @@
 package quizleague.web.site.results
 
-import quizleague.web.service.results.{ ReportsGetService }
-import quizleague.web.site.fixtures.{ FixtureService, FixturesService }
+import quizleague.web.service.results.ReportsGetService
+import quizleague.web.site.fixtures.{FixtureService, FixturesService}
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.text.TextService
 import quizleague.web.site.user.UserService
@@ -14,6 +14,7 @@ import quizleague.web.site.fixtures.AllFixturesTitleComponent
 import quizleague.web.site.fixtures.AllFixturesPage
 import quizleague.web.site.season.SeasonWatchService
 import quizleague.web.site.fixtures.FixturesService
+import quizleague.web.site.login.LoginService
 
 
 
@@ -28,7 +29,8 @@ object ResultsModule extends Module {
       components = Map("default" -> AllFixturesPage, "title" -> AllFixturesTitleComponent, "sidenav" -> ResultsMenuComponent)),
     RouteConfig(
       path = "/results/submit",
-      components = Map("default" -> SubmitResultsComponent,  "sidenav" -> ResultsMenuComponent, "title" -> SubmitResultsTitleComponent)),
+      components = Map("default" -> SubmitResultsComponent,  "sidenav" -> ResultsMenuComponent, "title" -> SubmitResultsTitleComponent),
+      beforeEnter = LoginService.routeGuard _),
 
     RouteConfig(path = "/results", redirect = "/results/all"))
 
