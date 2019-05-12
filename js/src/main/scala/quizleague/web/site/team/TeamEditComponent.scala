@@ -37,6 +37,8 @@ trait TeamEditComponent extends IdComponent{
   val team:Team
   var user:User
   var dialog:Boolean
+  var success:Boolean
+  var failure:Boolean
 }
 object TeamEditComponent extends Component with GridSizeComponentConfig{
   
@@ -83,20 +85,21 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
                     </v-card-actions>
                   </v-card>
                </v-dialog>
-
                <v-flex>
                 <v-icon color="primary">people</v-icon>&nbsp;<v-chip v-for="usr in team.users" close @input="removeUser(usr.id)">{{async(usr).name}}</v-chip>
                </v-flex>
              </v-card-text>
              </v-card>
             <v-card class="mb-3">
-            <v-card-title>Rubric</v-card-title>
+              <v-card-title>Rubric</v-card-title>
               <v-card-text>
-             <quill-editor v-if="text" v-model="text.text"></quill-editor>
-             </v-card-text>
-             </v-card>
-  		    </v-form>
-  		    <v-layout row><v-btn button v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn></v-layout>
+               <quill-editor v-if="text" v-model="text.text"></quill-editor>
+              </v-card-text>
+            </v-card>
+            <v-layout row>
+              <v-btn button v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+              <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="success">Saved!</v-alert></v-flex>
+            </v-layout>
         </v-layout>
        </v-container>"""
 
@@ -108,6 +111,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
   data("dialog", false)
   data("valid",false)
   data("user", null)
+  data("success", false)
   data("rules", literal(
     required=(value:UndefOr[String]) => if(value.filter(_ != null).exists(!_.isEmpty)) true else "Required",
     email = (value:String) => if(Pattern.matches(emailPattern, value)) true else "Valid email required"))
@@ -134,12 +138,9 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
   }}:js.ThisFunction)
 
   method("submit")({c:facade => {
-    Service.save(c.team).combineLatest(TextService.save(c.text)).subscribe(x => window.close())
-
-
-    //window.close()
+    Service.save(c.team).combineLatest(TextService.save(c.text)).subscribe(x => c.success = true, e => c.failure = true, ()=> c.success = true)
   }}:js.ThisFunction)
 
-  method("cancel"){() => window.close()}
+
 }
 

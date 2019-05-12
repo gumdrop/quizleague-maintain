@@ -78,7 +78,7 @@ object LoginService{
 
     val user = SiteUserService.siteUserForEmail(email)
 
-    user.defaultIfEmpty(js.Array[SiteUser]()).map(su => su.headOption.exists(u => {
+    user.defaultIfEmpty(Option.empty[SiteUser]).map(su => su.exists(u => {
 
       val actionCodeSettings = literal().asInstanceOf[ActionCodeSettings]
       import window.location
@@ -132,7 +132,7 @@ object LoginService{
 
         })
         .`catch`( (error:js.Any) => {
-          println(error)
+            println(error)
             c.$router.push("/login/failed")
         })
     }

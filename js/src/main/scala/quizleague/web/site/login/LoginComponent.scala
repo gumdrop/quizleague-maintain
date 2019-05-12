@@ -19,6 +19,9 @@ import js.Dynamic._
 @js.native
 trait LoginPage extends VueRxComponent{
   var showAlert:Boolean
+  var showProgress:Boolean
+  var showFailure:Boolean
+  var failureText:String
 }
 
 object LoginPage extends RouteComponent with NoSideMenu{
@@ -30,22 +33,31 @@ object LoginPage extends RouteComponent with NoSideMenu{
     <v-layout column>
     <v-card>
       <v-card-text>
-      <ql-named-text name="login-text"></ql-named-text>
-      <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
-      <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
-     </v-card-text>
+        <ql-named-text name="login-text"></ql-named-text>
+        <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
+        <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
+        <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
+        <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
+       </v-card-text>
      </v-card>
+
     </v-layout >
     </v-container>
     """
   components(TeamEditComponent)
 
   data("showAlert", false)
+  data("showProgress", false)
+  data("showFailure", false)
+  data("failureText","")
 
 
    def login(c:facade, email:String, forward:String) = {
 
-    LoginService.login(email, forward).subscribe(b => {c.showAlert = b})
+     c.showProgress = true
+     LoginService.login(email, forward).subscribe(
+       b => {c.showAlert = b;c.failureText = "You are not registered, or do not belong to a team.  Contact your team captain or the webmaster.";c.showFailure = !b;c.showProgress = false},
+       e => {c.failureText = e.toString;c.showFailure = true;c.showProgress=false})
   }
 
   data("email", null)

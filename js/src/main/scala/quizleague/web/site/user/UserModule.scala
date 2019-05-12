@@ -23,9 +23,9 @@ object UserService extends UserGetService with UserPutService{
 object SiteUserService extends SiteUserGetService with SiteUserPutService with PostService{
   val userService = UserService
 
-  def siteUserForEmail(email:String):Observable[js.Array[SiteUser]] = {
+  def siteUserForEmail(email:String):Observable[Option[SiteUser]] = {
     import quizleague.util.json.codecs.DomainCodecs._
-    command[List[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
+    command[Option[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _))
   }
 
   def siteUserForUid(uid:String):Observable[Option[SiteUser]] = {

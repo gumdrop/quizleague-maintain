@@ -36,7 +36,7 @@ class SiteEndpoint extends SitePostEndpoints{
   def siteUserForEmail(@PathParam("email") email:String) ={
 
     def createAndSave(user:Option[User]):SiteUser = {
-      val siteUser = SiteUser(UUID.randomUUID().toString,"https://storage.googleapis.com/chiltern-ql-firestore.appspot.com/files/631929649c.png","", user.map(u => new Ref[User]("user",u.id)), None)
+      val siteUser = SiteUser(UUID.randomUUID().toString,"https://storage.googleapis.com/chiltern-ql-firestore.appspot.com/files/defaultAvatar.png","", user.map(u => new Ref[User]("user",u.id)), None)
       save(siteUser)
       siteUser
     }
@@ -44,13 +44,14 @@ class SiteEndpoint extends SitePostEndpoints{
 
     val lce = email.toLowerCase()
 
-    val user = list[User].filter(_.email.toLowerCase == lce).headOption
+    val user = list[User].find(_.email.toLowerCase == lce)
+    def team(userID:String) = list[Team].find(t => t.users.exists(_.id ==userID)).isDefined
 
-    val siteUser = user.map(u => list[SiteUser].filter(su => su.user.map(_.id == u.id).getOrElse(false)))
+    val siteUser = user.filter(u => team(u.id)).map(u => list[SiteUser].find(su => su.user.map(_.id == u.id).getOrElse(false)))
 
-    val result:Option[List[SiteUser]] = siteUser.map(l => if(l.isEmpty) List(createAndSave(user)) else l)
+    val result:Option[SiteUser] = siteUser.flatMap(l => if(l.isDefined) l else l.map(u => createAndSave(user)))
 
-    result.getOrElse(List()).asJson.noSpaces
+    result.asJson.noSpaces
 
 
 
