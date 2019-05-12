@@ -122,11 +122,14 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
 
         </v-layout>
       </v-card-text>
-      <v-card-actions><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Details Saved.</v-alert></v-card-actions>
+      <v-card-actions></v-card-actions>
 
       </v-form>
     </v-card>
-    <v-layout row><v-btn primary @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn></v-layout>
+    <v-layout row>
+      <v-btn primary @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+      <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Details Saved.</v-alert></v-flex>
+    </v-layout>
   </v-layout>
 </v-container>
 
@@ -138,7 +141,7 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
     url = (value:String) => if(urlPattern.matcher(value).matches()) true else "Valid URL required"))
   method("saveUser")({(c:facade,user:SiteUser) => SiteUserService.save(user).subscribe(u => c.showAlert = true)}:js.ThisFunction)
   method("forward")({(c:facade, forward:UndefOr[String]) => forward.filter(_ != null).foreach(f => c.$router.push(f))}:js.ThisFunction)
-  subscription("user")(c => LoginService.userProfile.map(_.siteUser))
+  subscription("user")(c => LoginService.userProfile.filter(_ != null).map(_.siteUser))
 
 }
 

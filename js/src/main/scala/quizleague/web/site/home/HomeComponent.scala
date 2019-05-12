@@ -35,7 +35,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
      <ql-title>Home</ql-title>
      <v-layout v-bind="align">
       <v-flex xs12 smAndUp5>
-        <div>
+        <v-card>
           <v-tabs ripple :value="activeTab" slider-color="yellow" centered @click.native="haltTabs()">
               <v-tab key="1">Tables</v-tab>
               <v-tab key="2">Results</v-tab>
@@ -50,7 +50,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
                 <ql-next-fixtures style="min-width:300px" :seasonId="appData.currentSeason.id"></ql-next-fixtures></v-carousel-item>
               </v-tab-item>
           </v-tabs>
-        </div>  
+        </v-card>
       </v-flex>
       <v-flex offset-xs0 offset-md1 xs12>
         <ql-named-text name="front-page"></ql-named-text>
