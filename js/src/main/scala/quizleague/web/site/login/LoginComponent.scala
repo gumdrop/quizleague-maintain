@@ -115,8 +115,8 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
         <v-layout column>
           <v-text-field type="text" label="Handle" v-model="user.handle" :rules=[rules.required]></v-text-field>
           <v-text-field type="url" label="Avatar" v-model="user.avatar" :rules=[rules.required,rules.url]>
-            <template slot="append" size="36">
-            <v-avatar><img :src="user.avatar"></v-avatar>
+            <template slot="append">
+            <v-avatar  size="36"><img :src="user.avatar"></v-avatar>
             </template>
           </v-text-field>
 

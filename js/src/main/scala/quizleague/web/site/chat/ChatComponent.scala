@@ -3,12 +3,9 @@ package quizleague.web.site.chat
 import java.time.LocalDateTime
 
 import com.felstar.scalajs.vue.VueRxComponent
-import org.scalajs.dom
 import quizleague.web.core.{Component, DialogComponent, DialogComponentConfig}
 import quizleague.web.model._
 import quizleague.web.site.login.{LoggedInUser, LoginService}
-import quizleague.web.site.user.{SiteUserService, SiteUserWatchService}
-import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
 
 import scala.scalajs.js
@@ -98,15 +95,18 @@ object ChatMessages extends Component{
         :key="message.id"
         small >
         <template v-slot:icon>
-          <v-avatar>
+          <v-avatar size="36">
             <img :src="async(message.user).avatar">
           </v-avatar>
         </template>
         <template v-slot:opposite>
-          <span>{{async(message.user).handle}}</span>
+          <div>
+            <span>{{async(message.user).handle}}</span>
+            <div class="caption">{{message.date | datetime('d MMM yyy - hh:mm')}}</div>
+          </div>
         </template>
         <v-card class="elevation-2">
-          <v-card-text>{{message.message}}</v-card-text>
+          <v-card-text><p>{{message.message}}</p></v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>
@@ -123,18 +123,8 @@ object ChatMessages extends Component{
 
 }
 
-@js.native
-trait LoginButton extends VueRxComponent {
-  var login:Boolean = false
-  var profile:Boolean = false
-  val id:js.UndefOr[String]
-  val parentKey:String
-  val user:SiteUser
-}
 
-object LoginButton extends Component with DialogComponentConfig{
-
-  type facade = LoginButton with DialogComponent
+object LoginButton extends Component{
 
   val name = "ql-login-button"
   val template="""
