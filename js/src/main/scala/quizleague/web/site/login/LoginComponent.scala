@@ -3,18 +3,15 @@ package quizleague.web.site.login
 import java.util.regex.Pattern
 
 import com.felstar.scalajs.vue.{VueRxComponent, VuetifyComponent}
-import firebase.Firebase
-import firebase.auth.Auth
 import quizleague.web.core._
 import quizleague.web.model.SiteUser
 import quizleague.web.site.NoSideMenu
-import quizleague.web.site.SiteComponent.subscription
+import quizleague.web.site.team.TeamEditComponent
 import quizleague.web.site.user.SiteUserService
-import quizleague.web.useredit.TeamEditComponent
 
 import scala.scalajs.js
+import scala.scalajs.js.Dynamic._
 import scala.scalajs.js.UndefOr
-import js.Dynamic._
 
 @js.native
 trait LoginPage extends VueRxComponent{
@@ -44,8 +41,6 @@ object LoginPage extends RouteComponent with NoSideMenu{
     </v-layout >
     </v-container>
     """
-  components(TeamEditComponent)
-
   data("showAlert", false)
   data("showProgress", false)
   data("showFailure", false)

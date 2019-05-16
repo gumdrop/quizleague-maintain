@@ -14,22 +14,24 @@ import quizleague.rest.mail.EmailSender
 trait SitePostEndpoints {
   @POST
   @Path("/result/submit")
-  def resultSubmit(body:String) {
+  def resultSubmit(body:String) = {
     
-    val queue: Queue = QueueFactory.getQueue("results");
-    queue.add(withUrl("/rest/task/submitresult").payload(body));
+    val queue: Queue = QueueFactory.getQueue("results")
+    queue.add(withUrl("/rest/task/submitresult").payload(body))
+    "Done"
 
   }
   
   @POST
   @Path("/contact/team")
-  def contactTeam(body:String) {
+  def contactTeam(body:String) = {
     
-   import io.circe.parser._
+    import io.circe.parser._
    
-   val mail = deser[TeamEmailCommand](body)
+    val mail = deser[TeamEmailCommand](body)
    
-   EmailSender(mail.sender, load[Team](mail.teamId), mail.text)
+    EmailSender(mail.sender, load[Team](mail.teamId), mail.text)
+    "Done"
 
   }
 }

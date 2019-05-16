@@ -44,7 +44,9 @@ class TaskEndpoint {
       fix.result.isDefined
     })
 
-    userFromEmail(result.email).foreach(u => result.fixtures.foreach(saveFixture(u, result.reportText) _))
+    val user = load[User](result.userID)
+
+    result.fixtures.foreach(saveFixture(user, result.reportText) _)
 
     if (!haveResults) {
 
