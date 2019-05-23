@@ -9,6 +9,7 @@ import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import quill.VueQuillEditor
 import quizleague.web.util.rx._
 import rxscalajs.Observable
+import showdown.VueShowdown
 
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -26,6 +27,7 @@ object SiteApp{
   @JSExport
   def main():Unit = {
     Vue.use(VueQuillEditor)
+    Vue.use(VueShowdown, showdown.defaultOptions)
     Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
     Vue.filter("time", (time:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_TIME.parse(time)))
     Vue.filter("datetime", (datetime:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(datetime)))

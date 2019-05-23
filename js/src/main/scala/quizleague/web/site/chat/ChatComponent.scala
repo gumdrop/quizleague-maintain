@@ -106,7 +106,7 @@ object ChatMessages extends Component{
           </div>
         </template>
         <v-card class="elevation-2">
-          <v-card-text><p>{{message.message}}</p></v-card-text>
+          <v-card-text><vue-showdown :markdown="message.message" ></vue-showdown></v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>

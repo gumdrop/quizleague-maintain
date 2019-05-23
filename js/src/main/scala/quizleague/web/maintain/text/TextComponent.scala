@@ -23,7 +23,7 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
         ></v-text-field>
         <quill-editor v-if="item.mimeType=='text/html'" v-model="item.text">
 		    </quill-editor>
-        <v-textarea v-if="item.mimeType=='text/plain'"
+        <v-textarea v-if="item.mimeType=='text/plain' || item.mimeType=='text/markdown'"
           label="Text"
           v-model="item.text"
           :rules=${valRequired("Text")}
@@ -31,6 +31,7 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
           outline
           auto-grow
         ></v-textarea>
+        <vue-showdown v-if="item.mimeType=='text/markdown'" :markdown="item.text"></vue-showdown>
         </div>
      </v-layout>
      $formButtons

@@ -71,11 +71,22 @@ lazy val web = quizleague.js.settings(
 ).enablePlugins(ScalaJSPlugin)
 
 lazy val release = taskKey[Unit]("release to prod")
+lazy val copyFullOpt = taskKey[Unit]("copy release JS")
 
-release := {
+copyFullOpt := {
   val jsrelease = (fullOptJS in (quizleague.js, Compile)).value
   jsrelease.data.renameTo(new File(file("."), "jvm/src/main/webapp/quizleague-js-opt.js"))
-  (appengineDeploy in (quizleague.jvm,Compile)).toTask("").value
-
+  
 }
+
+
+
+
+release := Def.sequential(
+  copyFullOpt in Compile,
+  (appengineDeploy in (quizleague.jvm,Compile)).toTask("")
+  
+).value
+
+
 

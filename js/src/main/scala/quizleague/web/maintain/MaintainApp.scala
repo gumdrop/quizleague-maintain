@@ -14,13 +14,16 @@ import org.scalajs.dom.raw.HTMLElement
 import js.annotation.JSName
 import java.time.DateTimeUtils
 import java.time.format.DateTimeFormatter
+
 import quizleague.web.util.rx._
 import rxscalajs.Observable
 import quill.VueQuillEditor
+
 import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.annotation.JSExportTopLevel
 import firebase._
 import quizleague.web.store.Firestore
+import showdown._
 
 @JSExportTopLevel("Maintain")
 object MaintainApp{
@@ -32,6 +35,7 @@ object MaintainApp{
    Firestore.setAuthContext()
     
   Vue.use(VueQuillEditor)
+  Vue.use(VueShowdown, showdown.defaultOptions)
   Vue.filter("date", (date:String, format:String) => DateTimeFormatter.ofPattern(format).format(DateTimeFormatter.ISO_LOCAL_DATE.parse(date)))
   Vue.filter("combine", (obs:js.Array[RefObservable[Any]]) => Observable.combineLatest(obs.map(_.obs)).map(_.toJSArray))
   Vue.filter("wrap", (obj:js.Any) => Observable.just(obj))
