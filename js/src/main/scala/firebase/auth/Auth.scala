@@ -32,7 +32,7 @@ import firebase.User
 
       def getRedirectResult(): Promise[js.Any] = js.native
 
-      def onAuthStateChanged(nextOrObserver: Object, error: js.Function1[firebase.auth.Error, Any] = ???, completed: js.Function0[Any] = ???): js.Function0[Any] = js.native
+      def onAuthStateChanged(nextOrObserver: js.Function1[User,Any], error: js.Function1[firebase.auth.Error, Any] = ???, completed: js.Function0[Any] = ???): js.Function0[Any] = js.native
 
       def sendPasswordResetEmail(email: String): Promise[js.Any] = js.native
 
@@ -58,18 +58,37 @@ import firebase.User
 
       def isSignInWithEmailLink(href:String):Boolean = js.native
 
-      def signInWithEmailLink(email:String, href:String):Promise[js.Any] = js.native
+      def signInWithEmailLink(email:String, href:String):Promise[UserCredential] = js.native
     }
 
     @js.native
     trait AuthCredential extends js.Object {
-      var provider: String = js.native
+      val provider: String = js.native
+      val signInMethod:String = js.native
+    }
+
+    @js.native
+    trait UserCredential extends js.Object {
+      val additionalUserInfo:js.UndefOr[AdditionalUserInfo] = js.native
+      val credential:AuthCredential = js.native
+      val operationType:js.UndefOr[String] = js.native
+      val user:User
+    }
+
+    @js.native
+    trait AdditionalUserInfo extends js.Object {
+      val isNewUser: Boolean = js.native
+      val profile: js.Dynamic = js.native
+      val providerId: String = js.native
+      val username: js.UndefOr[String] = js.native
     }
 
     @js.native
     trait AuthProvider extends js.Object {
       var providerId: String = js.native
     }
+
+
 
     @js.native
     trait ActionCodeSettings extends js.Object {

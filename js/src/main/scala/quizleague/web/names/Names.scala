@@ -65,3 +65,15 @@ trait CompetitionStatisticsNames extends ComponentNames {
 trait NotificationNames extends ComponentNames {
   override val typeName = "notification"
 }
+
+trait ChatNames extends ComponentNames {
+  override val typeName = "chat"
+}
+
+trait ChatMessageNames extends ComponentNames {
+  override val typeName = "chatmessage"
+}
+
+trait SiteUserNames extends ComponentNames {
+  override val typeName = "siteuser"
+}

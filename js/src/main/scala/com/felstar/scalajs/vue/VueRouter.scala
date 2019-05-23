@@ -2,6 +2,7 @@ package com.felstar.scalajs.vue
 
 import scala.scalajs.js
 import js.Dynamic.literal
+import js.|
 import scala.scalajs.js.JSConverters._
 import org.scalajs.dom
 import org.scalajs.dom._
@@ -49,6 +50,7 @@ object Router{
 //  val props: js.Any = js.native
 //  val alias: js.Any = js.native
 //  val children: js.Array[RouteConfig] = js.native
+//  val beforeEnter: js.Function3[js.Any, js.Any, js.Function1[Boolean|String|Exception, Unit], Unit] = js.native
 //}
 
 @js.native

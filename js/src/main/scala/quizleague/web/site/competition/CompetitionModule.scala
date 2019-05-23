@@ -80,7 +80,7 @@ object CompetitionViewService extends SeasonWatchService {
   
   def parentSeason(competitionId:String) = {
     
-    val seasons = SeasonService.list
+    val seasons = SeasonService.list()
     
     seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).headOption.fold[Season](null)(identity))
   }

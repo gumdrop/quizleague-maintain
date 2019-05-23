@@ -3,6 +3,7 @@ package quizleague.web.model
 import scala.scalajs.js
 import quizleague.web.util.rx.RefObservable
 import quizleague.web.util.UUID
+import rxscalajs.Observable
 
 
 class Fixtures(
@@ -77,14 +78,16 @@ object Result{
     
 
 class Reports(
-    val id:String,
-    val reports:js.Array[Report],
-    val isEmpty:Boolean) extends Model
+               val id:String,
+               val reports:js.Array[Report],
+               val chat:Observable[Chat],
+               val isEmpty:Boolean) extends Model
     
 object Reports{
   def apply(id:String,
     reports:js.Array[Report],
-    isEmpty:Boolean) = new Reports(id, reports, isEmpty)
+    chat:Observable[Chat],
+    isEmpty:Boolean) = new Reports(id, reports, chat, isEmpty)
 }
     
 
@@ -95,7 +98,7 @@ class Report(
 }
     
 object Report{
-  def apply(    team:RefObservable[Team],
+  def apply(team:RefObservable[Team],
     text:RefObservable[Text]) = new Report(team,text) 
 }
     

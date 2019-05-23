@@ -1,5 +1,7 @@
 package quizleague.web.model
 
+import quizleague.web.util.rx.RefObservable
+
 import scala.scalajs.js
 
 
@@ -15,3 +17,13 @@ object User{
     email:String,
     retired:Boolean = false) = new User(id,name,email,retired)
 }
+
+class SiteUser(
+                val id: String,
+                val handle: String,
+                val avatar: String,
+                val user: RefObservable[User],
+                val uid:Option[String],
+                val retired: Boolean = false
+
+              ) extends Model

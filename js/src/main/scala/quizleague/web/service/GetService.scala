@@ -25,12 +25,13 @@ trait GetService[T <: Model] {
   private[service] val items: Map[String, T] = Map()
   private val observables = Map[String, Observable[U]]()
   private val refObsCache = Map[String, RefObservable[T]]()
-  private var listObservable: Option[Observable[js.Array[U]]] = None
+  private var listObservables: Map[String, Observable[js.Array[U]]] = Map()
 
   def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutSparse _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
+  def key(id:String) = s"$uriRoot/$id"
 
-  def list(): Observable[js.Array[T]] = listFromStorage.map(c => c.map(u => mapOutSparse(u)))
+  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutSparse(u)))
   
   protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutSparse _)) 
 
@@ -38,12 +39,9 @@ trait GetService[T <: Model] {
 
   protected def filterList(u:U) = true
   
-  protected final def listFromStorage(): Observable[js.Array[U]] = {
+  protected final def listFromStorage(parentKey:String = ""): Observable[js.Array[U]] = {
     
-    val obs = listObservable.getOrElse({listFromQuery(db.collection(uriRoot))})
-
-    listObservable = Option(obs)
-    obs
+    listObservables.getOrElseUpdate(parentKey,{listFromQuery(db.collection(s"${if(parentKey.isEmpty)""else s"$parentKey/"}$uriRoot"))})
   }
   
   protected final def listFromQuery(query:Query): Observable[js.Array[U]] = {
@@ -55,6 +53,7 @@ trait GetService[T <: Model] {
       subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u))).map(_.filter(filterList _))
    
   }
+
 
   protected final def add(item: T) = { items += ((item.id, item)); item }
   protected final def getFromStorage(id: String): Observable[U] = {

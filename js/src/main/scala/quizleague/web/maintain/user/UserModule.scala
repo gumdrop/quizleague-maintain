@@ -25,3 +25,7 @@ object UserService extends UserGetService with UserPutService{
   def userForEmail(email:String) = query(db.collection(uriRoot).where("email","==",email)).map(_.headOption)
 }
 
+object SiteUserService extends SiteUserGetService with SiteUserPutService{
+  val userService = UserService
+}
+

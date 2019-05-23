@@ -25,13 +25,13 @@ import quizleague.web.site.season._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import quizleague.web.useredit.TeamEditPage
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.competition.CompetitionService
 import quizleague.web.model.CompetitionType
 import quizleague.util.StringUtils._
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.site.fixtures.FixturesService
+import quizleague.web.site.login.LoginService
 import quizleague.web.util.{UUID, rx}
 import quizleague.web.util.Logging._
 
@@ -43,9 +43,10 @@ object TeamModule extends Module{
       
       RouteConfig(path = "/team/start", 
           components = Map("default" -> StartTeamPage, "title" -> StartTeamTitleComponent,"sidenav" -> TeamMenuComponent)),
-      RouteConfig(path = "/team/login",
-          components = Map("default" -> TeamLoginPage, "title" -> LoginTitleComponent,"sidenav" -> TeamMenuComponent)),
-          RouteConfig(path = "/team/:id", 
+      RouteConfig(path = "/team/edit",
+          components = Map("default" -> TeamEditPage, "sidenav" -> TeamMenuComponent),
+          beforeEnter = LoginService.routeGuard _),
+      RouteConfig(path = "/team/:id",
           components = Map("default" -> TeamPage, "title" -> TeamTitleComponent,"sidenav" -> TeamMenuComponent)),
       RouteConfig(path = "/team/:id/fixtures", 
           components = Map("default" -> TeamFixturesPage, "title" -> TeamFixturesTitle,"sidenav" -> TeamMenuComponent)),
@@ -70,12 +71,16 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
     import quizleague.util.json.codecs.DomainCodecs._
     command[List[U],String](List("site","team-for-email",email),None).map(_.map(mapOutSparse _).toJSArray)
   }
+
+  def teamForUser(userID:String):Observable[Option[Team]] = {
+    list().map(_.filter(_.users.exists(_.id == userID)).headOption)
+  }
   
   def sendEmailToTeam(sender:String, text:String, team:Team){
     import quizleague.util.json.codecs.CommandCodecs._
     
     val cmd = TeamEmailCommand(sender,text,team.id)
-    command[String,TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
+    command[List[String],TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
   }
   
   def leagueStanding(teamId:String):Observable[js.Array[Standing]] = ApplicationContextService.get.flatMap(

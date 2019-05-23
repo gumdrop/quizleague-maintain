@@ -39,14 +39,16 @@ import quizleague.web.maintain.MaintainModule
 import quizleague.web.site.common._
 import java.time.LocalDateTime
 
+import quizleague.web.site.chat.ChatModule
 import quizleague.web.site.competition.statistics.CompetitionStatisticsModule
+import quizleague.web.site.login.LoginModule
 import rxscalajs.Observable
 
 
 
 object SiteModule extends Module {
   
-  override val modules = @@(CommonModule, HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule, CompetitionStatisticsModule)
+  override val modules = @@(CommonModule, HomeModule, TeamModule, TextModule, VenueModule, FixturesModule, ResultsModule, LeagueTableModule, CompetitionModule, SeasonModule, CalendarModule, MaintainModule, CompetitionStatisticsModule, ChatModule, LoginModule)
   
   override val routes = @@(
       RouteConfig(path="/links", components = Map("default" -> LinksComponent, "title" -> LinksTitleComponent)),

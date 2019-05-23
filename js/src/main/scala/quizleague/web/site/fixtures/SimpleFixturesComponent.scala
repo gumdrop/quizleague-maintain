@@ -1,10 +1,8 @@
 package quizleague.web.site.fixtures
 
 import scala.scalajs.js
-
 import quizleague.web.model.Fixture
 import quizleague.web.util.rx._
-
 import quizleague.web.core._
 import rxscalajs.Observable
 import quizleague.web.core.IdComponent
@@ -13,6 +11,9 @@ import com.felstar.scalajs.vue._
 import quizleague.web.site.results.TableUtils
 import rxscalajs.Observable
 import quizleague.web.core.DialogComponentConfig
+import org.scalajs.dom
+import quizleague.web.site.chat.ChatService
+import quizleague.web.site.user.SiteUserService
 
 
 @js.native
@@ -77,7 +78,15 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                    <span>Close</span>
                  </v-tooltip>
                </v-card-title>
-              <ql-reports :id="fixture.result.reports.id"></ql-reports>
+              <ql-reports :id="fixture.result.reports.id" ></ql-reports>
+              <v-card-text>
+                <ql-chat :parentKey=parentKey(fixture.result.reports.id)></ql-chat>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <ql-login-button label="Login for chat" ></ql-login-button>
+
+               </v-card-actions>
             </v-card>
          </v-dialog>
         </td> 
@@ -88,7 +97,12 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   prop("fixture")
   prop("inlineDetails")
   method("nameClass")(nameClass _ )
+  method("parentKey"){id:String => ReportsService.key(id)}
+
+
 }
+
+
 
 object ReportsComponent extends Component{
   type facade = IdComponent

@@ -120,5 +120,5 @@ object VenueMenuComponent extends Component with SideMenu{
     </v-list-tile>
   </ql-side-menu>
 """
-    subscription("venues")(v => VenueService.list.map(_.sortBy(_.name)))
+    subscription("venues")(v => VenueService.list().map(_.sortBy(_.name)))
 }

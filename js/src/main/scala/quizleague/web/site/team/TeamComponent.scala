@@ -9,11 +9,13 @@ import quizleague.web.core.RouteComponent
 import quizleague.web.model.ApplicationContext
 import quizleague.web.model.Team
 import quizleague.web.site.ApplicationContextService
+
 import scala.scalajs.js
 import quizleague.web.site.fixtures.FixtureService
 import quizleague.web.util.Clipboard
 import org.scalajs.dom
 import quizleague.web.site.SideMenu
+import quizleague.web.site.login.LoginService
 
 object TeamPage extends RouteComponent{
   override val template = """<ql-team :id="$route.params.id"></ql-team>"""
@@ -224,8 +226,8 @@ object TeamMenuComponent extends RouteComponent with SideMenu{
        <v-list-tile to="/team/start">
         <v-list-tile-content><v-list-tile-title >Start a team</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile to="/team/login">
-          <v-list-tile-content><v-list-tile-title >Login</v-list-tile-title></v-list-tile-content>
+      <v-list-tile v-if="user" to="/team/edit">
+          <v-list-tile-content><v-list-tile-title >Edit Team Details</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-divider></v-divider>
        <v-list-tile v-if="teams" v-for="team in teams" :key="team.id" :to="'/team/' + team.id">
@@ -233,6 +235,7 @@ object TeamMenuComponent extends RouteComponent with SideMenu{
        </v-list-tile>
      </ql-side-menu>
      """
-   subscription("teams")(c => TeamService.list.map(_.sortBy(_.shortName)))
+   subscription("teams")(c => TeamService.list().map(_.sortBy(_.shortName)))
+  subscription("user")(c => LoginService.userProfile)
 }
 

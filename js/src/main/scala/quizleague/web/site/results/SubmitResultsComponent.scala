@@ -3,6 +3,7 @@ package quizleague.web.site.results
 import quizleague.web.core._
 import quizleague.web.site.user.UserService
 import quizleague.web.site.fixtures.FixtureService
+
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.site._
@@ -10,10 +11,11 @@ import quizleague.web.model._
 import quizleague.web.util.validation.Functions
 import quizleague.web.core.DialogComponentConfig
 import quizleague.web.core.DialogComponent
+import quizleague.web.site.login.{LoggedInUser, LoginService}
 
 @js.native
 trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with DialogComponent{
-  var email:String
+  var user:LoggedInUser
   var fixtures:js.Array[Fixture]
   val appData:ApplicationContext
   var hasResults:Boolean
@@ -30,8 +32,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   val template ="""
     <v-container>
       <v-form v-model="valid">
-      <v-layout column v-if="appData">
-       <v-text-field v-model="email" label="Enter your email address" prepend-icon="email" :rules="[required('Your mail address')]" type="email"></v-text-field>
+      <v-layout column>
       <div v-if="hasResults">This result has been submitted. You may add a match report.</div>
       <p></p>
       <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>   
@@ -61,11 +62,9 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
     </v-form>
     </v-container>"""
   
-  def handleEmail(c:facade) = {
-    if(c.email.toLowerCase.matches(emailRegex)) {
-      c.showProgress = true
-      FixtureService.fixturesForResultSubmission(c.email, c.appData.currentSeason.id).debounceTime(100).subscribe(handleFixtures(c) _)
-    }
+  def getFixtures(c:facade, user:LoggedInUser) = {
+    c.showProgress = true
+    FixtureService.fixturesForResultSubmission(user.team.id).subscribe(handleFixtures(c) _)
   }
   
   def handleFixtures(c:facade)(fixtures:js.Array[Fixture]) = {
@@ -90,21 +89,23 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
   def submit(c:facade){
     c.confirm = false
-    FixtureService.submitResult(c.fixtures, c.reportText, c.email)
+    FixtureService.submitResult(c.fixtures, c.reportText, c.user.siteUser.user.id)
     c.reportText = ""
     c.fixtures = js.Array()
     c.hasResults = false
   }
   
-  def mounted(c:facade) = c.$subscribeTo(c.$watchAsObservable("email"),(x:js.Any) => handleEmail(c))
+ def mounted(c:facade) = LoginService.userProfile.subscribe(user => getFixtures(c,user))
   
   
   subscription("appData")(c => ApplicationContextService.get)
+  subscription("user")(c => LoginService.userProfile)
+
   method("submit")({submit _}:js.ThisFunction)
   method("preSubmit")({preSubmit _}:js.ThisFunction)
   method("cancel")({cancel _}:js.ThisFunction)
   method("required")(Functions.required _)
-  data("email","")
+  method("getFixtures")({getFixtures _}:js.ThisFunction)
   data("hasResults",false)
   data("fixtures", js.Array())
   data("reportText",null)

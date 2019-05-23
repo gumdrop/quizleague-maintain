@@ -7,12 +7,14 @@ import quizleague.web.site.venue.VenueService
 import quizleague.web.model._
 import quizleague.web.site.team.TeamService
 import quizleague.web.core._
+
 import scalajs.js
 import js.JSConverters._
 import rxscalajs.Observable
 import rxscalajs.Observable._
 import quizleague.web.model.CompetitionType
 import java.time.LocalDate
+
 import quizleague.web.util.Logging._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition.CompetitionService
@@ -25,8 +27,11 @@ import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
 import java.time.LocalDate.{now => today}
 import java.time.LocalTime
+
 import rxscalajs.Observable
 import java.time.LocalDateTime
+
+import quizleague.web.site.chat.ChatService
 
 object FixturesModule extends Module {
 
@@ -153,14 +158,32 @@ object FixtureService extends FixtureGetService with PostService{
     fixtures.map(_.filter(f => (f.date + f.time) <= now))
 
   }
+
+  def fixturesForResultSubmission(teamId:String) = {
+    val today = LocalDate.now.toString()
+    val now = today + LocalTime.now().toString()
+
+    val fixtures: Observable[js.Array[Fixture]] =
+      recentTeamResults(teamId,4).map(
+            _.groupBy(_.date)
+              .toList
+              .sortBy(_._1)(Desc)
+              .take(1)
+              .map { case (k, v) => v }
+              .toJSArray
+              .flatMap(x => x))
+      .map(_.sortBy(_.subsidiary))
+
+    fixtures.map(_.filter(f => (f.date + f.time) <= now))
+  }
   
 
-  def submitResult(fixtures:js.Array[Fixture], reportText:String, email:String) = {
+  def submitResult(fixtures:js.Array[Fixture], reportText:String, userID:String) = {
     import quizleague.util.json.codecs.CommandCodecs._
     
-    val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), email)
+    val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), userID)
     
-    command[String,ResultsSubmitCommand](List("site","result","submit"),Some(cmd)).subscribe(x => Unit)
+    command[List[String],ResultsSubmitCommand](List("site","result","submit"),Some(cmd)).subscribe(x => Unit)
   }
   
 }
@@ -168,5 +191,6 @@ object FixtureService extends FixtureGetService with PostService{
 object ReportsService extends ReportsGetService {
   val textService = TextService
   val teamService = TeamService
+  val chatService = ChatService
 }
 
