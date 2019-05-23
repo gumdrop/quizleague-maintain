@@ -63,9 +63,19 @@ lazy val quizleague = crossProject.in(file(".")).
 lazy val server = quizleague.jvm.settings(
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
 ).enablePlugins(AppenginePlugin)
+
 lazy val web = quizleague.js.settings(
 	scalaJSUseMainModuleInitializer := false,
 	scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 ).enablePlugins(ScalaJSPlugin)
+
+lazy val release = taskKey[Unit]("release to prod")
+
+release := {
+  val jsrelease = (fullOptJS in (quizleague.js, Compile)).value
+  jsrelease.data.renameTo(new File(file("."), "jvm/src/main/webapp/quizleague-js-opt.js"))
+  (appengineDeploy in (quizleague.jvm, Compile)).inputTaskValue.parsed
+
+}
 
