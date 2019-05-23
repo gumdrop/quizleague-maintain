@@ -43,22 +43,5 @@ object SiteUserService extends SiteUserGetService with SiteUserPutService with P
   }
 }
 
-object SiteUserWatchService{
 
-  private val _siteUser:Subject[SiteUser] = ReplaySubject()
-
-  val key = "siteUserID"
-
-  setSiteUserID(dom.window.localStorage.getItem(key))
-
-  def siteUser:Observable[SiteUser] = _siteUser
-
-  def setSiteUserID(id:String)  {
-    SiteUserService.get(id).take(1).subscribe(u => {_siteUser.next(u); dom.window.localStorage.setItem(key, id)})
-
-  }
-
-  def getSiteUserID() = dom.window.localStorage.getItem(key)
-
-}
 

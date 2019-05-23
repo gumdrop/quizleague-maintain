@@ -108,8 +108,9 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
       <v-form v-model="valid" ref="fm">
        <v-card-text>
         <v-layout column>
-          <v-text-field type="text" label="Handle" v-model="user.handle" :rules=[rules.required]></v-text-field>
-          <v-text-field type="url" label="Avatar" v-model="user.avatar" :rules=[rules.required,rules.url]>
+          <ql-named-text v-if="$route.query.first == 'true'" name="profile-first-time"></ql-named-text>
+          <v-text-field type="text" label="Handle" v-model="user.handle" :rules="[rules.required]" hint="This is how you'll be identified in chat messages." persistent-hint="true"></v-text-field>
+          <v-text-field type="url" label="Avatar" v-model="user.avatar" :rules="[rules.required,rules.url]" hint="This is how you'll be identified in chat messages." persistent-hint="true">
             <template slot="append">
             <v-avatar  size="36"><img :src="user.avatar"></v-avatar>
             </template>
@@ -122,8 +123,8 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
       </v-form>
     </v-card>
     <v-layout row>
-      <v-btn primary @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
-      <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Details Saved.</v-alert></v-flex>
+      <v-btn primary :disabled="!valid" @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+      <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Settingsreload Saved.</v-alert></v-flex>
     </v-layout>
   </v-layout>
 </v-container>

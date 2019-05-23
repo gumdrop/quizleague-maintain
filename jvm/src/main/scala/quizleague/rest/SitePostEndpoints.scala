@@ -10,15 +10,17 @@ import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import quizleague.domain.command.TeamEmailCommand
 import quizleague.rest.mail.EmailSender
+import io.circe._, io.circe.syntax._
 
 trait SitePostEndpoints {
   @POST
   @Path("/result/submit")
   def resultSubmit(body:String) = {
+
     
     val queue: Queue = QueueFactory.getQueue("results")
     queue.add(withUrl("/rest/task/submitresult").payload(body))
-    "Done"
+    List[String]().asJson.noSpaces
 
   }
   
@@ -31,7 +33,7 @@ trait SitePostEndpoints {
     val mail = deser[TeamEmailCommand](body)
    
     EmailSender(mail.sender, load[Team](mail.teamId), mail.text)
-    "Done"
+    List[String]().asJson.noSpaces
 
   }
 }

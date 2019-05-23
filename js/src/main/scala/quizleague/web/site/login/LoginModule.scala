@@ -2,23 +2,18 @@ package quizleague.web.site.login
 
 import com.felstar.scalajs.vue.VueComponent
 import firebase.Firebase
-import firebase.auth.{ActionCodeSettings, UserCredential}
-import org.scalajs.dom
+import firebase.auth.ActionCodeSettings
 import org.scalajs.dom.window
 import quizleague.web.core.{Module, RouteConfig, _}
-import quizleague.web.site.user.{SiteUserService, SiteUserWatchService}
-import rxscalajs.{Observable, Subject}
 import quizleague.web.model._
-import quizleague.web.site.login.LoginCheckComponent.facade
 import quizleague.web.site.team.TeamService
-import quizleague.web.site.user.SiteUserWatchService.setSiteUserID
-import quizleague.web.store.Firestore
+import quizleague.web.site.user.SiteUserService
 import rxscalajs.subjects.ReplaySubject
-import quizleague.web.util.Logging._
+import rxscalajs.{Observable, Subject}
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
-import js.|
+import scala.scalajs.js.|
 
 
 object LoginModule extends Module{
@@ -121,7 +116,7 @@ object LoginService{
             su.headOption.foreach(s => {SiteUserService.setUid(s, result.user.uid)
             window.localStorage.removeItem("emailForSignIn")
               if(result.additionalUserInfo.fold(false)(_.isNewUser)){
-                c.$router.push(s"/login/profile?forward=$forward")
+                c.$router.push(s"/login/profile?first=true&forward=$forward")
               }
               else{
                 c.$router.push(forward)

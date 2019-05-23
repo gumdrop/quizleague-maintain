@@ -80,7 +80,7 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
     import quizleague.util.json.codecs.CommandCodecs._
     
     val cmd = TeamEmailCommand(sender,text,team.id)
-    command[String,TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
+    command[List[String],TeamEmailCommand](List("site","email","team"),Some(cmd)).subscribe(x => Unit)
   }
   
   def leagueStanding(teamId:String):Observable[js.Array[Standing]] = ApplicationContextService.get.flatMap(

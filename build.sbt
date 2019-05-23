@@ -75,7 +75,7 @@ lazy val release = taskKey[Unit]("release to prod")
 release := {
   val jsrelease = (fullOptJS in (quizleague.js, Compile)).value
   jsrelease.data.renameTo(new File(file("."), "jvm/src/main/webapp/quizleague-js-opt.js"))
-  (appengineDeploy in (quizleague.jvm, Compile)).inputTaskValue.parsed
+  (appengineDeploy in (quizleague.jvm,Compile)).toTask("").value
 
 }
 
