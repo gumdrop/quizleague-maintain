@@ -31,11 +31,13 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
           outline
           auto-grow
         ></v-textarea>
-        <vue-showdown v-if="item.mimeType=='text/markdown'" :markdown="item.text"></vue-showdown>
+        <vue-showdown v-if="item.mimeType=='text/markdown'" :flavor="showdown.flavor"  :vueTemplate="true"  :options="showdown.options" :markdown="item.text"></vue-showdown>
         </div>
      </v-layout>
      $formButtons
     </v-form>
   </v-container>"""
+
+  data("showdown", showdown.defaultOptions)
 
 }

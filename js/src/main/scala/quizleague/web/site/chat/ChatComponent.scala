@@ -106,11 +106,13 @@ object ChatMessages extends Component{
           </div>
         </template>
         <v-card class="elevation-2">
-          <v-card-text><vue-showdown :markdown="message.message" ></vue-showdown></v-card-text>
+          <v-card-text><vue-showdown :markdown="message.message"  :vueTemplate="true" :flavor="showdown.flavor" :options="showdown.options"></vue-showdown></v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>
   """
+
+  data("showdown", showdown.defaultOptions)
 
   props("parentKey","chatID")
 

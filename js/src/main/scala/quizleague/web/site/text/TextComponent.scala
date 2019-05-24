@@ -23,10 +23,12 @@ object TextComponent extends Component {
           <div v-if="text">
             <div v-if="text.mimeType=='text/html'" v-html="text.text"></div>
             <div v-if="text.mimeType=='text/plain'" v-text="text.text"></div>
-            <vue-showdown v-if="text.mimeType=='text/markdown'" :markdown="text.text" :options="{'table':true,'emoji':true}"></vue-showdown>
+            <vue-showdown v-if="text.mimeType=='text/markdown'" :markdown="text.text" :vueTemplate="true" :flavor="showdown.flavor" :options="showdown.options"></vue-showdown>
           </div>"""
-     props("id")
-     subscription("text","id")(v => TextService.get(v.id))
+
+  data("showdown", showdown.defaultOptions)
+  props("id")
+  subscription("text","id")(v => TextService.get(v.id))
 
 
 }
