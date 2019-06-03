@@ -30,6 +30,7 @@ object ChatComponent extends Component{
         <v-textarea label="Your message here"
           clearable="true"
           solo
+          outline
           auto-grow
           v-model="text"
           hide-details
@@ -68,7 +69,6 @@ object ChatComponent extends Component{
     else{
       saveMessage(c.chat.get.id)
     }
-    c.text = " "
     c.text = null
   }
 

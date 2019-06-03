@@ -24,9 +24,6 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
     <v-layout column >
 
     <v-flex align-content-start><ql-named-text :name="item.textName"></ql-named-text></v-flex>
-    <div>
-      <v-btn href="#" v-scroll-to="'#chat'" flat color="primary"><v-icon left>chat</v-icon>Chat</v-btn>
-    </div>
       <v-card>
        <v-card-text>
         <div><b>This season's competition will take place at <a :to="'/venue/' + item.event.venue.id">{{async(item.event.venue).name}}</a> on {{item.event.date | date("d MMMM yyyy")}} starting at {{item.event.time}}</b> </div>

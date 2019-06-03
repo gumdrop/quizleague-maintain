@@ -4,18 +4,21 @@ package quizleague.data
 import com.google.auth.oauth2.GoogleCredentials
 import quizleague.domain.Entity
 import io.circe._
+
 import reflect._
 import scala.collection.JavaConverters._
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
 import java.util.logging.Logger
 
+import quizleague.firestore.Connection
+
 object Storage {
   
   val log = Logger.getLogger(this.getClass.toString())
   
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
-  .setProjectId("ql-firestore-2").build
+  .setProjectId(Connection.projectId).build
 
 
   lazy val datastore = options.getService
