@@ -9,6 +9,7 @@ import quizleague.web.model._
 import quizleague.web.site.fixtures.{AllFixturesComponent, SimpleFixturesComponent}
 import rxscalajs.subjects.ReplaySubject
 import scalajs.js
+import quizleague.util.collection._
 
 object ChatModule extends Module {
 
@@ -21,7 +22,7 @@ object ChatMessageService extends ChatMessageGetService with ChatMessagePutServi
   val chatService = ChatService
 
   def list(parentKey:String, chatID:String):Observable[js.Array[ChatMessage]] =
-    list(s"$parentKey/${chatService.key(chatID)}").map(_.sortBy(_.date))
+    list(s"$parentKey/${chatService.key(chatID)}").map(_.sortBy(_.date)(Desc))
 
 }
 

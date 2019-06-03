@@ -78,6 +78,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                    <span>Close</span>
                  </v-tooltip>
                </v-card-title>
+
               <ql-reports :id="fixture.result.reports.id" ></ql-reports>
               <v-card-text>
                 <ql-chat :parentKey=parentKey(fixture.result.reports.id)></ql-chat>

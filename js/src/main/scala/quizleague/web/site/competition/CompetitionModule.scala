@@ -82,6 +82,6 @@ object CompetitionViewService extends SeasonWatchService {
     
     val seasons = SeasonService.list()
     
-    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).headOption.fold[Season](null)(identity))
+    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).headOption.getOrElse(null))
   }
 }

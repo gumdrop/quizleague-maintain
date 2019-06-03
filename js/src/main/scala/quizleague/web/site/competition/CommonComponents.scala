@@ -106,6 +106,10 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
        <ql-title>{{item.name}} {{formatText(text)}}{{formatSeason(season)}}</ql-title>
        <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{formatText(text)}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+         <v-btn href="#" v-scroll-to="'#chat'" flat ><v-icon left>chat</v-icon><span>Chat</span></v-btn>
+      </v-toolbar-items>
     </v-toolbar>"""
   
   props("id","text")

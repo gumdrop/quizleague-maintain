@@ -14,13 +14,13 @@ object VenueComponent extends ItemComponentConfig[Venue] with RouteComponent {
   <v-container v-if="item">
     <v-form v-model="valid" ref="fm">
       <v-layout column>
-        <v-textarea
+        <v-text-field
           label="Name"
           v-model="item.name"
           :rules=${valRequired("Name")}
           required
         ></v-text-field>
-        <v-text-field
+        <v-textarea
           label="Address"
           v-model="item.address"
           :rules=${valRequired("Address")}

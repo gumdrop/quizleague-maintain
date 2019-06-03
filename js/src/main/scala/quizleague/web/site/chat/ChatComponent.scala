@@ -3,7 +3,7 @@ package quizleague.web.site.chat
 import java.time.LocalDateTime
 
 import com.felstar.scalajs.vue.VueRxComponent
-import quizleague.web.core.{Component, DialogComponent, DialogComponentConfig}
+import quizleague.web.core._
 import quizleague.web.model._
 import quizleague.web.site.login.{LoggedInUser, LoginService}
 import rxscalajs.Observable
@@ -17,6 +17,7 @@ trait ChatComponent extends VueRxComponent {
   val chat:js.UndefOr[Chat]
   var messagesObs:js.UndefOr[Observable[js.Array[ChatMessage]]]
   val user:SiteUser
+  var text:String
 }
 
 object ChatComponent extends Component{
@@ -24,22 +25,23 @@ object ChatComponent extends Component{
   val name = "ql-chat"
   val template = """
   <v-layout column>
-    <v-flex v-if="chat">
-    <ql-chat-messages  :chatID="chat.id" :parentKey="parentKey"></ql-chat-messages>
-    </v-flex>
-    <v-flex>
+    <v-flex class="pb-0">
       <div v-if="user" >
-        <v-textarea placeholder="Chat Here"
+        <v-textarea label="Your message here"
+          clearable="true"
           solo
-          outline
           auto-grow
           v-model="text"
-          rows="1">
-
-          <template slot="append"><v-btn fab flat :disabled="!text" @click="text = addMessage(text)"><v-icon>send</v-icon></v-btn></template>
-
+          hide-details
+          rows="1"
+          :append-icon="text ? 'send' : null"
+          @click:append="addMessage(text)"
+          >
         </v-textarea>
        </div>
+    </v-flex>
+    <v-flex v-if="chat" class="pt-0">
+      <ql-chat-messages  :chatID="chat.id" :parentKey="parentKey"></ql-chat-messages>
     </v-flex>
   </v-layout>"""
 
@@ -49,10 +51,7 @@ object ChatComponent extends Component{
   data("text",null)
   subscription("chat", "parentKey")(c => ChatService
     .list(c.parentKey)
-    .flatMap(chats =>
-      chats.headOption.fold
-      (Observable.from(js.Array[Chat]()))
-      (chat => Observable.just(chat))))
+    .map(chats => chats.headOption.getOrElse(null)))
   subscription("user")(c => LoginService.userProfile.filter(_ != null).map(_.siteUser))
   method("addMessage")({addMessage _}:js.ThisFunction)
 
@@ -63,15 +62,14 @@ object ChatComponent extends Component{
       ChatMessageService.saveMessage(text, c.user.id, chatID, c.parentKey).subscribe(x => x)
     }
 
-    if(c.chat.isEmpty){
+    if(c.chat.filter(_ != null).isEmpty){
       ChatService.add(c.parentKey).subscribe(saveMessage _)
     }
     else{
       saveMessage(c.chat.get.id)
     }
-
-
-    null
+    c.text = " "
+    c.text = null
   }
 
 }
@@ -90,7 +88,7 @@ object ChatMessages extends Component{
   val name = "ql-chat-messages"
   val template = """
     <v-timeline v-if="messages">
-      <v-timeline-item :left="isLeft(message)" :right="!isLeft(message)"
+      <v-timeline-item v-bind="align(message)"
         v-for="message in messages"
         :key="message.id"
         small >
@@ -106,7 +104,7 @@ object ChatMessages extends Component{
           </div>
         </template>
         <v-card class="elevation-2">
-          <v-card-text><vue-showdown :markdown="message.message" ></vue-showdown></v-card-text>
+          <v-card-text class="pb-1"><ql-markdown :text="message.message" ></ql-markdown></v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>
@@ -120,6 +118,7 @@ object ChatMessages extends Component{
   method("isLeft")({(c:facade,m:ChatMessage) => c.user.fold(true)(_.siteUser.id != m.user.id)}:js.ThisFunction)
   method("date"){d:String => LocalDateTime.parse(d).toLocalDate.toString}
   method("time"){d:String => LocalDateTime.parse(d).toLocalTime.toString}
+  method("align")({(c:facade,m:ChatMessage) => c.user.filter(_!=null).fold(js.Object())(u => if(u.siteUser.id != m.user.id)$(left=true)else $(right=true))}:js.ThisFunction)
 
 }
 

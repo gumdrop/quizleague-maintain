@@ -28,7 +28,7 @@ object Firestore {
    Firebase.initializeApp(config)
       
    private val firestore = Firebase.firestore()
-   firestore.enablePersistence(literal(experimentalTabSynchronization=true)).`then`(x => {})
+   firestore.enablePersistence(literal(synchronizeTabs=true)).`then`(x => {})
    
    val db = firestore
    
