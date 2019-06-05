@@ -108,7 +108,7 @@ object LoggedOnMenu extends Component{
   val template = """
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn flat fab v-on="on" small><v-avatar size="36" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
+      <v-btn flat fab v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
     </template>
     <v-list>
         <v-list-tile to="/login/profile" key="1">
