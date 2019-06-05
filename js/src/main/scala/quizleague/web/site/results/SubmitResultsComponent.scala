@@ -45,8 +45,15 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
         <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
       </v-flex>
       <v-flex v-if="fixtures.length > 0">
-        <v-textarea v-model="reportText" outline auto-grow label="Match Report"></v-textarea>
+        <v-textarea v-model="reportText" outline auto-grow label="Match Report" >
+          <template slot="append"><v-btn flat @click="preview=!preview">Preview</v-btn></template>
+        </v-textarea>
         <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
+        <transition name="fade">
+          <div v-if="preview" >
+          <ql-markdown :text="reportText ? reportText : ''"></ql-markdown>
+          </div>
+        </transition>
       </v-flex>
      <v-dialog v-model="confirm" persistent lazy max-width="60%" v-bind="dialogSize" >
         <v-card>
@@ -112,6 +119,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   data("confirm", false)
   data("valid", false)
   data("showProgress", false)
+  data("preview", false)
   
   override val mounted = {(c:facade) => mounted(c)} :js.ThisFunction
 }
