@@ -12,7 +12,6 @@ import com.felstar.scalajs.vue._
 import org.scalajs.dom.raw.HTMLElement
 
 import js.annotation.JSName
-import java.time.DateTimeUtils
 import java.time.format.DateTimeFormatter
 
 import quizleague.web.util.rx._
