@@ -46,13 +46,16 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
       </v-flex>
       <v-flex v-if="fixtures.length > 0">
         <v-textarea v-model="reportText" outline auto-grow label="Match Report" >
-          <template slot="append"><v-btn flat @click="preview=!preview">Preview</v-btn></template>
+          <template slot="append"><v-btn flat @click="preview=!preview"><span>Preview</span></v-btn></template>
         </v-textarea>
         <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
         <transition name="fade">
-          <div v-if="preview" >
-          <ql-markdown :text="reportText ? reportText : ''"></ql-markdown>
-          </div>
+          <v-card v-if="preview" >
+            <v-card-title><v-header class="light-blue--text">Preview</v-header></v-card-title>
+            <v-card-text>
+              <ql-markdown :text="reportText ? reportText : ''"></ql-markdown>
+            </v-card-text>
+          </v-card>
         </transition>
       </v-flex>
      <v-dialog v-model="confirm" persistent lazy max-width="60%" v-bind="dialogSize" >

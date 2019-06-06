@@ -152,7 +152,7 @@ class TaskEndpoint {
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
     def newText(reportText:String) = {
-      val text = new Text(uuid.toString(), reportText, "text/plain")
+      val text = new Text(uuid.toString(), reportText, "text/markdown")
       Storage.save(text)
       Ref[Text]("text",text.id)
     }
