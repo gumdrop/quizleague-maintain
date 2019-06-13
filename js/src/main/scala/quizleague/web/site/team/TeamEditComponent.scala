@@ -97,7 +97,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
             </v-card>
             <v-layout row>
-              <v-btn button v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+              <v-btn button flat color="primary" v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
               <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="success">Saved!</v-alert></v-flex>
             </v-layout>
         </v-layout>

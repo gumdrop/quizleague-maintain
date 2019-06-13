@@ -31,10 +31,10 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
           outline
           auto-grow
         ></v-textarea>
-        <v-layout column>
+        <v-layout column v-if="item.mimeType=='text/markdown'">
         <v-subheader>Preview</v-subheader>
         <div class="elevation-5 pa-3">
-        <ql-markdown v-if="item.mimeType=='text/markdown'" :text="item.text" ></ql-markdown>
+        <ql-markdown  :text="item.text" ></ql-markdown>
         </div>
         </v-layout>
         </div>

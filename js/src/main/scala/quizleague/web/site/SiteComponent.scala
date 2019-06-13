@@ -55,8 +55,14 @@ object SiteComponent extends Component {
 
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn flat fab target="_blank" href="https://www.facebook.com/ChilternQuizLeague/"><v-icon>mdi-facebook-box</v-icon></v-btn>
+      <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
+      <v-tooltip left>
+        <template v-slot:activator="{ on }">
+          <v-btn flat fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
+        </template>
+        <span>Facebook</span>
+      </v-tooltip>
+
         <ql-logged-on-menu :user="user"  v-if="user"></ql-logged-on-menu>
         <v-btn to="/login" flat fab v-if="!user" title="Login"><v-icon left>mdi-login</v-icon></v-btn>
       </v-toolbar-items>
@@ -74,6 +80,10 @@ object SiteComponent extends Component {
       <notifications></notifications>
       </v-container>
     </v-content>
+    <v-bottom-nav app fixed :value="true" v-if="$vuetify.breakpoint.smAndDown">
+        <v-btn flat target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
+        <ql-logged-on-menu :user="user"  v-if="user"><span></ql-logged-on-menu>
+        <v-btn to="/login" flat v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn></v-bottom-nav>
   </v-app>"""
      
   components(ResultNotificationsComponent,TitleComponent, LoggedOnMenu)
