@@ -43,6 +43,7 @@ class LoggedInUser(val siteUser:SiteUser, val email:String, val team:Team) exten
 object LoginService{
 
   private val _loggedInUser:Subject[LoggedInUser] = ReplaySubject()
+  _loggedInUser.next(null)
 
   val userProfile:Observable[LoggedInUser] = _loggedInUser
 
