@@ -94,7 +94,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.name,
           refObs(c.text, textService),
           c.textName,
-          c.event.fold[Event](null)(e => Event(venueService.refObs(e.venue),e.date,e.time,e.duration)),
+          c.event.filter(_ != null).fold[Event](Event(null,null, null,0))(e => Event(venueService.refObs(e.venue),e.date,e.time,e.duration)),
           unwrapOption(c.icon)
         )
       }
@@ -165,7 +165,7 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
     def makeSingleton = DSiC(
       newId(),
       "Singleton",
-      Option(DomEvent(null,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90))),
+      Option(DomEvent(None,LocalDate.now, LocalTime.of(20,30), Duration.ofMinutes(90))),
       "",
       textService.getRef(textService.instance()))
 
