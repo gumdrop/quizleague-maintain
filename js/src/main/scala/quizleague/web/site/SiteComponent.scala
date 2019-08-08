@@ -24,7 +24,6 @@ object SiteComponent extends Component {
 
      val template="""
   <v-app
-    toolbar 
     style="font-size:16px;"
   >
   <v-navigation-drawer
@@ -40,42 +39,51 @@ object SiteComponent extends Component {
     <router-view name="sidenav"></router-view>
     </v-list>
   </v-navigation-drawer>
-    <v-toolbar      
+    <v-app-bar
       color="blue darken-3"
       dark
 	    fixed 
       app 
       clipped-left
-      scroll-off-screen
+      hide-on-scroll
+
       >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-toolbar-side-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text" >
         
         <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':'page-header-small'"><ql-title :title="appData.leagueName"></ql-title></span>
 
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
+      <!--v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp"-->
       <v-tooltip left>
         <template v-slot:activator="{ on }">
-          <v-btn flat fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
+          <v-btn flat icon fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
         </template>
         <span>Facebook</span>
       </v-tooltip>
 
         <ql-logged-on-menu :user="user"  v-if="user"></ql-logged-on-menu>
         <v-btn to="/login" flat fab v-if="!user" title="Login"><v-icon left>mdi-login</v-icon></v-btn>
-      </v-toolbar-items>
+      <!--/v-toolbar-items-->
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
-        <v-btn v-for="item in items" :to="item.to" flat ><v-icon left>{{item.icon}}</v-icon><span>{{item.name}}</span></v-btn>
+        <v-toolbar
+              color="blue darken-3"
+      dark
+      dense
+      flat>
+        <v-toolbar-items>
+        <v-btn text v-for="item in items" :to="item.to" flat ><v-icon left>{{item.icon}}</v-icon><span>{{item.name}}</span></v-btn>
+        </v-toolbar-items>
+        </v-toolbar>
       </div>
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
-		  <v-container fill-height fluid class="px-0 py-0">
+		  <v-container fluid class="px-0 py-0">
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>
-         <router-view ></router-view>
+         <router-view fill-height  ></router-view>
         </v-layout>
       <notifications></notifications>
       </v-container>
@@ -96,7 +104,7 @@ object SiteComponent extends Component {
   data("items",
     @@(menuItem("Home", "/home", "home"),
       menuItem("Teams", "/team", "people"),
-      menuItem("Competitons", "/competition", "mdi-trophy"),
+      menuItem("Competitions", "/competition", "mdi-trophy"),
       menuItem("Results", "/results", "check"),
       menuItem("Venues", "/venue", "location_on"),
       menuItem("Calendar", "/calendar", "mdi-calendar"),
@@ -118,7 +126,7 @@ object LoggedOnMenu extends Component{
   val template = """
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn flat fab v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
+      <v-btn flat fab icon v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
     </template>
     <v-list>
         <v-list-tile to="/login/profile" key="1">
