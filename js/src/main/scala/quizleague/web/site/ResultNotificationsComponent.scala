@@ -26,7 +26,7 @@ object ResultNotificationsComponent extends Component {
             color="info"
           >
           <ql-fixtures-simple :fixtures="fixtures"></ql-fixtures-simple>
-          <v-btn icon flat dark @click.native="messages = false"><v-icon right>close</v-icon</v-btn>
+          <v-btn icon text dark @click.native="messages = false"><v-icon right>close</v-icon</v-btn>
           </v-snackbar>
 """
 

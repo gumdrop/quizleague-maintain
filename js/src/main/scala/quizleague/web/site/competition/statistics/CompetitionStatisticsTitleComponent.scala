@@ -16,7 +16,7 @@ object CompetitionStatisticsTitleComponent extends Component{
     <v-toolbar
       color="purple darken-3"
       dark
-      clipped-left>
+      >
       <v-toolbar-title class="white--text" v-if="item" >
       Roll Of Honour - {{item.competitionName}}
        <ql-title>Roll Of Honour - {{item.competitionName}}</ql-title>

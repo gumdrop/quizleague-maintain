@@ -159,7 +159,7 @@ object HomePageLeagueTable extends Component{
   override val name = "ql-home-page-table"
   
   override val template ="""
-            <v-card flat v-if="tables">
+            <v-card text v-if="tables">
               <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
               <v-card-text grow>
               <v-container fluid>

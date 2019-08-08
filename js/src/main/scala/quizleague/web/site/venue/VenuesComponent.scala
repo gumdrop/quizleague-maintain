@@ -19,7 +19,7 @@ object VenuesTitleComponent extends RouteComponent{
       color="orange darken-3"
       dark
 	    
-      clipped-left>
+      >
       <ql-title>Venues</ql-title>
       <v-toolbar-title class="white--text" >
         Venues

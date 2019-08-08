@@ -44,7 +44,7 @@ object LatestResults extends Component{
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" flat to="results">Show All</v-btn>
+        <v-btn color="primary" text to="results">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -69,7 +69,7 @@ object NextFixtures extends Component{
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" flat to="fixtures">Show All</v-btn>
+        <v-btn color="primary" text to="fixtures">Show All</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -101,14 +101,14 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
   val template = """<v-toolbar      
       color="purple darken-3"
       dark
-      clipped-left>
+      >
       <v-toolbar-title class="white--text" v-if="item && season" >
        <ql-title>{{item.name}} {{formatText(text)}}{{formatSeason(season)}}</ql-title>
        <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{formatText(text)}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-         <v-btn href="#" v-scroll-to="'#chat'" flat ><v-icon left>chat</v-icon><span>Chat</span></v-btn>
+         <v-btn href="#" v-scroll-to="'#chat'" text ><v-icon left>chat</v-icon><span>Chat</span></v-btn>
       </v-toolbar-items>
     </v-toolbar>"""
   

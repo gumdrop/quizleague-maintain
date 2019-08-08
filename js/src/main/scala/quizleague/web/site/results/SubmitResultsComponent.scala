@@ -46,9 +46,9 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
       </v-flex>
       <v-flex v-if="fixtures.length > 0">
         <v-textarea v-model="reportText" outline auto-grow label="Match Report" >
-          <template slot="append"><v-tooltip top><template v-slot:activator="{ on }"><v-btn v-on="on" flat fab small color="light-blue" @click="preview=!preview"><v-icon>mdi-eye-outline</v-icon></v-btn></template><span>Preview</span></v-tooltip></template>
+          <template slot="append"><v-tooltip top><template v-slot:activator="{ on }"><v-btn v-on="on" text fab small color="light-blue" @click="preview=!preview"><v-icon>mdi-eye-outline</v-icon></v-btn></template><span>Preview</span></v-tooltip></template>
         </v-textarea>
-        <div><v-btn v-on:click="preSubmit" flat color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
+        <div><v-btn v-on:click="preSubmit" text color="primary" :disabled="!valid">Submit<v-icon right>send</v-icon></v-btn></div>
         <transition name="fade">
           <v-card v-if="preview" >
             <v-card-title><v-icon color="light-blue">mdi-eye-outline</v-icon><div class="light-blue--text pl-1" >Preview</div></v-card-title>
@@ -64,7 +64,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
           <v-card-text>
             <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
           </v-card-text>
-          </v-card-actions><v-btn flat v-on:click="cancel"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" v-on:click="submit"><v-icon left>check</v-icon>Ok</v-btn></v-card-actions>
+          </v-card-actions><v-btn text v-on:click="cancel"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn text color="primary" v-on:click="submit"><v-icon left>check</v-icon>Ok</v-btn></v-card-actions>
         </v-card>
      </v-dialog>
 
@@ -132,7 +132,7 @@ object SubmitResultsTitleComponent extends RouteComponent{
     <v-toolbar      
       color="red"
       dark
-      clipped-left>
+      >
       <ql-title>Submit Results</ql-title>
       <v-toolbar-title class="white--text" >
         Submit Results

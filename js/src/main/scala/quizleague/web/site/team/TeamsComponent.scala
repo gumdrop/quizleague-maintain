@@ -18,7 +18,7 @@ object TeamsTitleComponent extends RouteComponent{
     <v-toolbar      
       color="amber darken-3"
       dark
-      clipped-left>
+      >
       <ql-title>Teams</ql-title>
       <v-toolbar-title class="white--text" >
         Teams 
@@ -44,7 +44,7 @@ object StartTeamTitleComponent extends RouteComponent{
     <v-toolbar      
       color="amber darken-3"
       dark
-      clipped-left>
+      >
       <ql-title>Starting a Team</ql-title>
       <v-toolbar-title class="white--text" >
         Starting a Team 

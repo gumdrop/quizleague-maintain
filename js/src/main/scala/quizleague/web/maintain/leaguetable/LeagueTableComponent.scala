@@ -52,8 +52,8 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
           <v-btn icon v-on:click="addRow(team)" :disabled="!team" style="position:relative;top:12px"><v-icon>add</v-icon></v-btn><v-select label="Team" v-model="team" :items="unusedTeams()"></v-select>         
          </v-layout>
          <v-layout column>
-           <div><v-btn flat v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
-           <div><v-btn flat v-on:click="item=sort()" color="primary">Sort</v-btn></div>
+           <div><v-btn text v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
+           <div><v-btn text v-on:click="item=sort()" color="primary">Sort</v-btn></div>
           <table>
             <thead>
               <th></th>

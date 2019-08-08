@@ -16,7 +16,7 @@ object CompetitionStatisticsListComponent extends ItemListComponentConfig[Compet
   <v-container>
     <v-layout column>
       <div v-for="item in items" :key="item.id">
-        <v-btn :to="'competitionstatistics/' + item.id" flat left>{{item.competitionName}}</v-btn>
+        <v-btn :to="'competitionstatistics/' + item.id" text left>{{item.competitionName}}</v-btn>
       </div>
       $addFAB
     </v-layout>

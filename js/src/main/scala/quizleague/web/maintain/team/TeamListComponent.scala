@@ -15,7 +15,7 @@ object TeamListComponent extends ItemListComponentConfig[Team] with RouteCompone
   <v-container>
     <v-layout column>
       <div v-for="item in items" :key="item.id">
-        <v-btn :to="'team/' + item.id" flat left>{{item.name}}</v-btn>
+        <v-btn :to="'team/' + item.id" text left>{{item.name}}</v-btn>
       </div>
       $addFAB
     </v-layout>

@@ -101,8 +101,8 @@ object TeamResults extends Component{
         <ql-fixtures-simple :fixtures="results(id, seasonId)" :inlineDetails="true"></ql-fixtures-simple>
       </v-card-text>
       <v-card-actions>
-        <v-btn flat :to="id + '/results'" color="primary">Show All</v-btn>
-        <v-btn flat :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
+        <v-btn text :to="id + '/results'" color="primary">Show All</v-btn>
+        <v-btn text :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -121,9 +121,9 @@ object TeamFixtures extends Component{
         <ql-fixtures-simple :fixtures="fixtures(id, seasonId)" :inlineDetails="true"></ql-fixtures-simple>
       </v-card-text>
       <v-card-actions>
-        <v-btn flat :to="id + '/fixtures'" color="primary">Show All</v-btn>
+        <v-btn text :to="id + '/fixtures'" color="primary">Show All</v-btn>
         <v-menu offset-y>
-          <v-btn flat slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+          <v-btn text slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
            <v-list>
             <v-list-tile v-on:click="copy(id)">
               <v-list-tile-action v-on:click="copy(id)"><v-icon left>content_copy</v-icon></v-list-tile-action>
@@ -199,7 +199,7 @@ object ContactDialog extends Component with DialogComponentConfig{
                 </v-container>
                 </v-form>
               </v-card-text>
-              <v-card-actions><v-spacer></v-spacer><v-btn flat v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn flat color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+              <v-card-actions><v-spacer></v-spacer><v-btn text v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn text color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
             </v-card>
          </v-dialog>"""
   

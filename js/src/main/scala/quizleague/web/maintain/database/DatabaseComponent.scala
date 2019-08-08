@@ -22,7 +22,7 @@ object DatabaseComponent extends RouteComponent{
     <v-container grid-list-lg>
       <v-layout column fluid>
        <div>
-        <v-btn flat color="primary" v-on:click="upload" :disabled="!uploadFileSelected"><v-icon left>file_upload</v-icon>Upload</v-btn> 
+        <v-btn text color="primary" v-on:click="upload" :disabled="!uploadFileSelected"><v-icon left>file_upload</v-icon>Upload</v-btn>
         <input type="file" id="upload-text-field" label="Database dump file" v-on:change="(e) => uploadFileSelected=e.isTrusted">
         <v-dialog v-model="uploadComplete" max-width="400px">
           <v-card>
@@ -31,7 +31,7 @@ object DatabaseComponent extends RouteComponent{
         </v-dialog>
         </div>
        <div>
-        <v-btn flat href="/rest/entity/dbdownload/dump.json" color="primary" ><v-icon left>file_download</v-icon>Download</v-btn> 
+        <v-btn text href="/rest/entity/dbdownload/dump.json" color="primary" ><v-icon left>file_download</v-icon>Download</v-btn>
         </div>
       </v-layout>
     </v-container>

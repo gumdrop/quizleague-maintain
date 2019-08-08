@@ -58,13 +58,19 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
         <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away" :short="short"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :short="short" :team="fixture.away"></ql-team-name></td> 
         <td v-if="!fixture.result"></td>
-        <td v-else><div>
+        <td v-else>
+        <div>
           <v-tooltip top>
-            <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports" slot="activator">
-              <v-icon style="transform:scale(0.75)">description</v-icon>
-            </v-btn>
-            <span>Match Reports</span></v-tooltip></div>
-          <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" lazy v-if="fixture.result.reports">
+            <template v-slot:activator="{ on }">
+              <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports" v-on="on" >
+                <v-icon style="transform:scale(0.75)">description</v-icon>
+              </v-btn>
+            </template>
+            <span>Match Reports</span>
+
+            </v-tooltip>
+          </div>
+          <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" v-if="fixture.result.reports">
             <v-card>
               <v-card-title>Reports ::&nbsp;
                 <ql-team-name :short="short" :team="fixture.home"></ql-team-name>
@@ -72,9 +78,11 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                 <ql-team-name :short="short" :team="fixture.away"></ql-team-name>
                 <v-spacer></v-spacer>
                  <v-tooltip top>
-                   <v-btn icon slot="activator" v-on:click="showReports=false">
+                  <template v-slot:activator="{ on }">
+                   <v-btn icon v-on:click="showReports=false"  v-on="on" >
                      <v-icon>close</v-icon>
                    </v-btn>
+                   </template>
                    <span>Close</span>
                  </v-tooltip>
                </v-card-title>

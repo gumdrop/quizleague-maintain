@@ -16,7 +16,7 @@ object SeasonListComponent extends ItemListComponentConfig[Season] with RouteCom
   <v-container v-if="items">
     <v-layout column>
       <div v-for="item in items">
-        <v-btn :to="'season/' + item.id" flat left>{{item.startYear}}/{{item.endYear}}</v-btn>
+        <v-btn :to="'season/' + item.id" text left>{{item.startYear}}/{{item.endYear}}</v-btn>
       </div>
       $addFAB
     </v-layout>

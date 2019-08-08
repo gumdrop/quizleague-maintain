@@ -11,7 +11,7 @@ object GlobalTextListComponent extends ItemListComponentConfig[GlobalText] with 
   <v-container>
     <v-layout column>
       <div v-for="item in items">
-        <v-btn :to="'globaltext/' + item.id" flat left>{{item.name}}</v-btn>
+        <v-btn :to="'globaltext/' + item.id" text left>{{item.name}}</v-btn>
       </div>
       $addFAB
     </v-layout>

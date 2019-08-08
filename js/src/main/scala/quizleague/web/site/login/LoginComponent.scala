@@ -67,7 +67,7 @@ object LoginTitleComponent extends RouteComponent{
     <v-toolbar
       color="amber darken-3"
       dark
-      clipped-left>
+      >
       <ql-title>Login</ql-title>
       <v-toolbar-title class="white--text" >
         Login
@@ -123,7 +123,7 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
       </v-form>
     </v-card>
     <v-layout row>
-      <v-btn color="primary" flat :disabled="!valid" @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+      <v-btn color="primary" text :disabled="!valid" @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
       <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Settings Saved.</v-alert></v-flex>
     </v-layout>
   </v-layout>
@@ -146,7 +146,7 @@ object ProfileEditTitleComponent extends RouteComponent{
     <v-toolbar
       color="amber darken-3"
       dark
-      clipped-left>
+      >
       <ql-title>Profile Settings</ql-title>
       <v-toolbar-title class="white--text" >
         Profile Settings

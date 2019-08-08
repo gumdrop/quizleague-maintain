@@ -8,7 +8,7 @@ object CompetitionsTitleComponent extends RouteComponent with SeasonFormatCompon
   val template = """<v-toolbar      
       color="purple darken-3"
       dark
-      clipped-left>
+      >
       <ql-title v-if="s">Competitions {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         Competitions

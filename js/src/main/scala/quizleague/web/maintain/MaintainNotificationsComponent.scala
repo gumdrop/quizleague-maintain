@@ -25,7 +25,7 @@ object MaintainNotificationsComponent extends Component {
             v-model="messages"
           >
           {{notification}}
-          <v-btn flat color="pink" @click.native="messages = false">Close</v-btn>
+          <v-btn text color="pink" @click.native="messages = false">Close</v-btn>
           </v-snackbar>
 """
 

@@ -34,7 +34,7 @@ object SiteComponent extends Component {
 	  v-model="drawer">
 	  <v-list :expand="true">
     <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
-      <v-list-tile v-for="item in items" :to="item.to" ><v-list-tile-action><v-icon flat left>{{item.icon}}</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+      <v-list-tile v-for="item in items" :to="item.to" ><v-list-tile-action><v-icon text left>{{item.icon}}</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content></v-list-tile>
     </ql-side-menu>
     <router-view name="sidenav"></router-view>
     </v-list>
@@ -45,9 +45,7 @@ object SiteComponent extends Component {
 	    fixed 
       app 
       clipped-left
-      hide-on-scroll
-
-      >
+      hide-on-scroll>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text" >
         
@@ -55,26 +53,24 @@ object SiteComponent extends Component {
 
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!--v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp"-->
       <v-tooltip left>
         <template v-slot:activator="{ on }">
-          <v-btn flat icon fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
+          <v-btn text icon fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
         </template>
         <span>Facebook</span>
       </v-tooltip>
 
         <ql-logged-on-menu :user="user"  v-if="user"></ql-logged-on-menu>
-        <v-btn to="/login" flat fab v-if="!user" title="Login"><v-icon left>mdi-login</v-icon></v-btn>
-      <!--/v-toolbar-items-->
+        <v-btn to="/login" text fab v-if="!user" title="Login"><v-icon left>mdi-login</v-icon></v-btn>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
         <v-toolbar
-              color="blue darken-3"
-      dark
-      dense
-      flat>
-        <v-toolbar-items>
-        <v-btn text v-for="item in items" :to="item.to" flat ><v-icon left>{{item.icon}}</v-icon><span>{{item.name}}</span></v-btn>
-        </v-toolbar-items>
+          color="blue darken-3"
+          dark
+          dense
+          flat>
+          <v-toolbar-items>
+            <v-btn text v-for="item in items" :to="item.to" ><v-icon left>{{item.icon}}</v-icon><span>{{item.name}}</span></v-btn>
+          </v-toolbar-items>
         </v-toolbar>
       </div>
     </v-app-bar>
@@ -89,9 +85,9 @@ object SiteComponent extends Component {
       </v-container>
     </v-content>
     <v-bottom-nav app fixed :value="true" v-if="$vuetify.breakpoint.smAndDown">
-        <v-btn flat target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
+        <v-btn text target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
         <ql-logged-on-menu :user="user"  v-if="user"><span></ql-logged-on-menu>
-        <v-btn to="/login" flat v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn></v-bottom-nav>
+        <v-btn to="/login" text v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn></v-bottom-nav>
   </v-app>"""
      
   components(ResultNotificationsComponent,TitleComponent, LoggedOnMenu)
@@ -126,15 +122,15 @@ object LoggedOnMenu extends Component{
   val template = """
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn flat fab icon v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
+      <v-btn text fab icon v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
     </template>
     <v-list>
         <v-list-tile to="/login/profile" key="1">
-          <v-list-tile-action><v-icon flat left>person</v-icon></v-list-tile-action>
+          <v-list-tile-action><v-icon text left>person</v-icon></v-list-tile-action>
           <v-list-tile-content><v-list-tile-title>Edit Profile</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
         <v-list-tile key="2" @click="logout()">
-          <v-list-tile-action><v-icon flat left>mdi-logout</v-icon></v-list-tile-action>
+          <v-list-tile-action><v-icon text left>mdi-logout</v-icon></v-list-tile-action>
           <v-list-tile-content><v-list-tile-title>Logout</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
       </v-list>

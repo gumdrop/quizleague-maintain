@@ -58,7 +58,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
             <v-card class="mb-3">
             <v-card-title>Team Members</v-card-title>
               <v-card-text>
-                <v-btn flat color="primary" @click="newUser()" dark><v-icon left>person</v-icon>Add User</v-btn>
+                <v-btn text color="primary" @click="newUser()" dark><v-icon left>person</v-icon>Add User</v-btn>
                 <v-dialog v-model="dialog" persistent max-width="600px">
 
                   <v-card >
@@ -80,8 +80,8 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" flat @click="dialog = false"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn>
-                      <v-btn color="blue darken-1" flat @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>add</v-icon>Add</v-btn>
+                      <v-btn color="blue darken-1" text @click="dialog = false"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn>
+                      <v-btn color="blue darken-1" text @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>add</v-icon>Add</v-btn>
                     </v-card-actions>
                   </v-card>
                </v-dialog>
@@ -97,7 +97,7 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
               </v-card-text>
             </v-card>
             <v-layout row>
-              <v-btn button flat color="primary" v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+              <v-btn button text color="primary" v-on:click="submit()" :disabled="!valid"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
               <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="success">Saved!</v-alert></v-flex>
             </v-layout>
         </v-layout>

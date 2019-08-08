@@ -30,7 +30,7 @@ object SingletonCompetitionComponent extends CompetitionComponentConfig{
           <v-select label="Venue" v-model="item.event.venue" :items="venues"></v-select>
          </v-layout>
 
-      <div><v-btn v-on:click="editText(item.text.id)" flat  ><v-icon>description</v-icon>Text...</v-btn></div>
+      <div><v-btn v-on:click="editText(item.text.id)" text  ><v-icon>description</v-icon>Text...</v-btn></div>
       </v-layout>
       $formButtons
     </form>

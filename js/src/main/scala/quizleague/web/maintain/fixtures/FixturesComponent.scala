@@ -149,7 +149,7 @@ object FixtureComponent extends Component{
         <v-text-field label="Away Score" v-model.number="fx.result.awayScore" type="number"></v-text-field>
       </v-layout>
       <v-layout row v-if="showResult && fx.result.reports">
-        <span style="position:relative;top:14px;"><h4>Reports :&nbsp;</h4></span><v-btn flat v-on:click="editText(report.text.id)" v-for="report in async(fx.result.reports).reports" :key="report.text.id">{{async(report.team).shortName}}...</v-btn>
+        <span style="position:relative;top:14px;"><h4>Reports :&nbsp;</h4></span><v-btn text v-on:click="editText(report.text.id)" v-for="report in async(fx.result.reports).reports" :key="report.text.id">{{async(report.team).shortName}}...</v-btn>
       </v-layout>
       <v-divider></v-divider>
       <span>&nbsp</span>
