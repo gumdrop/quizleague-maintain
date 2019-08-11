@@ -8,12 +8,16 @@ object CompetitionsTitleComponent extends RouteComponent with SeasonFormatCompon
   val template = """<v-toolbar      
       color="purple darken-3"
       dark
+      dense
       >
       <ql-title v-if="s">Competitions {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         Competitions
       </v-toolbar-title>
-      &nbsp;<h3><ql-season-select :season="season"></ql-season-select></h3>
+       <span style="padding-left:2em;"></span>
+      <v-toolbar-items>
+        <ql-season-select :season="season" :inline="true"></ql-season-select>
+      </v-toolbar-items>
     </v-toolbar>"""
   
   data("season",CompetitionViewService.season)

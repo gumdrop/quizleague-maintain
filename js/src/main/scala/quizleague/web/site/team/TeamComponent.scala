@@ -123,17 +123,20 @@ object TeamFixtures extends Component{
       <v-card-actions>
         <v-btn text :to="id + '/fixtures'" color="primary">Show All</v-btn>
         <v-menu offset-y>
-          <v-btn text slot="activator"><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+          <template v-slot:activator="{ on }">
+          <v-btn text v-on="on" ><v-icon left>mdi-calendar</v-icon>Calendar</v-btn>
+          </template>
            <v-list>
-            <v-list-tile v-on:click="copy(id)">
-              <v-list-tile-action v-on:click="copy(id)"><v-icon left>content_copy</v-icon></v-list-tile-action>
-              <v-list-tile-content ><v-list-tile-title>Copy Calendar URL</v-list-tile-title></v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile :href="'calendar/team/' + id + '/calendar.ics'" target="_blank">
-              <v-list-tile-action ><v-icon left>mdi-download</v-icon></v-list-tile-action>
-              <v-list-tile-content><v-list-tile-title>Download Calendar File</v-list-tile-title></v-list-tile-content>
-            </v-list-tile>
+            <v-list-item v-on:click="copy(id)">
+              <v-list-item-action v-on:click="copy(id)"><v-icon left>content_copy</v-icon></v-list-item-action>
+              <v-list-item-content ><v-list-item-title>Copy Calendar URL</v-list-item-title></v-list-item-content>
+            </v-list-item>
+            <v-list-item :href="'calendar/team/' + id + '/calendar.ics'" target="_blank">
+              <v-list-item-action ><v-icon left>mdi-download</v-icon></v-list-item-action>
+              <v-list-item-content><v-list-item-title>Download Calendar File</v-list-item-title></v-list-item-content>
+            </v-list-item>
           </v-list>
+
         </v-menu>              
       </v-card-actions>
     </v-card>"""
@@ -152,15 +155,14 @@ object TeamTitle extends Component {
     <v-toolbar      
       color="amber darken-3"
       dark
-      clipped-left
       v-if="team">
       <ql-title>{{team.name}}</ql-title>
       <v-toolbar-title class="white--text" >
       <ql-r-team-name :team="team"></ql-r-team-name>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip top><v-btn icon slot="activator" v-on:click="contact=true"><v-icon>email</v-icon></v-btn><span>Contact Us</span></v-tooltip>
-      <v-tooltip top><v-btn icon :to="'/venue/' + team.venue.id" slot="activator"><v-icon>location_on</v-icon></v-btn><span>Venue</span></v-tooltip>
+      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon v-on="on" v-on:click="contact=true"><v-icon>email</v-icon></v-btn></template><span>Contact Us</span></v-tooltip>
+      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon :to="'/venue/' + team.venue.id"><v-icon>location_on</v-icon></v-btn></template><span>Venue</span></v-tooltip>
       <ql-team-contact-dialog :show="contact" :team="team" v-on:show="handleShow"></ql-team-contact-dialog> 
 
     </v-toolbar>"""
@@ -186,7 +188,7 @@ object ContactDialog extends Component with DialogComponentConfig{
   type facade = ContactDialog
   val name = "ql-team-contact-dialog"
   val template = """
-          <v-dialog v-model="show" max-width="60%" v-bind="dialogSize" lazy persistent>
+          <v-dialog v-model="show" max-width="60%" v-bind="dialogSize" persistent>
             <v-card>
               <v-card-title>Contact {{team.name}}</v-card-title>
               <v-card-text>
@@ -223,16 +225,16 @@ object ContactDialog extends Component with DialogComponentConfig{
 object TeamMenuComponent extends RouteComponent with SideMenu{
    override val template = """
      <ql-side-menu title="Teams" icon="people">
-       <v-list-tile to="/team/start">
-        <v-list-tile-content><v-list-tile-title >Start a team</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile v-if="user" to="/team/edit">
-          <v-list-tile-content><v-list-tile-title >Edit Team Details</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
+       <v-list-item to="/team/start">
+        <v-list-item-content><v-list-item-title>Start a team</v-list-item-title></v-list-item-content>
+      </v-list-item>
+      <v-list-item v-if="user" to="/team/edit">
+          <v-list-item-content><v-list-item-title>Edit Team Details</v-list-item-title></v-list-item-content>
+      </v-list-item>
       <v-divider></v-divider>
-       <v-list-tile v-if="teams" v-for="team in teams" :key="team.id" :to="'/team/' + team.id">
-          <v-list-tile-content><v-list-tile-title>{{team.name}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
+       <v-list-item v-if="teams" v-for="team in teams" :key="team.id" :to="'/team/' + team.id">
+          <v-list-item-content><v-list-item-title v-text="team.name"></v-list-item-title></v-list-item-content>
+       </v-list-item>
      </ql-side-menu>
      """
    subscription("teams")(c => TeamService.list().map(_.sortBy(_.shortName)))

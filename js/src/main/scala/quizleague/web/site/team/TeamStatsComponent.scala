@@ -39,7 +39,7 @@ object TeamStatsComponent extends Component with GridSizeComponentConfig{
         <v-tab-item key="1">
           <v-container v-bind="gridSize" fluid>
             <v-layout column>
-            <v-flex><ql-season-select :season="season" label="Season"></ql-season-select></v-flex>
+            <v-flex><ql-season-select :season="season" label="Season" :inline="false"></ql-season-select></v-flex>
             <v-flex><season-stats v-if="id && s" :teamId="id" :seasonId="s.id"></season-stats><v-flex>
             </v-layout>
           </v-container>
@@ -555,7 +555,7 @@ object TeamStatsTitleComponent extends Component{
   val template = """<v-toolbar      
       color="amber darken-3"
       dark
-      clipped-left v-if="team">
+      dense v-if="team">
      <ql-title>{{team.name}} : Graphs and Statistics</ql-title>
       <v-toolbar-title class="white--text">
         <ql-r-team-name :team="team"></ql-r-team-name> : Graphs and Statistics 

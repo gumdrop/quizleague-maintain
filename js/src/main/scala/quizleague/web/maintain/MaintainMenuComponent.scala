@@ -8,15 +8,15 @@ object MaintainMenuComponent extends Component{
   
   val template = """
      <v-list >
-        <v-list-tile to="/maintain/applicationcontext"><v-list-tile-content><v-list-tile-title>Application Context</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/globaltext"><v-list-tile-content><v-list-tile-title>Global Text</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/team"><v-list-tile-content><v-list-tile-title>Teams</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/season"><v-list-tile-content><v-list-tile-title>Seasons</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/user"><v-list-tile-content><v-list-tile-title>Users</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/venue"><v-list-tile-content><v-list-tile-title>Venues</v-list-tile-title></v-list-tile-content></v-list-tile>        
-        <v-list-tile to="/maintain/database"><v-list-tile-content><v-list-tile-title>Database</v-list-tile-title></v-list-tile-content></v-list-tile>        
-        <v-list-tile to="/maintain/stats"><v-list-tile-content><v-list-tile-title>Statistics</v-list-tile-title></v-list-tile-content></v-list-tile>
-        <v-list-tile to="/maintain/competitionstatistics"><v-list-tile-content><v-list-tile-title>Competition Statistics</v-list-tile-title></v-list-tile-content></v-list-tile>
+        <v-list-item to="/maintain/applicationcontext"><v-list-item-content><v-list-item-title>Application Context</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/globaltext"><v-list-item-content><v-list-item-title>Global Text</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/team"><v-list-item-content><v-list-item-title>Teams</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/season"><v-list-item-content><v-list-item-title>Seasons</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/user"><v-list-item-content><v-list-item-title>Users</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/venue"><v-list-item-content><v-list-item-title>Venues</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/database"><v-list-item-content><v-list-item-title>Database</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/stats"><v-list-item-content><v-list-item-title>Statistics</v-list-item-title></v-list-item-content></v-list-item>
+        <v-list-item to="/maintain/competitionstatistics"><v-list-item-content><v-list-item-title>Competition Statistics</v-list-item-title></v-list-item-content></v-list-item>
 
      </v-list>
 """

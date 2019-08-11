@@ -32,9 +32,9 @@ object SiteComponent extends Component {
       app
       :disable-resize-watcher="true"
 	  v-model="drawer">
-	  <v-list :expand="true">
+	  <v-list :expand="true" nav tile shaped>
     <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
-      <v-list-tile v-for="item in items" :to="item.to" ><v-list-tile-action><v-icon text left>{{item.icon}}</v-icon></v-list-tile-action><v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+      <v-list-item v-for="item in items" :to="item.to" ><v-list-item-action><v-icon text left v-text="item.icon"></v-icon></v-list-item-action><v-list-item-content><v-list-item-title v-text="item.name"></v-list-item-title></v-list-item-content></v-list-item>
     </ql-side-menu>
     <router-view name="sidenav"></router-view>
     </v-list>
@@ -42,13 +42,13 @@ object SiteComponent extends Component {
     <v-app-bar
       color="blue darken-3"
       dark
-	    fixed 
-      app 
+	    fixed
+      app
       clipped-left
       hide-on-scroll>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text" >
-        
+
         <span v-if="appData" :class="$vuetify.breakpoint.smAndUp?'page-header':'page-header-small'"><ql-title :title="appData.leagueName"></ql-title></span>
 
       </v-toolbar-title>
@@ -89,13 +89,13 @@ object SiteComponent extends Component {
         <ql-logged-on-menu :user="user"  v-if="user"><span></ql-logged-on-menu>
         <v-btn to="/login" text v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn></v-bottom-nav>
   </v-app>"""
-     
+
   components(ResultNotificationsComponent,TitleComponent, LoggedOnMenu)
-  
+
   def drawerGet(c:facade) = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
   def drawerSet(c:facade, showMenu:Boolean){c.showMenu = if(c.$vuetify.breakpoint.mdAndDown) showMenu else c.showMenu}
 
-  
+
   data("showMenu",false)
   data("items",
     @@(menuItem("Home", "/home", "home"),
@@ -125,14 +125,14 @@ object LoggedOnMenu extends Component{
       <v-btn text fab icon v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
     </template>
     <v-list>
-        <v-list-tile to="/login/profile" key="1">
-          <v-list-tile-action><v-icon text left>person</v-icon></v-list-tile-action>
-          <v-list-tile-content><v-list-tile-title>Edit Profile</v-list-tile-title></v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile key="2" @click="logout()">
-          <v-list-tile-action><v-icon text left>mdi-logout</v-icon></v-list-tile-action>
-          <v-list-tile-content><v-list-tile-title>Logout</v-list-tile-title></v-list-tile-content>
-        </v-list-tile>
+        <v-list-item to="/login/profile" key="1">
+          <v-list-item-action><v-icon text left>person</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>Edit Profile</v-list-item-title></v-list-item-content>
+        </v-list-item>
+        <v-list-item key="2" @click="logout()">
+          <v-list-item-action><v-icon text left>mdi-logout</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>Logout</v-list-item-title></v-list-item-content>
+        </v-list-item>
       </v-list>
   </v-menu>
   """

@@ -16,6 +16,7 @@ object LinksTitleComponent extends RouteComponent{
   val template = """<v-toolbar      
       color="green darken-3"
       dark
+      dense
       >
       <ql-title>Links</ql-title>
       <v-toolbar-title class="white--text" >

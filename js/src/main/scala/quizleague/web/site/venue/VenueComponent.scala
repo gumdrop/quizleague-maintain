@@ -115,9 +115,9 @@ object VenueMenuComponent extends Component with SideMenu{
   
   override val template = """
   <ql-side-menu title="Venues" icon="location_on" v-if="venues">
-    <v-list-tile :to="'/venue/' + venue.id"  v-for="venue in venues " :key="venue.id">
-      <v-list-tile-content><v-list-tile-title>{{venue.name}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <v-list-item :to="'/venue/' + venue.id"  v-for="venue in venues " :key="venue.id">
+      <v-list-item-content><v-list-item-title>{{venue.name}}</v-list-item-title></v-list-item-content>
+    </v-list-item>
   </ql-side-menu>
 """
     subscription("venues")(v => VenueService.list().map(_.sortBy(_.name)))

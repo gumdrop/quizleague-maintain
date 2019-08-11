@@ -18,6 +18,7 @@ object TeamsTitleComponent extends RouteComponent{
     <v-toolbar      
       color="amber darken-3"
       dark
+      dense
       >
       <ql-title>Teams</ql-title>
       <v-toolbar-title class="white--text" >

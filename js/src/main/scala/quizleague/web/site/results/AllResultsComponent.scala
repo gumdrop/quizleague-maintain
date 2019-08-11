@@ -46,13 +46,16 @@ object AllResultsTitleComponent extends RouteComponent with SeasonFormatComponen
   val template = """<v-toolbar      
       color="red darken-3"
       dark
+      dense
       >
       <ql-title v-if="s">All Results {{formatSeason(s)}}</ql-title>
       <v-toolbar-title class="white--text" >
         All Results
        </v-toolbar-title>
-      &nbsp;
-      <ql-season-select :season="season"></ql-season-select>
+       <span style="padding-left:2em;"></span>
+      <v-toolbar-items>
+      <ql-season-select :season="season" :inline="true"></ql-season-select>
+      </v-toolbar-items>
     </v-toolbar>"""
   
   data("season", ResultsViewService.season)

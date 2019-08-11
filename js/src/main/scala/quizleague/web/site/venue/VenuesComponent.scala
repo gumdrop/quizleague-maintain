@@ -18,7 +18,7 @@ object VenuesTitleComponent extends RouteComponent{
    override val  template="""<v-toolbar      
       color="orange darken-3"
       dark
-	    
+	    dense
       >
       <ql-title>Venues</ql-title>
       <v-toolbar-title class="white--text" >

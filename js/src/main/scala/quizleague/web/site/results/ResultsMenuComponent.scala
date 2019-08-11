@@ -9,15 +9,15 @@ import quizleague.web.site.login.LoginService
 object ResultsMenuComponent extends RouteComponent with SideMenu{
   val template = """
   <ql-side-menu title="Results" icon="check">
-  <v-list-tile to="/results/all">
-      <v-list-tile-content><v-list-tile-title   >All Results</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile to="/fixtures/all">
-      <v-list-tile-content><v-list-tile-title   >All Fixtures</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile to="/results/submit" v-if="user">
-      <v-list-tile-content><v-list-tile-title  >Submit Results</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+  <v-list-item to="/results/all">
+      <v-list-item-content><v-list-item-title   >All Results</v-list-item-title></v-list-item-content>
+    </v-list-item>
+    <v-list-item to="/fixtures/all">
+      <v-list-item-content><v-list-item-title   >All Fixtures</v-list-item-title></v-list-item-content>
+    </v-list-item>
+    <v-list-item to="/results/submit" v-if="user">
+      <v-list-item-content><v-list-item-title  >Submit Results</v-list-item-title></v-list-item-content>
+    </v-list-item>
   </ql-side-menu>
   """
 

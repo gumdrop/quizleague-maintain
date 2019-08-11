@@ -18,9 +18,9 @@ object CompetitionStatisticsMenu  extends Component{
   val name = "comp-stats-menu"
   val template = """
       <ql-side-menu title="Roll Of Honour" icon="mdi-script">
-       <v-list-tile v-for="stats in rollofhonour" :key="stats.id" :to="'/competition/rollofhonour/' + stats.id">
-           <v-list-tile-content><v-list-tile-title>{{stats.competitionName}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
+       <v-list-item v-for="stats in rollofhonour" :key="stats.id" :to="'/competition/rollofhonour/' + stats.id">
+           <v-list-item-content><v-list-item-title>{{stats.competitionName}}</v-list-item-title></v-list-item-content>
+       </v-list-item>
     </ql-side-menu>
   """
 
