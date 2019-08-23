@@ -53,6 +53,7 @@ object SiteComponent extends Component {
 
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <div v-if="$vuetify.breakpoint.lgAndUp">
       <v-tooltip left>
         <template v-slot:activator="{ on }">
           <v-btn text icon fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
@@ -62,6 +63,7 @@ object SiteComponent extends Component {
 
         <ql-logged-on-menu :user="user"  v-if="user"></ql-logged-on-menu>
         <v-btn to="/login" text fab v-if="!user" title="Login"><v-icon left>mdi-login</v-icon></v-btn>
+      </div>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
         <v-toolbar
           color="blue darken-3"
