@@ -94,7 +94,7 @@ object VenueTitle extends Component {
     <v-toolbar      
       color="orange darken-3"
       dark
-      clipped-left
+      dense
       v-if="venue">
       <ql-title>{{venue.name}}</ql-title>
       <v-toolbar-title class="white--text" >

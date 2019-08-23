@@ -44,6 +44,7 @@ object AllFixturesTitleComponent extends RouteComponent{
     <v-toolbar      
       color="red darken-3"
       dark
+      dense
       >
       <ql-title>All Fixtures</ql-title>
       <v-toolbar-title class="white--text" >

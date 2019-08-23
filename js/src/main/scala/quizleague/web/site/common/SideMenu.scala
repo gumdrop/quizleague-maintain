@@ -7,12 +7,10 @@ object SideMenu extends Component{
   
   val template = """
      <v-list-group no-action :prepend-icon="icon" :key="title" v-model="active">
-            <v-list-item slot="activator" >
-              <v-list-item-content>
-                <v-list-item-title v-text="title"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <slot></slot>
+        <template v-slot:activator>
+          <v-list-item-title v-text="title"></v-list-item-title>
+        </template>
+        <slot></slot>
       </v-list-group>
 
 """

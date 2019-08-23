@@ -46,7 +46,7 @@ object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
           chips
           >
         </v-select>
-        <div><v-btn v-on:click ="editText(item.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="editText(item.text.id)" text><v-icon>description</v-icon>Text</v-btn></div>
         $chbxRetired 
      </v-layout>
      $formButtons

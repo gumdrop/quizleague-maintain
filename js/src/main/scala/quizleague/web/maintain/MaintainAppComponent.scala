@@ -19,7 +19,7 @@ object MaintainAppComponent extends Component {
       v-model="drawer">
     <ql-maintain-menu></ql-maintain-menu>
   </v-navigation-drawer>
-    <v-toolbar      
+    <v-app-bar
       color="blue darken-3"
       dark
 	    fixed 
@@ -33,7 +33,7 @@ object MaintainAppComponent extends Component {
         <span>Quizleague Data Maintenance</span>
       </v-toolbar-title>
 
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
 		  <v-container fill-height fluid class="px-0 py-0">
         <v-layout justify-left align-top column>

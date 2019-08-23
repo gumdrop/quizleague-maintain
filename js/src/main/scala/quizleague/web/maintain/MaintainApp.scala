@@ -41,7 +41,8 @@ object MaintainApp{
   
   new Vue(
         literal(el="#maintain-app",
-        router = Router(MaintainAppModule())
+        router = Router(MaintainAppModule()),
+          vuetify = new Vuetify()
       )
     )
 

@@ -34,7 +34,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
           :rules=${valRequired("Name")}
           required
         ></v-text-field>
-        <div><v-btn v-on:click ="editText(entry.text.id)" flat><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="editText(entry.text.id)" text><v-icon>description</v-icon>Text</v-btn></div>
       </v-layout>
      </v-layout>
       <v-btn  fixed

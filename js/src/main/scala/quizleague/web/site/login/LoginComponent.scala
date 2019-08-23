@@ -3,6 +3,8 @@ package quizleague.web.site.login
 import java.util.regex.Pattern
 
 import com.felstar.scalajs.vue.{VueRxComponent, VuetifyComponent}
+import org.scalajs.dom.raw.{File, FileReader, UIEvent}
+import org.scalajs.dom.window.alert
 import quizleague.web.core._
 import quizleague.web.model.SiteUser
 import quizleague.web.site.NoSideMenu
@@ -12,6 +14,7 @@ import quizleague.web.site.user.SiteUserService
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic._
 import scala.scalajs.js.UndefOr
+import quizleague.web.util.Logging.log
 
 @js.native
 trait LoginPage extends VueRxComponent{
@@ -94,12 +97,13 @@ object LoginFailedComponent extends RouteComponent with NoSideMenu {
 }
 
 
-
+@js.native
+trait ProfileEditComponent extends VueRxComponent{
+ var user:SiteUser
+}
 object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSizeComponentConfig{
 
-  val urlPattern = Pattern.compile("""https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)""")
-
-  override type facade = LoginPage with VueRxComponent with VuetifyComponent
+  override type facade = ProfileEditComponent with LoginPage with VueRxComponent with VuetifyComponent
 
   val template="""
 <v-container v-bind="gridSize" fluid>
@@ -110,13 +114,11 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
         <v-layout column>
           <ql-named-text v-if="$route.query.first == 'true'" name="profile-first-time"></ql-named-text>
           <v-text-field type="text" label="Handle" v-model="user.handle" :rules="[rules.required]" hint="This is how you'll be identified in chat messages." persistent-hint="true"></v-text-field>
-          <v-text-field type="url" label="Avatar" v-model="user.avatar" :rules="[rules.required,rules.url]" hint="This is how you'll be identified in chat messages." persistent-hint="true">
-            <template slot="append">
-            <v-avatar  size="36"><img :src="user.avatar"></v-avatar>
-            </template>
-          </v-text-field>
+          <v-file-input label="Avatar" placeholder="This will appear alongside your handle in chat messages"  :rules="[]" hint="Select a file if you wish to customise your avatar." :show-size="true" persistent-hint="true" v-on:change="upload">
+          </v-file-input>
 
         </v-layout>
+        <v-avatar><img :src="user.avatar" ></v-avatar>
       </v-card-text>
       <v-card-actions></v-card-actions>
 
@@ -128,15 +130,30 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
     </v-layout>
   </v-layout>
 </v-container>
-
   """
+
+
+  def uploadFiles(c:facade,file:File) = {
+    val reader = new FileReader
+    reader.readAsDataURL(file)
+    reader.onload = (e:UIEvent) => {
+      val data = reader.result
+      if(data.toString.length <= 1000000){
+        c.user.avatar = data.toString
+      }
+      else{
+        alert("Avatar images must be less than 1Mb in size")
+      }
+
+    }
+  }
   data("showAlert", false)
   data("valid",false)
   data("rules", literal(
-    required=(value:UndefOr[String]) => if(value.filter(_ != null).exists(!_.isEmpty)) true else "Required",
-    url = (value:String) => if(urlPattern.matcher(value).matches()) true else "Valid URL required"))
+    required=(value:UndefOr[String]) => if(value.filter(_ != null).exists(!_.isEmpty)) true else "Required"))
   method("saveUser")({(c:facade,user:SiteUser) => SiteUserService.save(user).subscribe(u => c.showAlert = true)}:js.ThisFunction)
   method("forward")({(c:facade, forward:UndefOr[String]) => forward.filter(_ != null).foreach(f => c.$router.push(f))}:js.ThisFunction)
+  method("upload")({uploadFiles _}:js.ThisFunction)
   subscription("user")(c => LoginService.userProfile.filter(_ != null).map(_.siteUser))
 
 }

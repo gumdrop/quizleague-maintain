@@ -101,6 +101,7 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
   val template = """<v-toolbar      
       color="purple darken-3"
       dark
+      dense
       >
       <v-toolbar-title class="white--text" v-if="item && season" >
        <ql-title>{{item.name}} {{formatText(text)}}{{formatSeason(season)}}</ql-title>

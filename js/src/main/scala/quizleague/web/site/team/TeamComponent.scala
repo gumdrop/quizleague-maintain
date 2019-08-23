@@ -155,6 +155,7 @@ object TeamTitle extends Component {
     <v-toolbar      
       color="amber darken-3"
       dark
+      dense
       v-if="team">
       <ql-title>{{team.name}}</ql-title>
       <v-toolbar-title class="white--text" >

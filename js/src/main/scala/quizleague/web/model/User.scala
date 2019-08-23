@@ -21,7 +21,7 @@ object User{
 class SiteUser(
                 val id: String,
                 val handle: String,
-                val avatar: String,
+                var avatar: String,
                 val user: RefObservable[User],
                 val uid:Option[String],
                 val retired: Boolean = false

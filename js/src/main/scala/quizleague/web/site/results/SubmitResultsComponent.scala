@@ -58,7 +58,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
           </v-card>
         </transition>
       </v-flex>
-     <v-dialog v-model="confirm" persistent lazy max-width="60%" v-bind="dialogSize" >
+     <v-dialog v-model="confirm" persistent max-width="60%" v-bind="dialogSize" >
         <v-card>
           <v-card-title>Check Results</v-card-title>
           <v-card-text>
@@ -105,7 +105,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
     c.hasResults = false
   }
   
- def mounted(c:facade) = LoginService.userProfile.subscribe(user => getFixtures(c,user))
+ def mounted(c:facade) = LoginService.userProfile.filter(_ != null).subscribe(user => getFixtures(c,user))
   
   
   subscription("appData")(c => ApplicationContextService.get)
@@ -132,6 +132,7 @@ object SubmitResultsTitleComponent extends RouteComponent{
     <v-toolbar      
       color="red"
       dark
+      dense
       >
       <ql-title>Submit Results</ql-title>
       <v-toolbar-title class="white--text" >
