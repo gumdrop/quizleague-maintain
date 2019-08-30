@@ -63,7 +63,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn icon @click.stop="showReports=true" v-if="fixture.result.reports" v-on="on" >
-                <v-icon style="transform:scale(0.75)">description</v-icon>
+                <v-icon style="transform:scale(0.75)">mdi-file-document-outline</v-icon>
               </v-btn>
             </template>
             <span>Match Reports</span>

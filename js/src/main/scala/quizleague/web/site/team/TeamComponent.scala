@@ -225,7 +225,7 @@ object ContactDialog extends Component with DialogComponentConfig{
 
 object TeamMenuComponent extends RouteComponent with SideMenu{
    override val template = """
-     <ql-side-menu title="Teams" icon="people">
+     <ql-side-menu title="Teams" icon="mdi-account-multiple">
        <v-list-item to="/team/start">
         <v-list-item-content><v-list-item-title>Start a team</v-list-item-title></v-list-item-content>
       </v-list-item>

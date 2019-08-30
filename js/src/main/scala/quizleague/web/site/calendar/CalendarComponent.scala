@@ -145,7 +145,7 @@ object CalendarCalendarComponent extends Component{
           dark
           left
         >
-          keyboard_arrow_left
+          mdi-arrow-left
         </v-icon>
         Prev
       </v-btn>
@@ -162,7 +162,7 @@ object CalendarCalendarComponent extends Component{
           right
           dark
         >
-          keyboard_arrow_right
+          mdi-arrow-right
         </v-icon>
       </v-btn>
     </v-flex>
@@ -240,8 +240,8 @@ object FixturesEventComponent extends EventComponentConfig{
       <v-layout column align-start class="panel-component">
           <v-flex align-start><b><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link></b>
             <v-btn icon v-on:click="togglePanel" class="#view-btn">
-             <v-icon v-if="!panelVisible">visibility</v-icon>
-             <v-icon v-if="panelVisible">visibility_off</v-icon>
+             <v-icon v-if="!panelVisible">mdi-eye</v-icon>
+             <v-icon v-if="panelVisible">mdi-eye-off</v-icon>
             </v-btn>
           </v-flex> 
           <v-flex><v-slide-y-transition><ql-fixtures-simple v-if="panelVisible" :fixtures="event.fixtures.fixtures | combine"></ql-fixtures-simple></v-slide-y-transition></v-flex>

@@ -100,15 +100,15 @@ object SiteComponent extends Component {
 
   data("showMenu",false)
   data("items",
-    @@(menuItem("Home", "/home", "home"),
-      menuItem("Teams", "/team", "people"),
+    @@(menuItem("Home", "/home", "mdi-home"),
+      menuItem("Teams", "/team", "mdi-account-multiple"),
       menuItem("Competitions", "/competition", "mdi-trophy"),
-      menuItem("Results", "/results", "check"),
-      menuItem("Venues", "/venue", "location_on"),
+      menuItem("Results", "/results", "mdi-check"),
+      menuItem("Venues", "/venue", "mdi-map-marker"),
       menuItem("Calendar", "/calendar", "mdi-calendar"),
       menuItem("Rules", "/rules", "mdi-book-open-page-variant"),
-      menuItem("Links", "/links", "link"),
-      menuItem("Contact Us", "/contact", "contact_mail")
+      menuItem("Links", "/links", "mdi-link"),
+      menuItem("Contact Us", "/contact", "mdi-contact-mail")
 
     ))
   subscription("appData")(c => ApplicationContextService.get())

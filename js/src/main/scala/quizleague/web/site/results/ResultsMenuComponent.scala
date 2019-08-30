@@ -8,7 +8,7 @@ import quizleague.web.site.login.LoginService
 
 object ResultsMenuComponent extends RouteComponent with SideMenu{
   val template = """
-  <ql-side-menu title="Results" icon="check">
+  <ql-side-menu title="Results" icon="mdi-check">
   <v-list-item to="/results/all">
       <v-list-item-content><v-list-item-title   >All Results</v-list-item-title></v-list-item-content>
     </v-list-item>
