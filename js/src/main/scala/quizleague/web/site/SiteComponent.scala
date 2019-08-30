@@ -33,7 +33,7 @@ object SiteComponent extends Component {
       :disable-resize-watcher="true"
 	  v-model="drawer">
 	  <v-list :expand="true" nav tile shaped dense tile>
-    <ql-side-menu title="Main Menu" icon="menu" v-if="$vuetify.breakpoint.mdAndDown">
+    <ql-side-menu title="Main Menu" icon="mdi-menu" v-if="$vuetify.breakpoint.mdAndDown">
       <v-list-item v-for="item in items" :to="item.to" ><v-list-item-action><v-icon text left v-text="item.icon"></v-icon></v-list-item-action><v-list-item-content><v-list-item-title v-text="item.name"></v-list-item-title></v-list-item-content></v-list-item>
     </ql-side-menu>
     <router-view name="sidenav"></router-view>
