@@ -80,7 +80,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                  <v-tooltip top>
                   <template v-slot:activator="{ on }">
                    <v-btn icon v-on:click="showReports=false"  v-on="on" >
-                     <v-icon>close</v-icon>
+                     <v-icon>mdi-close</v-icon>
                    </v-btn>
                    </template>
                    <span>Close</span>
