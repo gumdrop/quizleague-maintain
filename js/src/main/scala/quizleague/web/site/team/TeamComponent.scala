@@ -202,7 +202,7 @@ object ContactDialog extends Component with DialogComponentConfig{
                 </v-container>
                 </v-form>
               </v-card-text>
-              <v-card-actions><v-spacer></v-spacer><v-btn text v-on:click="close"><v-icon left>cancel</v-icon>Cancel</v-btn><v-btn text color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>send</v-icon></v-btn></v-card-actions>
+              <v-card-actions><v-spacer></v-spacer><v-btn text v-on:click="close"><v-icon left>mdi-cancel</v-icon>Cancel</v-btn><v-btn text color="primary" :disabled="!valid" v-on:click="submit">Send<v-icon right>mdi-send</v-icon></v-btn></v-card-actions>
             </v-card>
          </v-dialog>"""
   
