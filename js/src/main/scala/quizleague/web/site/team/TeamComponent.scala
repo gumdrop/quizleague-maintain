@@ -102,7 +102,7 @@ object TeamResults extends Component{
       </v-card-text>
       <v-card-actions>
         <v-btn text :to="id + '/results'" color="primary">Show All</v-btn>
-        <v-btn text :to="id + '/stats'"><v-icon left>insert_chart</v-icon>Graphs & Stats</v-btn>
+        <v-btn text :to="id + '/stats'"><v-icon left>mdi-chart-bar</v-icon>Graphs & Stats</v-btn>
       </v-card-actions>
     </v-card>"""
   
@@ -128,7 +128,7 @@ object TeamFixtures extends Component{
           </template>
            <v-list>
             <v-list-item v-on:click="copy(id)">
-              <v-list-item-action v-on:click="copy(id)"><v-icon left>content_copy</v-icon></v-list-item-action>
+              <v-list-item-action v-on:click="copy(id)"><v-icon left>mdi-content-copy</v-icon></v-list-item-action>
               <v-list-item-content ><v-list-item-title>Copy Calendar URL</v-list-item-title></v-list-item-content>
             </v-list-item>
             <v-list-item :href="'calendar/team/' + id + '/calendar.ics'" target="_blank">
@@ -162,8 +162,8 @@ object TeamTitle extends Component {
       <ql-r-team-name :team="team"></ql-r-team-name>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon v-on="on" v-on:click="contact=true"><v-icon>email</v-icon></v-btn></template><span>Contact Us</span></v-tooltip>
-      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon :to="'/venue/' + team.venue.id"><v-icon>location_on</v-icon></v-btn></template><span>Venue</span></v-tooltip>
+      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon v-on="on" v-on:click="contact=true"><v-icon>mdi-email</v-icon></v-btn></template><span>Contact Us</span></v-tooltip>
+      <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon :to="'/venue/' + team.venue.id"><v-icon>mdi-map-marker</v-icon></v-btn></template><span>Venue</span></v-tooltip>
       <ql-team-contact-dialog :show="contact" :team="team" v-on:show="handleShow"></ql-team-contact-dialog> 
 
     </v-toolbar>"""
