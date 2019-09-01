@@ -34,7 +34,7 @@ object LoginPage extends RouteComponent with NoSideMenu{
     <v-card>
       <v-card-text>
         <ql-named-text name="login-text"></ql-named-text>
-        <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
+        <v-text-field v-model.email="mdi-email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
         <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
         <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
         <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
@@ -113,8 +113,8 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
        <v-card-text>
         <v-layout column>
           <ql-named-text v-if="$route.query.first == 'true'" name="profile-first-time"></ql-named-text>
-          <v-text-field type="text" label="Handle" v-model="user.handle" :rules="[rules.required]" hint="This is how you'll be identified in chat messages." persistent-hint="true"></v-text-field>
-          <v-file-input label="Avatar" placeholder="This will appear alongside your handle in chat messages"  :rules="[]" hint="Select a file if you wish to customise your avatar." :show-size="true" persistent-hint="true" v-on:change="upload">
+          <v-text-field prepend-icon="mdi-account" type="text" label="Handle" v-model="user.handle" :rules="[rules.required]" hint="This is how you'll be identified in chat messages." persistent-hint="true"></v-text-field>
+          <v-file-input prepend-icon="mdi-account-circle" label="Avatar" placeholder="This will appear alongside your handle in chat messages"  :rules="[]" hint="Select a file if you wish to customise your avatar." :show-size="true" persistent-hint="true" v-on:change="upload">
           </v-file-input>
 
         </v-layout>

@@ -28,16 +28,23 @@ object ChatComponent extends Component{
     <v-flex class="pb-0">
       <div v-if="user" >
         <v-textarea label="Your message here"
-          clearable="true"
+          :clearable="false"
           solo
           outline
           auto-grow
           v-model="text"
           hide-details
           rows="1"
-          :append-icon="text ? 'send' : null"
           @click:append="addMessage(text)"
           >
+          <template v-slot:append v-if="text" >
+            <v-tooltip top >
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on" color="primary" style="cursor:pointer;">mdi-send</v-icon>
+              </template>
+              <span>Send</span>
+            </v-tooltip>
+          </template>
         </v-textarea>
        </div>
     </v-flex>

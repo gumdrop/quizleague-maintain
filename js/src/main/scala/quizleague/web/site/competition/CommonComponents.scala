@@ -109,7 +109,7 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-         <v-btn href="#" v-scroll-to="'#chat'" text ><v-icon left>chat</v-icon><span>Chat</span></v-btn>
+         <v-btn href="#" v-scroll-to="'#chat'" text ><v-icon left>mdi-chat</v-icon><span>Chat</span></v-btn>
       </v-toolbar-items>
     </v-toolbar>"""
   

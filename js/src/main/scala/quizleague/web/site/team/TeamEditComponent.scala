@@ -58,21 +58,21 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
             <v-card class="mb-3">
             <v-card-title>Team Members</v-card-title>
               <v-card-text>
-                <v-btn text color="primary" @click="newUser()" dark><v-icon left>person</v-icon>Add User</v-btn>
+                <v-btn text color="primary" @click="newUser()" dark><v-icon left>mdi-account-plus</v-icon>Add User</v-btn>
                 <v-dialog v-model="dialog" persistent max-width="600px">
 
                   <v-card >
                     <v-card-title>
-                      <span class="headline"><v-icon>person</v-icon>&nbsp;New User</span>
+                      <span class="headline"><v-icon>mdi-account-plus</v-icon>&nbsp;New User</span>
                     </v-card-title>
                     <v-card-text v-if="user">
                       <v-container grid-list-md>
                         <v-layout column>
                           <v-flex xs12 sm6 md4>
-                            <v-text-field prepend-icon="person" label="Name" required :rules=[rules.required] v-model="user.name"></v-text-field>
+                            <v-text-field prepend-icon="mdi-account" label="Name" required :rules=[rules.required] v-model="user.name"></v-text-field>
                           </v-flex>
                           <v-flex xs12 sm6 md4>
-                            <v-text-field prepend-icon="email" label="Email" type="email" required :rules=[rules.required,rules.email] v-model="user.email"></v-text-field>
+                            <v-text-field prepend-icon="mdi-email" label="Email" type="email" required :rules=[rules.required,rules.email] v-model="user.email"></v-text-field>
                           </v-flex>
 
                         </v-layout>
@@ -81,12 +81,12 @@ object TeamEditComponent extends Component with GridSizeComponentConfig{
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="dialog = false"><v-icon left>mdi-close-circle</v-icon>Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>add</v-icon>Add</v-btn>
+                      <v-btn color="blue darken-1" text @click="dialog = false;addUser()" :disabled="!valid"><v-icon left>mdi-account-plus</v-icon>Add</v-btn>
                     </v-card-actions>
                   </v-card>
                </v-dialog>
                <v-flex>
-                <v-icon color="primary">people</v-icon>&nbsp;<v-chip v-for="usr in team.users" close @input="removeUser(usr.id)">{{async(usr).name}}</v-chip>
+                <v-icon color="primary">mdi-account-multiple</v-icon>&nbsp;<v-chip v-for="usr in team.users" close @input="removeUser(usr.id)">{{async(usr).name}}</v-chip>
                </v-flex>
              </v-card-text>
              </v-card>

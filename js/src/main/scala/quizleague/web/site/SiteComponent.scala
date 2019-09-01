@@ -128,7 +128,7 @@ object LoggedOnMenu extends Component{
     </template>
     <v-list>
         <v-list-item to="/login/profile" key="1">
-          <v-list-item-action><v-icon text left>person</v-icon></v-list-item-action>
+          <v-list-item-action><v-icon text left>mdi-account</v-icon></v-list-item-action>
           <v-list-item-content><v-list-item-title>Edit Profile</v-list-item-title></v-list-item-content>
         </v-list-item>
         <v-list-item key="2" @click="logout()">
