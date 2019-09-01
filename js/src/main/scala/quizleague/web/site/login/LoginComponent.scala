@@ -34,7 +34,7 @@ object LoginPage extends RouteComponent with NoSideMenu{
     <v-card>
       <v-card-text>
         <ql-named-text name="login-text"></ql-named-text>
-        <v-text-field v-model.email="mdi-email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
+        <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
         <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
         <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
         <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>

@@ -1,8 +1,10 @@
 package quizleague.web.site.team
 
+import scalajs.js
 import quizleague.web.core.RouteComponent
 import quizleague.web.core.GridSizeComponentConfig
 import quizleague.web.site.SideMenu
+import quizleague.web.site.login.LoginService
 
 object TeamsComponent extends RouteComponent with GridSizeComponentConfig {
     val template="""
@@ -11,6 +13,11 @@ object TeamsComponent extends RouteComponent with GridSizeComponentConfig {
           <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
         </v-layout>
        </v-container>"""
+  override val mounted = ({(c:facade) => {
+    //super.mounted.call(c)
+    LoginService.userProfile.filter(_ != null).subscribe(u => c.$router.push(s"team/${u.team.id}"))
+
+  }}:js.ThisFunction)
 
 }
 object TeamsTitleComponent extends RouteComponent{
@@ -25,8 +32,6 @@ object TeamsTitleComponent extends RouteComponent{
         Teams 
       </v-toolbar-title>
     </v-toolbar>"""
-       
-
 
 }
 
