@@ -140,3 +140,12 @@ object SubmitResultsTitleComponent extends RouteComponent{
       </v-toolbar-title>
     </v-toolbar>"""
 }
+
+object SubmitResultsInstructionsComponent extends RouteComponent with GridSizeComponentConfig{
+  val template = """
+  <v-container v-bind="gridSize" fluid>
+    <v-layout>
+    <v-flex><ql-named-text name="submit-results-instructions"></ql-named-text></v-flex>
+    </v-layout>
+  </v-container>"""
+}

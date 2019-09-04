@@ -18,6 +18,9 @@ object ResultsMenuComponent extends RouteComponent with SideMenu{
     <v-list-item to="/results/submit" v-if="user">
       <v-list-item-content><v-list-item-title  >Submit Results</v-list-item-title></v-list-item-content>
     </v-list-item>
+    <v-list-item to="/results/submit/instructions" v-if="!user">
+      <v-list-item-content><v-list-item-title  >Submit Results</v-list-item-title></v-list-item-content>
+    </v-list-item>
   </ql-side-menu>
   """
 

@@ -28,6 +28,10 @@ object ResultsModule extends Module {
       path = "/fixtures/all",
       components = Map("default" -> AllFixturesPage, "title" -> AllFixturesTitleComponent, "sidenav" -> ResultsMenuComponent)),
     RouteConfig(
+      path = "/results/submit/instructions",
+      components = Map("default" -> SubmitResultsInstructionsComponent,  "sidenav" -> ResultsMenuComponent, "title" -> SubmitResultsTitleComponent),
+      beforeEnter = LoginService.noAuthRouteGuard _),
+    RouteConfig(
       path = "/results/submit",
       components = Map("default" -> SubmitResultsComponent,  "sidenav" -> ResultsMenuComponent, "title" -> SubmitResultsTitleComponent),
       beforeEnter = LoginService.routeGuard _),
