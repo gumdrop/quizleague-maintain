@@ -34,7 +34,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
           :rules=${valRequired("Name")}
           required
         ></v-text-field>
-        <div><v-btn v-on:click ="editText(entry.text.id)" text><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="editText(entry.text.id)" text><v-icon>mdi-card-text-outline</v-icon>Text</v-btn></div>
       </v-layout>
      </v-layout>
       <v-btn  fixed
@@ -45,7 +45,7 @@ object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteCom
               small
               color="pink"
               v-on:click="add">
-          <v-icon>add</v-icon>
+          <v-icon>mdi-plus</v-icon>
       </v-btn>
       $formButtons
     </v-form>

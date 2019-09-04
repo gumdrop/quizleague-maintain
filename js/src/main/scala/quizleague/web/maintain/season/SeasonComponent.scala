@@ -38,10 +38,10 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
           required
         ></v-text-field>
 
-        <div><v-btn v-on:click ="editText(item.text.id)" text><v-icon>description</v-icon>Text</v-btn></div>
+        <div><v-btn v-on:click ="editText(item.text.id)" text><v-icon>mdi-card-text-outline</v-icon>Text</v-btn></div>
         <div><v-btn v-on:click ="calendar(item.text.id)" text><v-icon>mdi-calendar</v-icon>Calendar</v-btn></div>
         <v-layout column>
-          <v-select @input="addCompetition(selectedType)" clearable append-icon="add" v-model="selectedType" label="Add Competition" :items="types"></v-select>
+          <v-select @input="addCompetition(selectedType)" clearable append-icon="mdi-plus" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
           <v-chip close v-on:click="editCompetition(async(c))" @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
         </div>

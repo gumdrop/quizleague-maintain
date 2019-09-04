@@ -44,12 +44,12 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
           <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
           <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
           <v-select label="Subsidiary" :items="subsidiaries" v-model="item.subsidiary"></v-select>
-          <div><v-btn text v-if="item.subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item)"><v-icon>file_copy</v-icon>Copy fixtures to subsidiary</v-btn></div>
+          <div><v-btn text v-if="item.subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item)"><v-icon>mdi-file-copy</v-icon>Copy fixtures to subsidiary</v-btn></div>
 
-      <div><v-btn text v-on:click="editText(item.text.id)"  type="button" ><v-icon>description</v-icon>Text...</v-btn></div>
-      <div><v-btn text v-on:click="fixtures(item)" ><v-icon>check</v-icon>Fixtures...</v-btn></div>
+      <div><v-btn text v-on:click="editText(item.text.id)"  type="button" ><v-icon>mdi-card-text-outline</v-icon>Text...</v-btn></div>
+      <div><v-btn text v-on:click="fixtures(item)" ><v-icon>mdi-check</v-icon>Fixtures...</v-btn></div>
       <div>
-       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>add</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @input="removeTable(table.id)" v-for="(table,index) in item.tables" :key="table.id">{{async(table).description || 'Table ' + (index + 1)}}</v-chip>
+       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>mdi-plus</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @input="removeTable(table.id)" v-for="(table,index) in item.tables" :key="table.id">{{async(table).description || 'Table ' + (index + 1)}}</v-chip>
       </div>
       </v-layout>
       $formButtons

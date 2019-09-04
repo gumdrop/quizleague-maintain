@@ -27,7 +27,7 @@ import quizleague.web.util.component.SelectUtils
 //    <h2>Calendar {{item.startYear}}/{{item.endYear}}</h2>
 //    <form #fm="ngForm" (submit)="save()">
 //      <div fxLayout="column">
-//        <button md-icon-button (click)="addEvent()" type="button"><md-icon>add</md-icon></button>
+//        <button md-icon-button (click)="addEvent()" type="button"><md-icon>mdi-plus</md-icon></button>
 //        <div *ngFor="let event of items;let i = index" fxLayout="row">
 //          <div fxLayout="column">
 //            <button md-icon-button (click)="deleteEvent(event)" type="button"><md-icon>delete</md-icon></button>
@@ -79,11 +79,11 @@ object CalendarComponent extends ItemComponentConfig[Season] with RouteComponent
     <h2>Calendar {{item.startYear}}/{{item.endYear}}</h2>
     <v-form v-model="valid" >
       <v-layout column>
-        <v-btn icon v-on:click="addEvent()"><v-icon>add</v-icon></v-btn>
+        <v-btn icon v-on:click="addEvent()"><v-icon>mdi-plus</v-icon></v-btn>
         <div v-for="event in item.calendar" :key="event.id">
           <v-layout column>
             <v-layout row>
-             <v-btn icon v-on:click="deleteEvent(event)"><v-icon>delete</v-icon></v-btn>
+             <v-btn icon v-on:click="deleteEvent(event)"><v-icon>mdi-delete</v-icon></v-btn>
              <v-text-field  label="Description" type="text" 
               required
                  v-model="event.description" ></v-text-field>

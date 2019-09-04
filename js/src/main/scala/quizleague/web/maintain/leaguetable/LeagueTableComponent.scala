@@ -49,7 +49,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
        <v-layout column>
         <h4>Rows</h4>
         <v-layout row>
-          <v-btn icon v-on:click="addRow(team)" :disabled="!team" style="position:relative;top:12px"><v-icon>add</v-icon></v-btn><v-select label="Team" v-model="team" :items="unusedTeams()"></v-select>         
+          <v-btn icon v-on:click="addRow(team)" :disabled="!team" style="position:relative;top:12px"><v-icon>mdi-plus</v-icon></v-btn><v-select label="Team" v-model="team" :items="unusedTeams()"></v-select>
          </v-layout>
          <v-layout column>
            <div><v-btn text v-on:click="recalculate()" color="primary">Recalculate</v-btn></div>
@@ -70,7 +70,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
             <tbody>
               <tr v-for="(row,i) in item.rows" :key="row.team.id">
                 <td>
-                  <v-btn icon v-on:click="removeRow(row)"><v-icon >delete</v-icon></v-btn>
+                  <v-btn icon v-on:click="removeRow(row)"><v-icon >mdi-delete</v-icon></v-btn>
                 </td>
                 <td>{{async(row.team).shortName}}</td>
                 <td>

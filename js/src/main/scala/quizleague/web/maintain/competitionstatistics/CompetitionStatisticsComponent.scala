@@ -34,7 +34,7 @@ object CompetitionStatisticsComponent extends ItemComponentConfig[CompetitionSta
           required
         ></v-text-field>
         <h4>Results</h4>
-        <div><v-btn v-on:click="addResult(item)" button><v-icon >add</v-icon></v-btn></div>
+        <div><v-btn v-on:click="addResult(item)" button><v-icon >mdi-plus</v-icon></v-btn></div>
         <div v-for="row in sortResults(item.results)" :key="row.id">
           <v-card>
             <v-card-text>
@@ -43,7 +43,7 @@ object CompetitionStatisticsComponent extends ItemComponentConfig[CompetitionSta
           </v-card>
           <br>
         </div>
-        <div><v-btn v-on:click="addResult(item)" button><v-icon >add</v-icon></v-btn></div>
+        <div><v-btn v-on:click="addResult(item)" button><v-icon >mdi-plus</v-icon></v-btn></div>
      </v-layout>
      $formButtons
     </v-form>

@@ -15,7 +15,7 @@ object TemplateElements {
       :disabled="!valid"
               v-on:click = "save"
             >
-              <v-icon>save</v-icon>
+              <v-icon>mdi-content-save</v-icon>
             </v-btn>
             <v-btn
               fixed
@@ -27,7 +27,7 @@ object TemplateElements {
               color="pink"
               v-on:click = "cancel"
             >
-              <v-icon>cancel</v-icon>
+              <v-icon>mdi-cancel</v-icon>
             </v-btn>
 """
   
@@ -41,7 +41,7 @@ object TemplateElements {
               small
               color="pink"
               v-on:click="add">
-          <v-icon>add</v-icon>
+          <v-icon>mdi-plus</v-icon>
       </v-btn>
 """
   

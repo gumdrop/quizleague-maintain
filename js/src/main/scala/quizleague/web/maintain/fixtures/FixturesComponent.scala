@@ -63,7 +63,7 @@ object FixturesComponent extends CompetitionComponentConfig{
           <v-select label="Home" v-model="homeTeam" :items="unusedTeams(awayTeam)" @input="setVenue(homeTeam)"></v-select>        
           <v-select label="Away" v-model="awayTeam" :items="unusedTeams(homeTeam)"></v-select>
           <v-select label="Venue" v-model="venue" :items="venues"></v-select>
-          <v-btn style="top:5px;" icon v-on:click="addFixture()" :disabled="!(homeTeam && awayTeam && venue)"><v-icon >add</v-icon></v-btn>
+          <v-btn style="top:5px;" icon v-on:click="addFixture()" :disabled="!(homeTeam && awayTeam && venue)"><v-icon >mdi-plus</v-icon></v-btn>
          </v-layout>
          <v-layout column>
            <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in fxs.fixtures" :key="fixture.id"></fixture>
@@ -138,9 +138,9 @@ object FixtureComponent extends Component{
   val template = """
     <v-layout column v-if="fx">
       <v-layout row>
-        <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>cancel</v-icon></v-btn>
-        <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>check</v-icon></v-btn>
-        <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>add</v-icon></v-btn>
+        <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>mdi-cancel</v-icon></v-btn>
+        <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>mdi-check</v-icon></v-btn>
+        <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>mdi-plus</v-icon></v-btn>
         <span >{{async(fx.home).name}} - {{async(fx.away).name}} @ {{async(fx.venue).name}}</span>
       </v-layout>
       <v-layout row v-if="showResult && fx.result">

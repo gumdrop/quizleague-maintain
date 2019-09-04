@@ -34,7 +34,7 @@ object StatsComponent extends RouteComponent{
           required
           >
         </v-select>
-       <v-btn text color="primary" :disabled="!season" v-on:click="regenerate" ><v-icon left>refresh</v-icon>Regenerate</v-btn>
+       <v-btn text color="primary" :disabled="!season" v-on:click="regenerate" ><v-icon left>mdi-refresh</v-icon>Regenerate</v-btn>
        </div>
         <v-dialog v-model="complete" max-width="400px">
           <v-card>
