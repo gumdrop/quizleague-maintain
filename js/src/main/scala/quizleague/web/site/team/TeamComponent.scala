@@ -159,7 +159,7 @@ object TeamTitle extends Component {
       v-if="team">
       <ql-title>{{team.name}}</ql-title>
       <v-toolbar-title class="white--text" >
-      <ql-r-team-name :team="team"></ql-r-team-name>
+      <ql-r-team-name :id="team.id"></ql-r-team-name>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip top><template v-slot:activator="{ on }"><v-btn icon v-on="on" v-on:click="contact=true"><v-icon>mdi-email</v-icon></v-btn></template><span>Contact Us</span></v-tooltip>
