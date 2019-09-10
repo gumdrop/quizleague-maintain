@@ -99,7 +99,7 @@ object LoginService{
   def verifyEmail(email:String) = {
     import EmailValidationStatus._
     val user = SiteUserService.siteUserForEmail(email)
-    user.map(su => su.map(u => u.uid.fold(unregistered)(uid => registered))).defaultIfEmpty(Option(invalid)).map(_.get)
+    user.map(su => su.map(u => u.uid.fold(unregistered)(uid => registered))).defaultIfEmpty(Option(invalid)).map(_.getOrElse(invalid))
   }
 
   def loginWithPassword(c:VueComponent,email:String, password:String, forward:String) = {
