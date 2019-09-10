@@ -106,6 +106,7 @@ trait PasswordLoginComponent extends VueRxComponent{
   var password:String
   var forward:String
   var registered:Boolean
+  var showProgress:Boolean
 }
 object PasswordLoginComponent extends Component{
 
@@ -118,20 +119,24 @@ object PasswordLoginComponent extends Component{
     <v-flex v-if="!registered"><v-text-field type="password" v-model="password2" placeholder="Confirm Password"></v-text-field></v-flex>
     <v-flex v-if="!registered" :disabled="password != password2"><v-btn @click="register()">Register & Login</v-btn></v-flex>
     <v-flex v-if="registered"><v-btn @click="login()">Login</v-btn></v-flex>
-    <v-alert type="error" transition="scroll-y-transition" :value="!registered && password != password2">Passwords must match</v-alert>
+    <v-alert type="warning" transition="scroll-y-transition" :value="!registered && password2 && password != password2">Passwords must match</v-alert>
+    <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
   </v-layout>
   """
 
   def register(c:facade) = {
-    LoginService.createAcccount(c,c.email, c.password,c.forward).subscribe(x => log(s"success : $x"))
+    c.showProgress = true
+    LoginService.createAcccount(c,c.email, c.password,c.forward).subscribe(x => c.showProgress = false)
   }
 
   def login(c:facade) = {
-    LoginService.loginWithPassword(c, c.email,c.password,c.forward).subscribe(x => log(s"success : $x"))
+    c.showProgress = true
+    LoginService.loginWithPassword(c, c.email,c.password,c.forward).subscribe(x => c.showProgress = false)
   }
 
   data("password",null)
   data("password2",null)
+  data("showProgress",false)
   prop("email")
   prop("forward")
   prop("user")
