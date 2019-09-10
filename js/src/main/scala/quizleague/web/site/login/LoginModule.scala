@@ -2,14 +2,18 @@ package quizleague.web.site.login
 
 import com.felstar.scalajs.vue.VueComponent
 import firebase.Firebase
-import firebase.auth.ActionCodeSettings
+import firebase.auth.{ActionCodeSettings, UserCredential}
+import firebase.firestore.DocumentSnapshot
 import org.scalajs.dom.window
 import quizleague.web.core.{Module, RouteConfig, _}
 import quizleague.web.model._
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.user.SiteUserService
+import rxscalajs.facade.ObservableFacade
 import rxscalajs.subjects.ReplaySubject
 import rxscalajs.{Observable, Subject}
+import quizleague.web.util.Logging.log
+
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
@@ -39,6 +43,11 @@ object LoginModule extends Module{
 }
 
 class LoggedInUser(val siteUser:SiteUser, val email:String, val team:Team) extends js.Object
+
+object EmailValidationStatus extends Enumeration {
+  type EmailValidationStatus = Value
+  val invalid, registered, unregistered = Value
+}
 
 object LoginService{
 
@@ -87,6 +96,41 @@ object LoginService{
       true
     }))  }
 
+  def verifyEmail(email:String) = {
+    import EmailValidationStatus._
+    val user = SiteUserService.siteUserForEmail(email)
+    user.map(su => su.map(u => u.uid.fold(unregistered)(uid => registered))).defaultIfEmpty(Option(invalid)).map(_.get)
+  }
+
+  def loginWithPassword(c:VueComponent,email:String, password:String, forward:String) = {
+    val user = SiteUserService.siteUserForEmail(email)
+
+    val subject = ReplaySubject[Boolean]()
+
+    user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
+      Firebase.auth().signInWithEmailAndPassword(email,password)
+        .`then`(handleLoginSuccess(c, forward))
+        .`catch`(err => {log("Error on login",err.message);subject.next(false)})
+      true
+    }))
+    subject.asObservable()
+  }
+
+  def createAcccount(c: VueComponent, email:String, password:String, forward:String) = {
+    val user = SiteUserService.siteUserForEmail(email)
+
+    val subject = ReplaySubject[Boolean]()
+
+    user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
+      Firebase.auth().createUserWithEmailAndPassword(email,password)
+        .`then`(handleLoginSuccess(c,forward))
+        .`catch`(err => {log("Error on create",err.message);subject.next(false)})
+      true
+    }))
+    subject.asObservable()
+  }
+
+
   def check(c:VueComponent, forward:String): Unit ={
 
     val url = window.location.href
@@ -106,35 +150,34 @@ object LoginService{
         emailFromStorage
       }
 
-
-
       // The client SDK will parse the code from the link for you.
       Firebase.auth().signInWithEmailLink(email, url)
-        .`then`(result => {
-
-          val siteUser = SiteUserService.siteUserForEmail(String.valueOf(result.user.email))
-          siteUser.subscribe(su =>
-            su.headOption.foreach(s => {SiteUserService.setUid(s, result.user.uid)
-            window.localStorage.removeItem("emailForSignIn")
-              if(result.additionalUserInfo.fold(false)(_.isNewUser)){
-                c.$router.push(s"/login/profile?first=true&forward=$forward")
-              }
-              else{
-                c.$router.push(forward)
-              }
-            })
-
-          )
-
-        })
-        .`catch`( (error:js.Any) => {
-            println(error)
-            c.$router.push("/login/failed")
-        })
+        .`then`(handleLoginSuccess(c,forward))
+        .`catch`(handleLoginFailure(c))
     }
     else {
       println("Invalid sign in address")
     }
+  }
+
+  private def handleLoginSuccess(c:VueComponent,forward:String)(result:UserCredential) = {
+    val siteUser = SiteUserService.siteUserForEmail(String.valueOf(result.user.email))
+    siteUser.subscribe(su =>
+      su.headOption.foreach(s => {SiteUserService.setUid(s, result.user.uid)
+        window.localStorage.removeItem("emailForSignIn")
+        if(result.additionalUserInfo.fold(false)(_.isNewUser)){
+          c.$router.push(s"/login/profile?first=true&forward=$forward")
+        }
+        else{
+          c.$router.push(forward)
+        }
+      })
+
+    )
+  }
+  private def handleLoginFailure(c:VueComponent)(error:js.Any) ={
+    println(error)
+    c.$router.push("/login/failed")
   }
 
   def routeGuard(from:js.Any, to:js.Any, next:js.Function0[Unit]|js.Function1[Boolean | String | Exception, Unit]):Unit = {

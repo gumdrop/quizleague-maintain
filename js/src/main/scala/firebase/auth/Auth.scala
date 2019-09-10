@@ -24,7 +24,7 @@ import firebase.User
 
       def createCustomToken(uid: String, developerClaims: Object | Null = ???): String = js.native
 
-      def createUserWithEmailAndPassword(email: String, password: String): Promise[js.Any] = js.native
+      def createUserWithEmailAndPassword(email: String, password: String): Promise[UserCredential] = js.native
 
       var currentUser: User | Null = js.native
 
@@ -44,7 +44,7 @@ import firebase.User
 
       def signInWithCustomToken(token: String): Promise[js.Any] = js.native
 
-      def signInWithEmailAndPassword(email: String, password: String): Promise[js.Any] = js.native
+      def signInWithEmailAndPassword(email: String, password: String): Promise[UserCredential] = js.native
 
       def signInWithPopup(provider: firebase.auth.AuthProvider): Promise[js.Any] = js.native
 

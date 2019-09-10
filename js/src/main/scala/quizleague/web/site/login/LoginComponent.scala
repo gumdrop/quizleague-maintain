@@ -22,6 +22,8 @@ trait LoginPage extends VueRxComponent{
   var showProgress:Boolean
   var showFailure:Boolean
   var failureText:String
+  var registered:Boolean
+  var passwordLogin:Boolean
 }
 
 object LoginPage extends RouteComponent with NoSideMenu{
@@ -34,7 +36,10 @@ object LoginPage extends RouteComponent with NoSideMenu{
     <v-card>
       <v-card-text>
         <ql-named-text name="login-text"></ql-named-text>
-        <v-text-field v-model.email="email" label="Enter your email address"></v-text-field><v-btn button v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Submit</v-btn>
+        <v-text-field v-model.email="email" label="Enter your email address"></v-text-field>
+        <v-btn button text v-on:click="login(email,$route.query.forward?$route.query.forward : '/home')" :disabled="!email">Sign in by email</v-btn>
+        <v-btn button text v-on:click="doPasswordLogin(email)" :disabled="!email">Sign in with password</v-btn>
+        <ql-password-entry v-if="passwordLogin" :email="email" :forward="$route.query.forward?$route.query.forward : '/home'" :registered="registered"></ql-password-entry>
         <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
         <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
         <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
@@ -44,10 +49,14 @@ object LoginPage extends RouteComponent with NoSideMenu{
     </v-layout >
     </v-container>
     """
+  components(PasswordLoginComponent)
+
   data("showAlert", false)
   data("showProgress", false)
   data("showFailure", false)
   data("failureText","")
+  data("registered", false)
+  data("passwordLogin", false)
 
 
    def login(c:facade, email:String, forward:String) = {
@@ -58,11 +67,78 @@ object LoginPage extends RouteComponent with NoSideMenu{
        e => {c.failureText = e.toString;c.showFailure = true;c.showProgress=false})
   }
 
+  def passwordLogin(c:facade, email:String): Unit ={
+    import EmailValidationStatus._
+    c.showProgress = true
+    LoginService.verifyEmail(email).subscribe(
+      b => {
+        b match {
+          case `registered` => {
+            c.registered = true;
+            c.passwordLogin = true
+          }
+          case `unregistered` => {
+            c.passwordLogin = true
+          }
+          case `invalid` => {
+            c.failureText = "You are not registered, or do not belong to a team.  Contact your team captain or the webmaster.";
+            c.showFailure = true
+          }
+
+        }
+        c.showProgress = false
+        },
+      e => {c.failureText = e.toString;c.showFailure = true;c.showProgress=false})
+
+  }
+
   data("email", null)
   method("login"){login _:js.ThisFunction}
+  method("doPasswordLogin"){passwordLogin _:js.ThisFunction}
 
 
   
+}
+
+@js.native
+trait PasswordLoginComponent extends VueRxComponent{
+  var email:String
+  var password:String
+  var forward:String
+  var registered:Boolean
+}
+object PasswordLoginComponent extends Component{
+
+  override type facade = PasswordLoginComponent
+
+  val name="ql-password-entry"
+  val template="""
+  <v-layout column>
+    <v-flex><v-text-field type="password" v-model="password" placeholder="Password"></v-text-field></v-flex>
+    <v-flex v-if="!registered"><v-text-field type="password" v-model="password2" placeholder="Confirm Password"></v-text-field></v-flex>
+    <v-flex v-if="!registered" :disabled="password != password2"><v-btn @click="register()">Register & Login</v-btn></v-flex>
+    <v-flex v-if="registered"><v-btn @click="login()">Login</v-btn></v-flex>
+    <v-alert type="error" transition="scroll-y-transition" :value="!registered && password != password2">Passwords must match</v-alert>
+  </v-layout>
+  """
+
+  def register(c:facade) = {
+    LoginService.createAcccount(c,c.email, c.password,c.forward).subscribe(x => log(s"success : $x"))
+  }
+
+  def login(c:facade) = {
+    LoginService.loginWithPassword(c, c.email,c.password,c.forward).subscribe(x => log(s"success : $x"))
+  }
+
+  data("password",null)
+  data("password2",null)
+  prop("email")
+  prop("forward")
+  prop("user")
+  prop("registered")
+  subscription("user")(c => SiteUserService.siteUserForEmail(c.email).map(_.getOrElse(null)))
+  method("register"){register _:js.ThisFunction}
+  method("login"){login _ :js.ThisFunction}
 }
 
 object LoginTitleComponent extends RouteComponent{

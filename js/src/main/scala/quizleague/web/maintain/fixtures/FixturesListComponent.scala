@@ -29,9 +29,13 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
   <v-container>
     <v-layout column v-if="item ">
       <h2>Fixtures List for {{item.name}} </h2>
-      <div v-for="fixture in fs" :key="fixture.id">
+      <v-list>
+      <v-list-item v-for="fixture in fs" :key="fixture.id">
+        <v-list-item-action>
         <v-btn :to="'fixtures/' + fixture.id" text left>{{fixture.date | date("d MMMM yyyy")}}</v-btn>
-      </div>
+        </v-list-item-action>
+      </v-list-item>
+      </v-list>
     </v-layout>
     $addFAB
     $backFAB
