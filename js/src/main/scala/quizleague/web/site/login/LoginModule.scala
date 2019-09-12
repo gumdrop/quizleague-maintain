@@ -110,7 +110,11 @@ object LoginService{
     user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
       Firebase.auth().signInWithEmailAndPassword(email,password)
         .`then`(handleLoginSuccess(c, forward))
-        .`catch`(err => {log("Error on login",err.message);subject.next(false)})
+        .`catch`(err => {
+          log("Error on login",err.message)
+          subject.error(err.code match{
+            case _ => err.message
+          })})
       true
     }))
     subject.asObservable()
@@ -124,7 +128,14 @@ object LoginService{
     user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
       Firebase.auth().createUserWithEmailAndPassword(email,password)
         .`then`(handleLoginSuccess(c,forward))
-        .`catch`(err => {log("Error on create",err.message);subject.next(false)})
+        .`catch`(err => {
+          log("Error on create",err.message)
+          subject.error(err.code match{
+            case "auth/email-already-in-use" => "Email is already in use"
+            case "auth/weak-password" => "Password is too weak. Try using numbers, uppercase letters and symbols as well as lowercase letters."
+            case _ => err.message
+          })
+        })
       true
     }))
     subject.asObservable()

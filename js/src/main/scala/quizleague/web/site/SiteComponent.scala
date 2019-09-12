@@ -53,7 +53,7 @@ object SiteComponent extends Component {
 
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="$vuetify.breakpoint.lgAndUp">
+      <div v-if="$vuetify.breakpoint.mdAndUp">
       <v-tooltip left>
         <template v-slot:activator="{ on }">
           <v-btn text icon fab v-on="on" target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" tooltip="Facebook"><v-icon>mdi-facebook-box</v-icon></v-btn>
@@ -86,10 +86,11 @@ object SiteComponent extends Component {
       <notifications></notifications>
       </v-container>
     </v-content>
-    <v-bottom-nav app fixed :value="true" v-if="$vuetify.breakpoint.smAndDown">
+      <v-bottom-navigation fixed app hide-on-scroll :value="true" v-if="$vuetify.breakpoint.smAndDown" >
         <v-btn text target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
         <ql-logged-on-menu :user="user"  v-if="user"><span></ql-logged-on-menu>
-        <v-btn to="/login" text v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn></v-bottom-nav>
+        <v-btn to="/login" text v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn>
+      </v-bottom-navigation>
   </v-app>"""
 
   components(ResultNotificationsComponent,TitleComponent, LoggedOnMenu)

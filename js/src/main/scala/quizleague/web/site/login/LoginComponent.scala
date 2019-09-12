@@ -62,14 +62,19 @@ object LoginPage extends RouteComponent with NoSideMenu{
    def login(c:facade, email:String, forward:String) = {
 
      c.showProgress = true
+     c.passwordLogin = false
+     c.showFailure = false
      LoginService.login(email, forward).subscribe(
-       b => {c.showAlert = b;c.failureText = "You are not registered, or do not belong to a team.  Contact your team captain or the webmaster.";c.showFailure = !b;c.showProgress = false},
-       e => {c.failureText = e.toString;c.showFailure = true;c.showProgress=false})
+       b => {c.showAlert = b;c.failureText = "You are not registered, or do not belong to a team.  Contact your team captain or the webmaster.";c.showFailure = !b},
+       e => {c.failureText = e.toString;c.showFailure = true},
+     )
+     .add({() => c.showProgress = false}:js.Function0[Unit])
   }
 
   def passwordLogin(c:facade, email:String): Unit ={
     import EmailValidationStatus._
     c.showProgress = true
+    c.showFailure = false
     LoginService.verifyEmail(email).subscribe(
       b => {
         b match {
@@ -86,9 +91,9 @@ object LoginPage extends RouteComponent with NoSideMenu{
           }
 
         }
-        c.showProgress = false
         },
-      e => {c.failureText = e.toString;c.showFailure = true;c.showProgress=false})
+      e => {c.failureText = e.toString;c.showFailure = true})
+      .add({() => c.showProgress = false}:js.Function0[Unit])
 
   }
 
@@ -107,6 +112,8 @@ trait PasswordLoginComponent extends VueRxComponent{
   var forward:String
   var registered:Boolean
   var showProgress:Boolean
+  var showFailure:Boolean
+  var failureText:String
 }
 object PasswordLoginComponent extends Component{
 
@@ -120,28 +127,35 @@ object PasswordLoginComponent extends Component{
     <v-flex v-if="!registered" :disabled="password != password2"><v-btn @click="register()">Register & Login</v-btn></v-flex>
     <v-flex v-if="registered"><v-btn @click="login()">Login</v-btn></v-flex>
     <v-alert type="warning" transition="scroll-y-transition" :value="!registered && password2 && password != password2">Passwords must match</v-alert>
+    <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
     <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
   </v-layout>
   """
 
   def register(c:facade) = {
     c.showProgress = true
-    LoginService.createAcccount(c,c.email, c.password,c.forward).subscribe(x => c.showProgress = false)
+    LoginService.createAcccount(c,c.email, c.password,c.forward).subscribe(
+      x => {},
+      msg => {c.failureText = msg.toString;c.showFailure=true}
+    ).add({() => c.showProgress = false}:js.Function0[Unit])
   }
 
   def login(c:facade) = {
     c.showProgress = true
-    LoginService.loginWithPassword(c, c.email,c.password,c.forward).subscribe(x => c.showProgress = false)
+    LoginService.loginWithPassword(c, c.email,c.password,c.forward).subscribe(
+      x => {},
+      msg => {c.failureText = msg.toString;c.showFailure=true}
+    ).add({() => c.showProgress = false}:js.Function0[Unit])
   }
 
   data("password",null)
   data("password2",null)
   data("showProgress",false)
+  data("showFailure", false)
+  data("failureText", null)
   prop("email")
   prop("forward")
-  prop("user")
   prop("registered")
-  subscription("user")(c => SiteUserService.siteUserForEmail(c.email).map(_.getOrElse(null)))
   method("register"){register _:js.ThisFunction}
   method("login"){login _ :js.ThisFunction}
 }
