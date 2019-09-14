@@ -161,10 +161,12 @@ object HomePageLeagueTable extends Component{
   override val template ="""
             <v-card text v-if="tables">
               <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
-              <v-card-text grow>
+              <v-card-text >
               <v-container fluid>
                 <v-layout column v-bind="justify">
-                  <ql-league-table v-for="table in tables"  :key="table.id" :id="table.id" class="mb-3"></ql-league-table>
+                  <v-layout row v-for="table in tables"  :key="table.id">
+                  <ql-league-table  :id="table.id" class="mb-3"></ql-league-table>
+                  </v-layout>
                 </v-layout>
               </v-container>
               </v-card-text>

@@ -88,7 +88,7 @@ object SiteComponent extends Component {
     </v-content>
       <v-bottom-navigation fixed app hide-on-scroll :value="true" v-if="$vuetify.breakpoint.smAndDown" >
         <v-btn text target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
-        <ql-logged-on-menu :user="user"  v-if="user"><span></ql-logged-on-menu>
+        <ql-logged-on-menu :user="user"  v-if="user"><span style="position:relative;top:2px;">{{user.siteUser.handle}}</span></ql-logged-on-menu>
         <v-btn to="/login" text v-if="!user" title="Login"><span>Login</span><v-icon>mdi-login</v-icon></v-btn>
       </v-bottom-navigation>
   </v-app>"""
@@ -125,7 +125,7 @@ object LoggedOnMenu extends Component{
   val template = """
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn text fab icon v-on="on" small><v-avatar size="24" :title="user.siteUser.handle"><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
+      <v-btn text fab icon v-on="on" small :title="user.siteUser.handle"><slot></slot><v-avatar size="24" ><img :src="user.siteUser.avatar"></img></v-avatar></v-btn>
     </template>
     <v-list>
         <v-list-item to="/login/profile" key="1">
