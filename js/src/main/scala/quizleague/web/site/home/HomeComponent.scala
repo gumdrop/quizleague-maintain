@@ -163,7 +163,7 @@ object HomePageLeagueTable extends Component{
               <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
               <v-card-text >
               <v-container fluid>
-                <v-layout column v-bind="justify">
+                <v-layout column v-bind:class="justify">
                   <v-layout row v-for="table in tables"  :key="table.id">
                   <ql-league-table  :id="table.id" class="mb-3"></ql-league-table>
                   </v-layout>
@@ -175,6 +175,6 @@ object HomePageLeagueTable extends Component{
   props("seasonId")
   subscription("tables", "seasonId")(c => LeagueTableService.leagueTables(c.seasonId))
   
-  def justify(c: facade) = js.Dictionary("justify-space-around" -> c.$vuetify.breakpoint.smAndUp)
+  def justify(c: facade) = $("justify-space-around" -> "$vuetify.breakpoint.smAndUp")
   computed("justify")({ justify _ }: js.ThisFunction)
 }
