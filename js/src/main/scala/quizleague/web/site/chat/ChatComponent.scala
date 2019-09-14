@@ -136,10 +136,13 @@ object LoginButton extends Component{
   val template="""
   <div v-if="!user">
     <v-tooltip left>
-      <v-btn color="primary" fab small :to="'/login?forward=' + window.location.pathname" slot="activator">
+     <template v-slot:activator="{ on }">
+      <v-btn color="primary" fab small :to="'/login?forward=' + window.location.pathname" v-on="on">
+
         <v-icon>mdi-login</v-icon>
        </v-btn>
-      <span>{{label}}</span>
+     </template>
+     <span>{{label}}</span>
     </v-tooltip>
   </div>
   """
