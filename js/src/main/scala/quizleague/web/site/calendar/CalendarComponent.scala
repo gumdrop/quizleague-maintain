@@ -134,38 +134,26 @@ object CalendarCalendarComponent extends Component{
      </v-calendar>
      </v-flex>
      <v-spacer></v-spacer>
-      <v-layout row>
-      <v-flex
-      sm4
-      xs12
-      class="text-sm-left text-xs-center"
-    >
-      <v-btn @click="$refs.calendar.prev()">
+      <v-layout row class="align-content-space-between mt-1" >
+      <v-btn @click="$refs.calendar.prev()" fab class="ml-3">
         <v-icon
           dark
-          left
+          size="64"
         >
-          mdi-arrow-left
+          mdi-chevron-left
         </v-icon>
-        Prev
       </v-btn>
-    </v-flex>
+
     <v-spacer></v-spacer>
-    <v-flex
-      sm4
-      xs12
-      class="text-sm-right text-xs-center"
-    >
-      <v-btn @click="$refs.calendar.next()">
-        Next
-        <v-icon
-          right
+
+      <v-btn @click="$refs.calendar.next()" fab class="mr-3">
+         <v-icon
           dark
+          size="64"
         >
-          mdi-arrow-right
+          mdi-chevron-right
         </v-icon>
       </v-btn>
-    </v-flex>
     </v-layout>
     </v-layout>
   """
