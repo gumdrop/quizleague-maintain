@@ -221,7 +221,7 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
     </v-card>
     <v-layout row>
       <v-btn color="primary" text :disabled="!valid" @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
-      <v-flex grow><v-alert type="info" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showAlert">Profile Settings Saved.</v-alert></v-flex>
+      <v-flex grow><v-alert type="info" :icon="false" outlined border="left" text transition="scroll-y-transition" :value="showAlert">Profile Settings Saved.</v-alert></v-flex>
     </v-layout>
   </v-layout>
 </v-container>
