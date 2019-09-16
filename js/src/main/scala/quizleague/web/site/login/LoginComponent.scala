@@ -41,8 +41,8 @@ object LoginPage extends RouteComponent with NoSideMenu{
         <v-btn button text v-on:click="doPasswordLogin(email)" :disabled="!email">Sign in with password</v-btn>
         <ql-password-entry v-if="passwordLogin" :email="email" :forward="$route.query.forward?$route.query.forward : '/home'" :registered="registered"></ql-password-entry>
         <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
-        <v-alert type="info" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
-        <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
+        <v-alert type="info" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
+        <v-alert type="error" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showFailure" >{{failureText}}</v-alert>
        </v-card-text>
      </v-card>
 
@@ -126,8 +126,8 @@ object PasswordLoginComponent extends Component{
     <v-flex v-if="!registered"><v-text-field type="password" v-model="password2" placeholder="Confirm Password"></v-text-field></v-flex>
     <v-flex v-if="!registered" :disabled="password != password2"><v-btn @click="register()">Register & Login</v-btn></v-flex>
     <v-flex v-if="registered"><v-btn @click="login()">Login</v-btn></v-flex>
-    <v-alert type="warning" transition="scroll-y-transition" :value="!registered && password2 && password != password2">Passwords must match</v-alert>
-    <v-alert type="error" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
+    <v-alert type="warning" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="!registered && password2 && password != password2">Passwords must match</v-alert>
+    <v-alert type="error" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showFailure">{{failureText}}</v-alert>
     <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
   </v-layout>
   """
@@ -221,7 +221,7 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
     </v-card>
     <v-layout row>
       <v-btn color="primary" text :disabled="!valid" @click="saveUser(user);forward($route.query.forward)"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
-      <v-flex grow><v-alert type="info" transition="scroll-y-transition" :value="showAlert">Profile Settings Saved.</v-alert></v-flex>
+      <v-flex grow><v-alert type="info" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showAlert">Profile Settings Saved.</v-alert></v-flex>
     </v-layout>
   </v-layout>
 </v-container>
