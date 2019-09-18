@@ -2,8 +2,8 @@
   "devDependencies": {
     "lite-server": "^2.3.0"
   },
-    "scripts": {    
+  "scripts": {
     "dev": "lite-server",
-    "useredit" : "lite-server -c user-edit-bs-config.json"
+    "useredit": "lite-server -c user-edit-bs-config.json"
   }
 }

@@ -35,12 +35,13 @@ object ChatComponent extends Component{
           v-model="text"
           hide-details
           rows="1"
-          @click:append="addMessage(text)"
           >
           <template v-slot:append v-if="text" >
             <v-tooltip top >
               <template v-slot:activator="{ on }">
-                <v-icon v-on="on" color="primary" style="cursor:pointer;">mdi-send</v-icon>
+                <v-btn v-on="on" small icon @click="addMessage(text)" style="top:-5px;">
+                <v-icon color="primary">mdi-send</v-icon>
+                </v-btn>
               </template>
               <span>Send</span>
             </v-tooltip>
