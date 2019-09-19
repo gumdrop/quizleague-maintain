@@ -80,21 +80,26 @@ object LoginService{
   }
 
   def login(email:String, forward:String) = {
+    import EmailValidationStatus._
 
-    val user = SiteUserService.siteUserForEmail(email)
-
-    user.defaultIfEmpty(Option.empty[SiteUser]).map(su => su.exists(u => {
-
-      val actionCodeSettings = literal().asInstanceOf[ActionCodeSettings]
-      import window.location
-      val url = s"https://${location.hostname}/login/signin?forward=$forward"
-      actionCodeSettings.url = url
-      actionCodeSettings.handleCodeInApp = true
-
-      Firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-      window.localStorage.setItem("emailForSignIn", email)
-      true
-    }))  }
+    verifyEmail(email)
+      .flatMap(
+        r => r match {
+          case `invalid` => Observable.just(false)
+          case _ => {
+            val actionCodeSettings = literal().asInstanceOf[ActionCodeSettings]
+            import window.location
+            val url = s"https://${location.hostname}/login/signin?forward=$forward"
+            actionCodeSettings.url = url
+            actionCodeSettings.handleCodeInApp = true
+            toObservable(Firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings))
+              .map(x => {
+                window.localStorage.setItem("emailForSignIn", email)
+                true})
+          }
+        }
+      )
+  }
 
   def verifyEmail(email:String) = {
     import EmailValidationStatus._
@@ -102,43 +107,22 @@ object LoginService{
     user.map(su => su.map(u => u.uid.fold(unregistered)(uid => registered))).defaultIfEmpty(Option(invalid)).map(_.getOrElse(invalid))
   }
 
-  def loginWithPassword(c:VueComponent,email:String, password:String, forward:String) = {
+  def loginWithPassword(c:VueComponent,email:String, password:String, forward:String) =
+    authAction(c,email,forward, Firebase.auth().signInWithEmailAndPassword(email,password))
+
+  def createAcccount(c: VueComponent, email:String, password:String, forward:String) =
+    authAction(c,email,forward, Firebase.auth().createUserWithEmailAndPassword(email,password))
+
+
+  def authAction(c: VueComponent, email:String, forward:String, promise: => firebase.Promise[UserCredential]) = {
     val user = SiteUserService.siteUserForEmail(email)
 
-    val subject = ReplaySubject[Boolean]()
-
-    user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
-      Firebase.auth().signInWithEmailAndPassword(email,password)
-        .`then`(handleLoginSuccess(c, forward))
-        .`catch`(err => {
-          log("Error on login",err.message)
-          subject.error(err.code match{
-            case _ => err.message
-          })})
-      true
-    }))
-    subject.asObservable()
-  }
-
-  def createAcccount(c: VueComponent, email:String, password:String, forward:String) = {
-    val user = SiteUserService.siteUserForEmail(email)
-
-    val subject = ReplaySubject[Boolean]()
-
-    user.defaultIfEmpty(Option.empty[SiteUser]).subscribe(su => su.exists(u => {
-      Firebase.auth().createUserWithEmailAndPassword(email,password)
-        .`then`(handleLoginSuccess(c,forward))
-        .`catch`(err => {
-          log("Error on create",err.message)
-          subject.error(err.code match{
-            case "auth/email-already-in-use" => "Email is already in use"
-            case "auth/weak-password" => "Password is too weak. Try using numbers, uppercase letters and symbols as well as lowercase letters."
-            case _ => err.message
-          })
-        })
-      true
-    }))
-    subject.asObservable()
+    user.flatMap(su =>
+      su.fold(Observable.just(false))
+      (u => toObservable(promise)
+        .map(handleLoginSuccess(c, forward))
+      )
+    )
   }
 
 
@@ -183,8 +167,8 @@ object LoginService{
           c.$router.push(forward)
         }
       })
-
     )
+    true
   }
   private def handleLoginFailure(c:VueComponent)(error:js.Any) ={
     println(error)
@@ -192,11 +176,17 @@ object LoginService{
   }
 
   def routeGuard(from:js.Any, to:js.Any, next:js.Function0[Unit]|js.Function1[Boolean | String | Exception, Unit]):Unit = {
-    userProfile.subscribe(u => if(u != null){next.asInstanceOf[js.Function0[Unit]]()})
+    userProfile.filter(_ != null).subscribe(u => next.asInstanceOf[js.Function0[Unit]]())
   }
 
   def noAuthRouteGuard(from:js.Any, to:js.Any, next:js.Function0[Unit]|js.Function1[Boolean | String | Exception, Unit]):Unit = {
-    userProfile.subscribe(u => if(u == null){next.asInstanceOf[js.Function0[Unit]]()})
+    userProfile.filter(_ == null).subscribe(u => next.asInstanceOf[js.Function0[Unit]]())
+  }
+
+  private def  toObservable[T](promise:firebase.Promise[T]) = {
+    val subject = ReplaySubject[T]()
+    promise.`then`(subject.next _).`catch`(subject.error _)
+    subject.take(1)
   }
 
 }

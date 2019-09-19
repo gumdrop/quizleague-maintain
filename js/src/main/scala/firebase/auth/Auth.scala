@@ -36,7 +36,7 @@ import firebase.User
 
       def sendPasswordResetEmail(email: String): Promise[js.Any] = js.native
 
-      def sendSignInLinkToEmail(email:String, actionCodeSettings:ActionCodeSettings)
+      def sendSignInLinkToEmail(email:String, actionCodeSettings:ActionCodeSettings): Promise[js.Any] = js.native
 
       def signInAnonymously(): Promise[js.Any] = js.native
 
