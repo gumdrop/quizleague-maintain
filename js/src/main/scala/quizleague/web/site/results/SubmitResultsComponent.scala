@@ -64,7 +64,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
           <v-card-text>
             <ql-fixtures-simple :fixtures="fixtures | wrap" :inlineDetails="true"></ql-fixtures-simple>
           </v-card-text>
-          </v-card-actions><v-btn text v-on:click="cancel"><v-icon left>mdi-cancel</v-icon>Cancel</v-btn><v-btn text color="primary" v-on:click="submit"><v-icon left>check</v-icon>Ok</v-btn></v-card-actions>
+          </v-card-actions><v-btn text v-on:click="cancel"><v-icon left>mdi-cancel</v-icon>Cancel</v-btn><v-btn text color="primary" v-on:click="submit"><v-icon left>mdi-check</v-icon>Ok</v-btn></v-card-actions>
         </v-card>
      </v-dialog>
 

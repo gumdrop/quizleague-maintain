@@ -114,7 +114,7 @@ object VenueMenuComponent extends Component with SideMenu{
   override val name = ""  
   
   override val template = """
-  <ql-side-menu title="Venues" icon="location_on" v-if="venues">
+  <ql-side-menu title="Venues" icon="mdi-map-marker" v-if="venues">
     <v-list-item :to="'/venue/' + venue.id"  v-for="venue in venues " :key="venue.id">
       <v-list-item-content><v-list-item-title>{{venue.name}}</v-list-item-title></v-list-item-content>
     </v-list-item>
