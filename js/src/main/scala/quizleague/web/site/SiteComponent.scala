@@ -45,7 +45,9 @@ object SiteComponent extends Component {
 	    fixed
       app
       clipped-left
-      hide-on-scroll>
+      hide-on-scroll
+      src="/img/chiltern-hills.jpg"
+      >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-show="$vuetify.breakpoint.mdAndDown"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text" >
 
@@ -66,7 +68,7 @@ object SiteComponent extends Component {
       </div>
       <div slot="extension" v-if="$vuetify.breakpoint.lgAndUp">
         <v-toolbar
-          color="blue darken-3"
+          color="transparent"
           dark
           dense
           flat>
@@ -75,17 +77,29 @@ object SiteComponent extends Component {
           </v-toolbar-items>
         </v-toolbar>
       </div>
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
+        ></v-img>
+      </template>
+      </template>
     </v-app-bar>
+
     <v-content>
+
 		  <v-container fluid class="px-0 py-0">
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>
-         <router-view fill-height  ></router-view>
+         <v-flex fill-height>
+          <router-view  fill-height ></router-view>
+         </v-flex>
         </v-layout>
       <notifications></notifications>
       </v-container>
     </v-content>
+
       <v-bottom-navigation fixed app hide-on-scroll :value="true" v-if="$vuetify.breakpoint.smAndDown" >
         <v-btn text target="_blank" href="https://www.facebook.com/ChilternQuizLeague/" title="Facebook"><span>Facebook</span><v-icon>mdi-facebook-box</v-icon></v-btn>
         <ql-logged-on-menu :user="user"  v-if="user"><span style="position:relative;top:2px;">{{user.siteUser.handle}}</span></ql-logged-on-menu>
