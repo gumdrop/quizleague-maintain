@@ -82,6 +82,7 @@ object CalendarCalendarComponent extends Component{
   val template = """
    <v-layout column >
     <v-flex>
+    <ql-text-box>
       <v-calendar v-if="dateMap"
             ref="calendar"
             v-model="now"
@@ -132,6 +133,7 @@ object CalendarCalendarComponent extends Component{
          </template>
        </template>
      </v-calendar>
+     </ql-text-box>
      </v-flex>
      <v-spacer></v-spacer>
       <v-layout row class="align-content-space-between mt-1" >

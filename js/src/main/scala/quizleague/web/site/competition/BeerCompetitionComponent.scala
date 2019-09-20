@@ -20,8 +20,10 @@ object BeerCompetitionComponent extends Component with GridSizeComponentConfig{
   <v-container v-bind="gridSize" fluid v-if="item">
     <v-layout column v-bind="gridSize">
       <v-flex>      
+        <ql-text-box>
         <ql-named-text :name="item.textName"></ql-named-text>
         <ql-text :id="item.text.id"></ql-text>
+        </ql-text-box>
       </v-flex>
       <v-flex><league-tables :id="id"></league-tables></v-flex>
       <v-flex><latest-results :id="id"></latest-results></v-flex>

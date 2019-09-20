@@ -10,7 +10,7 @@ object TeamsComponent extends RouteComponent with GridSizeComponentConfig {
     val template="""
       <v-container v-bind="gridSize" fluid>
         <v-layout>
-          <v-flex><ql-named-text name="teams-header"></ql-named-text></v-flex>
+          <v-flex><ql-text-box><ql-named-text name="teams-header"></ql-named-text></ql-text-box></v-flex>
         </v-layout>
        </v-container>"""
   override val mounted = ({(c:facade) => {

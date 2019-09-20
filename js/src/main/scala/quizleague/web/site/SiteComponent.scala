@@ -77,8 +77,8 @@ object SiteComponent extends Component {
           </v-toolbar-items>
         </v-toolbar>
       </div>
-      <template v-slot:img="{ props }">
-        <v-img
+      <template v-slot:img="{ props }" >
+        <v-img v-if="$vuetify.breakpoint.smAndUp"
           v-bind="props"
           gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
         ></v-img>
@@ -86,9 +86,9 @@ object SiteComponent extends Component {
       </template>
     </v-app-bar>
 
-    <v-content>
-
-		  <v-container fluid class="px-0 py-0">
+    <v-content >
+      <div style="background-image:linear-gradient(to top right, rgba(255,255,255,.9), rgba(255,255,255,.9)),url('img/old-amersham.jpg');background-size: 100% 100%;width:100vw;height:100vh;position:fixed;z-index:0;">&nbsp;</div>
+		  <v-container fluid class="px-0 py-0" >
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>

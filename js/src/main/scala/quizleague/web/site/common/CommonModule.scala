@@ -3,7 +3,7 @@ import quizleague.web.core._
 import org.scalajs.dom
 
 object CommonModule extends Module{
-  override val components = @@(TitleComponent,SideMenu)
+  override val components = @@(TitleComponent,SideMenu, TextBox)
 }
 
 object TitleService {
