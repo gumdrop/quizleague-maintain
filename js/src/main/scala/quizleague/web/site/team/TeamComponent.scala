@@ -34,7 +34,7 @@ object TeamComponent extends Component with GridSizeComponentConfig{
             <v-container v-if="team && seasonId" v-bind="gridSize" fluid>
               <v-layout column>
 
-           <v-flex><ql-text :id="team.text.id"></ql-text></v-flex>
+           <v-flex><ql-text-box><ql-text :id="team.text.id"></ql-text></ql-text-box></v-flex>
             <v-flex><standings :id="team.id"></standings></v-flex>
             <v-flex><team-results :id="team.id" :seasonId="seasonId"></team-results>
             </v-flex>      

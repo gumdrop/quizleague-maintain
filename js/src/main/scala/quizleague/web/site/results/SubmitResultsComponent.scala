@@ -31,9 +31,10 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
   val template ="""
     <v-container>
+    <ql-text-box>
       <v-form v-model="valid">
       <v-layout column>
-      <div v-if="hasResults">This result has been submitted. You may add a match report.</div>
+      <div v-if="hasResults">This result has been submitted, but you can still add your match report.</div>
       <p></p>
       <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>   
       <v-flex v-for="fixture in fixtures" v-if="!hasResults">
@@ -70,6 +71,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
 
       </v-layout>
     </v-form>
+    </ql-text-box>
     </v-container>"""
   
   def getFixtures(c:facade, user:LoggedInUser) = {
@@ -145,7 +147,7 @@ object SubmitResultsInstructionsComponent extends RouteComponent with GridSizeCo
   val template = """
   <v-container v-bind="gridSize" fluid>
     <v-layout>
-    <v-flex><ql-named-text name="submit-results-instructions"></ql-named-text></v-flex>
+    <v-flex><ql-text-box><ql-named-text name="submit-results-instructions"></ql-named-text></ql-text-box></v-flex>
     </v-layout>
   </v-container>"""
 }
