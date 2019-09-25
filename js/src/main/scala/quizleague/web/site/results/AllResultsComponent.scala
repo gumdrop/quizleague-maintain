@@ -44,12 +44,12 @@ object AllResultsComponent extends Component with GridSizeComponentConfig{
 
 object AllResultsTitleComponent extends RouteComponent with SeasonFormatComponent{
   val template = """<v-toolbar      
-      color="red darken-3"
-      dark
+      color="red lighten-3"
+      class="subtitle-background"
       dense
       >
       <ql-title v-if="s">All Results {{formatSeason(s)}}</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title >
         All Results
        </v-toolbar-title>
        <span style="padding-left:2em;"></span>

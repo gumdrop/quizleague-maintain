@@ -99,11 +99,11 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
   type facade = IdComponent
   val name = "competition-title"
   val template = """<v-toolbar      
-      color="purple darken-3"
-      dark
+      color="purple lighten-3"
+      class="subtitle-background"
       dense
       >
-      <v-toolbar-title class="white--text" v-if="item && season" >
+      <v-toolbar-title  v-if="item && season" >
        <ql-title>{{item.name}} {{formatText(text)}}{{formatSeason(season)}}</ql-title>
        <v-icon v-if="item.icon" style="position:relative;top:-2px">{{item.icon}}</v-icon>&nbsp;&nbsp;<span>{{item.name}} {{formatText(text)}}{{season.startYear}}/{{season.endYear}}</span>
       </v-toolbar-title>

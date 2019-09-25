@@ -92,12 +92,12 @@ object VenueTitle extends Component {
   val name = "ql-venue-title"
   val template = """
     <v-toolbar      
-      color="orange darken-3"
-      dark
+      color="orange lighten-3"
       dense
+      class="subtitle-background"
       v-if="venue">
       <ql-title>{{venue.name}}</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title >
         {{venue.name}}
       </v-toolbar-title>
     </v-toolbar>"""

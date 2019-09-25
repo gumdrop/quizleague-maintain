@@ -1,11 +1,9 @@
 package quizleague.web.site.results
 
 import quizleague.web.core._
-import quizleague.web.site.user.UserService
 import quizleague.web.site.fixtures.FixtureService
 
 import scalajs.js
-import js.JSConverters._
 import quizleague.web.site._
 import quizleague.web.model._
 import quizleague.web.util.validation.Functions
@@ -132,12 +130,12 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
 object SubmitResultsTitleComponent extends RouteComponent{
   val template = """
     <v-toolbar      
-      color="red"
-      dark
+      color="red lighten-3"
       dense
+      class="subtitle-background"
       >
       <ql-title>Submit Results</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title >
         Submit Results
       </v-toolbar-title>
     </v-toolbar>"""

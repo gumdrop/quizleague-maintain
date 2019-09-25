@@ -23,12 +23,12 @@ object TeamsComponent extends RouteComponent with GridSizeComponentConfig {
 object TeamsTitleComponent extends RouteComponent{
    val  template="""
     <v-toolbar      
-      color="amber darken-3"
-      dark
+      color="amber lighten-3"
       dense
+      class="subtitle-background"
       >
       <ql-title>Teams</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title>
         Teams 
       </v-toolbar-title>
     </v-toolbar>"""

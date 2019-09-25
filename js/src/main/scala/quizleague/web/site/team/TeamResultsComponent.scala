@@ -46,11 +46,12 @@ object TeamResultsTitleComponent extends Component with SeasonFormatComponent{
   
   val name = "results-title"
   val template = """<v-toolbar      
-      color="amber darken-3"
-      dark
-      dense v-if="team">
+      color="amber lighten-3"
+      dense
+      class="subtitle-background"
+      v-if="team">
      <ql-title>{{team.name}} : Results {{formatSeason(s)}}</ql-title>
-      <v-toolbar-title class="white--text" v-if="team">
+      <v-toolbar-title v-if="team">
         <ql-r-team-name :team="team"></ql-r-team-name> : Results 
        </v-toolbar-title>
        <span style="padding-left:2em;"></span>

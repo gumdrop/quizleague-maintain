@@ -95,7 +95,7 @@ object SiteComponent extends Component {
          <v-flex fill-height>
           <router-view  fill-height ></router-view>
          </v-flex>
-        </v-layout>
+         </v-layout>
       <notifications></notifications>
       </v-container>
     </v-content>

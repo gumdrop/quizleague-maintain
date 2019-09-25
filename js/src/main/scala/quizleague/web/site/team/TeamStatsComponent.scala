@@ -553,11 +553,12 @@ object TeamStatsTitleComponent extends Component{
   
   val name = "stats-title"
   val template = """<v-toolbar      
-      color="amber darken-3"
-      dark
-      dense v-if="team">
+      color="amber lighten-3"
+      dense
+      class="subtitle-background"
+      v-if="team">
      <ql-title>{{team.name}} : Graphs and Statistics</ql-title>
-      <v-toolbar-title class="white--text">
+      <v-toolbar-title>
         <ql-r-team-name :team="team"></ql-r-team-name> : Graphs and Statistics 
        </v-toolbar-title>
     </v-toolbar>"""

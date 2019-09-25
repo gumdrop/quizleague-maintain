@@ -173,20 +173,20 @@ object CalendarCalendarComponent extends Component{
 object CalendarTitleComponent extends RouteComponent with SeasonFormatComponent{
   val template = """
     <v-toolbar      
-      color="yellow darken-3"
-      dark
+      color="yellow lighten-3"
       dense
+      class="subtitle-background"
       >
       <ql-title>Calendar {{formatSeason(s)}}</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title>
         Calendar
       </v-toolbar-title>
       <span style="padding-left:.5em;"></span>
       <v-toolbar-items>
         <ql-season-select :season="season" :inline="true" :disabled="viewType !== 'timeline'"></ql-season-select>
-        <v-btn-toggle v-model="viewType" light>
-          <v-btn text value="timeline" color="yellow darken-3">Timeline</v-btn>
-          <v-btn text value="calendar" color="yellow darken-3">Calendar</v-btn>
+        <v-btn-toggle v-model="viewType" dark>
+          <v-btn text value="timeline" color="yellow lighten-3">Timeline</v-btn>
+          <v-btn text value="calendar" color="yellow lighten-3">Calendar</v-btn>
         </v-btn-toggle>
       </v-toolbar-items>
      </v-toolbar>"""

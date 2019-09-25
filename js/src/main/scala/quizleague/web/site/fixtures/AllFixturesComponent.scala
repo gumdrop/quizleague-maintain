@@ -42,12 +42,12 @@ object AllFixturesComponent extends Component with GridSizeComponentConfig{
 object AllFixturesTitleComponent extends RouteComponent{
   val template = """
     <v-toolbar      
-      color="red darken-3"
-      dark
+      color="red lighten-3"
       dense
+      class="subtitle-background"
       >
       <ql-title>All Fixtures</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title >
         All Fixtures
       </v-toolbar-title>
     </v-toolbar>"""

@@ -14,12 +14,12 @@ object LinksComponent extends RouteComponent with NoSideMenu with GridSizeCompon
 
 object LinksTitleComponent extends RouteComponent{
   val template = """<v-toolbar      
-      color="green darken-3"
-      dark
+      color="green lighten-3"
       dense
+      class="subtitle-background"
       >
       <ql-title>Links</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title>
         Links
       </v-toolbar-title>
     </v-toolbar>"""
