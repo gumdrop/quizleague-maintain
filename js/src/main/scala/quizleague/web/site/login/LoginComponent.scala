@@ -163,11 +163,12 @@ object PasswordLoginComponent extends Component{
 object LoginTitleComponent extends RouteComponent{
   val  template="""
     <v-toolbar
-      color="amber darken-3"
-      dark
+      color="amber lighten-3"
+      dense
+      class="subtitle-background"
       >
       <ql-title>Login</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title>
         Login
       </v-toolbar-title>
     </v-toolbar>"""
@@ -256,11 +257,12 @@ object ProfileEditComponent extends RouteComponent with NoSideMenu with GridSize
 object ProfileEditTitleComponent extends RouteComponent{
   val  template="""
     <v-toolbar
-      color="amber darken-3"
-      dark
+      color="amber lighten-3"
+      dense
+      class="subtitle-background"
       >
       <ql-title>Profile Settings</ql-title>
-      <v-toolbar-title class="white--text" >
+      <v-toolbar-title>
         Profile Settings
       </v-toolbar-title>
     </v-toolbar>"""
