@@ -18,6 +18,7 @@ trait ChatComponent extends VueRxComponent {
   var messagesObs:js.UndefOr[Observable[js.Array[ChatMessage]]]
   val user:SiteUser
   var text:String
+  val name:String
 }
 
 object ChatComponent extends Component{
@@ -57,6 +58,7 @@ object ChatComponent extends Component{
   components(ChatMessages)
 
   prop("parentKey")
+  prop("name")
   data("text",null)
   subscription("chat", "parentKey")(c => ChatService
     .list(c.parentKey)
@@ -72,7 +74,7 @@ object ChatComponent extends Component{
     }
 
     if(c.chat.filter(_ != null).isEmpty){
-      ChatService.add(c.parentKey).subscribe(saveMessage _)
+      ChatService.add(c.parentKey, c.name).subscribe(saveMessage _)
     }
     else{
       saveMessage(c.chat.get.id)
@@ -137,7 +139,7 @@ object LoginButton extends Component{
   val template="""
   <div v-if="!user">
     <v-tooltip left>
-     <template v-slot:activator="{ on }">
+     <template #activator="{ on }">
       <v-btn color="primary" fab small :to="'/login?forward=' + window.location.pathname" v-on="on">
 
         <v-icon>mdi-login</v-icon>

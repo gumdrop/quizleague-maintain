@@ -7,6 +7,7 @@ import scala.scalajs.js
 
 class Chat(
             val id: String,
+            val name:String,
             val messages: Observable[js.Array[ChatMessage]],
             val retired: Boolean = false
           ) extends Model

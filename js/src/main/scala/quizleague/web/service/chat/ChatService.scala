@@ -27,6 +27,7 @@ trait ChatGetService extends GetService[Chat] with ChatNames {
 
   override protected def mapOutSparse(chat: Dom) = new Chat(
     chat.id,
+    chat.name,
     chatMessageService.list(key(chat.id)),
     chat.retired
     )
@@ -40,9 +41,11 @@ trait ChatPutService extends PutService[Chat] with ChatGetService {
 
   override protected def mapIn(chat: Chat) = Dom(
     chat.id,
+    chat.name,
     chat.retired)
 
-  override protected def make() = Dom(newId(), false)
+  override protected def make() = Dom(id = newId())
+  def make(name:String) = Dom(newId(), name)
 
   override def enc(item: Dom) = item.asJson
 
