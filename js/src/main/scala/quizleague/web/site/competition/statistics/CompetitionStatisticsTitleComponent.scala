@@ -14,10 +14,11 @@ object CompetitionStatisticsTitleComponent extends Component{
   val name = "competition-statistics-title"
   val template = """
     <v-toolbar
-      color="purple darken-3"
-      dark
+      color="purple lighten-3"
+      dense
+      class="subtitle-background"
       >
-      <v-toolbar-title class="white--text" v-if="item" >
+      <v-toolbar-title v-if="item" >
       Roll Of Honour - {{item.competitionName}}
        <ql-title>Roll Of Honour - {{item.competitionName}}</ql-title>
       </v-toolbar-title>

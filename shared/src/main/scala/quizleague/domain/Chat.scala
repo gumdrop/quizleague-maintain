@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 case class Chat(
                  id: String,
-                 name:String = "",
+                 name:Option[String] = None,
                  retired: Boolean = false
                ) extends Entity
 

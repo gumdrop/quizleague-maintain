@@ -32,7 +32,7 @@ object ChatService extends ChatGetService with ChatPutService {
   val chatMessageService = ChatMessageService
 
   def add(parentKey:String, name:String):Observable[String] = {
-    val chat = make()
+    val chat = make(name)
 
     save(chat,parentKey).map(x => chat.id)
 

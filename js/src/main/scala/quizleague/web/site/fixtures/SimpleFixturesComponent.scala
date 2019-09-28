@@ -1,7 +1,7 @@
 package quizleague.web.site.fixtures
 
 import scala.scalajs.js
-import quizleague.web.model.Fixture
+import quizleague.web.model.{Fixture, Team}
 import quizleague.web.util.rx._
 import quizleague.web.core._
 import rxscalajs.Observable
@@ -49,7 +49,7 @@ object SimpleFixturesComponent extends Component {
 object FixtureLineComponent extends Component with TableUtils with DialogComponentConfig{
   type facade = VueRxComponent with VuetifyComponent with DialogComponent
   val name = "ql-fixture-line"
-  val template = """
+  val template = s"""
       <tr>
         <td v-if="inlineDetails" class="inline-details" ><span v-if="!short">{{fixture.date| date("d MMM yyyy")}}</span><span v-else>{{fixture.date| date("d-MM-yy")}}</span> : {{fixture.parentDescription}} {{fixture.description}}</td>
         <td v-if="!fixture.result" class="home"><ql-team-name :team="fixture.home" :short="short"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :short="short" :team="fixture.home"></ql-team-name></td>
@@ -89,7 +89,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
 
               <ql-reports :id="fixture.result.reports.id" ></ql-reports>
               <v-card-text>
-                <ql-chat :parentKey=parentKey(fixture.result.reports.id)></ql-chat>
+                <ql-chat :parentKey=parentKey(fixture.result.reports.id) :name="fixture.parentDescription + ' ' +  fixture.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -105,6 +105,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   data("short")(c => c.$vuetify.breakpoint.smAndDown)
   prop("fixture")
   prop("inlineDetails")
+  method("chatName")((fixture:Fixture, home:Team, away:Team) => s"${fixture.parentDescription} ${fixture.date} : ${home.name} vs ${away.name}")
   method("nameClass")(nameClass _ )
   method("parentKey"){id:String => ReportsService.key(id)}
 
