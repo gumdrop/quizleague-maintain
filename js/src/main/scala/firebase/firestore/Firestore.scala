@@ -19,6 +19,7 @@ class Firestore extends js.Object {
   def enablePersistence(): Promise[Unit] = js.native
   def enablePersistence(config:js.Object): Promise[Unit] = js.native
   def collection(collectionPath: String): CollectionReference = js.native
+  def collectionGroup(collectionName: String): Query = js.native
   def doc(documentPath: String): DocumentReference = js.native
   def runTransaction[T](updateFunction: js.Function1[Transaction, Promise[T]]): Promise[T] = js.native
   def batch(): WriteBatch = js.native

@@ -50,7 +50,7 @@ trait GetService[T <: Model] {
 
       query.onSnapshot(subject.inner)
 
-      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u))).map(_.filter(filterList _))
+      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u.withParentKey(d.ref.parent.path)))).map(_.filter(filterList _))
    
   }
 
@@ -63,7 +63,7 @@ trait GetService[T <: Model] {
 
       db.doc(s"$uriRoot/$id").onSnapshot(subject.inner)
 
-      subject.map(a => if(a.exists) dec(a.data()).fold(e => {throw e}, u => u) else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
+      subject.map(a => if(a.exists) dec(a.data()).fold(e => {throw e}, u => u.withParentKey(a.ref.parent.path)) else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
     })
 
   }

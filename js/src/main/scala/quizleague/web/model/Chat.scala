@@ -9,14 +9,15 @@ class Chat(
             val id: String,
             val name:String,
             val messages: Observable[js.Array[ChatMessage]],
-            val retired: Boolean = false
+            val retired: Boolean = false,
           ) extends Model
 
 class ChatMessage(
                    val id:String,
                    val user: RefObservable[SiteUser],
                    val message: String,
-                   val date: String
+                   val date: String,
+                   val parentRef:String
                  ) extends Model
 
 

@@ -132,6 +132,19 @@ object ChatMessages extends Component{
 
 }
 
+object HotChats extends Component{
+  val name = "ql-hot-chats"
+  val template = """
+  <ql-text-box>
+    <v-layout column>
+      <v-flex v-for="chat in chats">{{chat.message}}  :  {{chat.parentRef}}</v-flex  >
+    </v-layout>
+  </ql-text-box>
+  """
+
+  subscription("chats")(c => ChatMessageService.hotChats())
+}
+
 
 object LoginButton extends Component{
 

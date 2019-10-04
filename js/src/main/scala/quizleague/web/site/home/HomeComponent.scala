@@ -53,10 +53,14 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
         </v-card>
       </v-flex>
       <v-flex offset-xs0 offset-md1 xs12>
-        <ql-text-box>
-          <ql-named-text name="front-page"></ql-named-text>
-          <ql-text v-if="async(appData.currentSeason).id" :id="async(appData.currentSeason).text.id"></ql-text>
-        </ql-text-box>
+        <v-layout column>
+          <ql-text-box>
+            <ql-named-text name="front-page"></ql-named-text>
+            <ql-text v-if="async(appData.currentSeason).id" :id="async(appData.currentSeason).text.id"></ql-text>
+          </ql-text-box>
+
+        <ql-hot-chats></ql-hot-chats>
+        </v-layout>
       </v-flex>
     </v-layout>
      <v-snackbar

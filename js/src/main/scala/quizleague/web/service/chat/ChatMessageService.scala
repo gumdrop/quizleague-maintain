@@ -29,7 +29,7 @@ trait ChatMessageGetService extends GetService[ChatMessage] with ChatMessageName
 
   override protected def mapOutSparse(message: Dom) = new ChatMessage(
     message.id,
-    userService.refObs(message.user.id), message.message, message.date.toString)
+    userService.refObs(message.user.id), message.message, message.date.toString,message.parentKey.getOrElse(null))
 
   protected def dec(json:js.Any) = decodeJson[U](json)
 

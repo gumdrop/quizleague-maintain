@@ -49,5 +49,4 @@ trait ChatPutService extends PutService[Chat] with ChatGetService {
 
   override def enc(item: Dom) = item.asJson
 
-
 }

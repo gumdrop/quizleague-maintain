@@ -8,12 +8,14 @@ import rxscalajs.{Observable, Subject}
 import quizleague.web.model._
 import quizleague.web.site.fixtures.{AllFixturesComponent, SimpleFixturesComponent}
 import rxscalajs.subjects.ReplaySubject
+
 import scalajs.js
 import quizleague.util.collection._
+import quizleague.web.site.chat.ChatService.{db, typeName}
 
 object ChatModule extends Module {
 
-  override val components = @@(ChatComponent, LoginButton)
+  override val components = @@(ChatComponent, LoginButton, HotChats)
 }
 
 object ChatMessageService extends ChatMessageGetService with ChatMessagePutService {
@@ -23,6 +25,10 @@ object ChatMessageService extends ChatMessageGetService with ChatMessagePutServi
 
   def list(parentKey:String, chatID:String):Observable[js.Array[ChatMessage]] =
     list(s"$parentKey/${chatService.key(chatID)}").map(_.sortBy(_.date)(Desc))
+
+  def hotChats() = {
+    query(db.collectionGroup(typeName).orderBy("date","desc").limit(5))
+  }
 
 }
 
@@ -37,8 +43,6 @@ object ChatService extends ChatGetService with ChatPutService {
     save(chat,parentKey).map(x => chat.id)
 
   }
-
-
 }
 
 
