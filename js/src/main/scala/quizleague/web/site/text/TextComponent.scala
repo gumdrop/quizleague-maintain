@@ -18,11 +18,18 @@ object TextComponent extends Component {
   override val name = "ql-text"
     
     override val template =  """
-          <div v-if="text">
+          <div>
+          <v-skeleton-loader
+          v-if="!text"
+          type="paragraph"
+        ></v-skeleton-loader>
+          <div v-else>
             <div v-if="text.mimeType=='text/html'" v-html="text.text"></div>
             <div v-if="text.mimeType=='text/plain'" v-text="text.text"></div>
             <ql-markdown v-if="text.mimeType=='text/markdown'" :text="text.text"></ql-markdown>
-          </div>"""
+          </div>
+          </div>
+         """
      props("id")
      subscription("text","id")(v => TextService.get(v.id))
 

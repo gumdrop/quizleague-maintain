@@ -28,17 +28,26 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
-   <div v-if="list" class="ql-fixtures-simple">
-      <table>
-        <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
-      </table>
-   </div>
+      <v-skeleton-loader
+          :loading="!list"
+          transition="fade-transition"
+          :types="loaderTypes"
+          type="fixture-table"
+          max-width="40vh"
 
+        >
+         <div class="ql-fixtures-simple">
+            <table>
+              <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
+            </table>
+         </div>
+        </v-skeleton-loader>
 """
 
   prop("fixtures")
-  //prop("list")
   prop("inlineDetails")
+
+  data("loaderTypes", $("fixture-row" -> "list-item, divider", "fixture-table" -> "fixture-row@5") )
   subscription("list","fixtures")(_.fixtures)
   components(FixtureLineComponent)
 

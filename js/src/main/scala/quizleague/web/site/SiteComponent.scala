@@ -92,7 +92,7 @@ object SiteComponent extends Component {
         <v-layout justify-left align-top column>
          <router-view name="title"  style="z-index:2"></router-view>
          <p></p>
-         <v-flex fill-height>
+         <v-flex fill-height style="z-index:1;">
           <router-view  fill-height ></router-view>
          </v-flex>
          </v-layout>
