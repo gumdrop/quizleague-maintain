@@ -39,7 +39,7 @@ object LeagueTableRowComponent extends Component{
   val name = "ql-league-table-row"
   val template = """
         <tr >
-            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id"><ql-team-name :team="row.team" short="true"></ql-team-name></router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id"><ql-r-team-name :id="row.team.id"></ql-r-team-name></router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>"""
   
   props("row")
