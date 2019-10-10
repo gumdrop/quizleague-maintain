@@ -101,7 +101,9 @@ object ChatMessages extends Component{
       <v-timeline-item v-bind="align(message)"
         v-for="message in messages"
         :key="message.id"
-        small >
+        small
+         transition="fade-transition"
+        >
         <template v-slot:icon>
           <v-avatar size="36">
             <img :src="async(message.user).avatar">
@@ -120,7 +122,7 @@ object ChatMessages extends Component{
     </v-timeline>
   """
 
-  props("parentKey","chatID")
+    props("parentKey","chatID")
 
   subscription("messages","chatID")(c => ChatMessageService.list(c.parentKey,c.chatID))
   subscription("user")(c => LoginService.userProfile)
@@ -137,12 +139,14 @@ object HotChats extends Component{
   val template = """
   <ql-text-box>
     <v-layout column>
-      <v-flex v-for="chat in chats">{{chat.message}}  :  {{chat.parentRef}}</v-flex  >
+      <v-flex v-for="chat in chats"><ql-chat :parentKey="parentKey(chat)" name="dummy"></ql-chat></v-flex  >
     </v-layout>
   </ql-text-box>
   """
 
   subscription("chats")(c => ChatMessageService.hotChats())
+  method("parentKey")((chat:ChatMessage) => chat.parentRef.substring(0,chat.parentRef.indexOf("/chat")))
+  method("chatID")((chat:ChatMessage) => chat.parentRef.substring(chat.parentRef.lastIndexOf("/"), chat.parentRef.length))
 }
 
 

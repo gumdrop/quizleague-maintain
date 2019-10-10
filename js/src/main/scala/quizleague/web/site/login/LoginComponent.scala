@@ -42,9 +42,9 @@ object LoginPage extends RouteComponent with NoSideMenu{
         <ql-password-entry v-if="passwordLogin" :email="email" :forward="$route.query.forward?$route.query.forward : '/home'" :registered="registered"></ql-password-entry>
         <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
         <v-alert type="info" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showAlert">An email has been sent with login instructions.</v-alert>
-        <v-alert type="error" :icon="false" outlined border="left" text class="mt-3" transition="scroll-y-transition" :value="showFailure" >{{failureText}}</v-alert>
-       </v-card-text>
-     </v-card>
+        <v-alert type="error" :icon="false" outlined border="left" text class="mt-3" transition="scale-y-transition" :value="showFailure" >{{failureText}}</v-alert>
+      </v-card-text>
+    </v-card>
 
     </v-layout >
     </v-container>

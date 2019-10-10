@@ -28,11 +28,13 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
+   <v-lazy>
    <div v-if="list" class="ql-fixtures-simple">
       <table>
         <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
       </table>
    </div>
+   </v-lazy>
 
 """
 
