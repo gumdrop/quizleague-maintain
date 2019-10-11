@@ -17,6 +17,7 @@ object LeagueTableComponent extends Component{
   
   val name = "ql-league-table"
   val template = """
+    <v-slide-y-transition>
       <table v-if="table" class="mat-elevation-z3 ql-league-table elevation-3">
         <caption>{{table.description}}</caption>
         <thead>
@@ -26,6 +27,7 @@ object LeagueTableComponent extends Component{
           <ql-league-table-row :row="row" v-for="row in table.rows" :key="row.team.id"></ql-league-table-row>
         </tbody>
       </table>
+    </v-slide-y-transition>
 """
   props("id")
   subscription("table","id")(c => LeagueTableService.get(c.id))

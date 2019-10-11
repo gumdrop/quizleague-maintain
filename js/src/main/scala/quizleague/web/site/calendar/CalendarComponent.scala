@@ -26,25 +26,28 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
   val name = "ql-calendar" 
   val template = """
   <v-container v-bind="gridSize" class="ql-calendar" fluid >
-    <transition name="fade">
+    <v-scroll-x-transition>
     <v-timeline v-bind="dense" v-if="items && viewType=='timeline'">
       <v-timeline-item v-for="item in items" :key="item.date"  :color="colour(item.events)" :icon="icon(item.events)" fill-dot>
-        <v-card>
-           <v-card-title :class="colour(item.events)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
-           <v-card-text>
-            <div v-for="event in item.events">
-                <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event" :panelVisible="false"></ql-fixtures-event>
-                <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
-                <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
-            </div>
-           </v-card-text>
-        </v-card>
+        <v-lazy>
+          <v-card>
+             <v-card-title :class="colour(item.events)"><h5 class="display-1 white--text font-weight-light">{{item.date | date("EEEE d MMMM yyyy")}}</h5></v-card-title>
+             <v-card-text>
+              <div v-for="event in item.events">
+                  <ql-fixtures-event v-if="event.eventType === 'fixtures'" :event="event" :panelVisible="false"></ql-fixtures-event>
+                  <ql-calendar-event v-if="event.eventType === 'calendar'" :event="event"></ql-calendar-event>
+                  <ql-competition-event v-if="event.eventType === 'competition'" :event="event"></ql-competition-event>
+              </div>
+             </v-card-text>
+          </v-card>
+        </v-lazy>
       </v-timeline-item>
+
     </v-timeline>
-    </transition>
-    <transition name="fade">
+    </v-scroll-x-transition>
+    <v-scroll-x-transition>
     <ql-calendar-calendar v-if="viewType=='calendar'"></ql-calendar-calendar>
-    </transition>
+    </v-scroll-x-transition>
   </v-container>"""
 
   def icon(events:js.Array[EventWrapper]) = events.headOption.fold("mdi-calendar")(e => e match {
