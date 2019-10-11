@@ -29,24 +29,20 @@ object SimpleFixturesComponent extends Component {
 
   val template = """
       <div>
-          <v-lazy v-model="active">
-           <v-slide-y-transition>
-           <div v-if="list" class="ql-fixtures-simple">
+          <v-slide-y-transition hide-on-leave>
+          <v-skeleton-loader
+              v-if="!list"
+              :types="loaderTypes"
+              type="fixture-table"
+              max-width="40vh">
+
+         </v-skeleton-loader>
+            <div v-else class="ql-fixtures-simple">
               <table>
                 <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
               </table>
            </div>
-           </v-slide-y-transition>
-           </v-lazy>
-          <v-skeleton-loader
-              :loading="!list || !active"
-              transition="fade-transition"
-              :types="loaderTypes"
-              type="fixture-table"
-              max-width="40vh"
 
-            ><div/>
-         </v-skeleton-loader>
         </div>
 """
 
