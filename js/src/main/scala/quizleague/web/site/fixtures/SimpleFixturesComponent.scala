@@ -64,11 +64,11 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   val template = """
       <tr>
         <td v-if="inlineDetails" class="inline-details" ><span v-if="!short">{{fixture.date| date("d MMM yyyy")}}</span><span v-else>{{fixture.date| date("d-MM-yy")}}</span> : {{fixture.parentDescription}} {{fixture.description}}</td>
-        <td v-if="!fixture.result" class="home"><ql-team-name :team="fixture.home" :short="short"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :short="short" :team="fixture.home"></ql-team-name></td>
+        <td v-if="!fixture.result" class="home"><ql-r-team-name :id="fixture.home.id" ></ql-r-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-r-team-name :id="fixture.home.id"></ql-r-team-name></td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.homeScore}}</td>
         <td> - </td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
-        <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away" :short="short"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :short="short" :team="fixture.away"></ql-team-name></td> 
+        <td v-if="!fixture.result" class="away"><ql-r-team-name :id="fixture.away.id" ></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-r-team-name :id="fixture.away.id"></ql-r-team-name></td>
         <td v-if="!fixture.result"></td>
         <td v-else>
         <div>

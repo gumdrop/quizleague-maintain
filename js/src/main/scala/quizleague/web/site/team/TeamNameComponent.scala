@@ -36,7 +36,7 @@ trait ResponsiveTeamNameComponent extends IdComponent{
 object ResponsiveTeamNameComponent extends Component{
   type facade = ResponsiveTeamNameComponent
   val name = "ql-r-team-name"
-  val template = """<span v-if="t">{{$vuetify.breakpoint.xsOnly ? t.shortName : t.name}}</span>"""
+  val template = """<span v-if="t">{{$vuetify.breakpoint.smAndDown ? t.shortName : t.name}}</span>"""
   props("team","id")
   subscription("t","team", "id")(c => c.team.toOption.fold(TeamService.get(c.id))(x => Observable.just(x)))
 
