@@ -145,8 +145,8 @@ object HotChats extends Component{
   """
 
   subscription("chats")(c => ChatMessageService.hotChats())
-  method("parentKey")((chat:ChatMessage) => chat.parentRef.substring(0,chat.parentRef.indexOf("/chat")))
-  method("chatID")((chat:ChatMessage) => chat.parentRef.substring(chat.parentRef.lastIndexOf("/"), chat.parentRef.length))
+  method("parentKey")((chat:ChatMessage) => chat.parentKey.substring(0,chat.parentKey.indexOf("/chat")))
+  method("chatID")((chat:ChatMessage) => chat.parentKey.substring(chat.parentKey.lastIndexOf("/"), chat.parentKey.length))
 }
 
 

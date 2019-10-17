@@ -16,8 +16,7 @@ class ChatMessage(
                    val id:String,
                    val user: RefObservable[SiteUser],
                    val message: String,
-                   val date: String,
-                   val parentRef:String
+                   val date: String
                  ) extends Model
 
 

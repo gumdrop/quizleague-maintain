@@ -27,13 +27,13 @@ trait GetService[T <: Model] {
   private val refObsCache = Map[String, RefObservable[T]]()
   private var listObservables: Map[String, Observable[js.Array[U]]] = Map()
 
-  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutSparse _).map(postProcess _))(Observable.just(_))
+  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutWithParentKey _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
   def key(id:String) = s"$uriRoot/$id"
 
-  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutSparse(u)))
+  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithParentKey(u)))
   
-  protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutSparse _)) 
+  protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutWithParentKey _))
 
   def flush() = items.clear()
 
@@ -90,8 +90,13 @@ trait GetService[T <: Model] {
   def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id))
   def ref(dom: U): Ref[U] = ref(dom.id)
 
-  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutSparse(domain))
+  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutWithParentKey(domain))
   protected def mapOutSparse(domain: U): T
+  private def mapOutWithParentKey(domain:U) = {
+    val t = mapOutSparse(domain)
+    t.parentKey = domain.parentKey.getOrElse(null)
+    t
+  }
 
 }
 

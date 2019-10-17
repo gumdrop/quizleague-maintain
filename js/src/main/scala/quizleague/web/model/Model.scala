@@ -2,6 +2,7 @@ package quizleague.web.model
 
 import scalajs.js
 
-trait Model extends js.Object{
+abstract class Model extends js.Object {
   val id:String
+  var parentKey:String = null
 }
