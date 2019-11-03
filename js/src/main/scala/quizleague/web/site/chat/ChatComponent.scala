@@ -69,15 +69,15 @@ object ChatComponent extends Component{
 
   def addMessage(c:facade, text:String) = {
 
-    def saveMessage(chatID:String): Unit ={
-      ChatMessageService.saveMessage(text, c.user.id, chatID, c.parentKey).subscribe(x => x)
+    def saveMessage(chatKey:Key): Unit ={
+      ChatMessageService.saveMessage(text, c.user.id, chatKey).subscribe(x => x)
     }
 
     if(c.chat.filter(_ != null).isEmpty){
       ChatService.add(c.parentKey, c.name).subscribe(saveMessage _)
     }
     else{
-      saveMessage(c.chat.get.id)
+      saveMessage(c.chat.get.key)
     }
     c.text = null
   }
@@ -145,8 +145,8 @@ object HotChats extends Component{
   """
 
   subscription("chats")(c => ChatMessageService.hotChats())
-  method("parentKey")((chat:ChatMessage) => chat.parentKey.substring(0,chat.parentKey.indexOf("/chat")))
-  method("chatID")((chat:ChatMessage) => chat.parentKey.substring(chat.parentKey.lastIndexOf("/"), chat.parentKey.length))
+  method("parentKey")((chat:ChatMessage) => Key(chat.key.parentKey).parentKey)
+  method("chatID")((chat:ChatMessage) => Key(chat.key.parentKey).id)
 }
 
 

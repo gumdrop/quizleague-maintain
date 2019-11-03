@@ -7,8 +7,9 @@ import scala.scalajs.js.JSConverters._
 import firebase.firestore._
 import io.circe._
 import io.circe.scalajs.convertJsToJson
-import quizleague.domain.{ Entity, Ref }
+import quizleague.domain.{ Entity, Ref, Key }
 import quizleague.web.model.Model
+import quizleague.web.model.{Key => ModKey}
 import quizleague.web.names.ComponentNames
 import quizleague.web.store.Firestore
 import quizleague.web.util.rx.RefObservable
@@ -27,13 +28,13 @@ trait GetService[T <: Model] {
   private val refObsCache = Map[String, RefObservable[T]]()
   private var listObservables: Map[String, Observable[js.Array[U]]] = Map()
 
-  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutWithParentKey _).map(postProcess _))(Observable.just(_))
+  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
   def key(id:String) = s"$uriRoot/$id"
 
-  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithParentKey(u)))
+  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithKey(u)))
   
-  protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutWithParentKey _))
+  protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutWithKey _))
 
   def flush() = items.clear()
 
@@ -50,7 +51,7 @@ trait GetService[T <: Model] {
 
       query.onSnapshot(subject.inner)
 
-      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u.withParentKey(parentRef(d.ref.parent.path))))).map(_.filter(filterList _))
+      subject.map(q => q.docs.map(d => dec(d.data()).fold(e => {throw e}, u => u.withKey(Key(d.ref.path))))).map(_.filter(filterList _))
    
   }
 
@@ -63,7 +64,12 @@ trait GetService[T <: Model] {
 
       db.doc(s"$uriRoot/$id").onSnapshot(subject.inner)
 
-      subject.map(a => if(a.exists) dec(a.data()).fold(e => {throw e}, u => u.withParentKey(parentRef(a.ref.parent.path))) else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
+      subject
+        .map(a => if(a.exists) dec(a.data())
+          .fold(e => {throw e}, u => u
+            .withKey(Key(a.ref.path))
+          )
+        else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
     })
 
   }
@@ -73,8 +79,6 @@ trait GetService[T <: Model] {
   protected def dec(json: js.Any): Either[Error, U]
 
   private[service] def getDom(id: String) = items(id)
-
-  private def parentRef(path:String) = path.substring(0,path.lastIndexOf(s"/$uriRoot"))
 
   protected def decodeJson[X](obj: js.Any)(implicit dec: Decoder[X]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
@@ -90,11 +94,11 @@ trait GetService[T <: Model] {
   def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id))
   def ref(dom: U): Ref[U] = ref(dom.id)
 
-  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutWithParentKey(domain))
+  protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutWithKey(domain))
   protected def mapOutSparse(domain: U): T
-  private def mapOutWithParentKey(domain:U) = {
+  protected final def mapOutWithKey(domain:U) = {
     val t = mapOutSparse(domain)
-    t.parentKey = domain.parentKey.getOrElse(null)
+    t.key = ModKey(domain.key.getOrElse(throw new RuntimeException("no domain key")))
     t
   }
 

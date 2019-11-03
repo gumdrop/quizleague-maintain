@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import quizleague.web.service.EntityService
 import quizleague.web.model._
-import quizleague.domain.{ChatMessage => Dom}
+import quizleague.domain.{ChatMessage => Dom, Key => DomKey}
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
 
@@ -48,8 +48,8 @@ trait ChatMessagePutService extends PutService[ChatMessage] with ChatMessageGetS
 
   override def enc(item: Dom) = item.asJson
 
-  def saveMessage(text:String, siteUserID:String, chatID:String, parentKey:String) = {
-      save(make().copy(user=userService.ref(siteUserID), message=text), s"$parentKey/${chatService.key(chatID)}")
+  def saveMessage(text:String, siteUserID:String, chatKey:Key) = {
+      save(make(DomKey(chatKey.key)).copy(user=userService.ref(siteUserID), message=text))
   }
 
 }

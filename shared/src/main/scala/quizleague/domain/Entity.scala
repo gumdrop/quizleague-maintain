@@ -5,12 +5,13 @@ trait Entity extends Serializable  {
 
   val id:String
   val retired:Boolean
-  var parentKey:Option[String] = None
+  var key:Option[Key] = None
 
-  def withParentKey(key:String):U = {
-    this.parentKey = Option(key)
+  def withKey(key:Key):U = {
+    this.key = Option(key)
     this
   }
 
+  def parentKey = key.flatMap(_.parentKey)
 }
 
