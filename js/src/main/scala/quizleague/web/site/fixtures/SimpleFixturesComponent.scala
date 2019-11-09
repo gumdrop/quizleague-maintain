@@ -30,19 +30,18 @@ object SimpleFixturesComponent extends Component {
   val template = """
       <div>
           <v-slide-y-transition hide-on-leave>
-          <v-skeleton-loader
-              v-if="!list"
-              :types="loaderTypes"
-              type="fixture-table"
-              max-width="40vh">
-
-         </v-skeleton-loader>
+            <v-skeleton-loader
+                v-if="!list"
+                :types="loaderTypes"
+                type="fixture-table"
+                max-width="40vh">
+            </v-skeleton-loader>
             <div v-else class="ql-fixtures-simple">
               <table>
                 <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
               </table>
            </div>
-
+          </v-slide-y-transition>
         </div>
 """
 
