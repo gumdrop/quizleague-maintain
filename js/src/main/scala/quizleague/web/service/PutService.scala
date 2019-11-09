@@ -24,8 +24,8 @@ trait PutService[T <: Model] {
   def save(obs:RefObservable[T]):Unit = obs.subscribe(save(_))
 
   protected def save(item:U):Observable[Unit] = saveDom(item)
-  protected def save(item:U, parentKey:String = ""):Observable[Unit] = {
-    item.key = Some(Key(Option(parentKey),uriRoot,item.id))
+  protected def save(item:U, parentKey:Key = null):Observable[Unit] = {
+    item.key = Some(Key(parentKey,uriRoot,item.id))
     saveDom(item)
   }
 
@@ -57,7 +57,10 @@ trait PutService[T <: Model] {
   
   protected def mapIn(model:T):U
   protected def make():U
-  protected def make(parentKey:Key):U = make().withKey(parentKey)
+  protected def make(parentKey:Key):U = {
+    val u = make()
+    u.withKey(Key(parentKey,uriRoot,u.id))
+  }
   protected def enc(item:U):Json
 
 }

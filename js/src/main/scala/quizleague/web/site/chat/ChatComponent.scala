@@ -3,6 +3,7 @@ package quizleague.web.site.chat
 import java.time.LocalDateTime
 
 import com.felstar.scalajs.vue.VueRxComponent
+import quizleague.util.collection._
 import quizleague.web.core._
 import quizleague.web.model._
 import quizleague.web.site.login.{LoggedInUser, LoginService}
@@ -13,7 +14,7 @@ import scala.scalajs.js.UndefOr
 
 @js.native
 trait ChatComponent extends VueRxComponent {
-  val parentKey:String
+  val parentKey:Key
   val chat:js.UndefOr[Chat]
   var messagesObs:js.UndefOr[Observable[js.Array[ChatMessage]]]
   val user:SiteUser
@@ -51,7 +52,7 @@ object ChatComponent extends Component{
        </div>
     </v-flex>
     <v-flex v-if="chat" class="pt-0">
-      <ql-chat-messages  :chatID="chat.id" :parentKey="parentKey"></ql-chat-messages>
+      <ql-chat-messages  :chatKey="chat.key" ></ql-chat-messages>
     </v-flex>
   </v-layout>"""
 
@@ -86,8 +87,7 @@ object ChatComponent extends Component{
 
 @js.native
 trait ChatMessages extends VueRxComponent {
-  val chatID:String
-  val parentKey:String
+  val chatKey:Key
   val user:UndefOr[LoggedInUser]
 }
 
@@ -122,9 +122,9 @@ object ChatMessages extends Component{
     </v-timeline>
   """
 
-    props("parentKey","chatID")
+  props("chatKey")
 
-  subscription("messages","chatID")(c => ChatMessageService.list(c.parentKey,c.chatID))
+  subscription("messages","chatKey")(c => ChatService.get(c.chatKey).flatMap(_.messages).map(_.sortBy(_.date)(Desc)))
   subscription("user")(c => LoginService.userProfile)
 
   method("isLeft")({(c:facade,m:ChatMessage) => c.user.fold(true)(_.siteUser.id != m.user.id)}:js.ThisFunction)
@@ -145,7 +145,7 @@ object HotChats extends Component{
   """
 
   subscription("chats")(c => ChatMessageService.hotChats())
-  method("parentKey")((chat:ChatMessage) => Key(chat.key.parentKey).parentKey)
+  method("parentKey")((chat:ChatMessage) => Key(Key(chat.key.parentKey).parentKey))
   method("chatID")((chat:ChatMessage) => Key(chat.key.parentKey).id)
 }
 

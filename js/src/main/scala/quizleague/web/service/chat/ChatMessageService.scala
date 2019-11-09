@@ -17,6 +17,7 @@ import quizleague.web.names._
 import io.circe.parser._
 import io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.web.util.Logging
 import rxscalajs.Observable
 
 import scalajs.js
@@ -49,7 +50,8 @@ trait ChatMessagePutService extends PutService[ChatMessage] with ChatMessageGetS
   override def enc(item: Dom) = item.asJson
 
   def saveMessage(text:String, siteUserID:String, chatKey:Key) = {
-      save(make(DomKey(chatKey.key)).copy(user=userService.ref(siteUserID), message=text))
+    val msg = make(DomKey(chatKey.key))
+    save(msg.copy(user=userService.ref(siteUserID), message=text).withKey(msg.key.get))
   }
 
 }

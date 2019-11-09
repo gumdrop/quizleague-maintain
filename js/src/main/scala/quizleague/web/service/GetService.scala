@@ -28,11 +28,12 @@ trait GetService[T <: Model] {
   private val refObsCache = Map[String, RefObservable[T]]()
   private var listObservables: Map[String, Observable[js.Array[U]]] = Map()
 
-  def get(id: String): Observable[T] = items.get(id).fold(getFromStorage(id).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
+  def get(id: String): Observable[T] = get(new ModKey(null, uriRoot,id))
+  def get(key: ModKey): Observable[T] = items.get(key.id).fold(getFromStorage(key).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
-  def key(id:String) = s"$uriRoot/$id"
+  def key(id:String) = ModKey(s"$uriRoot/$id")
 
-  def list(parentKey:String=""): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithKey(u)))
+  def list(parentKey:ModKey=null): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithKey(u)))
   
   protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutWithKey _))
 
@@ -40,9 +41,9 @@ trait GetService[T <: Model] {
 
   protected def filterList(u:U) = true
   
-  protected final def listFromStorage(parentKey:String = ""): Observable[js.Array[U]] = {
+  protected final def listFromStorage(parentKey:ModKey = null): Observable[js.Array[U]] = {
     
-    listObservables.getOrElseUpdate(parentKey,{listFromQuery(db.collection(s"${if(parentKey.isEmpty)""else s"$parentKey/"}$uriRoot"))})
+    listObservables.getOrElseUpdate(s"$parentKey",{listFromQuery(db.collection(s"${if(parentKey == null)""else s"${parentKey.key}/"}$uriRoot"))})
   }
   
   protected final def listFromQuery(query:Query): Observable[js.Array[U]] = {
@@ -57,19 +58,19 @@ trait GetService[T <: Model] {
 
 
   protected final def add(item: T) = { items += ((item.id, item)); item }
-  protected final def getFromStorage(id: String): Observable[U] = {
+  protected final def getFromStorage(key: ModKey): Observable[U] = {
 
-    observables.getOrElseUpdate(id, {
+    observables.getOrElseUpdate(key.id, {
       val subject = ReplaySubject[DocumentSnapshot]()
 
-      db.doc(s"$uriRoot/$id").onSnapshot(subject.inner)
+      db.doc(key.key).onSnapshot(subject.inner)
 
       subject
         .map(a => if(a.exists) dec(a.data())
           .fold(e => {throw e}, u => u
             .withKey(Key(a.ref.path))
           )
-        else {throw new Exception(s"db load failed : $uriRoot/$id not found")})
+        else {throw new Exception(s"db load failed : $key not found")})
     })
 
   }

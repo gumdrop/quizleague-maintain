@@ -32,7 +32,7 @@ trait ReportsGetService extends GetService[Model] with ReportsNames {
   override protected def mapOutSparse(dom: Dom) = Model(
     dom.id,
     mapReports(dom.reports),
-    chatService.list(key(dom.id)).flatMap(l => if(l.isEmpty) Observable.empty else Observable.just(l.head)),
+    chatService.list(Key(dom.key)).flatMap(l => if(l.isEmpty) Observable.empty else Observable.just(l.head)),
     dom.reports.isEmpty)
 
   private def mapReports(reports:List[DomReport]) =

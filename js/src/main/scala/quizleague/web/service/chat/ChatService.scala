@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import quizleague.web.service.EntityService
 import quizleague.web.model._
-import quizleague.domain.{Chat => Dom, ChatMessage => DomMessage}
+import quizleague.domain.{Chat => Dom, ChatMessage => DomMessage, Key => DomKey}
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
 
@@ -28,7 +28,7 @@ trait ChatGetService extends GetService[Chat] with ChatNames {
   override protected def mapOutSparse(chat: Dom) = new Chat(
     chat.id,
     chat.name.getOrElse(null),
-    chatMessageService.list(key(chat.id)),
+    chatMessageService.list(Key(chat.key)),
     chat.retired
     )
 
@@ -45,7 +45,11 @@ trait ChatPutService extends PutService[Chat] with ChatGetService {
     chat.retired)
 
   override protected def make() = Dom(id = newId())
-  def make(name:String) = Dom(newId(), Some(name))
+
+  def instance(parentKey:Key, name:String) = {
+    val id = newId()
+    mapOutWithKey(make().copy(name = Some(name)).withKey(DomKey(DomKey(parentKey.key),uriRoot,id)))
+  }
 
   override def enc(item: Dom) = item.asJson
 

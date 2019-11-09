@@ -1,17 +1,13 @@
 package quizleague.web.site.chat
 
-import quizleague.web.core.{@@, Module}
-import quizleague.web.service.chat.{ChatGetService, ChatMessageGetService, ChatMessagePutService, ChatPutService}
-import quizleague.web.service.user.SiteUserGetService
-import quizleague.web.site.user.SiteUserService
-import rxscalajs.{Observable, Subject}
-import quizleague.web.model._
-import quizleague.web.site.fixtures.{AllFixturesComponent, SimpleFixturesComponent}
-import rxscalajs.subjects.ReplaySubject
-
-import scalajs.js
 import quizleague.util.collection._
-import quizleague.web.site.chat.ChatService.{db, typeName}
+import quizleague.web.core.{@@, Module}
+import quizleague.web.model._
+import quizleague.web.service.chat.{ChatGetService, ChatMessageGetService, ChatMessagePutService, ChatPutService}
+import quizleague.web.site.user.SiteUserService
+import rxscalajs.Observable
+
+import scala.scalajs.js
 
 object ChatModule extends Module {
 
@@ -23,8 +19,8 @@ object ChatMessageService extends ChatMessageGetService with ChatMessagePutServi
   val userService = SiteUserService
   val chatService = ChatService
 
-  def list(parentKey:String, chatID:String):Observable[js.Array[ChatMessage]] =
-    list(s"$parentKey/${chatService.key(chatID)}").map(_.sortBy(_.date)(Desc))
+  def listMessages(chatKey:Key):Observable[js.Array[ChatMessage]] =
+    list(chatKey).map(_.sortBy(_.date)(Desc))
 
   def hotChats() = {
     query(db.collectionGroup(typeName).orderBy("date","desc").limit(5))
@@ -37,10 +33,10 @@ object ChatService extends ChatGetService with ChatPutService {
 
   val chatMessageService = ChatMessageService
 
-  def add(parentKey:String, name:String):Observable[String] = {
-    val chat = make(name)
+  def add(parentKey:Key, name:String):Observable[Key] = {
+    val chat = instance(parentKey,name)
 
-    save(chat,parentKey).map(x => chat.id)
+    save(chat).map(x => chat.key)
 
   }
 }
