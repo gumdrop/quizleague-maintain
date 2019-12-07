@@ -44,6 +44,7 @@ object FixtureService extends FixtureGetService with FixturePutService{
   override val venueService = VenueService
   override val reportsService = ReportsService
   override val userService = UserService
+  override val fixturesService = FixturesService
   
   def addResult(fixture:Fixture) = {
     val fx = mapIn(fixture)

@@ -66,7 +66,9 @@ object CompetitionViewService extends SeasonWatchService {
   
   def competitions() = season.flatMap(s => CompetitionService.competitions(s.id))
   
-  def fixtures(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => Observable.combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
+  def fixtures(competitionId:String) = CompetitionService
+    .get(competitionId)
+    .flatMap(c => Observable.combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
   
   def nextFixtures(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString

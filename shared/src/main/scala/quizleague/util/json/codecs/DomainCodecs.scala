@@ -4,7 +4,7 @@ import quizleague.domain._
 import quizleague.domain.stats._
 import quizleague.domain.notification._
 import ScalaTimeCodecs._
-import quizleague.domain.container.DomainContainer
+import quizleague.domain.container._
 
 object DomainCodecs{
   import io.circe._, io.circe.generic.semiauto._,io.circe.generic.auto._
@@ -34,6 +34,8 @@ object DomainCodecs{
   implicit val resultEncoder: Encoder[Result] = deriveEncoder
   implicit val reportsDecoder: Decoder[Reports] = deriveDecoder
   implicit val reportsEncoder: Encoder[Reports] = deriveEncoder
+  implicit val reportDecoder: Decoder[Report] = deriveDecoder
+  implicit val reportEncoder: Encoder[Report] = deriveEncoder
   implicit val competitionDecoder: Decoder[Competition] = deriveDecoder
   implicit val competitionEncoder: Encoder[Competition] = deriveEncoder
   implicit val leagueTableDecoder: Decoder[LeagueTable] = deriveDecoder
@@ -50,6 +52,8 @@ object DomainCodecs{
   implicit val userEncoder: Encoder[User] = deriveEncoder
   implicit val domainContainerDecoder: Decoder[DomainContainer] = deriveDecoder
   implicit val domainContainerEncoder: Encoder[DomainContainer] = deriveEncoder
+  implicit val nesteDomainContainerDecoder: Decoder[NestedDomainContainer] = deriveDecoder
+  implicit val nestedDomainContainerEncoder: Encoder[NestedDomainContainer] = deriveEncoder
   
   
   implicit val seasonStatsDecoder: Decoder[SeasonStats] = deriveDecoder

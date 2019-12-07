@@ -14,4 +14,5 @@ object Key{
   }
 
   def apply(parentKey:Key, entityName:String, id:String):Key = Key(Option(parentKey).map(_.key), entityName,id)
+  //def apply(parentKey:Option[Key], entityName:String, id:String):Key = Key(parentKey, entityName,id)
 }

@@ -31,7 +31,16 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     
   val fixtureService:FixtureGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description, dom.parentDescription,dom.date, dom.start, dom.duration,refObsList(dom.fixtures, fixtureService), dom.subsidiary.getOrElse(false))
+  override protected def mapOutSparse(dom:Dom) = Model(
+    dom.id,
+    dom.description,
+    dom.parentDescription,
+    dom.date,
+    dom.start,
+    dom.duration,
+    refObsList(dom.fixtures, fixtureService),
+    fixtureService.list(new Key(null, uriRoot,dom.id)),
+    dom.subsidiary.getOrElse(false))
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
  

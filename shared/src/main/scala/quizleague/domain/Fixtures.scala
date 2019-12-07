@@ -44,5 +44,9 @@ case class Reports(
 
 case class Report(
     team:Ref[Team],
-    text:Ref[Text])
+    text:Ref[Text],
+    ) extends Entity{
+   val id = ""
+   val retired = false
+}
 

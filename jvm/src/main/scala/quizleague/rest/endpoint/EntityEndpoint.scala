@@ -3,7 +3,7 @@ package quizleague.rest.endpoint
 import javax.ws.rs.Path
 import quizleague.rest.MaintainPostEndpoints
 import javax.ws.rs.POST
-import quizleague.domain.container.DomainContainer
+import quizleague.domain.container.{DomainContainer,NestedDomainContainer}
 import scala.reflect.ClassTag
 import quizleague.data.Storage
 import Storage._
@@ -76,6 +76,55 @@ class EntityEndpoint extends MaintainPostEndpoints{
     
     
     
+  }
+
+  @POST
+  @Path("/nesteddbupload")
+  def nesteddbupload(json:String) = {
+
+
+    def withKey[T <: Entity](pair:(String,T)):T =  {val (key,entity) = pair; entity.withKey(Key(key))}
+
+    def saveAll[T <: Entity](list:Map[String, T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
+      Storage.saveAll[T](list.toList.map(withKey _))(tag,encoder)
+    }
+
+    def deleteAll[T <: Entity](implicit tag:ClassTag[T], decoder:Decoder[T]){
+      try{
+        Storage.deleteAll(Storage.list[T])
+      }
+      catch{case e:Throwable => LOG.info(s"exception deleting collection $tag")}
+    }
+
+    deleteAll[ApplicationContext]
+    deleteAll[Competition]
+    deleteAll[Fixture]
+    deleteAll[Fixtures]
+    deleteAll[GlobalText]
+    deleteAll[LeagueTable]
+    deleteAll[Reports]
+    deleteAll[Season]
+    deleteAll[Team]
+    deleteAll[Text]
+    deleteAll[User]
+    deleteAll[Venue]
+    deleteAll[Statistics]
+
+    val container = deser[NestedDomainContainer](json)
+
+
+    saveAll(container.applicationcontext)
+    saveAll(container.competition)
+    saveAll(container.fixture)
+    saveAll(container.fixtures)
+    saveAll(container.globaltext)
+    saveAll(container.leaguetable)
+    saveAll(container.reports)
+    saveAll(container.season)
+    saveAll(container.team)
+    saveAll(container.text)
+    saveAll(container.user)
+    saveAll(container.venue)
   }
   
   @GET

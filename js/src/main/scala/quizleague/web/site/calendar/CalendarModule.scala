@@ -13,6 +13,7 @@ import quizleague.web.site.competition._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
 import org.scalajs.dom
+import quizleague.web.site.fixtures
 
 
 import quizleague.web.util.Logging._

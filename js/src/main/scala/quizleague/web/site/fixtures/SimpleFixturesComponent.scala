@@ -39,13 +39,17 @@ object SimpleFixturesComponent extends Component {
 
 }
 
+@js.native
+trait FixtureLineComponent extends VueRxComponent {
+  def fixture: Fixture = js.native
+}
 
 object FixtureLineComponent extends Component with TableUtils with DialogComponentConfig{
-  type facade = VueRxComponent with VuetifyComponent with DialogComponent
+  type facade = FixtureLineComponent with VuetifyComponent with DialogComponent
   val name = "ql-fixture-line"
   val template = s"""
       <tr>
-        <td v-if="inlineDetails" class="inline-details" ><span v-if="!short">{{fixture.date| date("d MMM yyyy")}}</span><span v-else>{{fixture.date| date("d-MM-yy")}}</span> : {{fixture.parentDescription}} {{fixture.description}}</td>
+        <td v-if="inlineDetails && parent" class="inline-details" ><span v-if="!short">{{parent.date| date("d MMM yyyy")}}</span><span v-else>{{fixture.date| date("d-MM-yy")}}</span> : {{parent.parentDescription}} {{parent.description}}</td>
         <td v-if="!fixture.result" class="home"><ql-team-name :team="fixture.home" :short="short"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)"><ql-team-name :short="short" :team="fixture.home"></ql-team-name></td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.homeScore}}</td>
         <td> - </td>
@@ -96,6 +100,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   data("short")(c => c.$vuetify.breakpoint.smAndDown)
   prop("fixture")
   prop("inlineDetails")
+  subscription("parent")(_.fixture.parent)
   method("chatName")((fixture:Fixture, home:Team, away:Team) => s"${fixture.parentDescription} ${fixture.date} : ${home.name} vs ${away.name}")
   method("nameClass")(nameClass _ )
   method("parentKey"){id:String => ReportsService.key(id)}

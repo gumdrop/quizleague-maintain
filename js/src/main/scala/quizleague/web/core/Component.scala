@@ -9,11 +9,13 @@ import rxscalajs.Observable
 import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
 import quizleague.web.util.rx.RefObservable
-import scala.scalajs.js.UndefOr
+
+import scala.scalajs.js.{UndefOr, |}
 import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VuetifyComponent
+
 import scala.collection.mutable
 
 
@@ -54,7 +56,7 @@ trait Component {
 
   val empty = new js.Object
   
-  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]]) => {
+  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]|Observable[js.Dynamic]]) => {
 
     if (in.isDefined) {
 
@@ -71,11 +73,13 @@ trait Component {
 
       val obs = in.get
 
+      val actual = if(obs.isInstanceOf[RefObservable[js.Dynamic]]) obs.asInstanceOf[RefObservable[js.Dynamic]].inner else obs.asInstanceOf[Observable[js.Dynamic]].inner
+
       val retval = observables.get(obs.hashCode)
 
       def sub() = {
         val a = js.Dictionary[Any]()
-        c.$subscribeTo(obs.inner, (b: js.Dynamic) => c.$nextTick({ () => Vue.util.extend(a, b); c.$forceUpdate() }))
+        c.$subscribeTo(actual, (b: js.Dynamic) => c.$nextTick({ () => Vue.util.extend(a, b); c.$forceUpdate() }))
         observables += ((obs.hashCode, a))
         a
       }

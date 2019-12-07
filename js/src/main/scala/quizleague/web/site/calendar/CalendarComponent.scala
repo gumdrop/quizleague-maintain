@@ -234,7 +234,7 @@ object FixturesEventComponent extends EventComponentConfig{
              <v-icon v-if="panelVisible">mdi-eye-off</v-icon>
             </v-btn>
           </v-flex> 
-          <v-flex><v-slide-y-transition><ql-fixtures-simple v-if="panelVisible" :fixtures="event.fixtures.fixtures | combine"></ql-fixtures-simple></v-slide-y-transition></v-flex>
+          <v-expand-transition><ql-fixtures-simple v-if="panelVisible" :fixtures="event.fixtures.fixture"></ql-fixtures-simple></v-expand-transition>
 
      </v-layout>
 """

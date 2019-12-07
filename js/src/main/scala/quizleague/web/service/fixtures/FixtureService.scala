@@ -3,7 +3,7 @@ package quizleague.web.service.fixtures
 
 
 import quizleague.web.model._
-import quizleague.web.model.{Fixture => Model}
+import quizleague.web.model.{Fixture => Model, Key}
 import quizleague.domain.{Fixture => Dom, Result => DomResult}
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
@@ -35,8 +35,9 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val teamService:TeamGetService
   val userService:UserGetService
   val reportsService:ReportsGetService
+  val fixturesService:FixturesGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,venueService.refObs(dom.venue),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration, mapResult(dom.result), dom.subsidiary)
+  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,venueService.refObs(dom.venue),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration, mapResult(dom.result), fixturesService.get(Key(dom.key.get.parentKey.get)), dom.subsidiary)
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
   

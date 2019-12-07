@@ -14,6 +14,7 @@ class Fixtures(
     val start:String,
     val duration:Float,
     val fixtures:js.Array[RefObservable[Fixture]],
+    val fixture: Observable[js.Array[Fixture]],
     val subsidiary:Boolean) extends Model
     
 object Fixtures{
@@ -24,7 +25,8 @@ object Fixtures{
     start:String,
     duration:Float,
     fixtures:js.Array[RefObservable[Fixture]],
-    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration,fixtures, subsidiary)
+    fixture: Observable[js.Array[Fixture]] = Observable.of(js.Array()),
+    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration,fixtures, fixture, subsidiary)
 }
     
 
@@ -39,6 +41,7 @@ class Fixture(
   val time: String,
   val duration : Float,
   val result: Result,
+  val parent: Observable[Fixtures],
   val subsidiary:Boolean
 ) extends Model
 
@@ -53,11 +56,12 @@ object Fixture{
   time: String,
   duration : Float,
   result:Result,
-  subsidiary:Boolean = false) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result, subsidiary)
+  parent:Observable[Fixtures] = Observable.empty,
+  subsidiary:Boolean = false) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result, parent, subsidiary)
   
   def addBlankResult(f:Fixture) = {
     Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
-        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null,null),f.subsidiary)
+        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null,null),f.parent, f.subsidiary)
   }
 }
 
