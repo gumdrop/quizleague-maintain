@@ -23,6 +23,7 @@ import quizleague.util.json.codecs.DomainCodecs._
 import io.circe.Json
 import quizleague.web.service.user.UserGetService
 import quizleague.web.service.results.ReportsGetService
+import quizleague.web.service.results.ReportGetService
 import quizleague.web.util.rx.RefObservable
 
 
@@ -35,15 +36,35 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val teamService:TeamGetService
   val userService:UserGetService
   val reportsService:ReportsGetService
+  val reportService:ReportGetService
   val fixturesService:FixturesGetService
 
-  override protected def mapOutSparse(dom:Dom) = Model(dom.id,dom.description,dom.parentDescription,venueService.refObs(dom.venue),refObs(dom.home, teamService),refObs(dom.away, teamService),dom.date,dom.time,dom.duration, mapResult(dom.result), fixturesService.get(Key(dom.key.get.parentKey.get)), dom.subsidiary)
+  override protected def mapOutSparse(dom:Dom) = Model(
+    dom.id,
+    dom.description,
+    dom.parentDescription,
+    venueService.refObs(dom.venue),
+    refObs(dom.home, teamService),
+    refObs(dom.away, teamService),
+    dom.date,
+    dom.time,
+    dom.duration,
+    mapResult(dom),
+    fixturesService.get(Key(dom.key.get.parentKey.get)),
+    dom.subsidiary)
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
   
-  private def mapResult(dom:Option[DomResult]):Result = {
+  private def mapResult(fixture:Dom):Result = {
        
-      dom.fold[Result](null)(r => Result(r.homeScore, r.awayScore, userService.refObs(r.submitter), r.note.orNull, reportsService.refObs(r.reports))) 
+      fixture.result.fold[Result](null)(r =>
+        Result(
+          r.homeScore,
+          r.awayScore,
+          userService.refObs(r.submitter),
+          r.note.orNull,
+          reportService.list(Key(fixture.key)),
+          reportsService.refObs(r.reports)))
     }
 
 }

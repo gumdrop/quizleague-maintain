@@ -22,6 +22,7 @@ import quizleague.web.site.user.UserService
 import quizleague.util.collection._
 import quizleague.web.site.text.TextService
 import quizleague.web.service.results.ReportsGetService
+import quizleague.web.service.results.ReportGetService
 import quizleague.web.service.PostService
 import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
@@ -77,7 +78,9 @@ object FixturesService extends FixturesGetService {
   }
 
   def competitionFixtures(competitions:Observable[js.Array[_ <: Competition]]):Observable[js.Array[Fixtures]] = {
-      competitions.map(_.flatMap(_.fixtures.map(_.obs))).flatMap(o => combineLatest(o).map(_.toJSArray))
+      val interim = competitions.map(_.map(c => FixturesService.list(c.key)))
+
+    interim.flatMap(o => combineLatest(o).map(_.flatten.toJSArray))
   }
 
 }
@@ -88,6 +91,7 @@ object FixtureService extends FixtureGetService with PostService{
   override val userService = UserService
   override val reportsService = ReportsService
   override val fixturesService = FixturesService
+  override val reportService  = ReportService
 
 
   def teamFixtures(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
@@ -195,5 +199,10 @@ object ReportsService extends ReportsGetService {
   val textService = TextService
   val teamService = TeamService
   val chatService = ChatService
+}
+
+object ReportService extends ReportGetService {
+  val textService = TextService
+  val teamService = TeamService
 }
 

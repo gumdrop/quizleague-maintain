@@ -59,16 +59,16 @@ object CompetitionService extends CompetitionGetService{
   def competition[T <: Competition:ClassTag](seasonId:String, typeName:String) = 
     competitionsOfType[T](seasonId).map(_.filter(_.typeName == typeName).head)
   
-  def competitions(seasonId:String) = SeasonService.get(seasonId).map(_.competitions.map(_.obs).toSeq).map(cs => combineLatest(cs)).flatten.map(_.toJSArray)
+  def competitions(seasonId:String) = SeasonService.get(seasonId).flatMap(s => list(s.key))
 }
 
 object CompetitionViewService extends SeasonWatchService {
   
-  def competitions() = season.flatMap(s => CompetitionService.competitions(s.id))
+  def competitions() = season.flatMap(s => CompetitionService.list(s.key))
   
   def fixtures(competitionId:String) = CompetitionService
     .get(competitionId)
-    .flatMap(c => Observable.combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
+    .flatMap(c => FixturesService.list(c.key))
   
   def nextFixtures(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString

@@ -3,6 +3,7 @@ package quizleague.web.model
 
 import scalajs.js
 import quizleague.web.util.rx.RefObservable
+import rxscalajs.Observable
 
 
 class Season(

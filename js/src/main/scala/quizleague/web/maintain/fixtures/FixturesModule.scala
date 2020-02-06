@@ -8,6 +8,8 @@ import quizleague.web.service.fixtures.FixturesGetService
 import quizleague.web.service.fixtures.FixturesPutService
 import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.results.ReportsPutService
+import quizleague.web.service.results.ReportGetService
+import quizleague.web.service.results.ReportPutService
 import quizleague.web.maintain.text.TextService
 import quizleague.web.maintain.user.UserService
 import quizleague.web.maintain.competition.CompetitionService
@@ -45,6 +47,7 @@ object FixtureService extends FixtureGetService with FixturePutService{
   override val reportsService = ReportsService
   override val userService = UserService
   override val fixturesService = FixturesService
+  override val reportService = ReportService
   
   def addResult(fixture:Fixture) = {
     val fx = mapIn(fixture)
@@ -86,5 +89,10 @@ object ReportsService extends ReportsGetService with ReportsPutService{
   override val teamService = TeamService
   override val textService = TextService
   override val chatService = ChatService
+}
+
+object ReportService extends ReportGetService with ReportPutService{
+  override val teamService = TeamService
+  override val textService = TextService
 }
 

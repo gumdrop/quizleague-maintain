@@ -39,7 +39,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     dom.start,
     dom.duration,
     refObsList(dom.fixtures, fixtureService),
-    fixtureService.list(new Key(null, uriRoot,dom.id)),
+    fixtureService.list(Key(dom.key.get.key)),
     dom.subsidiary.getOrElse(false))
   
   override protected def dec(json:js.Any) = decodeJson[U](json)

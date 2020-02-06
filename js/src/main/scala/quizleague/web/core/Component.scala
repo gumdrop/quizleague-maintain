@@ -197,3 +197,8 @@ trait Component {
 trait IdComponent extends VueComponent with VueRxComponent with VuetifyComponent{
   val id:String = js.native  
 }
+
+@js.native
+trait KeyComponent extends VueComponent with VueRxComponent with VuetifyComponent{
+  val key:String = js.native
+}

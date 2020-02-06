@@ -61,7 +61,7 @@ object Fixture{
   
   def addBlankResult(f:Fixture) = {
     Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
-        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null,null),f.parent, f.subsidiary)
+        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array()),null),f.parent, f.subsidiary)
   }
 }
 
@@ -70,6 +70,7 @@ class Result(
     val awayScore:Int,
     val submitter:RefObservable[User],
     val note:String,
+    val report:Observable[js.Array[Report]],
     val reports:RefObservable[Reports]) extends js.Object
     
 object Result{
@@ -77,7 +78,8 @@ object Result{
     awayScore:Int,
     submitter:RefObservable[User],
     note:String,
-    reports:RefObservable[Reports]) = new Result(homeScore, awayScore, submitter, note, reports) 
+    report:Observable[js.Array[Report]],
+    reports:RefObservable[Reports]) = new Result(homeScore, awayScore, submitter, note, report, reports)
 }
     
 
@@ -97,7 +99,7 @@ object Reports{
 
 class Report(
     val team:RefObservable[Team],
-    val text:RefObservable[Text]) extends js.Object{
+    val text:RefObservable[Text]) extends Model{
     val id = UUID.randomUUID().toString()
 }
     
