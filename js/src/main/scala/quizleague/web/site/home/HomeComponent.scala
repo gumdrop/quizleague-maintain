@@ -84,7 +84,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
 
   override val mounted = ({(c:facade) => {
     super.mounted.call(c);
-    setTimeout(5000)(c.sponsorMessage = true);
+    setTimeout(5000)(c.sponsorMessage = false);
     c.tabsHandle = setInterval(5000)(nextTab(c))
   }}:js.ThisFunction)
   
