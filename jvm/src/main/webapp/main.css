@@ -6,7 +6,6 @@
   button.btn{text-transform:none;}
   a.btn{text-transform:none;}
   .ql-league-table {
-      border : 1px solid rgba(0,0,0,.25);
       font-size:14px;
     }
     .ql-league-table caption{
@@ -119,6 +118,23 @@
     vertical-align: middle;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.height-enter-active, .height-leave-active {
+  transition: height .5s;
+  height:5em;;
+    overflow:hidden;
+}
+.height-enter, .height-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  height: 0;
+  overflow:hidden;
+}
+
 .frame-background{
     background-image:linear-gradient(to top right, rgba(255,255,255,.9), rgba(255,255,255,.9)),url('img/old-amersham.jpg');
     background-size: 100% 100%;
@@ -127,6 +143,7 @@
     position:fixed;
     z-index:0;
 }
+
 .subtitle-background{
-    background-image:linear-gradient(to top right, rgba(255,255,255,.7), rgba(255,255,255,0))
+    background-image:linear-gradient(to top right, rgba(255,255,255,.7), rgba(255,255,255,0));
 }
