@@ -32,8 +32,6 @@ object DomainCodecs{
   implicit val fixtureEncoder: Encoder[Fixture] = deriveEncoder
   implicit val resultDecoder: Decoder[Result] = deriveDecoder
   implicit val resultEncoder: Encoder[Result] = deriveEncoder
-  implicit val reportsDecoder: Decoder[Reports] = deriveDecoder
-  implicit val reportsEncoder: Encoder[Reports] = deriveEncoder
   implicit val reportDecoder: Decoder[Report] = deriveDecoder
   implicit val reportEncoder: Encoder[Report] = deriveEncoder
   implicit val competitionDecoder: Decoder[Competition] = deriveDecoder

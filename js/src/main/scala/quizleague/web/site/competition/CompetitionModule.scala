@@ -17,7 +17,7 @@ import scalajs.js
 import js.JSConverters._
 import rxscalajs.Subject
 import rxscalajs.subjects.ReplaySubject
-import quizleague.web.model.Season
+import quizleague.web.model.Key
 import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.season.SeasonWatchService
 import java.time.LocalDate
@@ -31,12 +31,12 @@ import scala.reflect.api.TypeTags
 object CompetitionModule extends Module {
   
   override val routes = @@(
-        RouteConfig(path="/competition/:id/league", components=Map("default" -> LeagueCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
-        RouteConfig(path="/competition/:id/subsidiary", components=Map("default" -> BeerCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
-        RouteConfig(path="/competition/:id/cup", components=Map("default" -> CupCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
-        RouteConfig(path="/competition/:id/singleton", components=Map("default" -> SingletonCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
-        RouteConfig(path="/competition/:id/results", components=Map("default" -> ResultsPage, "title" -> CompetitionResultsTitle, "sidenav" -> CompetitionMenu)),
-        RouteConfig(path="/competition/:id/fixtures", components=Map("default" -> FixturesPage, "title" -> CompetitionFixturesTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/league", components=Map("default" -> LeagueCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/subsidiary", components=Map("default" -> BeerCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/cup", components=Map("default" -> CupCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/singleton", components=Map("default" -> SingletonCompetitionPage, "title" -> CompetitionTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/results", components=Map("default" -> ResultsPage, "title" -> CompetitionResultsTitle, "sidenav" -> CompetitionMenu)),
+        RouteConfig(path="/competition/:key/fixtures", components=Map("default" -> FixturesPage, "title" -> CompetitionFixturesTitle, "sidenav" -> CompetitionMenu)),
 
         RouteConfig(path="/competition", components=Map("default" -> CompetitionsComponent, "title" -> CompetitionsTitleComponent, "sidenav" -> CompetitionMenu)
   ))
@@ -59,31 +59,28 @@ object CompetitionService extends CompetitionGetService{
   def competition[T <: Competition:ClassTag](seasonId:String, typeName:String) = 
     competitionsOfType[T](seasonId).map(_.filter(_.typeName == typeName).head)
   
-  def competitions(seasonId:String) = SeasonService.get(seasonId).flatMap(s => list(s.key))
+  def competitions(seasonId:String) = SeasonService.get(seasonId).flatMap(_.competition)
 }
 
 object CompetitionViewService extends SeasonWatchService {
   
   def competitions() = season.flatMap(s => CompetitionService.list(s.key))
   
-  def fixtures(competitionId:String) = CompetitionService
-    .get(competitionId)
+  def fixtures(competitionKey:Key) = CompetitionService
+    .get(competitionKey)
     .flatMap(c => FixturesService.list(c.key))
   
-  def nextFixtures(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
+  def nextFixtures(competitionKey:Key, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString
-    fixtures(competitionId).map(_.filter(_.date >= today).sortBy(_.date).take(take))
+    fixtures(competitionKey).map(_.filter(_.date >= today).sortBy(_.date).take(take))
   }
 
-  def latestResults(competitionId:String, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
+  def latestResults(competitionKey:Key, take:Integer = Integer.MAX_VALUE):Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString
-    fixtures(competitionId).map(_.filter(_.date <= today).sortBy(_.date)(Desc).take(take))
+    fixtures(competitionKey).map(_.filter(_.date <= today).sortBy(_.date)(Desc).take(take))
   }
   
-  def parentSeason(competitionId:String) = {
-    
-    val seasons = SeasonService.list()
-    
-    seasons.map(_.filter(_.competitions.exists(_.id == competitionId)).headOption.getOrElse(null))
+  def parentSeason(competitionKey:Key) = {
+    SeasonService.get(Key(competitionKey.parentKey))
   }
 }

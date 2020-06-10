@@ -3,6 +3,8 @@ package quizleague.web.model
 import scalajs.js
 import quizleague.domain.{Key => DomKey}
 
+import scala.scalajs.js.URIUtils
+
 abstract class Model extends js.Object {
   val id:String
   var key:Key = null
@@ -11,6 +13,8 @@ abstract class Model extends js.Object {
 
 class Key(val parentKey:String, val entityName:String, val id:String) extends js.Object {
   def key = s"${Option(parentKey).fold("")(x =>s"$x/")}$entityName/$id"
+
+  def encode = key.replace('/','|')
 
   override def toString: String = key
 }
@@ -24,4 +28,5 @@ object Key{
     new Key(parts.take(length -2).mkString("/"),end(0),end(1))
   }
   def apply(key:Option[DomKey]):Key = key.map(Key(_)).getOrElse(null)
+  def decode(key:String) = Key(key.replace('|','/'))
 }

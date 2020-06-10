@@ -43,7 +43,7 @@ object CalendarComponent extends Component with GridSizeComponentConfig{
     </v-timeline>
     </transition>
     <transition name="fade">
-    <ql-calendar-calendar v-if="viewType=='calendar'"></ql-calendar-calendar>
+    <ql-calendar-calendar v-if="items && viewType=='calendar'"></ql-calendar-calendar>
     </transition>
   </v-container>"""
 
@@ -228,7 +228,7 @@ object FixturesEventComponent extends EventComponentConfig{
   val name = "ql-fixtures-event"
    val template = s"""
       <v-layout column align-start class="panel-component">
-          <v-flex align-start><b><router-link :to="'/competition/' + event.competition.id + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link></b>
+          <v-flex align-start><b><router-link :to="'/competition/' + event.competition.key.encode + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link></b>
             <v-btn icon v-on:click="togglePanel" class="#view-btn">
              <v-icon v-if="!panelVisible">mdi-eye</v-icon>
              <v-icon v-if="panelVisible">mdi-eye-off</v-icon>

@@ -114,8 +114,8 @@ object HistoricalStatsAggregator {
     var startingStats:List[Statistics] = List()
     
     val stats = for (
-      f <- c.fixtures.sortBy(f => f.date.toString);
-      r <- f.fixtures
+      f <- list[Fixtures](c.key).sortBy(f => f.date.toString);
+      r <- list[Fixture](f.key)
  
   ) yield {
       dummyTables = LeagueTableRecalculator.recalculate(dummyTables,List(r))

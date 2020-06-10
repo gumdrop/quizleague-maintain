@@ -1,6 +1,5 @@
 package quizleague.web.site.results
 
-import quizleague.web.service.results.ReportsGetService
 import quizleague.web.site.fixtures.{FixtureService, FixturesService}
 import quizleague.web.site.team.TeamService
 import quizleague.web.site.text.TextService

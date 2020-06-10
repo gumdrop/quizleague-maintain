@@ -5,6 +5,7 @@ import scala.scalajs.js.Date
 import scala.scalajs.js.Any.fromBoolean
 import scala.scalajs.js.Any.fromString
 import scala.scalajs.js.annotation.JSExportAll
+import rxscalajs.Observable
 
 object CompetitionType extends Enumeration {
   type CompetitionType = Value
@@ -19,8 +20,9 @@ sealed trait Competition extends Model{
   val id: String
   val name: String
   val typeName: String
-  val fixtures: js.Array[RefObservable[Fixtures]]
+  val fixtures: Observable[js.Array[Fixtures]]
   val tables: js.Array[RefObservable[LeagueTable]]
+  val leaguetable: Observable[js.Array[LeagueTable]]
   val text: RefObservable[Text]
   val textName:String
   val icon:String
@@ -31,8 +33,9 @@ class LeagueCompetition(
   override val name: String,
   val startTime: String,
   val duration: Float,
-  override val fixtures: js.Array[RefObservable[Fixtures]],
+  override val fixtures: Observable[js.Array[Fixtures]],
   override val tables: js.Array[RefObservable[LeagueTable]],
+  override val leaguetable: Observable[js.Array[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
   val subsidiary: RefObservable[Competition],
@@ -45,28 +48,30 @@ class CupCompetition(
   override val name: String,
   val startTime: String,
   val duration: Float,
-  override val fixtures: js.Array[RefObservable[Fixtures]],
+  override val fixtures: Observable[js.Array[Fixtures]],
   override val text: RefObservable[Text],  
   override val textName:String,
   val icon:String
   )  extends Competition {
   override val typeName = cup.toString()
   override val tables = js.Array[RefObservable[LeagueTable]]()
+  override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
 }
 
 class SubsidiaryLeagueCompetition(
   override val id: String,
   override val name: String,
-  override val fixtures: js.Array[RefObservable[Fixtures]],
+  override val fixtures: Observable[js.Array[Fixtures]],
   override val tables: js.Array[RefObservable[LeagueTable]],
+  override val leaguetable: Observable[js.Array[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
   val icon:String) extends Competition {
   override val typeName = subsidiary.toString()
 }
 object SubsidiaryLeagueCompetition {
-  def addFixtures(sub:Competition, fixtures:js.Array[RefObservable[Fixtures]]) = {
-    new SubsidiaryLeagueCompetition(sub.id,sub.name, fixtures, sub.tables, sub.text, sub.textName, sub.icon)
+  def addFixtures(sub:Competition,fixtures: Observable[js.Array[Fixtures]]) = {
+    new SubsidiaryLeagueCompetition(sub.id,sub.name, fixtures, sub.tables, sub.leaguetable, sub.text, sub.textName, sub.icon)
   }
 }
 
@@ -78,8 +83,9 @@ class SingletonCompetition(
   val event: Event,
   val icon:String) extends Competition {
   override val typeName = singleton.toString()
-  override val fixtures = js.Array[RefObservable[Fixtures]]()
+  override val fixtures = Observable.just(js.Array())
   override val tables = js.Array[RefObservable[LeagueTable]]()
+  override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
 }
     
 

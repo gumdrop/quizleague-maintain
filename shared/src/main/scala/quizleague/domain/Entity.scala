@@ -12,6 +12,11 @@ trait Entity extends Serializable  {
     this
   }
 
+  def withKey(key:Option[Key]):U = {
+    this.key = key
+    this
+  }
+
   def parentKey = key.flatMap(_.parentKey)
 }
 

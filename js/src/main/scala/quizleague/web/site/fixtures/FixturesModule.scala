@@ -21,11 +21,11 @@ import quizleague.web.site.competition.CompetitionService
 import quizleague.web.site.user.UserService
 import quizleague.util.collection._
 import quizleague.web.site.text.TextService
-import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.results.ReportGetService
 import quizleague.web.service.PostService
 import quizleague.domain.command.ResultsSubmitCommand
 import quizleague.domain.command.ResultValues
+import quizleague.domain.Key
 import java.time.LocalDate.{now => today}
 import java.time.LocalTime
 
@@ -88,7 +88,6 @@ object FixtureService extends FixtureGetService with PostService{
   override val venueService = VenueService
   override val teamService = TeamService
   override val userService = UserService
-  override val reportsService = ReportsService
   override val fixturesService = FixturesService
   override val reportService  = ReportService
 
@@ -187,17 +186,11 @@ object FixtureService extends FixtureGetService with PostService{
   def submitResult(fixtures:js.Array[Fixture], reportText:String, userID:String) = {
     import quizleague.util.json.codecs.CommandCodecs._
     
-    val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(f.id, f.result.homeScore, f.result.awayScore)).toList, Option(reportText), userID)
+    val cmd = ResultsSubmitCommand(fixtures.map(f => ResultValues(Key(f.key.key), f.result.homeScore, f.result.awayScore)).toList, Option(reportText), userID)
     
     command[List[String],ResultsSubmitCommand](List("site","result","submit"),Some(cmd)).subscribe(x => Unit)
   }
   
-}
-
-object ReportsService extends ReportsGetService {
-  val textService = TextService
-  val teamService = TeamService
-  val chatService = ChatService
 }
 
 object ReportService extends ReportGetService {

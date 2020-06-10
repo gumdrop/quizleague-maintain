@@ -9,11 +9,12 @@ import js.DynamicImplicits
 import quizleague.web.util.rx.RefObservable
 import quizleague.web.core._
 import quizleague.web.model._
+import KeyComponent._
 
 
 object LeagueTableComponent extends Component{
     
-  type facade = IdComponent
+  type facade = KeyComponent
   
   val name = "ql-league-table"
   val template = """
@@ -27,8 +28,8 @@ object LeagueTableComponent extends Component{
         </tbody>
       </table>
 """
-  props("id")
-  subscription("table","id")(c => LeagueTableService.get(c.id))
+  props("keyval")
+  subscription("table","keyval")(c => LeagueTableService.get(key(c)))
   method("sort")((rows:js.Array[LeagueTableRow]) => rows.sortBy(_.position.toInt))
   
   

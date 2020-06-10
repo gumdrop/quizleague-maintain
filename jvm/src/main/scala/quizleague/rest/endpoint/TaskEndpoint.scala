@@ -40,7 +40,7 @@ class TaskEndpoint {
     logger.finest(() => s"submit result arrived : $result")
 
     val haveResults = result.fixtures.exists(f => {
-      val fix = Storage.load[Fixture](f.fixtureId)
+      val fix = Storage.load[Fixture](f.fixtureKey)
       fix.result.isDefined
     })
 
@@ -51,7 +51,7 @@ class TaskEndpoint {
     if (!haveResults) {
 
       result.fixtures.foreach(f => {
-        val fixture = load[Fixture](f.fixtureId)
+        val fixture = load[Fixture](f.fixtureKey)
         val leagueTables = tables(fixture)
         if (!leagueTables.isEmpty) {
           updateTables(leagueTables, fixture)
@@ -102,19 +102,7 @@ class TaskEndpoint {
   }
   
   private def tables(fixture:Fixture):List[LeagueTable] =   { 
-    
-    def comp(c:Ref[Competition]):Competition = c
-    
-    applicationContext()
-     .currentSeason
-     .competitions
-     .map(comp _)
-     .flatMap(_ match {
-       case c:FixturesCompetition with CompetitionTables => List(c)
-       case _ => List()
-     })
-     .filter(_.fixtures.flatMap(_.fixtures).exists(_.id == fixture.id))
-     .flatMap(_.tables)
+    list[LeagueTable](fixture.key.map(_.parentKey).flatMap(_.flatMap(Key(_).parentKey)).map(Key(_)))
   }
   
  
@@ -146,7 +134,7 @@ class TaskEndpoint {
 
   private def saveFixture(user:User,reportIn:Option[String])(result:ResultValues) = {
        
-    val fixture = Storage.load[Fixture](result.fixtureId)
+    val fixture = Storage.load[Fixture](result.fixtureKey)
     val report = reportIn.filter(r => !r.trim.isEmpty && !fixture.subsidiary)
     
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
@@ -159,7 +147,8 @@ class TaskEndpoint {
     
     def newReports(reportText:String) = {
 
-      val reports = Reports(uuid.toString(), List(newReport(reportText)))
+      val id = uuid.toString()
+      val reports = Reports(id, List(newReport(reportText))).withKey(Key(result.fixtureKey,"report",id))
       Storage.save(reports)
       Ref[Reports]("reports",reports.id)
     }
@@ -174,7 +163,7 @@ class TaskEndpoint {
     }
     
     def addReport(ref:Reports, reportText:String) = {
-      val newRef = ref.copy(reports = ref.reports.:+(newReport(reportText)))
+      val newRef = ref.copy(reports = ref.reports.:+(newReport(reportText))).withKey(ref.key)
       Storage.save(newRef)
       Ref[Reports]("reports",ref.id)
     }
@@ -188,7 +177,7 @@ class TaskEndpoint {
     
     logger.finest(() => s"fixture : \n:$fixture") 
     
-    val res = fixture.copy(result = fixture.result.fold(newResult())(oldResult _))
+    val res = fixture.copy(result = fixture.result.fold(newResult())(oldResult _)).withKey(fixture.key)
     
     logger.finest(() => s"made result : \nresult:$res") 
     

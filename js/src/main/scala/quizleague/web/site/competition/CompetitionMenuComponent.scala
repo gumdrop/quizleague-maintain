@@ -26,7 +26,7 @@ object CompetitionMenuComponent extends Component with SeasonFormatComponent{
   val template = """
     <div>
     <ql-side-menu :title="'Competitions ' + formatSeason(season)" icon="mdi-trophy" v-if="competitions && season">
-       <v-list-item v-for="competition in competitions" :key="competition.id" :to="'/competition/' + competition.id +'/' + competition.typeName">
+       <v-list-item v-for="competition in competitions" :key="competition.id" :to="'/competition/'+ competition.key.encode + '/' + competition.typeName">
           <v-list-item-action><v-icon  text left v-if="competition.icon">{{competition.icon}}</v-icon></v-list-item-action>
           <v-list-item-content><v-list-item-title>{{competition.name}}</v-list-item-title></v-list-item-content>
       </v-list-item>

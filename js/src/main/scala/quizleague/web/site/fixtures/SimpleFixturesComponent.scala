@@ -1,7 +1,8 @@
 package quizleague.web.site.fixtures
 
 import com.felstar.scalajs.vue._
-import quizleague.web.core.{DialogComponentConfig, IdComponent, _}
+import quizleague.web.core.{DialogComponentConfig, KeyComponent, _}
+import KeyComponent._
 import quizleague.web.model.{Fixture, Team}
 import quizleague.web.site.results.TableUtils
 import rxscalajs.Observable
@@ -72,7 +73,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
             <span>Match Reports</span>
            </v-tooltip>
           </div>
-          <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" v-if="fixture.result.reports">
+          <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" v-if="reports">
             <v-card>
               <v-card-title>Reports ::&nbsp;
                 <ql-team-name :short="short" :team="fixture.home"></ql-team-name>
@@ -88,9 +89,9 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                    <span>Close</span>
                  </v-tooltip>
                </v-card-title>
-              <ql-reports :id="fixture.result.reports.id" ></ql-reports>
+              <ql-reports :keyval="fixture.key" ></ql-reports>
               <v-card-text>
-                <!--ql-chat :parentKey="async(fixture.result.reports).key" :name="fixture.parentDescription + ' ' +  fixture.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat-->
+                <ql-chat :parentKey="fixture.key" :name="fixture.parentDescription + ' ' +  fixture.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -109,20 +110,17 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   subscription("reports")(c => if(c.fixture.result != null) c.fixture.result.report else Observable.just(js.Array()))
   method("chatName")((fixture:Fixture, home:Team, away:Team) => s"${fixture.parentDescription} ${fixture.date} : ${home.name} vs ${away.name}")
   method("nameClass")(nameClass _ )
-  method("parentKey"){id:String => ReportsService.key(id)}
-
-
 }
 
 
 
 object ReportsComponent extends Component{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "ql-reports"
   val template = """
     <v-container grid-list-sm v-if="reports">
       <v-layout column>
-      <v-flex v-for="report in reports.reports" :key="report.id">
+      <v-flex v-for="report in reports" :key="report.id">
         <v-card >
         <v-card-title><h5>{{async(report.team).name}}</h5></v-card-title>
         <v-card-text v-if="report.text">
@@ -133,6 +131,6 @@ object ReportsComponent extends Component{
     </v-layout>
     </v-container>"""
   
-  prop("id")
-  subscription("reports", "id")(c => ReportsService.get(c.id))
+  prop("keyval")
+  subscription("reports", "id")(c => ReportService.list(key(c)))
 }

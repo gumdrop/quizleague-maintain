@@ -12,7 +12,8 @@ class Season(
     val endYear:Int,
     val text:RefObservable[Text],
     val competitions:js.Array[RefObservable[Competition]],
-    val calendar:js.Array[CalendarEvent]
+    val calendar:js.Array[CalendarEvent],
+    val competition: Observable[js.Array[Competition]]
 ) extends Model{
   def toText() = if(startYear==endYear) s"$startYear" else s"$startYear/$endYear"
 }
@@ -23,5 +24,6 @@ object Season{
     endYear:Int,
     text:RefObservable[Text],
     competitions:js.Array[RefObservable[Competition]],
-    calendar:js.Array[CalendarEvent]) = new Season(id,startYear,endYear,text, competitions, calendar)
+    calendar:js.Array[CalendarEvent],
+    competition: Observable[js.Array[Competition]]) = new Season(id,startYear,endYear,text, competitions, calendar, competition)
 }

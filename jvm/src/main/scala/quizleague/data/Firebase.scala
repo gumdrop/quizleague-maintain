@@ -66,6 +66,8 @@ object Storage {
      })
   }
 
+  def load[T <: Entity](key:Key)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(key, decoder)
+
   def load[T <: Entity](id: String, parent:Option[Key] = None)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(Key(s"${makeKind(parent)}/$id}"), decoder)
 
   def list[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = list(None)

@@ -29,7 +29,15 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
   val competitionService: CompetitionGetService
   val venueService: VenueGetService
 
-  override protected def mapOutSparse(season: Dom) = Season(season.id, season.startYear, season.endYear, refObs(season.text,textService), refObsList(season.competitions, competitionService),mapEvents(season.calendar))
+  override protected def mapOutSparse(season: Dom) = Season(
+    season.id,
+    season.startYear,
+    season.endYear,
+    refObs(season.text,textService),
+    refObsList(season.competitions, competitionService),
+    mapEvents(season.calendar),
+    competitionService.list(season.key))
+
   override def flush() = { textService.flush(); super.flush() }
   
   private def mapEvents(events:List[DomEvent]):js.Array[CalendarEvent] = {

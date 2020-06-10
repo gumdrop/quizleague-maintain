@@ -7,15 +7,15 @@ import scala.scalajs.js
 import quizleague.web.model._
 import rxscalajs.Observable
 import rxscalajs.Observable.combineLatest
+
 import js.JSConverters._
 import quizleague.web.site.season.SeasonService
 import quizleague.web.site.competition._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
 import org.scalajs.dom
+import quizleague.web.maintain.fixtures.FixturesService
 import quizleague.web.site.fixtures
-
-
 import quizleague.web.util.Logging._
 
 object CalendarModule extends Module{
@@ -37,9 +37,6 @@ object CalendarViewService extends SeasonWatchService{
 
   def events(seasonId:String):Observable[js.Array[DateWrapper]] = {
     
-    import CompetitionType._
-    
-    
     def singletonEvents(c:Competition):js.Array[EventWrapper] = c match {
       case s:SingletonCompetition => js.Array(EventWrapper(s.event,c))
       case _ => js.Array()
@@ -48,7 +45,7 @@ object CalendarViewService extends SeasonWatchService{
     
     val comps = CompetitionService.firstClassCompetitions(seasonId)
     
-    def fixtures = comps.flatMap(cs => combineLatest(cs.flatMap(c => c.fixtures.map(_.obs).map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray)
+    def fixtures = comps.flatMap(cs => combineLatest(cs.map(c => c.fixtures.map(f => f.map(EventWrapper(_,c)))).toSeq)).map(_.toJSArray.flatten.toJSArray)
     
     def singletons = comps.map(cs => cs.flatMap(singletonEvents _))
     

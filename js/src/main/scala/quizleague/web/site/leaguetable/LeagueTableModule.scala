@@ -6,6 +6,8 @@ import quizleague.web.core._
 import quizleague.web.site.season.SeasonService
 import rxscalajs.Observable._
 import quizleague.web.model.CompetitionType
+import quizleague.web.site.competition.CompetitionService
+
 import scalajs.js
 import js.JSConverters._
 
@@ -18,15 +20,8 @@ object LeagueTableService extends LeagueTableGetService {
     override val teamService = TeamService
     
     def leagueTables(seasonId:String) = {
-      
-     SeasonService.get(seasonId)
-        .map(_.competitions
-            .map(_.obs).toSeq)
-            .map(cs => combineLatest(cs))
-            .flatten
-            .map(_.filter(_.typeName == CompetitionType.league.toString())
-                .flatMap(_.tables).toJSArray
-                )
+      CompetitionService.firstClassCompetitions(seasonId).map(c => combineLatest(c.toSeq.filter(_.typeName == CompetitionType.league.toString())
+        .map(_.leaguetable))).flatten.map(_.flatten.toJSArray)
     }
 
 }

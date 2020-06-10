@@ -15,6 +15,7 @@ import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.util.Logging._
 import com.felstar.scalajs.vue.VuetifyComponent
+import quizleague.web.model.Key
 
 import scala.collection.mutable
 
@@ -23,6 +24,7 @@ trait RouteComponent extends Component{
 
   val name = ""
 
+  method("decode")((key:String) => Key.decode(key))
 }
 
 
@@ -200,5 +202,11 @@ trait IdComponent extends VueComponent with VueRxComponent with VuetifyComponent
 
 @js.native
 trait KeyComponent extends VueComponent with VueRxComponent with VuetifyComponent{
-  val key:String = js.native
+  val keyval:UndefOr[Key] = js.native
+  val keystring:UndefOr[String] = js.native
+
+}
+
+object KeyComponent {
+  def key(comp:KeyComponent) = comp.keyval.getOrElse(Key(comp.keystring.getOrElse(null)))
 }

@@ -6,8 +6,6 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.venue.VenueService
 import quizleague.web.service.fixtures.FixturesGetService
 import quizleague.web.service.fixtures.FixturesPutService
-import quizleague.web.service.results.ReportsGetService
-import quizleague.web.service.results.ReportsPutService
 import quizleague.web.service.results.ReportGetService
 import quizleague.web.service.results.ReportPutService
 import quizleague.web.maintain.text.TextService
@@ -44,14 +42,13 @@ object FixturesModule extends Module {
 object FixtureService extends FixtureGetService with FixturePutService{
   override val teamService = TeamService
   override val venueService = VenueService
-  override val reportsService = ReportsService
   override val userService = UserService
   override val fixturesService = FixturesService
   override val reportService = ReportService
   
   def addResult(fixture:Fixture) = {
     val fx = mapIn(fixture)
-    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
+    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None)))))
   }
   
   def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixture]]] = {
@@ -66,7 +63,7 @@ object FixtureService extends FixtureGetService with FixturePutService{
 object FixturesService extends FixturesGetService with FixturesPutService{
   override val fixtureService = FixtureService
   
-  def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => combineLatest(c.fixtures.map(_.obs).toSeq)).map(_.toJSArray)
+  def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => c.fixtures)
 
   def copy(fixtures:js.Array[RefObservable[Fixtures]], parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixtures]]] = {
     Observable.combineLatest(fixtures.map(f => copy(f,parentDescription, subsidiary)).toSeq).map(_.toJSArray)
@@ -83,12 +80,6 @@ object FixturesService extends FixturesGetService with FixturesPutService{
     
   }
 
-}
-
-object ReportsService extends ReportsGetService with ReportsPutService{
-  override val teamService = TeamService
-  override val textService = TextService
-  override val chatService = ChatService
 }
 
 object ReportService extends ReportGetService with ReportPutService{

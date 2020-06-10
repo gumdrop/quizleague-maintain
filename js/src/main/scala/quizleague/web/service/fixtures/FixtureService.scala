@@ -22,9 +22,9 @@ import io.circe._,io.circe.parser._,io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
 import io.circe.Json
 import quizleague.web.service.user.UserGetService
-import quizleague.web.service.results.ReportsGetService
 import quizleague.web.service.results.ReportGetService
 import quizleague.web.util.rx.RefObservable
+import rxscalajs.Observable
 
 
 
@@ -35,7 +35,6 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val venueService:VenueGetService
   val teamService:TeamGetService
   val userService:UserGetService
-  val reportsService:ReportsGetService
   val reportService:ReportGetService
   val fixturesService:FixturesGetService
 
@@ -63,8 +62,8 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
           r.awayScore,
           userService.refObs(r.submitter),
           r.note.orNull,
-          reportService.list(Key(fixture.key)),
-          reportsService.refObs(r.reports)))
+         reportService.list(Key(fixture.key))
+        ))
     }
 
 }
@@ -90,7 +89,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   
   private def mapInResult(r:Result):Option[DomResult]  = {
     if(r != null) {
-      Some(DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note), reportsService.refOption(r.reports)))
+      Some(DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note)))
     }
     else None
   }

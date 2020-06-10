@@ -69,14 +69,14 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
   
   def copyFixturesToSubsidiary(c:facade, item:LeagueCompetition) = {
     
-    c.showProgress = true
-    item.subsidiary.obs.first.flatMap(sub => {
-      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
-    }).subscribe(sf =>{
-      val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
-      CompetitionService.save(newsub)
-      c.showProgress = false
-    })
+//    c.showProgress = true
+//    item.subsidiary.obs.first.flatMap(sub => {
+//      Observable.of(sub).combineLatest(FixturesService.copy(item.fixtures, sub.name, true))
+//    }).subscribe(sf =>{
+//      val newsub = SubsidiaryLeagueCompetition.addFixtures(sf._1, sf._2)
+//      CompetitionService.save(newsub)
+//      c.showProgress = false
+//    })
   }
   
   

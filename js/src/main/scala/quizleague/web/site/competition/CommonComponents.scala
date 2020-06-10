@@ -1,35 +1,30 @@
 package quizleague.web.site.competition
 
-import quizleague.web.core.@@
-import quizleague.web.core.Component
-import quizleague.web.core.IdComponent
-import quizleague.web.core.IdComponent
-import quizleague.web.core.RouteComponent
+import quizleague.web.core.{@@, Component, GridSizeComponentConfig, IdComponent, KeyComponent, RouteComponent}
+import KeyComponent._
+import quizleague.web.model.Key
 import com.felstar.scalajs.vue.VuetifyComponent
 import com.felstar.scalajs.vue.VueComponent
 import quizleague.web.core.GridSizeComponentConfig
-import com.felstar.scalajs.vue.VuetifyComponent
-import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.core.GridSizeComponentConfig
-import quizleague.web.site.season.SeasonFormatComponent
+import quizleague.web.site.season.{SeasonFormatComponent, SeasonService}
 
 object LeagueTables extends Component{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "league-tables"
   val template = """
     <v-card class="mb-x">
       <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
       <v-card-text>
-        <ql-league-table v-for="table in item.tables" :key="table.id" :id="table.id" class="mb-3"></ql-league-table>
+        <ql-league-table v-for="table in tables" :key="table.id" :keyval="table.key" class="mb-3"></ql-league-table>
       </v-card-text>
     </v-card>"""
   
-  props ("id")
-  subscription ("item","id")(c => CompetitionService.get(c.id))
+  props ("keyval")
+  subscription ("tables","keyval")(c => CompetitionService.get(key(c)).flatMap(_.leaguetable))
 }
 
 object LatestResults extends Component{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "latest-results"
   val template = """
     <v-card class="mb-0">
@@ -48,14 +43,14 @@ object LatestResults extends Component{
       </v-card-actions>
     </v-card>"""
   
-  props("id")
+  props("keyval")
   
-  subscription ("latestResults","id")(c => CompetitionViewService.latestResults(c.id,1))
+  subscription ("latestResults","keyval")(c => CompetitionViewService.latestResults(key(c),1))
     
 }
 
 object NextFixtures extends Component{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "next-fixtures"
   val template = """<v-card class="mb-0">
       <v-card-title primary-title><h3 class="headline mb-0">Fixtures</h3></v-card-title>
@@ -75,28 +70,28 @@ object NextFixtures extends Component{
   
 
  
-  props("id")
-  subscription("nextFixtures","id")(c => CompetitionViewService.nextFixtures(c.id,1))
+  props("keyval")
+  subscription("nextFixtures","keyval")(c => CompetitionViewService.nextFixtures(key(c),1))
 }
 
 
 object CompetitionTitle extends RouteComponent{
-  val template = """<competition-title :id="$route.params.id" :text="null"></competition-title>"""
+  val template = """<competition-title :keyval="decode($route.params.key)" :text="null"></competition-title>"""
   components(CompetitionTitleComponent)
 }
 
 object CompetitionResultsTitle extends RouteComponent{
-  val template = """<competition-title :id="$route.params.id" text="Results"></competition-title>"""
+  val template = """<competition-title :keyval="decode($route.params.key)" text="Results"></competition-title>"""
   components(CompetitionTitleComponent)
 }
 
 object CompetitionFixturesTitle extends RouteComponent{
-  val template = """<competition-title :id="$route.params.id" text="Fixtures"></competition-title>"""
+  val template = """<competition-title :keyval="decode($route.params.key)" text="Fixtures"></competition-title>"""
   components(CompetitionTitleComponent)
 }
   
 object CompetitionTitleComponent extends Component with SeasonFormatComponent{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "competition-title"
   val template = """<v-toolbar      
       color="purple lighten-3"
@@ -113,26 +108,26 @@ object CompetitionTitleComponent extends Component with SeasonFormatComponent{
       </v-toolbar-items>
     </v-toolbar>"""
   
-  props("id","text")
-  subscription("item","id")(c => CompetitionService.get(c.id))
-  subscription("season")(c => CompetitionViewService.parentSeason(c.id))
+  props("keyval","text")
+  subscription("item","keyval")(c => CompetitionService.get(key(c)))
+  subscription("season")(c => CompetitionViewService.parentSeason(key(c)))
   method("formatText")((text:String) => if(text == null || text.isEmpty) "" else s": $text ")
 }
 
 
 
 object ResultsPage extends RouteComponent{
-  val template = """<all-results :id="$route.params.id"></all-results>"""
+  val template = """<all-results :keyval="decode($route.params.key)"></all-results>"""
   components(AllResults) 
 }
 
 trait ResultsComponent extends Component {
-  type facade = IdComponent
+  type facade = KeyComponent
  
 
-  props("id")
+  props("keyval")
 
-  subscription("latestResults","id")(c => CompetitionViewService.latestResults(c.id, take))
+  subscription("latestResults","keyval")(c => CompetitionViewService.latestResults(key(c), take))
 
   def take:Int
 }
@@ -164,7 +159,7 @@ object FixturesPage extends RouteComponent{
 }
 
 object RemainingFixtures extends Component with GridSizeComponentConfig{
-  type facade = IdComponent
+  type facade = KeyComponent
   val name = "remaining-fixtures"
   val template = """
     <v-container v-bind="gridSize" fluid v-if="nextFixtures">
@@ -182,9 +177,9 @@ object RemainingFixtures extends Component with GridSizeComponentConfig{
   
 
  
-  props("id")
+  props("keyval")
 
-  subscription("nextFixtures","id")(c => CompetitionViewService.nextFixtures(c.id))
+  subscription("nextFixtures","keyval")(c => CompetitionViewService.nextFixtures(key(c)))
 
   
 }

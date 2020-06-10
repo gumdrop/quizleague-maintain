@@ -28,10 +28,6 @@ trait ResultsNames extends ComponentNames {
   override val typeName = "results"
 }
 
-trait ReportsNames extends ComponentNames {
-  override val typeName = "reports"
-}
-
 trait ReportNames extends ComponentNames {
   override val typeName = "report"
 }

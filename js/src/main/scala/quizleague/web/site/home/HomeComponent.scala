@@ -113,7 +113,7 @@ object NextFixturesComponent extends Component{
      <v-card-text v-if="fixtures">
         <div v-for="f in fixtures" :key="f.id" style="margin-bottom:1em;">
         <h4>{{f.parentDescription}} {{f.description}} {{f.date | date("d MMM yyyy")}}</h4>
-        <ql-fixtures-simple :fixtures="f.fixtures | combine"></ql-fixtures-simple>
+        <ql-fixtures-simple :fixtures="f.fixture"></ql-fixtures-simple>
         </div>
      </v-card-text>
    </v-card>
@@ -145,7 +145,7 @@ object LatestResultsComponent extends Component{
    </v-card>
 
 """
-  
+
   props("seasonId")
   subscription("fixtures", "seasonId")(c => FixturesService.latestResults(c.seasonId))
 }
@@ -164,22 +164,22 @@ object HomePageLeagueTable extends Component{
   
   override val name = "ql-home-page-table"
   
-  override val template ="""
+  override val template =s"""
             <v-card text v-if="tables">
               <v-card-title primary-title><h3 class="headline mb-0">League Table</h3></v-card-title>
               <v-card-text >
               <v-container fluid>
                 <v-layout column v-bind:class="justify">
-                  <v-layout row v-for="table in tables"  :key="table.id">
-                  <ql-league-table  :id="table.id" class="mb-3"></ql-league-table>
+                  <v-layout row v-for="table in tables"  :key="table">
+                   <ql-league-table  :keyval="table" class="mb-3"></ql-league-table>
                   </v-layout>
                 </v-layout>
               </v-container>
               </v-card-text>
             </v-card>"""
-  
+  import quizleague.web.util.Logging.log
   props("seasonId")
-  subscription("tables", "seasonId")(c => LeagueTableService.leagueTables(c.seasonId))
+  subscription("tables", "seasonId")(c => LeagueTableService.leagueTables(c.seasonId).map(_.map(_.key)))
   
   def justify(c: facade) = $("justify-space-around" -> "$vuetify.breakpoint.smAndUp")
   computed("justify")({ justify _ }: js.ThisFunction)

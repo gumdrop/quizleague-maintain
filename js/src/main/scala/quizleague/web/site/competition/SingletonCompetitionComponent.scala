@@ -1,21 +1,21 @@
 package quizleague.web.site.competition
 
 import quizleague.web.core._
-import quizleague.web.core.IdComponent
+import KeyComponent._
 import quizleague.web.core.GridSizeComponentConfig
 
 import scala.scalajs.js
 
 
 object SingletonCompetitionPage extends RouteComponent{
-  val template = """<competition :id="$route.params.id" ></competition>"""
+  val template = """<competition :keyval="decode($route.params.key)" ></competition>"""
   components(SingletonCompetitionComponent)
 }
 
 
 object SingletonCompetitionComponent extends Component with GridSizeComponentConfig{
   
-  type facade = IdComponent
+  type facade = KeyComponent
   
   val name = "competition"
   
@@ -34,7 +34,7 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
      <v-card class="mt-3"  id="chat">
         <v-card-title>Chat</v-card-title>
           <v-card-text>
-            <ql-chat :parentKey="parentKey"></ql-chat>
+            <ql-chat :parentKey="keyval"></ql-chat>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -44,9 +44,7 @@ object SingletonCompetitionComponent extends Component with GridSizeComponentCon
   </v-layout>
 </v-container>"""
   
-  props("id")
+  props("keyval")
   
-  subscription("item","id")(c => CompetitionService.get(c.id))
-  computed("parentKey")({c:facade => CompetitionService.key(c.id)}:js.ThisFunction)
-
+  subscription("item","keyval")(c => CompetitionService.get(key(c)))
 }

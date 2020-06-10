@@ -61,7 +61,7 @@ object Fixture{
   
   def addBlankResult(f:Fixture) = {
     Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
-        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array()),null),f.parent, f.subsidiary)
+        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array())),f.parent, f.subsidiary)
   }
 }
 
@@ -70,32 +70,15 @@ class Result(
     val awayScore:Int,
     val submitter:RefObservable[User],
     val note:String,
-    val report:Observable[js.Array[Report]],
-    val reports:RefObservable[Reports]) extends js.Object
+    val report:Observable[js.Array[Report]]) extends js.Object
     
 object Result{
   def apply(    homeScore:Int,
     awayScore:Int,
     submitter:RefObservable[User],
     note:String,
-    report:Observable[js.Array[Report]],
-    reports:RefObservable[Reports]) = new Result(homeScore, awayScore, submitter, note, report, reports)
+    report:Observable[js.Array[Report]]) = new Result(homeScore,awayScore,submitter,note,report)
 }
-    
-
-class Reports(
-               val id:String,
-               val reports:js.Array[Report],
-               val chat:Observable[Chat],
-               val isEmpty:Boolean) extends Model
-    
-object Reports{
-  def apply(id:String,
-    reports:js.Array[Report],
-    chat:Observable[Chat],
-    isEmpty:Boolean) = new Reports(id, reports, chat, isEmpty)
-}
-    
 
 class Report(
     val team:RefObservable[Team],
@@ -105,6 +88,5 @@ class Report(
     
 object Report{
   def apply(team:RefObservable[Team],
-    text:RefObservable[Text]) = new Report(team,text) 
+    text:RefObservable[Text]) = new Report(team,text)
 }
-    

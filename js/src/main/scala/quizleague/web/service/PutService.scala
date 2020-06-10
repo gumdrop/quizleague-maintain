@@ -31,7 +31,7 @@ trait PutService[T <: Model] {
 
   private[service] def saveDom(i:U):Observable[Unit] = {
     val path = i.key.getOrElse(throw new RuntimeException("no key")).key
-    val promise = db.doc(path).set(convertJsonToJs(enc(i.withKey(null))).asInstanceOf[js.Dictionary[js.Any]])
+    val promise = db.doc(path).set(convertJsonToJs(enc(i.withKey(None))).asInstanceOf[js.Dictionary[js.Any]])
     val obs = ReplaySubject[Unit]()
     promise.`then`({obs.next(_)}, {obs.error(_)})
     log(i,s"saved $path to firestore")
