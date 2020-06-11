@@ -144,40 +144,22 @@ class TaskEndpoint {
       Storage.save(text)
       Ref[Text]("text",text.id)
     }
-    
-    def newReports(reportText:String) = {
 
-      val id = uuid.toString()
-      val reports = Reports(id, List(newReport(reportText))).withKey(Key(result.fixtureKey,"report",id))
-      Storage.save(reports)
-      Ref[Reports]("reports",reports.id)
-    }
-    
     def newResult() = {
-      Some(Result(result.homeScore,result.awayScore, submitter = Some(Ref[User]("user",user.id)), None, report.map(newReports(_))))
+      Some(Result(result.homeScore,result.awayScore, submitter = Some(Ref[User]("user",user.id)), None,None))
     }
     
     def newReport(reportText:String) = {
        val team = teamFromUser(user)
-       Report(Ref("team",team.id), newText(reportText))
+       Report(Ref("team",team.id), newText(reportText)).withKey(Key(fixture.key.get,"report",uuid.toString))
     }
     
-    def addReport(ref:Reports, reportText:String) = {
-      val newRef = ref.copy(reports = ref.reports.:+(newReport(reportText))).withKey(ref.key)
-      Storage.save(newRef)
-      Ref[Reports]("reports",ref.id)
-    }
-    
-    def oldResult(existing:Result) = {
-      val reports = report.fold(existing.reports)(t => Some(existing.reports.fold(newReports(t))(addReport(_, t))))
-      Some(existing.copy(reports = reports))
 
-    }
-    
-    
     logger.finest(() => s"fixture : \n:$fixture") 
     
-    val res = fixture.copy(result = fixture.result.fold(newResult())(oldResult _)).withKey(fixture.key)
+    val res = fixture.copy(result = fixture.result.fold(newResult())(Some(_))).withKey(fixture.key)
+
+    report.foreach(reportText => Storage.save(newReport(reportText)))
     
     logger.finest(() => s"made result : \nresult:$res") 
     

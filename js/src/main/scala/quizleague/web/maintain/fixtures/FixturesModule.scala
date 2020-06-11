@@ -48,7 +48,7 @@ object FixtureService extends FixtureGetService with FixturePutService{
   
   def addResult(fixture:Fixture) = {
     val fx = mapIn(fixture)
-    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None)))))
+    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
   }
   
   def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixture]]] = {

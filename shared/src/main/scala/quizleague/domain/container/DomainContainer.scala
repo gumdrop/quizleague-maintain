@@ -10,6 +10,7 @@ case class DomainContainer(
     fixture:List[Fixture],
     globaltext:List[GlobalText],
     leaguetable:List[LeagueTable],
+    reports: List[Reports],
     season:List[Season],
     team:List[Team],
     text:List[Text],

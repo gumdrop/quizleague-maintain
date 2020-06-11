@@ -43,6 +43,7 @@ class NestedEntityMigrationEndpoint {
         val fixtureSet = listMap[Fixture]
         val reportsSet = listMap[Reports]
         val textSet = listMap[Text]
+        val globalText = list[GlobalText]
 
 
         val competitionsToSave = seasons.flatMap(s => s.competitions.flatMap(c => competitionSet.get(c.id).map(_.withKey(Key(s.key.map(_.key),"competition",c.id)))))
@@ -90,7 +91,7 @@ class NestedEntityMigrationEndpoint {
             venue = list[Venue],
             chat = Map(),
             chatMessage = Map(),
-            globaltext = Map(),
+            globaltext = globalText,
             text = list[Text] ++ reportText,
             user = list[User],
             fixtures = fixturesToSave,
