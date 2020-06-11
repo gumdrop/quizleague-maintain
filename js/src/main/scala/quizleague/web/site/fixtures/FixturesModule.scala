@@ -176,7 +176,7 @@ object FixtureService extends FixtureGetService with PostService{
               .take(1)
               .map { case (k, v) => v }
               .toJSArray
-              .flatMap(x => x))
+              .flatten)
       .map(_.sortBy(_.subsidiary))
 
     fixtures.map(_.filter(f => (f.date + f.time) <= now))

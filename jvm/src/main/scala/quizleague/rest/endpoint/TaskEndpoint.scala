@@ -44,7 +44,7 @@ class TaskEndpoint {
       fix.result.isDefined
     })
 
-    val user = load[User](result.userID)
+    val user = load[User](Key(None,"user",result.userID))
 
     result.fixtures.foreach(saveFixture(user, result.reportText) _)
 
@@ -140,7 +140,8 @@ class TaskEndpoint {
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
     def newText(reportText:String) = {
-      val text = new Text(uuid.toString(), reportText, "text/markdown")
+      val id = uuid.toString
+      val text = Text(id, reportText, "text/markdown").withKey(Key(None,"text", id))
       Storage.save(text)
       Ref[Text]("text",text.id)
     }

@@ -142,7 +142,7 @@ object Storage {
   }
 
   private def load[T <: Entity](key:Key, decoder: Decoder[T])(implicit tag: ClassTag[T]): T = {
-
+    log.info(s"key = $key")
     entityToObj(datastore.document(key.key).get.get.getData.asInstanceOf[java.util.Map[String,Any]], decoder).withKey(key)
 
   }

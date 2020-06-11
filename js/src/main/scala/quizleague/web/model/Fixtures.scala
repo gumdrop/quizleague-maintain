@@ -60,8 +60,10 @@ object Fixture{
   subsidiary:Boolean = false) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result, parent, subsidiary)
   
   def addBlankResult(f:Fixture) = {
-    Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration, 
+    val retval = Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration,
         Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array())),f.parent, f.subsidiary)
+    retval.key = f.key
+    retval
   }
 }
 
