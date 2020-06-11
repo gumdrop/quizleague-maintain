@@ -20,7 +20,7 @@ object LeagueCompetitionComponent extends Component with GridSizeComponentConfig
     <v-layout column>
       <v-flex>
         <ql-text-box>
-        <ql-named-text :name="item.textName"></ql-named-text>
+        <!--ql-named-text :name="item.textName"></ql-named-text-->
         <ql-text :id="item.text.id"></ql-text>
         </ql-text-box>
       </v-flex>

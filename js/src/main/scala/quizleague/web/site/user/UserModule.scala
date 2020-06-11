@@ -6,7 +6,10 @@ import quizleague.web.model.SiteUser
 import rxscalajs.{Observable, Subject}
 import rxscalajs.subjects.ReplaySubject
 import org.scalajs.dom
+import quizleague.domain.Key
+import quizleague.web.model
 import quizleague.web.service.PostService
+
 import scalajs.js
 import js.JSConverters._
 
@@ -25,7 +28,8 @@ object SiteUserService extends SiteUserGetService with SiteUserPutService with P
 
   def siteUserForEmail(email:String):Observable[Option[SiteUser]] = {
     import quizleague.util.json.codecs.DomainCodecs._
-    command[Option[U],String](List("site","site-user-for-email",email),None).map(_.map(mapOutSparse _))
+    command[Option[U],String](List("site","site-user-for-email",email),None).map(_.map(u => {
+      mapOutSparse(u.withKey(Key(None, typeName, u.id)))}))
   }
 
   def siteUserForUid(uid:String):Observable[Option[SiteUser]] = {
@@ -38,8 +42,10 @@ object SiteUserService extends SiteUserGetService with SiteUserPutService with P
   }
 
   def setUid(user:SiteUser, uid:String): Unit ={
+    import model.Key
     val nu = new SiteUser(user.id, user.handle, user.avatar, user.user, Option(uid))
-    save(nu);
+    nu.key = new Key(null, typeName, user.id)
+    save(nu)
   }
 }
 
