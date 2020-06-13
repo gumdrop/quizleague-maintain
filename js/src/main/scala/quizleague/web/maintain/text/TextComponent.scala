@@ -10,6 +10,8 @@ object TextComponent extends ItemComponentConfig[Text] with RouteComponent {
 
   val service = TextService
 
+  def parentKey(c:facade) = null
+
   val template = s"""
   <v-container v-if="item">
     <v-form v-model="valid" ref="fm">

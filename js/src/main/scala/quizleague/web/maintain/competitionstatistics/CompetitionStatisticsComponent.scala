@@ -6,6 +6,7 @@ import quizleague.web.maintain.competition.CompetitionService
 import quizleague.web.maintain.competitionstatistics.CompetitionStatisticsComponent.{facade, subscription}
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.maintain.component.TemplateElements._
+import quizleague.web.maintain.season.SeasonComponent.facade
 import quizleague.web.maintain.season.SeasonService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.user.UserService
@@ -22,6 +23,7 @@ import js.JSConverters._
 object CompetitionStatisticsComponent extends ItemComponentConfig[CompetitionStatistics] with RouteComponent {
 
   val service = CompetitionStatisticsService
+  def parentKey(c:facade) = null
 
   val template = s"""
   <v-container v-if="item">

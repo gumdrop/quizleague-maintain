@@ -16,6 +16,8 @@ object SelectUtils {
         items.map(_.obs))
         .map(_.filter(filter).map(o => new SelectWrapper(nameMaker(o),service.refObs(o.id)))).map(_.sortBy(_.text).toJSArray)
   }
+//  def model[T <: Model](items:Observable[js.Array[T]])(nameMaker: T => String):Observable[js.Array[SelectWrapper[T]]] = items.map(_.map(o => new SelectWrapper(nameMaker(o),service.refObs(o.id)))).map(_.sortBy(_.text))
+
 
 }
 

@@ -42,6 +42,7 @@ trait FixturesComponent extends CompetitionComponent{
 object FixturesComponent extends CompetitionComponentConfig{
 
   override type facade = FixturesComponent
+  override def parentKey(c:facade) = s"season/${c.$route.params("seasonId")}/competition/${c.$route.params("id")}"
   val fixtureService = FixtureService
   components(FixtureComponent)
   
@@ -66,7 +67,7 @@ object FixturesComponent extends CompetitionComponentConfig{
           <v-btn style="top:5px;" icon v-on:click="addFixture()" :disabled="!(homeTeam && awayTeam && venue)"><v-icon >mdi-plus</v-icon></v-btn>
          </v-layout>
          <v-layout column>
-           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in fxs.fixtures" :key="fixture.id"></fixture>
+           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in async(fxs.fixture)" :key="fixture.id"></fixture>
          </v-layout>
         </v-layout>      
      </v-layout>
@@ -122,7 +123,7 @@ object FixturesComponent extends CompetitionComponentConfig{
 
 @js.native
 trait FixtureComponent extends VueRxComponent{
-  val fixture:RefObservable[Fixture]
+  val fixture:Fixture
   var fx:Fixture
   val fixtures:Fixtures
   val teamManager:TeamManager
@@ -173,10 +174,12 @@ object FixtureComponent extends Component{
   }
   
   data("showResult", false)
+  data("fx")(c => {c.teamManager.take(c.fixture.home);c.teamManager.take(c.fixture.away);c.fixture})
 
   props("fixture","fixtures","teamManager")
+
   
-  subscription("fx")(c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x}))
+  //subscription("fx")(c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x}))
   
   method("removeFixture")({removeFixture _ }:js.ThisFunction)
   method("editText")({editText _ }:js.ThisFunction)

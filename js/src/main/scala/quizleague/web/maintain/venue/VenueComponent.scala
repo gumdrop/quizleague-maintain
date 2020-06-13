@@ -4,11 +4,14 @@ import quizleague.web.core._
 import quizleague.web.maintain.component.TemplateElements._
 import com.felstar.scalajs.vue.VueRxComponent
 import quizleague.web.maintain.component.ItemComponentConfig
+import quizleague.web.maintain.fixtures.FixturesComponent.facade
 import quizleague.web.model._
 
 object VenueComponent extends ItemComponentConfig[Venue] with RouteComponent {
 
   val service = VenueService
+
+  def parentKey(c:facade) = null
 
   val template = s"""
   <v-container v-if="item">

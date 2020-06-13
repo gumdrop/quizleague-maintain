@@ -12,6 +12,7 @@ import quizleague.web.util.component.SelectUtils
 object TeamComponent extends ItemComponentConfig[Team] with RouteComponent {
 
   val service = TeamService
+  def parentKey(c:facade) = null
   val venueService = VenueService
   def venues() = SelectUtils.model[Venue](venueService)(_.name)
   def users() = SelectUtils.model[User](UserService)(_.name)

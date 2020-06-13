@@ -18,7 +18,7 @@ trait SeasonComponent extends ItemComponent[Season]{
 object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
 
   override type facade = SeasonComponent
-    
+  def parentKey(c:facade) = null
 
 
   val template = s"""
@@ -43,7 +43,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         <v-layout column>
           <v-select @input="addCompetition(selectedType)" clearable append-icon="mdi-plus" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
-          <v-chip close v-on:click="editCompetition(async(c))" @input="removeCompetition(c.id)" v-for="c in item.competitions" :key="c.id">{{async(c).name}}</v-chip>
+          <v-chip close v-on:click="editCompetition(c)" @input="removeCompetition(c)" v-for="c in async(item.competition)" :key="c.id">{{c.name}}</v-chip>
         </div>
         </v-layout>
         $chbxRetired 
@@ -53,14 +53,15 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
   </v-container>"""
     
      
-       val service = SeasonService
+  val service = SeasonService
   val competitionService = CompetitionService
   
-  def removeCompetition(c:facade, id:String) = c.item.competitions ---= id
+  def removeCompetition(c:facade, competition:Competition) = competitionService.delete(competition)
   
   def addCompetition(c:facade,typeName:String) = {
       val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      c.item.competitions +++= (comp.id,comp)
+      comp.key = competitionService.key(parentKey(c),comp.id)
+      competitionService.cache(comp)
       c.selectedType = null
       editCompetition(c,comp)
     }
@@ -73,7 +74,8 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
       service.cache(c.item)
       c.$router.push(s"${c.item.id}/calendar")
     }
-     
+
+  //subscription("competitions", "item")((c:facade) => c.item.competition)
   method("removeCompetition")({removeCompetition _}:js.ThisFunction)
   method("addCompetition")({addCompetition _}:js.ThisFunction)
   method("calendar")({calendar _}:js.ThisFunction)

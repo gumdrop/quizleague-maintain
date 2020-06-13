@@ -36,7 +36,8 @@ trait LeagueTableComponent extends ItemComponent[LeagueTable]{
 object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteComponent{
   
   override type facade = LeagueTableComponent
-  override val service = LeagueTableService  
+  override val service = LeagueTableService
+  def parentKey(c:facade) =s"season/${c.$route.params("seasonId")}/competition/${c.$route.params("competitionId")}"
 
   val template = s"""
  <v-container v-if="item && teams">

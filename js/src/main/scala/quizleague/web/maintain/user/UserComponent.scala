@@ -10,6 +10,8 @@ object UserComponent extends ItemComponentConfig[User] with RouteComponent {
 
   val service = UserService
 
+  def parentKey(c:facade) = null
+
   val template = s"""
   <v-container v-if="item">
     <v-form v-model="valid" ref="fm">

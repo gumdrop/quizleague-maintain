@@ -21,6 +21,8 @@ trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with R
   override type facade <: CompetitionComponent
   
   val service = CompetitionService
+
+  def parentKey(c:facade) = new Key(null, "season", c.$route.params("seasonId")).key
   
   def fixtures(c:facade) = {
      c.$router.push(s"fixtures")

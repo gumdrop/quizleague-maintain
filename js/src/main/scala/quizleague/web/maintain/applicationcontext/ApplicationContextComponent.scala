@@ -31,6 +31,7 @@ object ApplicationContextComponent extends ItemComponentConfig[ApplicationContex
   override type facade = ApplicationContextComponent
   
   val service = ApplicationContextService
+  def parentKey(c:facade) = null
   def users() = SelectUtils.model[User](UserService)(_.name)
   def textSets() = SelectUtils.model[GlobalText](GlobalTextService)(_.name)
   def seasons() = SelectUtils.model[Season](SeasonService)(s => s"${s.startYear}/${s.endYear}")

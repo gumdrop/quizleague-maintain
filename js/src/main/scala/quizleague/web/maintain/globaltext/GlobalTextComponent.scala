@@ -15,6 +15,7 @@ import js.JSConverters._
 object GlobalTextComponent extends ItemComponentConfig[GlobalText] with RouteComponent {
 
   val service = GlobalTextService
+  def parentKey(c:facade) = null
 
   val template = s"""
   <v-container v-if="item">

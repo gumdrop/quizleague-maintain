@@ -24,7 +24,7 @@ trait FixturesListComponent extends CompetitionComponent{
 object FixturesListComponent extends CompetitionComponentConfig with FixturesNames{
   
   override type facade = FixturesListComponent
-  
+
   val template = s"""
   <v-container>
     <v-layout column v-if="item ">

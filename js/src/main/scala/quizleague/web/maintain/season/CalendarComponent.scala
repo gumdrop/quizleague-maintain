@@ -72,6 +72,7 @@ import quizleague.web.util.component.SelectUtils
 object CalendarComponent extends ItemComponentConfig[Season] with RouteComponent{
 
   val service = SeasonService
+  def parentKey(c:facade) = null
     
    
   val template = s"""
