@@ -71,7 +71,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           leagueTableService.list(dom.key),
           refObs(c.text, textService),
           c.textName,          
-          refObs(c.subsidiary),
           unwrapOption(c.icon))
         case c: DCC => new CupCompetition(
           c.id,
@@ -145,8 +144,8 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
       Duration.ofSeconds(5400),
       List(),
       List(),
-      textService.getRef(textService.instance()),
-      None)
+      textService.getRef(textService.instance())
+    )
 
     def makeCup = DCC(
       newId(),
@@ -182,7 +181,6 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
           List(),
           l.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(l.text),
-          if (l.subsidiary == null) None else Option(ref(l.subsidiary)),
           l.textName,
           Option(l.icon))
 

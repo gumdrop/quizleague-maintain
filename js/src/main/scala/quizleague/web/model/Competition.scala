@@ -38,7 +38,6 @@ class LeagueCompetition(
   override val leaguetable: Observable[js.Array[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
-  val subsidiary: RefObservable[Competition],
   val icon:String) extends Competition {
   override val typeName = league.toString()
 }

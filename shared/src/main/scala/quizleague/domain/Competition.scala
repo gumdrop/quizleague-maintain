@@ -29,7 +29,6 @@ case class LeagueCompetition(
 
   tables:List[Ref[LeagueTable]],
   text:Ref[Text],
-  subsidiary:Option[Ref[Competition]],
   textName:String = "league-comp",
   icon:Option[String] = None
   
@@ -103,8 +102,7 @@ object Competition
  }
 
  trait MainLeagueCompetition extends BaseLeagueCompetition{
-  val subsidiary:Option[Ref[Competition]]
-}
+ }
 
  trait KnockoutCompetition extends TeamCompetition with ScheduledCompetition
 
