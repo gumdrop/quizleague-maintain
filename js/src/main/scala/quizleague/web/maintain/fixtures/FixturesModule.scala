@@ -21,6 +21,7 @@ import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.model._
 import quizleague.domain.Result
 import quizleague.web.maintain.chat.ChatService
+import quizleague.web.util.Logging
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
 
@@ -65,19 +66,26 @@ object FixturesService extends FixturesGetService with FixturesPutService{
   
   def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => c.fixtures)
 
-  def copy(fixtures:js.Array[RefObservable[Fixtures]], parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixtures]]] = {
-    Observable.combineLatest(fixtures.map(f => copy(f,parentDescription, subsidiary)).toSeq).map(_.toJSArray)
-  }
-  
-  private def copy(fixtures:RefObservable[Fixtures], parentDescription:String, subsidiary:Boolean):Observable[RefObservable[Fixtures]] = {
-    
-    val model = get(fixtures.id)
-    
-    model.flatMap(fxs => Observable.of(fxs).combineLatest(fixtureService.copy(fxs, parentDescription, subsidiary)).map(x => {
-      val f = copy(fxs,parentDescription,x._2, true)
-      getRefObs(f.id)
-    }))
-    
+  def copyFixtures(fixtures:Observable[js.Array[Fixtures]], competition:Competition) = {
+
+     def copyFixture(fixture:Fixture, fixtures:Fixtures) = {
+       fixtureService.save(fixtureService.copy(fixture, fixtures.key))
+     }
+
+
+     fixtures.map(_.map(fxs => {
+
+       Logging.log(asJSon(fxs), "fxs")
+
+       val fixtures1 = copy(fxs, competition.key)
+
+       Logging.log(asJSon(fixtures1), "fixtures1")
+
+       val saved1 = save(fixtures1).map(Seq(_))
+       val saved2 = fxs.fixture.map(_.map(f => copyFixture(f, fixtures1))).map(_.toSeq).map(combineLatest _).flatten
+       combineLatest(Seq(saved1,saved2))
+     }).toSeq).map(combineLatest _).flatten.map(_.flatten.flatten)
+
   }
 
 }

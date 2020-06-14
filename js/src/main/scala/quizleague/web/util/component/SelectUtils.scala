@@ -16,9 +16,10 @@ object SelectUtils {
         items.map(_.obs))
         .map(_.filter(filter).map(o => new SelectWrapper(nameMaker(o),service.refObs(o.id)))).map(_.sortBy(_.text).toJSArray)
   }
-//  def model[T <: Model](items:Observable[js.Array[T]])(nameMaker: T => String):Observable[js.Array[SelectWrapper[T]]] = items.map(_.map(o => new SelectWrapper(nameMaker(o),service.refObs(o.id)))).map(_.sortBy(_.text))
+  def objectModel[T <: Model](items:Observable[js.Array[T]])(nameMaker: T => String)(filter: T => Boolean = (t:T)=>true):Observable[js.Array[SelectObjectWrapper[T]]] = items.map(_.filter(filter).map(o => new SelectObjectWrapper(nameMaker(o),o))).map(_.sortBy(_.text))
 
 
 }
 
 class SelectWrapper[T](val text:String, val value:RefObservable[T]) extends js.Object
+class SelectObjectWrapper[T](val text:String, val value:T) extends js.Object

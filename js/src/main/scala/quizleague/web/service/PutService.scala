@@ -39,7 +39,7 @@ trait PutService[T <: Model] {
     obs
   }
 
-
+  def copy(item:T, parentKey:ModelKey = null):T = mapOutWithKey(mapIn(item).withKey(Key(Option(parentKey).map(_.key),uriRoot,newId())))
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
   def delete(item:T):Unit = doDelete(item.id)
   def delete(id:String):Unit = doDelete(id)
@@ -62,5 +62,6 @@ trait PutService[T <: Model] {
     u.withKey(Key(parentKey,uriRoot,u.id))
   }
   protected def enc(item:U):Json
+  def asJSon(item:T) = enc(mapIn(item)).toString()
 
 }
