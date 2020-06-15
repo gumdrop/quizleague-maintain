@@ -1,15 +1,15 @@
 package quizleague.web.service.competition
 
 import scala.scalajs.js
-
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 
 import io.circe.syntax.EncoderOps
-import quizleague.domain.{ Competition => Dom, Event => DomEvent }
+import quizleague.domain.{Key,Competition => Dom, Event => DomEvent}
 import quizleague.util.json.codecs.DomainCodecs.competitionDecoder
 import quizleague.util.json.codecs.DomainCodecs.competitionEncoder
+import quizleague.web.model.{Key => ModelKey}
 import quizleague.web.model.Competition
 import quizleague.web.model.CompetitionType
 import quizleague.web.model.CompetitionType.CompetitionType
@@ -19,8 +19,7 @@ import quizleague.web.model.LeagueCompetition
 import quizleague.web.model.SingletonCompetition
 import quizleague.web.model.SubsidiaryLeagueCompetition
 import quizleague.web.names.CompetitionNames
-import quizleague.web.service.DirtyListService
-import quizleague.web.service.GetService
+import quizleague.web.service.{GetService, PutService}
 import quizleague.web.service.fixtures.FixturesGetService
 import quizleague.web.service.fixtures.FixturesPutService
 import quizleague.web.service.leaguetable.LeagueTableGetService
@@ -105,7 +104,7 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
 
 }
 
-trait CompetitionPutService extends CompetitionGetService with DirtyListService[Competition] {
+trait CompetitionPutService extends CompetitionGetService with PutService[Competition] {
   import PutHelpers._
   override val textService: TextPutService
   override val fixturesService: FixturesPutService
@@ -119,14 +118,19 @@ trait CompetitionPutService extends CompetitionGetService with DirtyListService[
 
   override def enc(item: Dom) = item.asJson
 
-  def instance[A <: Competition](compType: CompetitionType): A = {
+  def instance[A <: Competition](compType: CompetitionType, parentKey:ModelKey): A = {
+    log(parentKey,"incoming key")
+    log(compType.toString,"comp type")
+
     val comp = compType match {
       case CompetitionType.league => makeLeague
       case CompetitionType.cup => makeCup
       case CompetitionType.subsidiary => makeSubsidiary
       case CompetitionType.singleton => makeSingleton
     }
-    add(comp).asInstanceOf[A]
+
+    log(comp, "comp" )
+    add(comp.withKey(Key(Option(parentKey.key), uriRoot,comp.id))).asInstanceOf[A]
   }
 
   object PutHelpers {

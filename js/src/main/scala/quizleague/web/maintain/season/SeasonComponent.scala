@@ -1,14 +1,18 @@
 package quizleague.web.maintain.season
 
+import java.util.logging.Logger
+
 import quizleague.web.maintain.component.ItemComponent
 import quizleague.web.maintain.component.ItemComponentConfig
 import quizleague.web.maintain.component.ItemComponentConfig._
 import quizleague.web.core.RouteComponent
 import quizleague.web.model._
 import quizleague.web.maintain.component.TemplateElements._
+
 import scalajs.js
 import js.JSConverters._
 import quizleague.web.maintain.competition.CompetitionService
+import quizleague.web.util.Logging
 
 @js.native
 trait SeasonComponent extends ItemComponent[Season]{
@@ -41,9 +45,9 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
         <div><v-btn v-on:click ="editText(item.text.id)" text><v-icon>mdi-card-text-outline</v-icon>Text</v-btn></div>
         <div><v-btn v-on:click ="calendar(item.text.id)" text><v-icon>mdi-calendar</v-icon>Calendar</v-btn></div>
         <v-layout column>
-          <v-select @input="addCompetition(selectedType)" clearable append-icon="mdi-plus" v-model="selectedType" label="Add Competition" :items="types"></v-select>
+          <v-select @click:append="addCompetition(item, selectedType)" clearable append-icon="mdi-plus" v-model="selectedType" label="Add Competition" :items="types"></v-select>
         <div>
-          <v-chip close v-on:click="editCompetition(c)" @input="removeCompetition(c)" v-for="c in async(item.competition)" :key="c.id">{{c.name}}</v-chip>
+          <v-chip close v-on:click="editCompetition(c)" @click:close="removeCompetition(c)" v-for="c in competitions" :key="c.id">{{c.name}}</v-chip>
         </div>
         </v-layout>
         $chbxRetired 
@@ -56,18 +60,21 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
   val service = SeasonService
   val competitionService = CompetitionService
   
-  def removeCompetition(c:facade, competition:Competition) = competitionService.delete(competition)
+  def removeCompetition(c:facade, competition:Competition) = {
+    if(org.scalajs.dom.window.confirm("Delete ?")) {
+      competitionService.delete(competition).subscribe(x => x)
+    }
+  }
   
-  def addCompetition(c:facade,typeName:String) = {
-      val comp:Competition = competitionService.instance(CompetitionType.withName(typeName))
-      comp.key = competitionService.key(parentKey(c),comp.id)
-      competitionService.cache(comp)
+  def addCompetition(c:facade, item:Season, typeName:String) = {
+      val compType = CompetitionType.withName(typeName)
+      val comp:Competition = competitionService.instance(compType, item.key)
+      competitionService.save(comp)
       c.selectedType = null
       editCompetition(c,comp)
     }
   
   def editCompetition(c:facade, comp: Competition) = {
-    service.cache(c.item)
     c.$router.push(s"${c.item.id}/competition/${comp.id}/${comp.typeName}")
   }
   def calendar(c:facade) = {
@@ -75,7 +82,7 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
       c.$router.push(s"${c.item.id}/calendar")
     }
 
-  //subscription("competitions", "item")((c:facade) => c.item.competition)
+  subscription("competitions")((c:facade) => item(c).flatMap(_.competition))
   method("removeCompetition")({removeCompetition _}:js.ThisFunction)
   method("addCompetition")({addCompetition _}:js.ThisFunction)
   method("calendar")({calendar _}:js.ThisFunction)

@@ -47,7 +47,7 @@ object FixturesComponent extends CompetitionComponentConfig{
   components(FixtureComponent)
   
   val template = s"""
-  <v-container v-if="item && season && fxs">
+  <v-container v-if="item && season && fxs && teams && fixtures && venues">
     <h2>Fixtures : {{item.name}}</h2>
     <v-form v-model="valid">
     <v-layout column>
@@ -67,7 +67,7 @@ object FixturesComponent extends CompetitionComponentConfig{
           <v-btn style="top:5px;" icon v-on:click="addFixture()" :disabled="!(homeTeam && awayTeam && venue)"><v-icon >mdi-plus</v-icon></v-btn>
          </v-layout>
          <v-layout column>
-           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in async(fxs.fixture)" :key="fixture.id"></fixture>
+           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in fixtures" :key="fixture.id"></fixture>
          </v-layout>
         </v-layout>      
      </v-layout>
@@ -90,8 +90,7 @@ object FixturesComponent extends CompetitionComponentConfig{
       teamManager(c).take(c.awayTeam),
       c.venue,
       c.item.typeName == CompetitionType.subsidiary.toString)
-      c.fxs.fixtures +++= (f.id, f)
-      fixtureService.cache(f)
+      fixtureService.save(f).subscribe(x => c.$forceUpdate())
 
     c.homeTeam = null
     c.awayTeam = null
@@ -111,6 +110,7 @@ object FixturesComponent extends CompetitionComponentConfig{
   method("save")({save _ }:js.ThisFunction)
   
   subscription("fxs")(c => obsFromParam(c,"fixturesId", FixturesService))
+  subscription("fixtures")(c => obsFromParam(c,"fixturesId", FixturesService).flatMap(_.fixture))
   subscription("venues")(c => venues())
   subscription("teams")(c => teams())
   
@@ -157,11 +157,12 @@ object FixtureComponent extends Component{
     </v-layout>
 """
   def removeFixture(c:facade, fx:Fixture) = {
-    c.fixtures.fixtures ---= fx.id
-    c.teamManager.untake(fx.home)
-    c.teamManager.untake(fx.away)
-    FixtureService.delete(fx.id)
-   
+    if(org.scalajs.dom.window.confirm("Delete ?")){
+      c.teamManager.untake(fx.home)
+      c.teamManager.untake(fx.away)
+      FixtureService.delete(fx).subscribe(x => c.$forceUpdate())
+    }
+
   }
   
   def editText(c:facade, textId:String) = {
@@ -170,6 +171,7 @@ object FixtureComponent extends Component{
   
   def addResult(c:facade) = {
     c.fx = FixtureService.addResult(c.fx)
+    FixtureService.save(c.fx)
     c.showResult = true
   }
   

@@ -47,7 +47,7 @@ trait LeagueTableGetService extends GetService[Model] with LeagueTableNames {
 
 }
 
-trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService with DirtyListService[Model] {
+trait LeagueTablePutService extends PutService[Model] with LeagueTableGetService{
 
   override val teamService: TeamPutService
 

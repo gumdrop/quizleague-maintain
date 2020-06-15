@@ -34,8 +34,8 @@ object SubsidiaryCompetitionComponent extends CompetitionComponentConfig{
       <div><v-btn text v-on:click="editText(item.text.id)"  type="button" ><v-icon>mdi-card-text-outline</v-icon>Text...</v-btn></div>
       <div><v-btn text v-on:click="fixtures(item)" ><v-icon>mdi-check</v-icon>Fixtures...</v-btn></div>
       <div>
-       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>mdi-plus</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @input="removeTable(table.id)" v-for="(table,index) in item.tables" :key="table.id">{{async(table).description || 'Table ' + (index + 1)}}</v-chip>
-      </div>
+       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>mdi-plus</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @click:close="removeTable(table)" v-for="(table,index) in tables" :key="table.id">{{table.description || 'Table ' + (1 + index)}}</v-chip>
+       </div>
       </v-layout>
       $formButtons
     </v-form>

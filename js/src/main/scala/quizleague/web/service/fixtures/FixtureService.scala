@@ -36,7 +36,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   val teamService:TeamGetService
   val userService:UserGetService
   val reportService:ReportGetService
-  val fixturesService:FixturesGetService
+  val fixturesService:GetService[Fixtures]
 
   override protected def mapOutSparse(dom:Dom) = Model(
     dom.id,
@@ -68,7 +68,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 
 }
 
-trait FixturePutService extends PutService[Fixture] with FixtureGetService with DirtyListService[Model]{
+trait FixturePutService extends PutService[Fixture] with FixtureGetService{
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.refOption(model.venue), teamService.ref(model.home), teamService.ref(model.away), model.date, model.time, model.duration, mapInResult(model.result), model.subsidiary)
   override protected def make() = ???
   
@@ -76,15 +76,16 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService with 
   override val teamService:TeamPutService
   
   def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue], subsidiary:Boolean) = {
-    val dom = Dom(newId,fx.description, fx.parentDescription,venueService.refOption(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None,subsidiary)
-    mapOutSparse(dom)
+
+    val dom = withKey(Dom(newId,fx.description, fx.parentDescription,venueService.refOption(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None,subsidiary), fx.key.key)
+    mapOutWithKey(dom)
   }
   
   def copy(in:Fixture, parentDescription:String, subsidiary:Boolean):Fixture = {
     val fx = mapIn(in)
     val dom = Dom(newId,fx.description, parentDescription,fx.venue,fx.home,fx.away,fx.date,fx.time,fx.duration,None,subsidiary)
     save(dom)
-    mapOutSparse(dom)
+    mapOutWithKey(dom)
   }
   
   private def mapInResult(result:Result):Option[DomResult]  = {

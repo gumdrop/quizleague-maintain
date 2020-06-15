@@ -30,10 +30,12 @@ trait GetService[T <: Model] {
   private var listObservables: Map[String, Observable[js.Array[U]]] = Map()
 
   def get(id: String): Observable[T] = get(key(id))
-  def get(key: ModKey): Observable[T] = items.get(log(key,"get key").id).fold(getFromStorage(key).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
+  def get(key: ModKey): Observable[T] = items.get(key.id).fold(getFromStorage(key).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
   def key(id:String):ModKey = key(null,id)
   def key(parentKey:String, id:String):ModKey = new ModKey(parentKey,uriRoot,id)
+  def key(key:Option[Key]):ModKey = key.map(k => ModKey(k.key)).getOrElse(null)
+  def key(key:ModKey):Option[Key] = Option(key).map(k => Key(k.key))
 
 
   def list(parentKey:Option[Key]): Observable[js.Array[T]] = list(parentKey.map(k => ModKey(k.key)).getOrElse(null))

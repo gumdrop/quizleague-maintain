@@ -92,17 +92,6 @@ object FixtureService extends FixtureGetService with PostService{
   override val reportService  = ReportService
 
 
-  def teamFixtures(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-
-    val today = LocalDate.now.toString
-
-    val q = db.collectionGroup(uriRoot).where("date",">=", today.toString).where("subsidiary","==", false).orderBy("date").limit(take)
-    val home = query(q.where("home.id","==",teamId))
-    val away = query(q.where("away.id","==",teamId))
-    
-    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date).take(take).toJSArray)
-  }
-  
   def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
     val q = db.collectionGroup(uriRoot).where("date","<=", today.toString).orderBy("date","desc").limit(take)
     val home = query(q.where("home.id","==",teamId))

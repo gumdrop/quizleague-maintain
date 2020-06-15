@@ -91,7 +91,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                </v-card-title>
               <ql-reports :keyval="fixture.key" ></ql-reports>
               <v-card-text>
-                <ql-chat :parentKey="fixture.key" :name="fixture.parentDescription + ' ' +  fixture.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
+                <ql-chat :parentKey="fixture.key" :name="parent.parentDescription + ' ' +  parent.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>

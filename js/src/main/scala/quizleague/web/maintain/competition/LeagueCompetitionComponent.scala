@@ -1,30 +1,20 @@
 package quizleague.web.maintain.competition
 
-import quizleague.web.maintain.component.ItemComponent
+import quizleague.web.maintain.component.TemplateElements._
 import quizleague.web.maintain.component._
+import quizleague.web.maintain.fixtures.FixturesService
+import quizleague.web.maintain.season.SeasonService
 import quizleague.web.model._
+import quizleague.web.util.component.SelectWrapper
+import rxscalajs.Observable
 
 import scala.scalajs.js
-import TemplateElements._
-import quizleague.web.maintain.season.SeasonService
-import rxscalajs.Observable._
-
-import js.JSConverters._
-import quizleague.web.core._
-import rxscalajs.Observable
-import quizleague.web.util.Logging._
-import quizleague.web.maintain.season.SeasonService
-import quizleague.web.util.rx.RefObservable
-import quizleague.web.maintain.fixtures.FixturesService
-import quizleague.web.maintain.fixtures.FixtureService
-import quizleague.web.util.component.{SelectObjectWrapper, SelectUtils, SelectWrapper}
 
 
 
 @js.native
 trait LeagueCompetitionComponent extends CompetitionComponent{
   var subsidiaries:js.Array[SelectWrapper[Competition]]
-  var subsidiary:LeagueCompetition
   var showProgress:Boolean
 }
 object LeagueCompetitionComponent extends CompetitionComponentConfig{
@@ -44,13 +34,12 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
              required step="0.5" :rules=${valRequired("Duration")}></v-text-field>
           <v-text-field label="Text Name" required v-model="item.textName" :rules=${valRequired("Text Name")}></v-text-field>
           <v-text-field label="Icon Name" v-model="item.icon" :append-icon="item.icon" ></v-text-field>
-          <v-select label="Subsidiary" :items="subsidiaries" v-model="subsidiary"></v-select>
-          <div><v-btn text v-if="subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item)"><v-icon>mdi-file-copy</v-icon>Copy fixtures to subsidiary</v-btn></div>
+          <div v-for="subsidiary in subsidiaries" :key="subsidiary.id"><v-btn text v-if="subsidiary" type="button" v-on:click="copyFixturesToSubsidiary(item, subsidiary)"><v-icon>mdi-file-copy</v-icon>Copy fixtures to {{subsidiary.name}}</v-btn></div>
 
       <div><v-btn text v-on:click="editText(item.text.id)"  type="button" ><v-icon>mdi-card-text-outline</v-icon>Text...</v-btn></div>
       <div><v-btn text v-on:click="fixtures(item)" ><v-icon>mdi-check</v-icon>Fixtures...</v-btn></div>
-      <div>
-       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>mdi-plus</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @input="removeTable(table.id)" v-for="(table,index) in async(item.leaguetable)" :key="table.id">{{table.description || 'Table ' + (index + 1)}}</v-chip>
+      <div v-if="tables">
+       <span>Tables</span>&nbsp;<v-btn v-on:click="addTable()" icon><v-icon>mdi-plus</v-icon></v-btn>  <v-chip close v-on:click="toTable(table.id)" @click:close="removeTable(table)" v-for="(table,index) in tables" :key="table.id">{{table.description || 'Table ' + (1 + index)}}</v-chip>
       </div>
       </v-layout>
       $formButtons
@@ -64,14 +53,13 @@ object LeagueCompetitionComponent extends CompetitionComponentConfig{
     }
   }
   
-  def subsidiaries(seasonId:String):Observable[js.Array[SelectObjectWrapper[Competition]]] = {
-    SeasonService.get(seasonId).flatMap(season => SelectUtils.objectModel(season.competition)(_.name)(filterSubs _))
+  def subsidiaries(seasonId:String):Observable[js.Array[Competition]] = {
+    SeasonService.get(seasonId).flatMap(_.competition.map(_.filter(filterSubs _)))
   }
   
-  def copyFixturesToSubsidiary(c:facade, item:LeagueCompetition) = {
-    log(c.subsidiary.id,"subsidiary")
+  def copyFixturesToSubsidiary(c:facade, item:LeagueCompetition, subsidiary:LeagueCompetition) = {
     c.showProgress = true
-    FixturesService.copyFixtures(item.fixtures, c.subsidiary).subscribe(x => c.showProgress = false)
+    FixturesService.copyFixtures(item.fixtures, subsidiary).subscribe(x => c.showProgress = false)
 
   }
   

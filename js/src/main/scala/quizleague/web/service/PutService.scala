@@ -1,5 +1,7 @@
 package quizleague.web.service
 
+import firebase.Promise
+
 import scalajs.js
 import quizleague.web.util.UUID
 import quizleague.domain.{Key, Ref}
@@ -32,21 +34,29 @@ trait PutService[T <: Model] {
   private[service] def saveDom(i:U):Observable[Unit] = {
     val path = i.key.getOrElse(throw new RuntimeException("no key")).key
     val promise = db.doc(path).set(convertJsonToJs(enc(i.withKey(None))).asInstanceOf[js.Dictionary[js.Any]])
-    val obs = ReplaySubject[Unit]()
-    promise.`then`({obs.next(_)}, {obs.error(_)})
     log(i,s"saved $path to firestore")
     deCache(i)
+    promiseToObs(promise)
+  }
+
+  private[service] def promiseToObs[X](promise:Promise[X]):Observable[X]=  {
+    val obs = ReplaySubject[X]()
+    promise.`then`({obs.next(_)}, {obs.error(_)})
     obs
   }
 
   def copy(item:T, parentKey:ModelKey = null):T = mapOutWithKey(mapIn(item).withKey(Key(Option(parentKey).map(_.key),uriRoot,newId())))
   def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
-  def delete(item:T):Unit = doDelete(item.id)
-  def delete(id:String):Unit = doDelete(id)
-  private[service] def doDelete(id:String):Unit = {items -= id; db.doc(s"$uriRoot/$id").delete()}
+  def delete(item:T):Observable[Unit] = doDelete(item.key)
+  def delete(id:String):Observable[Unit] = doDelete(new ModelKey(null,uriRoot,id))
+  private[service] def doDelete(key:ModelKey) = {
+    items -= key.id
+    promiseToObs(db.doc(key.key).delete())
+  }
   def instance() = add(mapOutWithKey(make()))
   def instance(parentKey:ModelKey) = add(mapOutWithKey(make(Key(parentKey.key))))
   def getId(item:T) = if (item != null ) item.id else null
+  def getKey(item:T):ModelKey = Option(item).map(_.key).getOrElse(key(item.id))
   protected final def newId() = UUID.randomUUID.toString()
   private[service] def deCache(item:U) = items -= item.id
   protected final def mapInWithKey(model:T) = {
@@ -60,6 +70,9 @@ trait PutService[T <: Model] {
   protected def make(parentKey:Key):U = {
     val u = make()
     u.withKey(Key(parentKey,uriRoot,u.id))
+  }
+  protected def withKey(item:U, parentKey:String):U = {
+    item.withKey(new Key(Option(parentKey), uriRoot, item.id))
   }
   protected def enc(item:U):Json
   def asJSon(item:T) = enc(mapIn(item)).toString()

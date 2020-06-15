@@ -3,10 +3,13 @@ package quizleague.web.service.text
 import scalajs.js
 import quizleague.web.service._
 import quizleague.web.model.Text
-import quizleague.domain.{ Text => Dom }
+import quizleague.domain.{Key, Text => Dom}
 import shapeless._
 import quizleague.web.names.TextNames
-import io.circe._,io.circe.parser._,io.circe.syntax._,io.circe.scalajs.convertJsToJson
+import io.circe._
+import io.circe.parser._
+import io.circe.syntax._
+import io.circe.scalajs.convertJsToJson
 import quizleague.util.json.codecs.DomainCodecs._
 
 
@@ -24,7 +27,7 @@ trait TextPutService extends PutService[Text] with TextGetService with DirtyList
 
   override protected def mapIn(text: Text) = Dom(text.id, text.text, text.mimeType)
 
-  override protected def make(): Dom = Dom(newId(), "", "text/html")
+  override protected def make(): Dom = {val id = newId();Dom(id, "", "text/html").withKey(Key(None, uriRoot, id))}
 
   override def enc(item: Dom) = item.asJson
 

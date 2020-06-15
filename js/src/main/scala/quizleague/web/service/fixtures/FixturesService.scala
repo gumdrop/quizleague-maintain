@@ -46,7 +46,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
  
 }
 
-trait FixturesPutService extends PutService[Fixtures] with FixturesGetService with DirtyListService[Model] {
+trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
   
   override val fixtureService:FixturePutService
   override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures),Option(model.subsidiary))
@@ -60,13 +60,13 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
     
     def weekText = s"Week ${fixtures.length + 1}"
     
-    
+    val id = newId
     add(
-    competition match {
-      case c:LeagueCompetition => Dom(newId, weekText, c.name, findNextDate(c), c.startTime, c.duration, List())
-      case c:CupCompetition => Dom(newId,"",c.name,LocalDate.now,c.startTime,c.duration,List())
+      (competition match {
+      case c:LeagueCompetition => Dom(id, weekText, c.name, findNextDate(c), c.startTime, c.duration, List())
+      case c:CupCompetition => Dom(id,"",c.name,LocalDate.now,c.startTime,c.duration,List())
       case _ => null
-    })
+    }).withKey(key(key(competition.key.key,id))))
   }
   
   def copy(in:Fixtures, parentDescription:String, fixtures:js.Array[RefObservable[Fixture]], subsidiary:Boolean):Fixtures = {
@@ -80,13 +80,13 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService wi
 
   override def enc(item: Dom) = item.asJson
   
-  override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
-  override def delete(id:String) = {
-    get(id).first.subscribe( fix => {
-      fix.fixtures.foreach(f => {fixtureService.delete(f.id)});
-      super.delete(id)  
-    })
-  }
+//  override def save(item:Dom) = {fixtureService.saveAllDirty;super.save(item)}
+//  override def delete(id:String) = {
+//    get(id).first.subscribe( fix => {
+//      fix.fixtures.foreach(f => {fixtureService.delete(f.id)});
+//      super.delete(id)
+//    })
+//  }
 
 }
 

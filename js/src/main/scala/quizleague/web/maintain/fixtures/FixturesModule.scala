@@ -20,6 +20,7 @@ import quizleague.web.core.RouteConfig
 import quizleague.web.maintain.MaintainMenuComponent
 import quizleague.web.model._
 import quizleague.domain.Result
+import quizleague.domain.{Key => DomKey}
 import quizleague.web.maintain.chat.ChatService
 import quizleague.web.util.Logging
 import quizleague.web.util.rx.RefObservable
@@ -48,8 +49,9 @@ object FixtureService extends FixtureGetService with FixturePutService{
   override val reportService = ReportService
   
   def addResult(fixture:Fixture) = {
-    val fx = mapIn(fixture)
-    add(mapOutSparse(fx.copy(result = Some(Result(0,0,None,None,None)))))
+    val fx = mapIn(fixture).withKey(DomKey(fixture.key.key))
+
+    add(mapOutWithKey(fx.copy(result = Some(Result(0,0,None,None,None))).withKey(DomKey(fixture.key.key))))
   }
   
   def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixture]]] = {
@@ -74,13 +76,7 @@ object FixturesService extends FixturesGetService with FixturesPutService{
 
 
      fixtures.map(_.map(fxs => {
-
-       Logging.log(asJSon(fxs), "fxs")
-
        val fixtures1 = copy(fxs, competition.key)
-
-       Logging.log(asJSon(fixtures1), "fixtures1")
-
        val saved1 = save(fixtures1).map(Seq(_))
        val saved2 = fxs.fixture.map(_.map(f => copyFixture(f, fixtures1))).map(_.toSeq).map(combineLatest _).flatten
        combineLatest(Seq(saved1,saved2))

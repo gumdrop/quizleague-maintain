@@ -35,7 +35,8 @@ trait ItemComponentConfig[T <: Model] extends Component{
   }
   
   def obsFromParam[X <: Model](c:facade, param:String, service:GetService[X] with PutService[X] = service) = service.get(service.key(c.pkey,c.$route.params(param))).map(i => service.cache(i))
-  
+  def item(c:facade):Observable[T] = obsFromParam(c, paramName)
+
   def save(c:facade) = {
     val item = c.item
     item.key = service.key(parentKey(c),item.id)
