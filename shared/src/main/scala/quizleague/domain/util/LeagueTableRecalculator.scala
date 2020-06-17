@@ -34,7 +34,7 @@ object LeagueTableRecalculator
       .zipWithIndex
       .map{case(r,i) => r.copy(position = (i + 1).toString())}
       
-      table.copy(rows = newRows) 
+      table.copy(rows = newRows).withKey(table.key)
     }  
     
     val rows:List[LeagueTableRow] = fixtures.flatMap(makeRows _)

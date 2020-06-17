@@ -1,8 +1,10 @@
 package quizleague.data
 
 
+import java.util
+
 import com.google.auth.oauth2.GoogleCredentials
-import quizleague.domain.{Entity,Key}
+import quizleague.domain.{Entity, Key, Ref}
 import io.circe._
 
 import reflect._
@@ -14,9 +16,9 @@ import java.util.logging.Logger
 import quizleague.firestore.Connection
 
 object Storage {
-  
+
   val log = Logger.getLogger(this.getClass.toString())
-  
+
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
   .setProjectId(Connection.projectId).build
 
@@ -26,59 +28,65 @@ object Storage {
   def delete[T <: Entity](entity: T)(implicit tag: ClassTag[T]): Unit ={
     datastore.document(key(entity).key).delete()
   }
-  
+
   def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Unit = {
     save(key(entity), encoder(entity))
   }
+  def ref[T <: Entity](entity: T)(implicit tag: ClassTag[T]):Ref[T] = Ref(makeKind(entity.key),entity.id,entity.key)
 
   def key(entity:Entity):Key = entity.key.getOrElse(throw new IllegalArgumentException)
 
   def saveAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T], encoder: Encoder[T]):Unit = {
     val objrefs = entities.map(e => (datastore.document(key(e).key),asMap(encoder(e).asObject.get)))
-     
+
      val batchSets = objrefs.grouped(400)
-     
+
      batchSets.foreach( l => {
 
        log.warning(s"saving batch : $l" )
-     
+
        val batch = datastore.batch()
-       
+
        l.foreach({case (r,o) => batch.set(r,o)})
-       
+
        batch.commit()
      })
   }
-  
+
     def deleteAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T]):Unit = {
 
      val objrefs = entities.map(e => (datastore.document(s"${makeKind(e.key)}()/${e.id}")))
-     
+
      val batchSets = objrefs.grouped(400)
-     
+
      batchSets.foreach( l => {
-     
+
        val batch = datastore.batch()
-       
+
        l.foreach(d => batch.delete(d))
-       
+
        batch.commit()
      })
   }
 
   def load[T <: Entity](key:Key)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(key, decoder)
 
-  def load[T <: Entity](id: String, parent:Option[Key] = None)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(Key(s"${makeKind(parent)}/$id}"), decoder)
+  def load[T <: Entity](id: String, parent:Option[Key] = None)(implicit tag: ClassTag[T], decoder: Decoder[T]): T = load(Key(s"${makeKind(parent)}/$id"), decoder)
 
   def list[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = list(None)
 
   def list[T <: Entity](parent:Option[Key] = None)(implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
-    datastore.collection(makeKind(parent)).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String,Any]], decoder).withKey(Key(d.getReference.getPath))).toList
+    val key = makeKind(parent)
+    val list = datastore.collection(key).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String, Any]], decoder).withKey(Key(d.getReference.getPath))).toList
+    log.info(s"key : $key \nlist:$list")
+    list
   }
 
-  private def makeKind(parent:Option[Key])(implicit tag: ClassTag[_]) = s"${parent.fold("")(x =>s"$x/")}${tag.runtimeClass.getSimpleName.toLowerCase}"
+  private def makeKind(parent:Option[Key])(implicit tag: ClassTag[_]) = s"${parent.fold("")(x =>s"${x.key}/")}${tag.runtimeClass.getSimpleName.toLowerCase}"
 
   private def save(key:Key, json: Json):Unit = {
+
+    log.info(s"key: ${key.key} \njson:${json.toString()}")
 
     val res = json.asObject.map(obj => {
       val ent = asMap(obj)
@@ -87,9 +95,9 @@ object Storage {
     })
 
   }
-  
+
   private def asMap(obj: JsonObject) = {
-    
+
     def handleField(name: String, json: Json) =  ((name, convertObject(json)))
 
     def convertObject(json: Json): Any = {
@@ -109,12 +117,12 @@ object Storage {
     def doit(obj: JsonObject) = {
 
       val res = Map() ++ obj.toVector.map((handleField _).tupled)
-      
+
       res.asInstanceOf[Map[String,Object]].asJava
     }
-    
+
     doit(obj)
-    
+
   }
 
   private def props(p: java.util.Map[String,Any]):Iterable[(String,Json)] = {
@@ -142,8 +150,11 @@ object Storage {
   }
 
   private def load[T <: Entity](key:Key, decoder: Decoder[T])(implicit tag: ClassTag[T]): T = {
-    log.info(s"key = $key")
-    entityToObj(datastore.document(key.key).get.get.getData.asInstanceOf[java.util.Map[String,Any]], decoder).withKey(key)
+
+    val map = datastore.document(key.key).get.get.getData.asInstanceOf[util.Map[String, Any]]
+
+    log.info(s"key: $key\nmap: $map")
+    entityToObj(map, decoder).withKey(key)
 
   }
 

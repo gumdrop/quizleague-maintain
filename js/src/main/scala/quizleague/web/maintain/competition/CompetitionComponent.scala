@@ -40,13 +40,13 @@ trait CompetitionComponentConfig extends ItemComponentConfig[Competition] with R
   def removeTable(c:facade, table:LeagueTable) = {
     if(org.scalajs.dom.window.confirm("Delete ?"))
       {
-        LeagueTableService.delete(table).subscribe(x => x)
+        LeagueTableService.delete(table)
       }
   }
   
   def addTable(c:facade) = {
     val table = LeagueTableService.instance(c.item.key)
-    LeagueTableService.save(table).subscribe(x => Unit)
+    LeagueTableService.save(table)
   }
 
   subscription("season"){c:facade => SeasonService.get(c.$route.params("seasonId"))}

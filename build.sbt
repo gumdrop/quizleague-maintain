@@ -50,7 +50,7 @@ lazy val quizleague = crossProject.in(file(".")).
     libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet-core" % "2.25.1",
     libraryDependencies += "org.eclipse.jetty" % "jetty-server" % "9.4.24.v20191120",
 	//libraryDependencies += "io.netty" % "netty-tcnative-boringssl-static" % "2.0.7.Final",
-    libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "1.31.0"
+    libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "1.34.0"
 
   ).
   jsSettings(

@@ -16,12 +16,14 @@ import scala.collection.mutable.Map
 
 object StatsWorker {
 
-  def leagueComp(season:Season) = season.competitions.map(toComp _).flatMap((c:Competition) => c match{
-    case a:LeagueCompetition => List(a)
-    case _  => List()
-  }).head
+  def leagueComp(season:Season) = {
+    list[Competition](season.key).flatMap((c:Competition) => c match{
+      case a:LeagueCompetition => List(a)
+      case _  => List()
+    }).head
+  }
 
-  def cupComps(season:Season) = season.competitions.map(toComp _).flatMap((c:Competition) => c match{
+  def cupComps(season:Season) = list[Competition](season.key).flatMap((c:Competition) => c match{
     case a:KnockoutCompetition => List(a)
     case _  => List()
   })
@@ -76,7 +78,7 @@ class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable], s
   private def find(team: Ref[Team]): Statistics = {
 
     def comp = StatsWorker.leagueComp(season)
-    def table = comp.tables.filter(t => t.rows.exists(_.team.id == team.id)).head
+    def table = list[LeagueTable](comp.key).filter(_.rows.exists(_.team.id == team.id)).map(ref _).head
     
     cache.getOrElseUpdate(team.id, Statistics(uuid.toString,team, Ref[Season]("season", season.id), table))
     
@@ -109,7 +111,8 @@ object HistoricalStatsAggregator {
     deleteAll(seasonStats)
 
     val c = StatsWorker.leagueComp(season)
-    var dummyTables:List[LeagueTable] = c.tables.map(t => refToObject(t).copy(rows = t.rows.map(r => r.copy(team = r.team, "",0,0,0,0,0,0,0))))
+    val tables = list[LeagueTable](c.key)
+    var dummyTables:List[LeagueTable] = tables.map(t => t.copy(rows = t.rows.map(r => r.copy(team = r.team, "",0,0,0,0,0,0,0))).withKey(t.key))
 
     var startingStats:List[Statistics] = List()
     

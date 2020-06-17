@@ -62,16 +62,16 @@ object SeasonComponent extends ItemComponentConfig[Season] with RouteComponent {
   
   def removeCompetition(c:facade, competition:Competition) = {
     if(org.scalajs.dom.window.confirm("Delete ?")) {
-      competitionService.delete(competition).subscribe(x => x)
+      competitionService.delete(competition)
     }
   }
   
   def addCompetition(c:facade, item:Season, typeName:String) = {
       val compType = CompetitionType.withName(typeName)
       val comp:Competition = competitionService.instance(compType, item.key)
-      competitionService.save(comp)
+      competitionService.save(comp).subscribe(x => editCompetition(c,comp))
       c.selectedType = null
-      editCompetition(c,comp)
+
     }
   
   def editCompetition(c:facade, comp: Competition) = {

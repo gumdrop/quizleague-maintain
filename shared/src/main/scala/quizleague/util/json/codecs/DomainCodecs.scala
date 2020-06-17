@@ -76,6 +76,7 @@ object DomainCodecs{
   implicit val chatMessageDecoder: Decoder[ChatMessage] = deriveDecoder
   implicit val chatUserEncoder: Encoder[SiteUser] = deriveEncoder
   implicit val chatUserDecoder: Decoder[SiteUser] = deriveDecoder
+  implicit val keyEncoder: Encoder[Key] = deriveEncoder
+  implicit val keyDecoder: Decoder[Key] = deriveDecoder
 
-  
 }

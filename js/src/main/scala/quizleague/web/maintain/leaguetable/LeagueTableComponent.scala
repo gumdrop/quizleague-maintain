@@ -118,7 +118,7 @@ object LeagueTableComponent extends ItemComponentConfig[LeagueTable] with RouteC
     }
     
     def recalculate(c:facade) = {
-      service.recalculateTable(c.item, c.competition)
+      service.recalculateTable(c.item)
     }
     
     def sort(c:facade) = LeagueTableService.sortTable(c.item)

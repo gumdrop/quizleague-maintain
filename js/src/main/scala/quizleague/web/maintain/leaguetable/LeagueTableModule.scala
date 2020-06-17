@@ -5,7 +5,7 @@ import quizleague.web.service.leaguetable.LeagueTablePutService
 import quizleague.web.maintain.team.TeamService
 import quizleague.web.service.{DirtyListService, PostService}
 import quizleague.web.model._
-import quizleague.domain.{LeagueTable => Dom}
+import quizleague.domain.{LeagueTable => Dom, Key => DomKey}
 import quizleague.util.json.codecs.DomainCodecs._
 import quizleague.web.core._
 import quizleague.web.core.RouteConfig
@@ -26,12 +26,13 @@ object LeagueTableModule extends Module{
 }
 
 object LeagueTableService extends LeagueTableGetService with LeagueTablePutService with PostService {
-  
+  import quizleague.util.json.codecs.DomainCodecs._
+
   override val teamService = TeamService
   
     
-  def recalculateTable(table:LeagueTable, competition:Competition) = {
-    command[Dom,String](List("entity","recalculate-table",table.id,competition.id),None).subscribe(x => Unit)
+  def recalculateTable(table:LeagueTable) = {
+    command[Dom,DomKey](List("entity","recalculate-table"),Option(DomKey(table.key.key))).subscribe(x => Unit)
   }
   
 

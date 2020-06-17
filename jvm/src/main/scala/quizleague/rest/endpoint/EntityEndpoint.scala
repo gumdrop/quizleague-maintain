@@ -154,18 +154,18 @@ class EntityEndpoint extends MaintainPostEndpoints{
   }
   
   @POST
-  @Path("/recalculate-table/{tableId}/{competitionId}")
-  def recalculateTable(
-      @PathParam("tableId") tableId: String,
-      @PathParam("competitionId") competitionId: String
-      ) = {
+  @Path("/recalculate-table/")
+  def recalculateTable(json:String) = {
+        val key =  deser[Key](json)
 
-        val table = Storage.load[LeagueTable](tableId)   
-        val competition = Storage.load[Competition](competitionId).asInstanceOf[LeagueCompetition]
+        val table = load[LeagueTable](key)
+        val fixtures = list[Fixtures](key.parentKey.map(Key(_))).flatMap(fxs => list[Fixture](fxs.key))
+
+        LOG.info(s"fixtures : $fixtures")
         
-        val blankTable = table.copy(rows = table.rows.map(_.copy(won=0,lost=0,drawn=0,leaguePoints=0,matchPointsFor=0, matchPointsAgainst=0, played=0)))
+        val blankTable = table.copy(rows = table.rows.map(_.copy(won=0,lost=0,drawn=0,leaguePoints=0,matchPointsFor=0, matchPointsAgainst=0, played=0))).withKey(key)
         
-        val recalcTable = LeagueTableRecalculator.recalculate(List(blankTable), competition.fixtures.flatMap(_.fixtures))
+        val recalcTable = LeagueTableRecalculator.recalculate(List(blankTable), fixtures)
         
         recalcTable.foreach(Storage.save(_))
   }

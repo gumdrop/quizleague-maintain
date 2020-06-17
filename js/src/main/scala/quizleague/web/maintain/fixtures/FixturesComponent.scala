@@ -43,6 +43,7 @@ object FixturesComponent extends CompetitionComponentConfig{
 
   override type facade = FixturesComponent
   override def parentKey(c:facade) = s"season/${c.$route.params("seasonId")}/competition/${c.$route.params("id")}"
+
   val fixtureService = FixtureService
   components(FixtureComponent)
   
@@ -67,7 +68,10 @@ object FixturesComponent extends CompetitionComponentConfig{
           <v-btn style="top:5px;" icon v-on:click="addFixture()" :disabled="!(homeTeam && awayTeam && venue)"><v-icon >mdi-plus</v-icon></v-btn>
          </v-layout>
          <v-layout column>
-           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager" v-for="fixture in fixtures" :key="fixture.id"></fixture>
+          <v-layout row  v-for="fixture in fixtures" :key="fixture.id">
+           <v-btn style="top:-14px;" icon v-on:click="removeFixture(fixture)" ><v-icon>mdi-cancel</v-icon></v-btn>
+           <fixture :fixture="fixture" :fixtures="fxs" :teamManager="teamManager"></fixture>
+          </v-layout>
          </v-layout>
         </v-layout>      
      </v-layout>
@@ -96,6 +100,15 @@ object FixturesComponent extends CompetitionComponentConfig{
     c.awayTeam = null
     c.venue = null
   }
+
+  def removeFixture(c:facade, fx:Fixture) = {
+    if(org.scalajs.dom.window.confirm("Delete ?")){
+      c.teamManager.untake(fx.home)
+      c.teamManager.untake(fx.away)
+      fixtureService.delete(fx).subscribe(x => c.$forceUpdate())
+    }
+
+  }
   
   def teamManager(c:facade) = if(c.teamManager == null) {c.teamManager = new TeamManager(c.teams); c.teamManager} else c.teamManager
 
@@ -108,6 +121,7 @@ object FixturesComponent extends CompetitionComponentConfig{
   method("setVenue")({setVenue _ }:js.ThisFunction)
   method("unusedTeams")({unusedTeams _ }:js.ThisFunction)
   method("save")({save _ }:js.ThisFunction)
+  method("removeFixture")({removeFixture _ }:js.ThisFunction)
   
   subscription("fxs")(c => obsFromParam(c,"fixturesId", FixturesService))
   subscription("fixtures")(c => obsFromParam(c,"fixturesId", FixturesService).flatMap(_.fixture))
@@ -139,7 +153,6 @@ object FixtureComponent extends Component{
   val template = """
     <v-layout column v-if="fx">
       <v-layout row>
-        <v-btn style="top:-14px;" icon v-on:click="removeFixture(fx)" ><v-icon>mdi-cancel</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="fx.result" v-on:click="showResult = !showResult"><v-icon>mdi-check</v-icon></v-btn>
         <v-btn style="top:-14px;" icon v-if="!fx.result" v-on:click="addResult()"><v-icon>mdi-plus</v-icon></v-btn>
         <span >{{async(fx.home).name}} - {{async(fx.away).name}} @ {{async(fx.venue).name}}</span>
@@ -156,14 +169,7 @@ object FixtureComponent extends Component{
       <span>&nbsp</span>
     </v-layout>
 """
-  def removeFixture(c:facade, fx:Fixture) = {
-    if(org.scalajs.dom.window.confirm("Delete ?")){
-      c.teamManager.untake(fx.home)
-      c.teamManager.untake(fx.away)
-      FixtureService.delete(fx).subscribe(x => c.$forceUpdate())
-    }
 
-  }
   
   def editText(c:facade, textId:String) = {
     c.$router.push(s"/maintain/text/$textId")
@@ -183,7 +189,7 @@ object FixtureComponent extends Component{
   
   //subscription("fx")(c => c.fixture.obs.map(f => FixtureService.cache(f)).map(x => {c.teamManager.take(x.home);c.teamManager.take(x.away);x}))
   
-  method("removeFixture")({removeFixture _ }:js.ThisFunction)
+
   method("editText")({editText _ }:js.ThisFunction)
   method("addResult")({addResult _ }:js.ThisFunction)
 

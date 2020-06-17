@@ -44,8 +44,8 @@ object FixturesListComponent extends CompetitionComponentConfig with FixturesNam
   
   def add(c:facade):Unit = {
     val fixs = FixturesService.instance(c.item, c.fs)
-    FixturesService.save(fixs)
-    c.$router.push(s"fixtures/${fixs.id}")
+    FixturesService.save(fixs).subscribe(x => c.$router.push(s"fixtures/${fixs.id}"))
+
   }
   
  subscription("fs")(c => item(c).flatMap(_.fixtures).map(_.sortBy(_.date)))
