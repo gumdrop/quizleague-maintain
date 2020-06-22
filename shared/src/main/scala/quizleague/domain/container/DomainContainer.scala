@@ -1,6 +1,7 @@
 package quizleague.domain.container
 
 import quizleague.domain._
+import quizleague.domain.stats.CompetitionStatistics
 
 case class DomainContainer(
     
@@ -15,7 +16,8 @@ case class DomainContainer(
     team:List[Team],
     text:List[Text],
     user:List[User],
-    venue:List[Venue]   
+    venue:List[Venue],
+    competitionStatistics: List[CompetitionStatistics]
 
 )
 
@@ -33,7 +35,8 @@ case class NestedDomainContainer(
     user:Map[String,User],
     venue:Map[String,Venue],
     chat:Map[String, Chat],
-    chatMessage: Map[String, ChatMessage]
+    chatMessage: Map[String, ChatMessage],
+    competitionStatistics: Map[String,CompetitionStatistics]
 
 
 )

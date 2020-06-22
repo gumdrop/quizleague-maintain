@@ -17,7 +17,7 @@ class LeagueTableCalculatorSpec extends FlatSpec with Matchers {
     val team2 = Ref[Team]("team", uuid)
     val team3 = Ref[Team]("team", uuid)
 
-    val venue1 = Ref[Venue]("venue", uuid)
+    val venue1 = Option(Ref[Venue]("venue", uuid))
 
     val fixture1 = Fixture(uuid, "", "", venue1, team1, team2, LocalDate.now, LocalTime.now, Duration.ofHours(1),Some(Result(10,25,None,None,None)))
     val fixture2 = Fixture(uuid, "", "", venue1, team2, team1, LocalDate.now, LocalTime.now, Duration.ofHours(1),Some(Result(13,21,None,None,None)))

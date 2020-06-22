@@ -91,13 +91,15 @@ class TaskEndpoint {
      val season = load[Season](seasonId)
      
      HistoricalStatsAggregator.perform(season)
-     
+
+     val key = Key(None, "notification", uuid.toString)
+
      Storage.save(Notification(
-         uuid.toString(), 
+         key.id,
          NotificationTypeNames.maintain, 
          LocalDateTime.now(), 
-         MaintainMessagePayload(s"Stats regenerated for ${season.startYear}/${season.endYear}")   
-      ))
+         MaintainMessagePayload(s"Stats regenerated for ${season.startYear}/${season.endYear}")
+      ).withKey(key))
     
   }
   

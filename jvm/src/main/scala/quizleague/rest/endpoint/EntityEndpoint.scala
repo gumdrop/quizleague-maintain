@@ -109,6 +109,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     deleteAll[User]
     deleteAll[Venue]
     deleteAll[Statistics]
+    deleteAll[CompetitionStatistics]
 
     val container = deser[NestedDomainContainer](json)
 
@@ -125,6 +126,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.text)
     saveAll(container.user)
     saveAll(container.venue)
+    saveAll(container.competitionStatistics)
   }
   
   @GET
@@ -147,7 +149,8 @@ class EntityEndpoint extends MaintainPostEndpoints{
         list[Team],
         list[Text],
         list[User],
-        list[Venue]
+        list[Venue],
+        list[CompetitionStatistics]
     )
     
     container.asJson.noSpaces

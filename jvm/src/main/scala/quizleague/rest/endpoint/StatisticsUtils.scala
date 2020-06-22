@@ -54,7 +54,7 @@ class StatsWorker(fixture: Fixture, season: Season, tables: List[LeagueTable], s
   
       val allStats = (for (t <- tables; row <- t.rows if row.team.id != homeStats.team.id && row.team.id != awayStats.team.id) yield find(row.team))
       
-      (homeStats :: awayStats :: allStats).map(s => s.addLeaguePosition(fixture.date, leaguePosition(s.team, tables)))
+      (homeStats :: awayStats :: allStats).map(s => s.addLeaguePosition(fixture.date, leaguePosition(s.team, tables)).withKey(Key(None,"statistics", s.id)))
     }
     else stats
 

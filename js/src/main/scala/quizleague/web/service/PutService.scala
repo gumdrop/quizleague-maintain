@@ -27,8 +27,7 @@ trait PutService[T <: Model] {
 
   protected def save(item:U):Observable[Unit] = saveDom(item)
   protected def save(item:U, parentKey:Key = null):Observable[Unit] = {
-    item.key = Some(Key(parentKey,uriRoot,item.id))
-    saveDom(item)
+    saveDom(item.withKey(Key(parentKey,uriRoot,item.id)))
   }
 
   private[service] def saveDom(i:U):Observable[Unit] = {
@@ -61,8 +60,7 @@ trait PutService[T <: Model] {
   private[service] def deCache(item:U) = items -= item.id
   protected final def mapInWithKey(model:T) = {
     val dom = mapIn(model)
-    dom.key = Some(Key(model.key.key))
-    dom
+    dom.withKey(Some(Key(model.key.key)))
   }
   
   protected def mapIn(model:T):U

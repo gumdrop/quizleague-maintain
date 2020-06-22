@@ -15,7 +15,7 @@ import java.util.logging.Logger
 
 import quizleague.firestore.Connection
 
-object Storage {
+object Storage extends StorageUtils {
 
   val log = Logger.getLogger(this.getClass.toString())
 
@@ -32,9 +32,6 @@ object Storage {
   def save[T <: Entity](entity: T)(implicit tag: ClassTag[T], encoder: Encoder[T]): Unit = {
     save(key(entity), encoder(entity))
   }
-  def ref[T <: Entity](entity: T)(implicit tag: ClassTag[T]):Ref[T] = Ref(makeKind(entity.key),entity.id,entity.key)
-
-  def key(entity:Entity):Key = entity.key.getOrElse(throw new IllegalArgumentException)
 
   def saveAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T], encoder: Encoder[T]):Unit = {
     val objrefs = entities.map(e => (datastore.document(key(e).key),asMap(encoder(e).asObject.get)))
@@ -82,7 +79,6 @@ object Storage {
     list
   }
 
-  private def makeKind(parent:Option[Key])(implicit tag: ClassTag[_]) = s"${parent.fold("")(x =>s"${x.key}/")}${tag.runtimeClass.getSimpleName.toLowerCase}"
 
   private def save(key:Key, json: Json):Unit = {
 
@@ -167,4 +163,14 @@ object Storage {
     r.fold(fa => throw fa, fb => fb)
   }
   
+}
+
+trait StorageUtils{
+  def ref[T <: Entity](entity: T)(implicit tag: ClassTag[T]):Ref[T] = entity.key.fold(Ref[T](makeKind(None),entity.id,None))(x => Ref[T](x.entityName,x.id,entity.key))
+
+  def key(entity:Entity):Key = entity.key.getOrElse(throw new IllegalArgumentException)
+
+  private[data] def makeKind(parent:Option[Key])(implicit tag: ClassTag[_]) = s"${parent.fold("")(x =>s"${x.key}/")}${tag.runtimeClass.getSimpleName.toLowerCase}"
+
+
 }

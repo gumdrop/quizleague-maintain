@@ -12,6 +12,7 @@ import quizleague.util.json.codecs.DomainCodecs._
 import io.circe._
 import io.circe.syntax._
 import quizleague.domain.container.NestedDomainContainer
+import quizleague.domain.stats.CompetitionStatistics
 
 import scala.reflect.ClassTag
 import scala.language.implicitConversions
@@ -44,6 +45,7 @@ class NestedEntityMigrationEndpoint {
         val reportsSet = listMap[Reports]
         val textSet = listMap[Text]
         val globalText = list[GlobalText]
+        val competitionStatistics = list[CompetitionStatistics]
 
 
         val competitionsToSave = seasons.flatMap(s => s.competitions.flatMap(c => competitionSet.get(c.id).map(_.withKey(Key(s.key.map(_.key),"competition",c.id)))))
@@ -82,6 +84,11 @@ class NestedEntityMigrationEndpoint {
 
         val reportText = reportsToSave.map(report => textSet.get(report.text.id).get.withKey(Key(report.key.map(_.key),"text", report.text.id)))
 
+        val competitionStatisticsToSave = competitionStatistics.map(cs => {
+            val results = cs.results.map(r => r.copy(competition = r.competition.flatMap(x => competitionsToSave.find(_.id == x.id).map(c => Ref[Competition](c.key.get)))))
+            cs.copy(results = results).withKey(Key(None,"competitionstatistics",cs.id))
+        })
+
         NestedDomainContainer(
             applicationcontext = list[ApplicationContext],
             season = seasons,
@@ -96,7 +103,9 @@ class NestedEntityMigrationEndpoint {
             user = list[User],
             fixtures = fixturesToSave,
             fixture = fixtureToSave,
-            reports = reportsToSave
+            reports = reportsToSave,
+            competitionStatistics = competitionStatisticsToSave
+
         ).asJson.noSpaces
     }
 

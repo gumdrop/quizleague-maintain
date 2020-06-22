@@ -35,8 +35,8 @@ trait GetService[T <: Model] {
   def key(id:String):ModKey = key(null,id)
   def key(parentKey:String, id:String):ModKey = new ModKey(parentKey,uriRoot,id)
   def key(key:Option[Key]):ModKey = key.map(k => ModKey(k.key)).getOrElse(null)
+  def key(key:Key):ModKey = ModKey(key.key)
   def key(key:ModKey):Option[Key] = Option(key).map(k => Key(k.key))
-
 
   def list(parentKey:Option[Key]): Observable[js.Array[T]] = list(parentKey.map(k => ModKey(k.key)).getOrElse(null))
   def list(parentKey:ModKey=null): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithKey(u)))
@@ -90,9 +90,11 @@ trait GetService[T <: Model] {
   protected def decodeJson[X](obj: js.Any)(implicit dec: Decoder[X]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
   protected[service] def getRefObs(id:String):RefObservable[T] = refObsCache.getOrElseUpdate(id, RefObservable(id, () => get(id)))
+  protected[service] def getRefObs(domKey:Key):RefObservable[T] = refObsCache.getOrElseUpdate(domKey.id, RefObservable(domKey.id, () => get(key(domKey))))
+
   final def refObs(id: String): RefObservable[T] = getRefObs(id)
   final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs(ref.id))
-  protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.id)
+  protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.getKey())
   protected final def refObsList[A <: Entity, B <: Model](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 
   def ref(id: String): Ref[U] = Ref(typeName, id)
