@@ -72,6 +72,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.text)
     saveAll(container.user)
     saveAll(container.venue)
+    saveAll(container.competitionStatistics)
     
     
     
@@ -98,7 +99,8 @@ class EntityEndpoint extends MaintainPostEndpoints{
         list[Team],
         list[Text],
         list[User],
-        list[Venue]
+        list[Venue],
+        list[CompetitionStatistics]
     )
     
     container.asJson.noSpaces

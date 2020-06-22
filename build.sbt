@@ -1,5 +1,7 @@
 name := "Quiz League"
 
+import scala.sys.process._
+
 EclipseKeys.skipParents in ThisBuild := false
 EclipseKeys.withSource := true
 
@@ -79,12 +81,17 @@ copyFullOpt := {
   
 }
 
+lazy val execScript = taskKey[Unit]("Execute the shell script")
 
+execScript := {
+  "gcloud app deploy jvm/target/webapp/WEB-INF/appengine-web.xml --quiet "!
+}
 
 
 release := Def.sequential(
   copyFullOpt in Compile,
-  (appengineDeploy in (quizleague.jvm,Compile)).toTask("")
+  webappPrepare in (quizleague.jvm,Compile),
+  execScript
   
 ).value
 

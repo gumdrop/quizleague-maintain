@@ -1,6 +1,7 @@
 package quizleague.domain.container
 
 import quizleague.domain._
+import quizleague.domain.stats._
 
 case class DomainContainer(
     
@@ -15,6 +16,7 @@ case class DomainContainer(
     team:List[Team],
     text:List[Text],
     user:List[User],
-    venue:List[Venue]   
+    venue:List[Venue],
+    competitionStatistics:List[CompetitionStatistics]
 
 )
