@@ -52,7 +52,7 @@ object Storage extends StorageUtils {
 
     def deleteAll[T <: Entity](entities: List[T])(implicit tag: ClassTag[T]):Unit = {
 
-     val objrefs = entities.map(e => (datastore.document(s"${makeKind(e.key)}()/${e.id}")))
+     val objrefs = entities.map(e => (datastore.document(key(e).key)))
 
      val batchSets = objrefs.grouped(400)
 

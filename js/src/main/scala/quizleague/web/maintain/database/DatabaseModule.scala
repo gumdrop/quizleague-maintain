@@ -28,7 +28,7 @@ object DatabaseService{
       log(reader.result)
        
       val request = Request(
-        "/rest/entity/nesteddbupload",
+        "/rest/entity/dbupload",
         headers = Map("Content-Type" -> "application/json", "Accept-Content" -> "application/json"),
         data = reader.result.toString,
         method = "POST")
