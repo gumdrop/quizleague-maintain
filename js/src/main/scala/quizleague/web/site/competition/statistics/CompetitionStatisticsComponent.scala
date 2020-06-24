@@ -66,7 +66,7 @@ object ResultSeasonComponent extends Component{
   val name = "result-season"
   val template="""
   <span>
-    <competition-link :id="result.competition.id" v-if="result.competition">
+    <competition-link :competition="result.competition" id="result.competition.id" v-if="result.competition">
      {{result.seasonText}}
     </competition-link>
     <span v-if="!result.competition">
@@ -84,6 +84,7 @@ object ResultSeasonComponent extends Component{
 @js.native
 trait CompetitionLinkComponent extends VueRxComponent{
   val id:String
+  val competition:RefObservable[Competition]
 }
 
 object CompetitionLinkComponent extends Component{
@@ -92,13 +93,14 @@ object CompetitionLinkComponent extends Component{
 
 val name = "competition-link"
 val template="""
-    <router-link :to="'/competition/' + id + '/' + comp.typeName" v-if="comp">
+    <router-link :to="'/competition/'+ comp.key.encode + '/' + comp.typeName" v-if="comp">
      <slot></slot>
     </router-link>
   """
 
-prop("id")
-subscription("comp")(c => CompetitionService.get(c.id))
+  prop("competition")
+  prop("id")
+  subscription("comp")(c => c.competition.obs)
 
 }
 

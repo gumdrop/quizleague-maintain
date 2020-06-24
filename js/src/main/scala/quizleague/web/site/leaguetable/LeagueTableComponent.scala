@@ -18,6 +18,7 @@ object LeagueTableComponent extends Component{
   
   val name = "ql-league-table"
   val template = """
+    <v-slide-y-transition>
       <table v-if="table" class="mat-elevation-z3 ql-league-table elevation-3">
         <caption>{{table.description}}</caption>
         <thead>
@@ -27,6 +28,7 @@ object LeagueTableComponent extends Component{
           <ql-league-table-row :row="row" v-for="row in table.rows" :key="row.team.id"></ql-league-table-row>
         </tbody>
       </table>
+    </v-slide-y-transition>
 """
   props("keyval")
   subscription("table","keyval")(c => LeagueTableService.get(key(c)))
@@ -40,7 +42,7 @@ object LeagueTableRowComponent extends Component{
   val name = "ql-league-table-row"
   val template = """
         <tr >
-            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id"><ql-team-name :team="row.team" short="true"></ql-team-name></router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
+            <td>{{row.position}}</td><td><router-link :to="'/team/' + row.team.id"><ql-r-team-name :id="row.team.id"></ql-r-team-name></router-link></a></td><td class="num">{{row.played}}</td><td class="num">{{row.won}}</td><td class="num">{{row.drawn}}</td><td class="num">{{row.lost}}</td><td class="num">{{row.matchPointsFor}}</td><td class="num">{{row.leaguePoints}}</td>
           </tr>"""
   
   props("row")

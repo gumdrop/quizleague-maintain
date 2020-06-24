@@ -88,7 +88,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
 
   override val mounted = ({(c:facade) => {
     super.mounted.call(c);
-    setTimeout(5000)(c.sponsorMessage = true);
+    setTimeout(5000)(c.sponsorMessage = false);
     c.tabsHandle = setInterval(5000)(nextTab(c))
   }}:js.ThisFunction)
   
@@ -145,7 +145,7 @@ object LatestResultsComponent extends Component{
    </v-card>
 
 """
-
+  
   props("seasonId")
   subscription("fixtures", "seasonId")(c => FixturesService.latestResults(c.seasonId))
 }
@@ -177,7 +177,7 @@ object HomePageLeagueTable extends Component{
               </v-container>
               </v-card-text>
             </v-card>"""
-  import quizleague.web.util.Logging.log
+  
   props("seasonId")
   subscription("tables", "seasonId")(c => LeagueTableService.leagueTables(c.seasonId).map(_.map(_.key)))
   

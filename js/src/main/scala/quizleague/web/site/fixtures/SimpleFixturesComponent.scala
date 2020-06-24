@@ -1,13 +1,22 @@
 package quizleague.web.site.fixtures
 
+import scala.scalajs.js
+import quizleague.web.model.Fixture
+import quizleague.web.util.rx._
+import quizleague.web.core._
+import rxscalajs.Observable
+import quizleague.web.core.IdComponent
+import com.felstar.scalajs.vue.VueComponent
 import com.felstar.scalajs.vue._
 import quizleague.web.core.{DialogComponentConfig, KeyComponent, _}
 import KeyComponent._
 import quizleague.web.model.{Fixture, Team}
 import quizleague.web.site.results.TableUtils
 import rxscalajs.Observable
-
-import scala.scalajs.js
+import quizleague.web.core.DialogComponentConfig
+import org.scalajs.dom
+import quizleague.web.site.chat.ChatService
+import quizleague.web.site.user.SiteUserService
 
 
 @js.native
@@ -90,12 +99,13 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                  </v-tooltip>
                </v-card-title>
               <ql-reports :keyval="fixture.key" ></ql-reports>
-              <v-card-text>
+              <v-card-text v-if="parent">
                 <ql-chat :parentKey="fixture.key" :name="parent.parentDescription + ' ' +  parent.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <ql-login-button label="Login for chat" ></ql-login-button>
+
                </v-card-actions>
             </v-card>
          </v-dialog>
@@ -110,8 +120,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   subscription("reports")(c => if(c.fixture.result != null) c.fixture.result.report else Observable.just(js.Array()))
   method("chatName")((fixture:Fixture, home:Team, away:Team) => s"${fixture.parentDescription} ${fixture.date} : ${home.name} vs ${away.name}")
   method("nameClass")(nameClass _ )
-}
-
+ }
 
 
 object ReportsComponent extends Component{

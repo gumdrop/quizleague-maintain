@@ -93,7 +93,7 @@ trait GetService[T <: Model] {
   protected[service] def getRefObs(domKey:Key):RefObservable[T] = refObsCache.getOrElseUpdate(domKey.id, RefObservable(domKey.id, () => get(key(domKey))))
 
   final def refObs(id: String): RefObservable[T] = getRefObs(id)
-  final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => refObs(ref.id))
+  final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => getRefObs(ref.getKey()))
   protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.getKey())
   protected final def refObsList[A <: Entity, B <: Model](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 

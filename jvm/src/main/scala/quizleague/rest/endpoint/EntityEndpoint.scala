@@ -72,6 +72,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.text)
     saveAll(container.user)
     saveAll(container.venue)
+    saveAll(container.competitionStatistics)
     
     
     
