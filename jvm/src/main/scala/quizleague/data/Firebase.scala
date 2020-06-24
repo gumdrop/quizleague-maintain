@@ -168,7 +168,7 @@ object Storage extends StorageUtils {
 trait StorageUtils{
   def ref[T <: Entity](entity: T)(implicit tag: ClassTag[T]):Ref[T] = entity.key.fold(Ref[T](makeKind(None),entity.id,None))(x => Ref[T](x.entityName,x.id,entity.key))
 
-  def key(entity:Entity):Key = entity.key.getOrElse(throw new IllegalArgumentException)
+  def key[T <: Entity](entity:T)(implicit tag: ClassTag[T]):Key = entity.key.getOrElse(Key(None,makeKind(None), entity.id))
 
   private[data] def makeKind(parent:Option[Key])(implicit tag: ClassTag[_]) = s"${parent.fold("")(x =>s"${x.key}/")}${tag.runtimeClass.getSimpleName.toLowerCase}"
 

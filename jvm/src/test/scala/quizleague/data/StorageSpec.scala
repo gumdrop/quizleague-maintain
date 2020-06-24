@@ -25,4 +25,20 @@ class StorageSpec extends FlatSpec with Matchers {
     ref.key should be (Some(key))
 
   }
+
+  "A domain object with no key" should "return a key with typename and id only" in {
+    val user = User("id","","")
+    val key = storage.key(user)
+    key.id should be (user.id)
+    key.entityName should be ("user")
+
+  }
+
+  "A domain object with a key" should "return the key" in {
+    val keyin = Key(None, "user1", "id1")
+    val user = User("id","","").withKey(keyin)
+    val keyout = storage.key(user)
+    keyout should be (keyin)
+
+  }
 }
