@@ -93,9 +93,12 @@ object CompetitionLinkComponent extends Component{
 
 val name = "competition-link"
 val template="""
-    <router-link :to="'/competition/'+ comp.key.encode + '/' + comp.typeName" v-if="comp">
-     <slot></slot>
-    </router-link>
+    <span>
+      <v-skeleton-loader v-if="!comp" type="text" width="5em"></v-skeleton-loader>
+      <router-link :to="'/competition/'+ comp.key.encode + '/' + comp.typeName" v-else>
+       <slot></slot>
+      </router-link>
+    </span>
   """
 
   prop("competition")
