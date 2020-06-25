@@ -36,7 +36,8 @@ object SiteApp{
     Vue.filter("refobs", (obs:Observable[js.Any]) => RefObservable(obs.hashCode.toString, () => obs))
   new Vue(
         literal(el="#app",
-        router = Router(SiteModule()),
+        router = Router(SiteModule(), scrollBehavior = () => js.Dynamic.literal(x=0,y=0)
+        ),
           vuetify = new Vuetify()
       )
     )

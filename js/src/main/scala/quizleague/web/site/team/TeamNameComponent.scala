@@ -20,11 +20,9 @@ object TeamNameComponent extends Component{
   
   type facade = TeamNameComponent
   val name = "ql-team-name"
-  val template = """<span v-if="t">{{short ? t.shortName : t.name}}</span>"""
+  val template = """<span><v-skeleton-loader v-if="!t" type="text" width="15em"></v-skeleton-loader><span v-else>{{short ? t.shortName : t.name}}</span></span>"""
   props("team","short","id")
   subscription("t","team", "id")(c => c.team.toOption.fold(TeamService.get(c.id))(_.obs))
-
-  
 }
 
 
@@ -36,7 +34,7 @@ trait ResponsiveTeamNameComponent extends IdComponent{
 object ResponsiveTeamNameComponent extends Component{
   type facade = ResponsiveTeamNameComponent
   val name = "ql-r-team-name"
-  val template = """<span v-if="t">{{$vuetify.breakpoint.smAndDown ? t.shortName : t.name}}</span>"""
+  val template = """<span><v-skeleton-loader v-if="!t" type="text" width="15em"></v-skeleton-loader><span v-else>{{$vuetify.breakpoint.smAndDown ? t.shortName : t.name}}</span></span>"""
   props("team","id")
   subscription("t","team", "id")(c => c.team.toOption.fold(TeamService.get(c.id))(x => Observable.just(x)))
 

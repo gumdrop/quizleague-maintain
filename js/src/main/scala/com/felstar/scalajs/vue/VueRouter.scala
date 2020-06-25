@@ -18,7 +18,8 @@ class Router extends js.Object {
   val base:String = js.native
   val linkActiveClass:String = js.native
   val linkExactActiveClass:String = js.native
- 
+  val scrollBehavior:js.Function = js.native
+
 }
 
 
@@ -28,13 +29,15 @@ object Router{
   mode:String = "history",
   base:String = "/",
   linkActiveClass:String = null,
-  linkExactActiveClass:String = null
+  linkExactActiveClass:String = null,
+  scrollBehavior:js.Function = null
   ) = new Router(literal(
     routes=routes.toJSArray,
     mode=mode,
     base=base,
     linkActiveClass=linkActiveClass,
-    linkExactActiveClass=linkExactActiveClass
+    linkExactActiveClass=linkExactActiveClass,
+    scrollBehavior = scrollBehavior
   ))
 }
 

@@ -59,7 +59,7 @@ object HomeComponent extends RouteComponent with NoSideMenu with GridSizeCompone
             <ql-text v-if="async(appData.currentSeason).id" :id="async(appData.currentSeason).text.id"></ql-text>
           </ql-text-box>
 
-        <ql-hot-chats></ql-hot-chats>
+        <!--ql-hot-chats></ql-hot-chats-->
         </v-layout>
       </v-flex>
     </v-layout>

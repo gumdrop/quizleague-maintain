@@ -31,18 +31,30 @@ object SimpleFixturesComponent extends Component {
   val name = "ql-fixtures-simple"
 
   val template = """
-   <v-lazy>
-   <div v-if="list" class="ql-fixtures-simple">
-      <table>
-        <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
-      </table>
-   </div>
-   </v-lazy>
-
+      <div>
+        <v-lazy>
+          <v-slide-y-transition hide-on-leave>
+            <v-skeleton-loader
+                v-if="!list"
+                :types="loaderTypes"
+                type="fixture-table"
+                max-width="40vh">
+            </v-skeleton-loader>
+            <div v-else class="ql-fixtures-simple">
+              <table>
+                <ql-fixture-line v-for="fixture in list" :key="fixture.id" :fixture="fixture" :inlineDetails="inlineDetails"></ql-fixture-line>
+              </table>
+           </div>
+          </v-slide-y-transition>
+        </v-lazy>
+      </div>
 """
 
   prop("fixtures")
   prop("inlineDetails")
+  data("active",false)
+
+  data("loaderTypes", $("fixture-row" -> "list-item, divider", "fixture-table" -> "fixture-row@3") )
   subscription("list","fixtures")(_.fixtures)
   components(FixtureLineComponent)
 
@@ -65,11 +77,11 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
             <span v-if="!short">{{parent.date| date("d MMM yyyy")}}</span><span v-else>{{parent.date| date("d-MM-yy")}}</span> : {{parent.parentDescription}} {{parent.description}}
           </span>
         </td>
-        <td v-if="!fixture.result" class="home" style="min-width:5em;"><ql-team-name :team="fixture.home" :short="short"></ql-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)" style="min-width:5em;"><ql-team-name :short="short" :team="fixture.home"></ql-team-name></td>
+        <td v-if="!fixture.result" class="home" style="min-width:5em;"><ql-r-team-name :id="fixture.home.id" :short="short"></ql-r-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)" style="min-width:5em;"><ql-r-team-name :short="short" :id="fixture.home.id"></ql-r-team-name></td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.homeScore}}</td>
         <td> - </td>
         <td v-if="!fixture.result"></td><td v-else class="score">{{fixture.result.awayScore}}</td>
-        <td v-if="!fixture.result" class="away"><ql-team-name :team="fixture.away" :short="short"></ql-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-team-name :short="short" :team="fixture.away"></ql-team-name></td>
+        <td v-if="!fixture.result" class="away"><ql-r-team-name :id="fixture.away.id" :short="short"></ql-r-team-name></td><td v-else class="away" :class="nameClass(fixture.result.awayScore, fixture.result.homeScore)"><ql-r-team-name :short="short" :id="fixture.away.id"></ql-r-team-name></td>
         <td v-if="!fixture.result"></td>
         <td v-else>
         <div v-if="reports && reports.length > 0">
@@ -85,9 +97,9 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
           <v-dialog v-model="showReports" max-width="60%" v-bind="dialogSize" v-if="reports">
             <v-card>
               <v-card-title>Reports ::&nbsp;
-                <ql-team-name :short="short" :team="fixture.home"></ql-team-name>
+                <ql-r-team-name :short="short" :id="fixture.home.id"></ql-r-team-name>
                 &nbsp;{{fixture.result.homeScore}} - {{fixture.result.awayScore}}&nbsp;
-                <ql-team-name :short="short" :team="fixture.away"></ql-team-name>
+                <ql-r-team-name :short="short" :id="fixture.away.id"></ql-r-team-name>
                 <v-spacer></v-spacer>
                  <v-tooltip top>
                   <template v-slot:activator="{ on }">
