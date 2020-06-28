@@ -79,6 +79,13 @@ object Storage extends StorageUtils {
     list
   }
 
+  def group[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
+    val key = makeKind(None)
+    val list = datastore.collectionGroup(key).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String, Any]], decoder).withKey(Key(d.getReference.getPath))).toList
+    log.info(s"key : $key \nlist:$list")
+    list
+  }
+
 
   private def save(key:Key, json: Json):Unit = {
 

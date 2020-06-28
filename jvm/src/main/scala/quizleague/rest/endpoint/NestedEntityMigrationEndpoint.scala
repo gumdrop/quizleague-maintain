@@ -5,7 +5,7 @@ import java.util.logging.{Level, Logger}
 
 import javax.ws.rs.{GET, POST, Path, Produces}
 import quizleague.data.Storage
-import quizleague.data.Storage.list
+import quizleague.data.Storage.{list,group,key}
 import quizleague.domain._
 import quizleague.conversions.RefConversions.{log, _}
 import quizleague.util.json.codecs.DomainCodecs._
@@ -33,8 +33,11 @@ class NestedEntityMigrationEndpoint {
         implicit val context = StorageContext()
 
         def idpair[T <: Entity](entity:T) = (entity.id, entity)
+        def keypair[T <: Entity](entity: T) = (entity.key.get, entity)
 
         def listMap[T <: Entity](implicit tag:ClassTag[T],decoder: Decoder[T]) = list[T]()(tag,decoder).map(idpair _).toMap
+
+        def groupMap[T <: Entity](implicit tag:ClassTag[T],decoder: Decoder[T]) = group[T](tag,decoder).map(idpair _).toMap
 
 
         val seasons = list[Season]
@@ -46,6 +49,8 @@ class NestedEntityMigrationEndpoint {
         val textSet = listMap[Text]
         val globalText = list[GlobalText]
         val competitionStatistics = list[CompetitionStatistics]
+        val chats = groupMap[Chat]
+        val chatMessages = group[ChatMessage]
 
 
         val competitionsToSave = seasons.flatMap(s => s.competitions.flatMap(c => competitionSet.get(c.id).map(_.withKey(Key(s.key.map(_.key),"competition",c.id)))))
@@ -89,6 +94,29 @@ class NestedEntityMigrationEndpoint {
             cs.copy(results = results).withKey(Key(None,"competitionstatistics",cs.id))
         })
 
+        val chatsToSave = chats.values.map(chat => {
+            val reportsKey = Key(chat.key.get.parentKey.get)
+            val reportsId = reportsKey.id
+
+            val fixtureKey = fixtureSet.values
+                .filter(f => f.result
+                  .flatMap(_.reports)
+                  .exists(_.id == reportsId))
+              .headOption
+              .flatMap(_.key)
+              .map(_.key)
+
+            chat.withKey(Key(fixtureKey,"chat", chat.id))
+        })
+
+        val chatMessagesToSave = chatMessages.flatMap(cm => {
+          val chatId = cm.key.flatMap(_.parentKey).map(Key(_)).map(_.id)
+          chatId
+            .flatMap(id => chats.get(id))
+              .map(_.key)
+              .map(key => cm.withKey(key))
+        })
+
         NestedDomainContainer(
             applicationcontext = list[ApplicationContext],
             season = seasons,
@@ -96,8 +124,8 @@ class NestedEntityMigrationEndpoint {
             leaguetable = leagueTableToSave,
             team = list[Team],
             venue = list[Venue],
-            chat = Map(),
-            chatMessage = Map(),
+            chat = chatsToSave,
+            chatMessage = chatMessagesToSave,
             globaltext = globalText,
             text = list[Text] ++ reportText,
             user = list[User],
