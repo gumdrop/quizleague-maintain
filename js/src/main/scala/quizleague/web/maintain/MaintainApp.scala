@@ -31,7 +31,7 @@ object MaintainApp{
   def main():Unit = {
   
   //set up firebase auth context
-  // Firestore.setAuthContext()
+  Firestore.setAuthContext()
     
   Vue.use(VueQuillEditor)
   Vue.use(VueShowdown, showdown.defaultOptions)

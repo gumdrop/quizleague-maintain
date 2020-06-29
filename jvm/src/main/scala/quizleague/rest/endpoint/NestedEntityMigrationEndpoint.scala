@@ -98,8 +98,8 @@ class NestedEntityMigrationEndpoint {
             val reportsKey = Key(chat.key.get.parentKey.get)
             val reportsId = reportsKey.id
 
-            val fixtureKey = fixtureSet.values
-                .filter(f => f.result
+            val fixtureKey = fixtureToSave.
+              filter(f => f.result
                   .flatMap(_.reports)
                   .exists(_.id == reportsId))
               .headOption
@@ -113,8 +113,8 @@ class NestedEntityMigrationEndpoint {
           val chatId = cm.key.flatMap(_.parentKey).map(Key(_)).map(_.id)
           chatId
             .flatMap(id => chats.get(id))
-              .map(_.key)
-              .map(key => cm.withKey(key))
+              .map(_.key.map(_.key))
+              .map(key => cm.withKey(Key(key, "chatmessage", cm.id)))
         })
 
         NestedDomainContainer(

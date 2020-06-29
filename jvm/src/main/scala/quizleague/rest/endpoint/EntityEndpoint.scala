@@ -73,7 +73,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.user)
     saveAll(container.venue)
     saveAll(container.competitionStatistics)
-    
+
     
     
     
@@ -128,6 +128,8 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.user)
     saveAll(container.venue)
     saveAll(container.competitionStatistics)
+    saveAll(container.chat)
+    saveAll(container.chatMessage)
   }
   
   @GET
