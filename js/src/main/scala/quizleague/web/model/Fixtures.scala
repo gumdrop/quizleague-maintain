@@ -14,6 +14,7 @@ class Fixtures(
     val start:String,
     val duration:Float,
     val fixture: Observable[js.Array[Fixture]],
+    val parent: Observable[Competition],
     val subsidiary:Boolean) extends Model
     
 object Fixtures{
@@ -24,7 +25,8 @@ object Fixtures{
     start:String,
     duration:Float,
     fixture: Observable[js.Array[Fixture]] = Observable.of(js.Array()),
-    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration, fixture, subsidiary)
+    parent: Observable[Competition],
+    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration, fixture, parent, subsidiary)
 }
     
 

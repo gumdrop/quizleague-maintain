@@ -33,14 +33,13 @@ object TeamComponent extends Component with GridSizeComponentConfig{
   override val template = """
             <v-container v-if="team && seasonId" v-bind="gridSize" fluid>
               <v-layout column>
-
-           <v-flex><ql-text-box><ql-text :id="team.text.id"></ql-text></ql-text-box></v-flex>
-            <v-flex><standings :id="team.id"></standings></v-flex>
-            <v-flex><team-results :id="team.id" :seasonId="seasonId"></team-results>
-            </v-flex>      
-            <v-flex><team-fixtures :id="team.id" :seasonId="seasonId"></team-fixtures>
-            </v-flex>
-          </v-layout>
+                <v-flex ><ql-text-box v-if="async(team.text).text"><ql-text :id="team.text.id"></ql-text></ql-text-box></v-flex>
+                <v-flex><standings :id="team.id"></standings></v-flex>
+                <v-flex><team-results :id="team.id" :seasonId="seasonId"></team-results>
+                </v-flex>
+                <v-flex><team-fixtures :id="team.id" :seasonId="seasonId"></team-fixtures>
+                </v-flex>
+              </v-layout>
           </v-container>"""
   props("id")
   subscription("team","id")(v => TeamService.get(v.id))
@@ -64,6 +63,7 @@ object TeamStandings extends Component {
   
   val name = "standings"
   val template ="""        
+      <v-slide-y-transition>
       <v-card v-if="standings && standings.length > 0">
         <v-card-title primary-title><h3 class="headline mb-0">Standings</h3></v-card-title>
         <v-card-text>
@@ -71,7 +71,8 @@ object TeamStandings extends Component {
             <standing v-for="s in standings" :standing="s"></standing>
           </table>
         </v-card-text>
-      </v-card>"""
+      </v-card>
+      </v-slide-y-transition>"""
   props("id")
   subscription("standings","id")(c => TeamService.standings(c.id))
   

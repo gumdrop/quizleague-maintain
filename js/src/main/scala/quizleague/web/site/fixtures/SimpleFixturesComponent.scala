@@ -74,7 +74,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
         <td v-if="inlineDetails" class="inline-details" >
           <v-skeleton-loader v-if="!parent" type="text" width="15em"></v-skeleton-loader>
           <span v-if="parent">
-            <span v-if="!short">{{parent.date| date("d MMM yyyy")}}</span><span v-else>{{parent.date| date("d-MM-yy")}}</span> : {{parent.parentDescription}} {{parent.description}}
+            <span v-if="!short">{{parent.date| date("d MMM yyyy")}}</span><span v-else>{{parent.date| date("d-MM-yy")}}</span> : {{async(parent.parent).name}} {{parent.description}}
           </span>
         </td>
         <td v-if="!fixture.result" class="home" style="min-width:5em;"><ql-r-team-name :id="fixture.home.id" :short="short"></ql-r-team-name></td><td v-else class="home" :class="nameClass(fixture.result.homeScore, fixture.result.awayScore)" style="min-width:5em;"><ql-r-team-name :short="short" :id="fixture.home.id"></ql-r-team-name></td>

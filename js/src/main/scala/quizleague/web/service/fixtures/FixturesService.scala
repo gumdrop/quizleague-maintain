@@ -8,20 +8,28 @@ import quizleague.domain.{Fixtures => Dom}
 import quizleague.domain.Ref
 import quizleague.web.names.ComponentNames
 import quizleague.util.collection._
+
 import scala.scalajs.js
 import java.time.Year
+
 import quizleague.web.util.DateTimeConverters._
+
 import scala.scalajs.js.Date
 import quizleague.web.service._
 import java.time.LocalTime
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDate
+
 import quizleague.web.service.DirtyListService
 import quizleague.web.names.FixturesNames
 import quizleague.web.util.rx._
-import io.circe._,io.circe.parser._,io.circe.syntax._
+import io.circe._
+import io.circe.parser._
+import io.circe.syntax._
 import quizleague.util.json.codecs.DomainCodecs._
+import quizleague.web.service.competition.CompetitionGetService
+
 import js.JSConverters._
 
 
@@ -30,6 +38,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     override type U = Dom
     
   val fixtureService:FixtureGetService
+  val competitionService:CompetitionGetService
 
   override protected def mapOutSparse(dom:Dom) = Model(
     dom.id,
@@ -39,6 +48,7 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     dom.start,
     dom.duration,
     fixtureService.list(dom.key),
+    competitionService.get(Key(dom.key.get.parentKey.get)),
     dom.subsidiary.getOrElse(false))
   
   override protected def dec(json:js.Any) = decodeJson[U](json)

@@ -22,6 +22,7 @@ import quizleague.web.model._
 import quizleague.domain.Result
 import quizleague.domain.{Key => DomKey}
 import quizleague.web.maintain.chat.ChatService
+import quizleague.web.service.competition.CompetitionGetService
 import quizleague.web.util.Logging
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
@@ -65,10 +66,9 @@ object FixtureService extends FixtureGetService with FixturePutService{
 
 object FixturesService extends FixturesGetService with FixturesPutService{
   override val fixtureService = FixtureService
+  override val competitionService = CompetitionService
   
-  def fixturesForCompetition(competitionId:String) = CompetitionService.get(competitionId).flatMap(c => c.fixtures)
-
-  def copyFixtures(fixtures:Observable[js.Array[Fixtures]], competition:Competition) = {
+   def copyFixtures(fixtures:Observable[js.Array[Fixtures]], competition:Competition) = {
 
      def copyFixture(fixture:Fixture, fixtures:Fixtures) = {
        fixtureService.save(fixtureService.copy(fixture, fixtures.key))

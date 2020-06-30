@@ -33,7 +33,7 @@ object StatsWorker {
   def seasonStats(season:Season) = list[Statistics].filter(s => s.season.id == season.id)
   
   def perform(fixture: Fixture, season: Season){
-    val stats = new StatsWorker(fixture, season, leagueComp(season).tables, seasonStats(season)).doIt
+    val stats = new StatsWorker(fixture, season, list[LeagueTable](leagueComp(season).key), seasonStats(season)).doIt
     saveAll(stats)
   }
 }

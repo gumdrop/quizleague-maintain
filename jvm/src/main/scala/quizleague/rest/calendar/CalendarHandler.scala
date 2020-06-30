@@ -101,7 +101,7 @@ END:VEVENT
       //.append("X-WR-TIMEZONE:UTC\n")
       
         def teamCompetitions(season:Season) = {
-          season.competitions.flatMap(refToObject(_) match {
+          list[Competition](season.key).flatMap(_ match {
             case c:TeamCompetition => List(c)
             case _ => List()
           }
@@ -109,7 +109,7 @@ END:VEVENT
         }
       
       def singletonCompetitions(season:Season) = {
-        season.competitions.flatMap(refToObject(_) match {
+        list[Competition](season.key).flatMap(_ match {
           case c:SingletonCompetition => List(c)
           case _ => List()
         }
@@ -123,8 +123,8 @@ END:VEVENT
         builder.append(s"X-WR-CALNAME:${gap.leagueName} calendar for ${t.name}\n")
         for{
           c <- teamCompetitions(gap.currentSeason)
-          fixtures <- c.fixtures
-          f <- fixtures.fixtures if(f.home.id == team.id || f.away.id == team.id)
+          fixtures <- list[Fixtures](c.key)
+          f <- list[Fixture](fixtures.key) if(f.home.id == team.id || f.away.id == team.id)
         }
         yield{
           builder.append(formatFixture(f, s"${fixtures.parentDescription} ${fixtures.description}"))
@@ -138,7 +138,7 @@ END:VEVENT
         }
         for{
           c <- teamCompetitions(gap.currentSeason)
-          fixtures <- c.fixtures if fixtures.fixtures.isEmpty
+          fixtures <- list[Fixtures](c.key) if list[Fixture](fixtures.key).isEmpty
                  }
         yield{
           builder.append(formatBlankFixtures(fixtures))

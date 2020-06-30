@@ -149,7 +149,7 @@ class TaskEndpoint {
     }
 
     def newResult() = {
-      Some(Result(result.homeScore,result.awayScore, submitter = Some(Ref[User]("user",user.id)), None,None))
+      Some(Result(result.homeScore,result.awayScore, submitter = Some(Ref[User]("user",user.id)), None))
     }
     
     def newReport(reportText:String) = {

@@ -32,6 +32,7 @@ import java.time.LocalTime
 import rxscalajs.Observable
 import java.time.LocalDateTime
 
+import quizleague.web.service.competition.CompetitionGetService
 import quizleague.web.site.chat.ChatService
 
 object FixturesModule extends Module {
@@ -41,6 +42,7 @@ object FixturesModule extends Module {
 
 object FixturesService extends FixturesGetService {
   override val fixtureService = FixtureService
+  override val competitionService = CompetitionService
 
   def nextFixtures(seasonId: String): Observable[js.Array[Fixtures]] = {
     val today = LocalDate.now.toString
