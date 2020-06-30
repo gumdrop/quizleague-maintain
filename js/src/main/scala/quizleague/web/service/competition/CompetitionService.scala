@@ -66,7 +66,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.startTime,
           c.duration,
           fixturesService.list(c.key),
-          refObsList(c.tables, leagueTableService),
           leagueTableService.list(dom.key),
           refObs(c.text, textService),
           c.textName,          
@@ -84,7 +83,6 @@ trait CompetitionGetService extends GetService[Competition] with CompetitionName
           c.id,
           c.name,
           fixturesService.list(c.key),
-          refObsList(c.tables, leagueTableService),
           leagueTableService.list(dom.key),
           refObs(c.text, textService),
           c.textName,
@@ -146,8 +144,6 @@ trait CompetitionPutService extends CompetitionGetService with PutService[Compet
       "League",
       LocalTime.of(20, 30),
       Duration.ofSeconds(5400),
-      List(),
-      List(),
       textService.getRef(textService.instance())
     )
 
@@ -156,15 +152,12 @@ trait CompetitionPutService extends CompetitionGetService with PutService[Compet
       "Cup",
       LocalTime.of(20, 30),
       Duration.ofSeconds(5400),
-      List(),
       textService.getRef(textService.instance()),
       "cup-comp")
 
     def makeSubsidiary = DSC(
       newId(),
       "Subsidiary",
-      List(),
-      List(),
       textService.getRef(textService.instance()))
     
     def makeSingleton = DSiC(
@@ -182,8 +175,6 @@ trait CompetitionPutService extends CompetitionGetService with PutService[Compet
           l.name,
           l.startTime,
           l.duration,
-          List(),
-          l.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(l.text),
           l.textName,
           Option(l.icon))
@@ -193,7 +184,6 @@ trait CompetitionPutService extends CompetitionGetService with PutService[Compet
           c.name,
           c.startTime,
           c.duration,
-          List(),
           textService.ref(c.text),
           c.textName,
           Option(c.icon))
@@ -201,8 +191,6 @@ trait CompetitionPutService extends CompetitionGetService with PutService[Compet
         case s: SubsidiaryLeagueCompetition => DSC(
           s.id,
           s.name,
-          List(),
-          s.tables.map(leagueTableService.ref(_)).toList,
           textService.ref(s.text),
           s.textName,
           Option(s.icon))

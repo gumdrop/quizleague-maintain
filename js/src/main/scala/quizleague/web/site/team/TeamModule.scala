@@ -86,7 +86,7 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
   def leagueStanding(teamId:String):Observable[js.Array[Standing]] = ApplicationContextService.get.flatMap(
     s => {
       CompetitionService.competition[LeagueCompetition](s.currentSeason.id, CompetitionType.league.toString)
-        .flatMap(c => zip(c.tables))
+        .flatMap(c => c.leaguetable)
         .map(_.flatMap(t => t.rows
           .filter(_.team.id == teamId)
           .map(row => new Standing(s"League ${t.description}", toOrdinal(row.position.toInt)))))

@@ -11,7 +11,6 @@ class Season(
     val startYear:Int,
     val endYear:Int,
     val text:RefObservable[Text],
-    val competitions:js.Array[RefObservable[Competition]],
     val calendar:js.Array[CalendarEvent],
     val competition: Observable[js.Array[Competition]]
 ) extends Model{
@@ -23,7 +22,6 @@ object Season{
     startYear:Int,
     endYear:Int,
     text:RefObservable[Text],
-    competitions:js.Array[RefObservable[Competition]],
     calendar:js.Array[CalendarEvent],
-    competition: Observable[js.Array[Competition]]) = new Season(id,startYear,endYear,text, competitions, calendar, competition)
+    competition: Observable[js.Array[Competition]]) = new Season(id,startYear,endYear,text, calendar, competition)
 }

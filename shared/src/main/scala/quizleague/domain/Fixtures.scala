@@ -10,7 +10,6 @@ case class Fixtures(
     date:LocalDate,
     start:LocalTime,
     duration:Duration,
-    fixtures:List[Ref[Fixture]],
     subsidiary:Option[Boolean] = None,
     retired:Boolean = false) extends Entity
     
@@ -33,8 +32,7 @@ case class Result(
     homeScore:Int,
     awayScore:Int,
     submitter:Option[Ref[User]],
-    note:Option[String],
-    reports:Option[Ref[Reports]]
+    note:Option[String]
    )
 
 case class Reports(

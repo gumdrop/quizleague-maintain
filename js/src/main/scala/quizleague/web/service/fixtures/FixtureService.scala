@@ -89,7 +89,7 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService{
   }
   
   private def mapInResult(result:Result):Option[DomResult]  = {
-    Option(result).map(r => DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note),None))
+    Option(result).map(r => DomResult(r.homeScore, r.awayScore, Option(userService.ref(r.submitter)), Option(r.note)))
   }
   
   override def enc(item: Dom) = item.asJson

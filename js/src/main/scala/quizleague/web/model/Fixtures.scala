@@ -13,7 +13,6 @@ class Fixtures(
     val date:String,
     val start:String,
     val duration:Float,
-    val fixtures:js.Array[RefObservable[Fixture]],
     val fixture: Observable[js.Array[Fixture]],
     val subsidiary:Boolean) extends Model
     
@@ -24,9 +23,8 @@ object Fixtures{
     date:String,
     start:String,
     duration:Float,
-    fixtures:js.Array[RefObservable[Fixture]],
     fixture: Observable[js.Array[Fixture]] = Observable.of(js.Array()),
-    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration,fixtures, fixture, subsidiary)
+    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration, fixture, subsidiary)
 }
     
 

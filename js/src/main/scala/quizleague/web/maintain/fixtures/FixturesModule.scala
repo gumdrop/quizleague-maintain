@@ -51,14 +51,14 @@ object FixtureService extends FixtureGetService with FixturePutService{
   def addResult(fixture:Fixture) = {
     val fx = mapIn(fixture).withKey(DomKey(fixture.key.key))
 
-    add(mapOutWithKey(fx.copy(result = Some(Result(0,0,None,None,None))).withKey(DomKey(fixture.key.key))))
+    add(mapOutWithKey(fx.copy(result = Some(Result(0,0,None,None))).withKey(DomKey(fixture.key.key))))
   }
   
-  def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[RefObservable[Fixture]]] = {
-    combineLatest(fxs.fixtures.map(_.obs.map(fx => {
+  def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[Fixture]] = {
+    fxs.fixture.map(_.map(fx => {
       val x = copy(fx, parentDescription,subsidiary)
-      getRefObs(x.id)
-    }))).map(_.toJSArray)
+      x
+    }))
   }
   
 }

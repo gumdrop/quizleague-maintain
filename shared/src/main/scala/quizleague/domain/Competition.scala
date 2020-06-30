@@ -25,9 +25,6 @@ case class LeagueCompetition(
   name:String,
   startTime:LocalTime,
   duration:Duration,
-  fixtures:List[Ref[Fixtures]],
-
-  tables:List[Ref[LeagueTable]],
   text:Ref[Text],
   textName:String = "league-comp",
   icon:Option[String] = None
@@ -40,7 +37,6 @@ case class CupCompetition(
   name:String,
   startTime:LocalTime,
   duration:Duration,
-  fixtures:List[Ref[Fixtures]],
   text:Ref[Text],
   textName:String,
   icon:Option[String] = None
@@ -49,8 +45,6 @@ case class CupCompetition(
 case class SubsidiaryLeagueCompetition(
   id:String,
   name:String,
-  fixtures:List[Ref[Fixtures]],
-  tables:List[Ref[LeagueTable]],
   text:Ref[Text],
   textName:String = "beer-comp",
   icon:Option[String] = None
@@ -84,7 +78,7 @@ object Competition
 
 
  trait FixturesCompetition{
-  val fixtures:List[Ref[Fixtures]]
+
 }
 
  trait TeamCompetition extends FixturesCompetition{
@@ -92,7 +86,7 @@ object Competition
  }
 
  trait CompetitionTables{
-    val tables:List[Ref[LeagueTable]]
+
 }
 
  trait BaseLeagueCompetition extends TeamCompetition with ScheduledCompetition with CompetitionTables{

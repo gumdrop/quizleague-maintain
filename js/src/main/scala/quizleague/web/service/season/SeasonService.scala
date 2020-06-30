@@ -34,7 +34,6 @@ trait SeasonGetService extends GetService[Season] with SeasonNames {
     season.startYear,
     season.endYear,
     refObs(season.text,textService),
-    refObsList(season.competitions, competitionService),
     mapEvents(season.calendar),
     competitionService.list(season.key))
 
@@ -58,10 +57,9 @@ trait SeasonPutService extends PutService[Season] with SeasonGetService {
       season.startYear, 
       season.endYear, 
       textService.ref(season.text), 
-      competitionService.ref(season.competitions), 
       season.calendar.map(e=>DomEvent(venueService.refOption(e.venue), e.date, e.time, e.duration, e.description)).toList
   )
-  override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List(),List())
+  override protected def make() = Dom(newId(), Year.parse(new Date().getFullYear.toString), Year.parse(new Date().getFullYear.toString) plusYears 1, textService.getRef(textService.instance()), List())
 
   override def flush() = { textService.flush(); super.flush() }
 

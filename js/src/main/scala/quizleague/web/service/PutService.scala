@@ -40,7 +40,7 @@ trait PutService[T <: Model] {
 
   private[service] def promiseToObs[X](promise:Promise[X]):Observable[X]=  {
     val obs = ReplaySubject[X]()
-    promise.`then`({obs.next(_)}, {obs.error(_)})
+    promise.`then`(obs.next _, obs.error _)
     obs
   }
 

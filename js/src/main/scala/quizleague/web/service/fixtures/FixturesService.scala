@@ -38,7 +38,6 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
     dom.date,
     dom.start,
     dom.duration,
-    refObsList(dom.fixtures, fixtureService),
     fixtureService.list(dom.key),
     dom.subsidiary.getOrElse(false))
   
@@ -49,8 +48,8 @@ trait FixturesGetService extends GetService[Fixtures] with FixturesNames{
 trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
   
   override val fixtureService:FixturePutService
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, fixtureService.ref(model.fixtures),Option(model.subsidiary))
-  override protected def make() = Dom(newId, "","",LocalDate.now,LocalTime.of(20,30), Duration.ofSeconds(5400),List())
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, model.date, model.start, model.duration, Option(model.subsidiary))
+  override protected def make() = Dom(newId, "","",LocalDate.now,LocalTime.of(20,30), Duration.ofSeconds(5400))
   
   def instance(competition:Competition, fixtures:js.Array[Fixtures]) = {
     
@@ -63,8 +62,8 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
     val id = newId
     add(
       (competition match {
-      case c:LeagueCompetition => Dom(id, weekText, c.name, findNextDate(c), c.startTime, c.duration, List())
-      case c:CupCompetition => Dom(id,"",c.name,LocalDate.now,c.startTime,c.duration,List())
+      case c:LeagueCompetition => Dom(id, weekText, c.name, findNextDate(c), c.startTime, c.duration)
+      case c:CupCompetition => Dom(id,"",c.name,LocalDate.now,c.startTime,c.duration)
       case _ => null
     }).withKey(key(key(competition.key.key,id))))
   }
@@ -73,7 +72,7 @@ trait FixturesPutService extends PutService[Fixtures] with FixturesGetService{
     println("copy fixtures")
     
     val fx = mapIn(in)
-    val dom = Dom(newId,fx.description, parentDescription,fx.date,fx.start,fx.duration,fixtureService.ref(fixtures),Some(subsidiary))
+    val dom = Dom(newId,fx.description, parentDescription,fx.date,fx.start,fx.duration,Some(subsidiary))
     save(dom)
     mapOutSparse(dom)    
   }

@@ -95,10 +95,8 @@ trait GetService[T <: Model] {
   final def refObs(id: String): RefObservable[T] = getRefObs(id)
   final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => getRefObs(ref.getKey()))
   protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.getKey())
-  protected final def refObsList[A <: Entity, B <: Model](refs: List[Ref[A]], service: GetService[B]): js.Array[RefObservable[B]] = refs.map(refObs(_, service)).toJSArray
 
   def ref(id: String): Ref[U] = Ref(typeName, id)
-  def ref(list: js.Array[RefObservable[T]]): List[Ref[U]] = list.map(ref _).toList
   def ref(ro: RefObservable[T]): Ref[U] = if (ro == null) null else Ref(typeName, ro.id)
   def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id))
   def ref(dom: U): Ref[U] = ref(dom.id)

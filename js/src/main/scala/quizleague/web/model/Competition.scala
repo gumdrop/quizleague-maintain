@@ -21,7 +21,6 @@ sealed trait Competition extends Model{
   val name: String
   val typeName: String
   val fixtures: Observable[js.Array[Fixtures]]
-  val tables: js.Array[RefObservable[LeagueTable]]
   val leaguetable: Observable[js.Array[LeagueTable]]
   val text: RefObservable[Text]
   val textName:String
@@ -34,7 +33,6 @@ class LeagueCompetition(
   val startTime: String,
   val duration: Float,
   override val fixtures: Observable[js.Array[Fixtures]],
-  override val tables: js.Array[RefObservable[LeagueTable]],
   override val leaguetable: Observable[js.Array[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
@@ -53,7 +51,6 @@ class CupCompetition(
   val icon:String
   )  extends Competition {
   override val typeName = cup.toString()
-  override val tables = js.Array[RefObservable[LeagueTable]]()
   override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
 }
 
@@ -61,7 +58,6 @@ class SubsidiaryLeagueCompetition(
   override val id: String,
   override val name: String,
   override val fixtures: Observable[js.Array[Fixtures]],
-  override val tables: js.Array[RefObservable[LeagueTable]],
   override val leaguetable: Observable[js.Array[LeagueTable]],
   override val text: RefObservable[Text],
   override val textName:String,
@@ -70,7 +66,7 @@ class SubsidiaryLeagueCompetition(
 }
 object SubsidiaryLeagueCompetition {
   def addFixtures(sub:Competition,fixtures: Observable[js.Array[Fixtures]]) = {
-    new SubsidiaryLeagueCompetition(sub.id,sub.name, fixtures, sub.tables, sub.leaguetable, sub.text, sub.textName, sub.icon)
+    new SubsidiaryLeagueCompetition(sub.id,sub.name, fixtures, sub.leaguetable, sub.text, sub.textName, sub.icon)
   }
 }
 
@@ -83,7 +79,6 @@ class SingletonCompetition(
   val icon:String) extends Competition {
   override val typeName = singleton.toString()
   override val fixtures = Observable.just(js.Array())
-  override val tables = js.Array[RefObservable[LeagueTable]]()
   override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
 }
     
