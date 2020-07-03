@@ -96,7 +96,11 @@ object TeamService extends TeamGetService with RetiredFilter[Team] with PostServ
   def cupStandings(teamId:String):Observable[js.Array[Standing]] = ApplicationContextService.get.flatMap(
     s => {
       FixtureService.fixturesFrom(FixturesService.competitionFixtures(CompetitionService.competitionsOfType[CupCompetition](s.currentSeason.id)), teamId)
-        .map(_.filter(_.result == null).map(f => new Standing(f.parentDescription,f.description)))
+        .map(_.filter(_.result == null).map(fx => fx.parent.map(f => f.parent.map(c => new Standing(c.name,f.description)))))
+        .map(_.toSeq)
+        .map(_.map(_.flatten))
+        .flatMap(x => Observable.combineLatest(x))
+        .map(_.toJSArray)
     }
   )
 

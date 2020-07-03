@@ -112,7 +112,7 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
                </v-card-title>
               <ql-reports :keyval="fixture.key" ></ql-reports>
               <v-card-text v-if="parent">
-                <ql-chat :parentKey="fixture.key" :name="parent.parentDescription + ' ' +  parent.description + ' ' + fixture.date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
+                <ql-chat :parentKey="fixture.key" :name="async(parent.parent).name + ' ' +  parent.description + ' ' + async(fixture.parent).date + ' : ' + async(fixture.home).shortName + ' vs ' + async(fixture.away).shortName"></ql-chat>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -130,7 +130,6 @@ object FixtureLineComponent extends Component with TableUtils with DialogCompone
   prop("inlineDetails")
   subscription("parent")(_.fixture.parent)
   subscription("reports")(c => if(c.fixture.result != null) c.fixture.result.report else Observable.just(js.Array()))
-  method("chatName")((fixture:Fixture, home:Team, away:Team) => s"${fixture.parentDescription} ${fixture.date} : ${home.name} vs ${away.name}")
   method("nameClass")(nameClass _ )
  }
 

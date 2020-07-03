@@ -3,24 +3,6 @@ package quizleague.domain.container
 import quizleague.domain._
 import quizleague.domain.stats.CompetitionStatistics
 
-case class DomainContainer(
-    
-    applicationcontext:List[ApplicationContext],
-    competition:List[Competition],
-    fixtures:List[Fixtures],
-    fixture:List[Fixture],
-    globaltext:List[GlobalText],
-    leaguetable:List[LeagueTable],
-    reports: List[Reports],
-    season:List[Season],
-    team:List[Team],
-    text:List[Text],
-    user:List[User],
-    venue:List[Venue],
-    competitionStatistics: List[CompetitionStatistics]
-
-)
-
 case class NestedDomainContainer(
     applicationcontext:Map[String,ApplicationContext],
     competition:Map[String,Competition],

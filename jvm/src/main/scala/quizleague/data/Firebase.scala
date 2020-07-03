@@ -13,6 +13,8 @@ import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
 import java.util.logging.Logger
 
+import com.google.cloud.TransportOptions
+import com.google.cloud.grpc.GrpcTransportOptions
 import quizleague.firestore.Connection
 
 object Storage extends StorageUtils {
@@ -20,8 +22,10 @@ object Storage extends StorageUtils {
   val log = Logger.getLogger(this.getClass.toString())
 
   val options = FirestoreOptions.getDefaultInstance.toBuilder()
-  .setProjectId(Connection.projectId).build
-
+  .setProjectId(Connection.projectId)
+//    .setHost("localhost:8082")
+//    .setChannelProvider(FirestoreOptions.getDefaultTransportChannelProviderBuilder.setEndpoint("http://localhost:8082").build())
+    .build()
 
   lazy val datastore = options.getService
 

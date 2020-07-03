@@ -10,3 +10,8 @@ node_modules/
 *.sjsir
 *.class
 /quizleague.iml
+firebase.json
+firestore.indexes.json
+firestore.rules
+
+/.firebaserc

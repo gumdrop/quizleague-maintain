@@ -25,6 +25,8 @@ class Firestore extends js.Object {
   def batch(): WriteBatch = js.native
   var app: firebase.app.App = js.native
   var INTERNAL: js.Any = js.native
+  val settings:Settings = js.native
+  val hostname:String = js.native
 }
 
 @js.native

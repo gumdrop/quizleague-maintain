@@ -59,7 +59,7 @@ END:VEVENT
 """
 
     }
-    private def formatFixture(fixture:Fixture, description:String)(implicit context:StorageContext) = {
+    private def formatFixture(fixture:Fixture, fixtures:Fixtures, description:String)(implicit context:StorageContext) = {
       
       val text = s"${fixture.home.shortName} - ${fixture.away.shortName} : $description"
       
@@ -69,26 +69,26 @@ END:VEVENT
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
-UID:${fixture.date}.$uidPart.chilternquizleague.uk
+UID:${fixtures.date}.$uidPart.chilternquizleague.uk
 DESCRIPTION:$text
 SUMMARY:$text
-DTSTART:${toUtc(fixture.date.atTime(fixture.time))}
-DTEND:${toUtc(fixture.date.atTime(fixture.time plus fixture.duration))}
+DTSTART:${toUtc(fixtures.date.atTime(fixtures.start))}
+DTEND:${toUtc(fixtures.date.atTime(fixtures.start plus fixtures.duration))}
 ${fixture.venue.map(v => s"""LOCATION:${v.name}, $address""").getOrElse("")}
 END:VEVENT
 """
 
     }
-    private def formatBlankFixtures(fixtures:Fixtures)(implicit context:StorageContext) = {
+    private def formatBlankFixtures(fixtures:Fixtures, description:String)(implicit context:StorageContext) = {
       
       val now = toUtc(LocalDateTime.now)
-      val uidPart = (fixtures.parentDescription + fixtures.description).replaceAll("\\s", "")
+      val uidPart = (description + fixtures.description).replaceAll("\\s", "")
       s"""
 BEGIN:VEVENT
 DTSTAMP:$now
 UID:${fixtures.date}.$uidPart.chilternquizleague.uk
-DESCRIPTION:${fixtures.parentDescription} ${fixtures.description}
-SUMMARY:${fixtures.parentDescription} ${fixtures.description}
+DESCRIPTION:${description} ${fixtures.description}
+SUMMARY:${description} ${fixtures.description}
 DTSTART:${toUtc(fixtures.date.atTime(fixtures.start))}
 DTEND:${toUtc(fixtures.date.atTime(fixtures.start plus fixtures.duration))}
 END:VEVENT
@@ -127,7 +127,7 @@ END:VEVENT
           f <- list[Fixture](fixtures.key) if(f.home.id == team.id || f.away.id == team.id)
         }
         yield{
-          builder.append(formatFixture(f, s"${fixtures.parentDescription} ${fixtures.description}"))
+          builder.append(formatFixture(f, fixtures ,s"${c.name} ${fixtures.description}"))
         }
         for{
           c <- singletonCompetitions(gap.currentSeason)
@@ -141,7 +141,7 @@ END:VEVENT
           fixtures <- list[Fixtures](c.key) if list[Fixture](fixtures.key).isEmpty
                  }
         yield{
-          builder.append(formatBlankFixtures(fixtures))
+          builder.append(formatBlankFixtures(fixtures, c.name))
         }
         for{
           e <- gap.currentSeason.calendar

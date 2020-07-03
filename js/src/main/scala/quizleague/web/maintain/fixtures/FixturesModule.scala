@@ -55,9 +55,9 @@ object FixtureService extends FixtureGetService with FixturePutService{
     add(mapOutWithKey(fx.copy(result = Some(Result(0,0,None,None))).withKey(DomKey(fixture.key.key))))
   }
   
-  def copy(fxs:Fixtures, parentDescription:String, subsidiary:Boolean):Observable[js.Array[Fixture]] = {
+  def copy(fxs:Fixtures):Observable[js.Array[Fixture]] = {
     fxs.fixture.map(_.map(fx => {
-      val x = copy(fx, parentDescription,subsidiary)
+      val x = copy(fx)
       x
     }))
   }

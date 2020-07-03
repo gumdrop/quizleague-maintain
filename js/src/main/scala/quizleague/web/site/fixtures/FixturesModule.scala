@@ -33,6 +33,7 @@ import rxscalajs.Observable
 import java.time.LocalDateTime
 
 import quizleague.web.service.competition.CompetitionGetService
+import quizleague.web.site.ApplicationContextService
 import quizleague.web.site.chat.ChatService
 
 object FixturesModule extends Module {
@@ -84,6 +85,8 @@ object FixturesService extends FixturesGetService {
     interim.flatMap(o => combineLatest(o).map(_.flatten.toJSArray))
   }
 
+
+
 }
 
 object FixtureService extends FixtureGetService with PostService{
@@ -93,30 +96,27 @@ object FixtureService extends FixtureGetService with PostService{
   override val fixturesService = FixturesService
   override val reportService  = ReportService
 
+//  def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
+//    val q = groupQuery().where("date","<=", today.toString).orderBy("date","desc").limit(take)
+//    val home = query(q.where("home.id","==",teamId))
+//    val away = query(q.where("away.id","==",teamId))
+//
+//    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date)(Desc).take(take).toJSArray)
+//  }
 
-  def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-    val q = db.collectionGroup(uriRoot).where("date","<=", today.toString).orderBy("date","desc").limit(take)
-    val home = query(q.where("home.id","==",teamId))
-    val away = query(q.where("away.id","==",teamId))
-    
-    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date)(Desc).take(take).toJSArray)
-  }
-
-
-  
   def fixturesFrom(fixtures:Observable[js.Array[Fixtures]], teamId:String, take:Int = Integer.MAX_VALUE, sortOrder:Ordering[String] = Asc[String]) = {
-    val tf = fixturesToFixtureList(fixtures)
-      .map(_.filter(f => f.home.id == teamId || f.away.id == teamId).sortBy(_.date)(sortOrder))
-      
+    val tf = fixturesToFixtureList(fixtures.map(_.sortBy(_.date)(sortOrder)))
+      .map(_.filter(f => f.home.id == teamId || f.away.id == teamId))
+
     tf.map(_.take(take))
   }
   
   def teamResults(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
     
-    val fixtures = FixturesService.spentFixtures(seasonId)
+    val fixtures = FixturesService.spentFixtures(seasonId).map(_.sortBy(_.date)(Desc))
     
     val tf = fixturesToFixtureList(fixtures)
-    .map(_.filter(f => (f.home.id == teamId || f.away.id == teamId)).sortBy(_.date)(Desc))
+    .map(_.filter(f => (f.home.id == teamId || f.away.id == teamId)))
       
     tf.map(_.take(take))
   }
@@ -124,53 +124,52 @@ object FixtureService extends FixtureGetService with PostService{
   def teamFixturesForSeason(teamId: String, seasonId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
     
     val fixtures = FixturesService.activeFixtures(seasonId)
-    
-    val tf = fixturesToFixtureList(fixtures)
-    .map(_.filter(f => f.home.id == teamId || f.away.id == teamId).sortBy(_.date))
-      
-    tf.map(_.take(take))
+
+    fixturesFrom(fixtures, teamId, take, Asc)
   }
 
-  def fixturesForResultSubmission(email: String, seasonId: String): Observable[js.Array[Fixture]] = {
-
-    val today = LocalDate.now.toString()
-    val now = today + LocalTime.now().toString()
-
-    val fixtures: Observable[js.Array[Fixture]] = teamService.teamForEmail(email)
-      .map(
-        _.map(
-          team => recentTeamResults(team.id,4).map(
-                  _.groupBy(_.date)
-                  .toList
-                  .sortBy(_._1)(Desc)
-                  .take(1)
-                  .map { case (k, v) => v }
-                  .toJSArray
-                  .flatMap(x => x))))
-      .map(x => combineLatest(x.toSeq))
-      .flatten
-      .map(_.toJSArray.flatMap(x => x).sortBy(_.subsidiary))
-
-    fixtures.map(_.filter(f => (f.date + f.time) <= now))
-
-  }
 
   def fixturesForResultSubmission(teamId:String) = {
     val today = LocalDate.now.toString()
     val now = today + LocalTime.now().toString()
+    val context = ApplicationContextService.get()
 
-    val fixtures: Observable[js.Array[Fixture]] =
-      recentTeamResults(teamId,4).map(
-            _.groupBy(_.date)
-              .toList
-              .sortBy(_._1)(Desc)
-              .take(1)
-              .map { case (k, v) => v }
-              .toJSArray
-              .flatten)
-      .map(_.sortBy(_.subsidiary))
+    val comps = context
+      .flatMap(_.currentSeason)
+      .flatMap(_.competition)
 
-    fixtures.map(_.filter(f => (f.date + f.time) <= now))
+    val triples = comps
+      .map(
+        _.map(c =>
+          c.fixtures
+            .map(_.filter(f => f.date <= today && f.start <= now)
+              .map(f => (c,f))
+                .map{case(c,f) => f.fixture
+                  .map(fx => (c,f,fx.filter(x => x.home.id == teamId || x.away.id == teamId)))}
+
+        )
+
+      ))
+      .flatMap(x =>combineLatest(x.toSeq))
+        .map(_.toJSArray.flatten.toSeq)
+        .flatMap(x => combineLatest(x))
+        .map(_.toJSArray)
+
+
+
+    val fixtures =
+      triples.map(
+        _.groupBy{case(c,f,fxs) => f.date}
+          .toList
+          .sortBy(_._1)(Desc)
+          .take(1)
+          .map{case(c,v) => v}
+          .toJSArray.flatten.toJSArray)
+          .map(_.sortBy{case(c,f,fxs) => c.subsidiary})
+          .map(_.flatMap{case(c,f,fxs) => fxs})
+
+   fixtures
+
   }
   
 

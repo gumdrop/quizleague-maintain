@@ -40,7 +40,7 @@ trait GetService[T <: Model] {
 
   def list(parentKey:Option[Key]): Observable[js.Array[T]] = list(parentKey.map(k => ModKey(k.key)).getOrElse(null))
   def list(parentKey:ModKey=null): Observable[js.Array[T]] = listFromStorage(parentKey).map(c => c.map(u => mapOutWithKey(u)))
-  
+  def groupQuery():Query = db.collectionGroup(uriRoot)
   protected def query(query:Query):Observable[js.Array[T]] = listFromQuery(query).map(_.map(mapOutWithKey _))
 
   def flush() = items.clear()

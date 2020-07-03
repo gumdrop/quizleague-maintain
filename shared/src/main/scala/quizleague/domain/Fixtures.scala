@@ -6,27 +6,19 @@ import java.time.{Duration, LocalDate, LocalDateTime, LocalTime}
 case class Fixtures(
     id:String, 
     description:String,
-    parentDescription:String,
     date:LocalDate,
     start:LocalTime,
-    duration:Duration,
-    subsidiary:Option[Boolean] = None,
     retired:Boolean = false) extends Entity
     
 case class Fixture(
   id:String,
   description:String,
-  parentDescription:String,
   venue: Option[Ref[Venue]],
   home: Ref[Team],
   away:Ref[Team],
-  date: LocalDate,
-  time: LocalTime,
-  duration : Duration,
   result : Option[Result],
-  subsidiary:Boolean = false,
   retired:Boolean = false
-) extends BaseEvent with Entity
+) extends  Entity
 
 case class Result(
     homeScore:Int,
@@ -35,10 +27,6 @@ case class Result(
     note:Option[String]
    )
 
-case class Reports(
-    id:String,
-    reports:List[Report],
-    retired:Boolean = false) extends Entity
 
 case class Report(
     team:Ref[Team],

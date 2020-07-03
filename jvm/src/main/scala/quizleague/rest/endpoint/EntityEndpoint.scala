@@ -3,7 +3,7 @@ package quizleague.rest.endpoint
 import javax.ws.rs.Path
 import quizleague.rest.MaintainPostEndpoints
 import javax.ws.rs.POST
-import quizleague.domain.container.{DomainContainer,NestedDomainContainer}
+import quizleague.domain.container.{NestedDomainContainer}
 import scala.reflect.ClassTag
 import quizleague.data.Storage
 import Storage._
@@ -29,58 +29,10 @@ class EntityEndpoint extends MaintainPostEndpoints{
   
   implicit val context = StorageContext()
   
+
+
   @POST
   @Path("/dbupload")
-  def dbupload(json:String) = {
-    
-    def saveAll[T <: Entity](list:List[T])(implicit tag:ClassTag[T], encoder:Encoder[T]) = {
-      Storage.saveAll[T](list)(tag,encoder)
-    }
-    
-    def deleteAll[T <: Entity](implicit tag:ClassTag[T], decoder:Decoder[T]){
-      try{
-        Storage.deleteAll(Storage.list[T])
-      }
-      catch{case e:Throwable => LOG.info(s"exception deleting collection $tag")}
-    }
-    
-    deleteAll[ApplicationContext]
-    deleteAll[Competition]
-    deleteAll[Fixture]
-    deleteAll[Fixtures]
-    deleteAll[GlobalText]
-    deleteAll[LeagueTable]
-    deleteAll[Reports]
-    deleteAll[Season]
-    deleteAll[Team]
-    deleteAll[Text]
-    deleteAll[User]
-    deleteAll[Venue]
-    deleteAll[Statistics]
-    
-    val container = deser[DomainContainer](json)
-    
-    saveAll(container.applicationcontext)
-    saveAll(container.competition)
-    saveAll(container.fixture)
-    saveAll(container.fixtures)
-    saveAll(container.globaltext)
-    saveAll(container.leaguetable)
-    saveAll(container.reports)
-    saveAll(container.season)
-    saveAll(container.team)
-    saveAll(container.text)
-    saveAll(container.user)
-    saveAll(container.venue)
-    saveAll(container.competitionStatistics)
-
-    
-    
-    
-  }
-
-  @POST
-  @Path("/nesteddbupload")
   def nesteddbupload(json:String) = {
 
 
@@ -103,7 +55,6 @@ class EntityEndpoint extends MaintainPostEndpoints{
     deleteAll[Fixtures]
     deleteAll[GlobalText]
     deleteAll[LeagueTable]
-    deleteAll[Reports]
     deleteAll[Season]
     deleteAll[Team]
     deleteAll[Text]
@@ -138,22 +89,29 @@ class EntityEndpoint extends MaintainPostEndpoints{
   def dbdownload() = {
     import Storage.list
     import io.circe.syntax._
+    import scala.language.implicitConversions
 
-    
-    val container = DomainContainer(
-        list[ApplicationContext],
-        list[Competition],
-        list[Fixtures],
-        list[Fixture],
-        list[GlobalText],
-        list[LeagueTable],
-        list[Reports],
-        list[Season],
-        list[Team],
-        list[Text],
-        list[User],
-        list[Venue],
-        list[CompetitionStatistics]
+    def toTuple[T <: Entity](entity:T) = (entity.key.get.key, entity)
+    implicit def toMap[T <: Entity](entities:Iterable[T]) = entities.map(toTuple _).toMap
+
+    implicit val context = StorageContext()
+
+    val container = NestedDomainContainer(
+      applicationcontext = list[ApplicationContext],
+      season = list[Season],
+      competition = group[Competition],
+      leaguetable = group[LeagueTable],
+      team = list[Team],
+      venue = list[Venue],
+      chat = group[Chat],
+      chatMessage = group[ChatMessage],
+      globaltext = list[GlobalText],
+      text = list[Text],
+      user = list[User],
+      fixtures = group[Fixtures],
+      fixture = group[Fixture],
+      reports = group[Report],
+      competitionStatistics = list[CompetitionStatistics]
     )
     
     container.asJson.noSpaces

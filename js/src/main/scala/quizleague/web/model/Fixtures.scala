@@ -9,59 +9,43 @@ import rxscalajs.Observable
 class Fixtures(
     val id:String, 
     val description:String,
-    val parentDescription:String,
     val date:String,
     val start:String,
-    val duration:Float,
     val fixture: Observable[js.Array[Fixture]],
-    val parent: Observable[Competition],
-    val subsidiary:Boolean) extends Model
+    val parent: Observable[Competition]) extends Model
     
 object Fixtures{
   def apply(id:String, 
     description:String,
-    parentDescription:String,
     date:String,
     start:String,
-    duration:Float,
     fixture: Observable[js.Array[Fixture]] = Observable.of(js.Array()),
-    parent: Observable[Competition],
-    subsidiary:Boolean = false) = new Fixtures(id,description,parentDescription,date,start,duration, fixture, parent, subsidiary)
+    parent: Observable[Competition]) = new Fixtures(id,description,date,start, fixture, parent)
 }
     
 
 class Fixture(
   val id:String,
   val description:String,
-  val parentDescription:String,
   val venue: RefObservable[Venue],
   val home:RefObservable[Team],
   val away:RefObservable[Team],
-  val date: String,
-  val time: String,
-  val duration : Float,
   val result: Result,
-  val parent: Observable[Fixtures],
-  val subsidiary:Boolean
+  val parent: Observable[Fixtures]
 ) extends Model
 
 object Fixture{
   def apply(  id:String,
   description:String,
-  parentDescription:String,
   venue: RefObservable[Venue],
   home:RefObservable[Team],
   away:RefObservable[Team],
-  date: String,
-  time: String,
-  duration : Float,
   result:Result,
-  parent:Observable[Fixtures] = Observable.empty,
-  subsidiary:Boolean = false) = new Fixture(id,description,parentDescription, venue, home, away,date,time,duration, result, parent, subsidiary)
+  parent:Observable[Fixtures] = Observable.empty) = new Fixture(id,description, venue, home, away, result, parent)
   
   def addBlankResult(f:Fixture) = {
-    val retval = Fixture(f.id,f.description,f.parentDescription, f.venue, f.home, f.away, f.date, f.time, f.duration,
-        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array())),f.parent, f.subsidiary)
+    val retval = Fixture(f.id,f.description, f.venue, f.home, f.away,
+        Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array())),f.parent)
     retval.key = f.key
     retval
   }

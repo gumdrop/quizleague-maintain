@@ -25,6 +25,7 @@ sealed trait Competition extends Model{
   val text: RefObservable[Text]
   val textName:String
   val icon:String
+  val subsidiary:Boolean
 }
 
 class LeagueCompetition(
@@ -38,6 +39,7 @@ class LeagueCompetition(
   override val textName:String,
   val icon:String) extends Competition {
   override val typeName = league.toString()
+  override val subsidiary = false
 }
 
 class CupCompetition(
@@ -52,6 +54,7 @@ class CupCompetition(
   )  extends Competition {
   override val typeName = cup.toString()
   override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
+  override val subsidiary = false
 }
 
 class SubsidiaryLeagueCompetition(
@@ -62,7 +65,8 @@ class SubsidiaryLeagueCompetition(
   override val text: RefObservable[Text],
   override val textName:String,
   val icon:String) extends Competition {
-  override val typeName = subsidiary.toString()
+  override val typeName = CompetitionType.subsidiary.toString()
+  override val subsidiary = true
 }
 object SubsidiaryLeagueCompetition {
   def addFixtures(sub:Competition,fixtures: Observable[js.Array[Fixtures]]) = {
@@ -80,6 +84,7 @@ class SingletonCompetition(
   override val typeName = singleton.toString()
   override val fixtures = Observable.just(js.Array())
   override val leaguetable: Observable[js.Array[LeagueTable]] = Observable.just(js.Array())
+  override val subsidiary = false
 }
     
 

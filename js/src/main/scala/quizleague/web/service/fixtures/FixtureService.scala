@@ -41,16 +41,11 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
   override protected def mapOutSparse(dom:Dom) = Model(
     dom.id,
     dom.description,
-    dom.parentDescription,
     venueService.refObs(dom.venue),
     refObs(dom.home, teamService),
     refObs(dom.away, teamService),
-    dom.date,
-    dom.time,
-    dom.duration,
     mapResult(dom),
-    fixturesService.get(Key(dom.key.get.parentKey.get)),
-    dom.subsidiary)
+    fixturesService.get(Key(dom.key.get.parentKey.get)))
   
   override protected def dec(json:js.Any) = decodeJson[U](json)
   
@@ -69,7 +64,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 }
 
 trait FixturePutService extends PutService[Fixture] with FixtureGetService{
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, model.parentDescription, venueService.refOption(model.venue), teamService.ref(model.home), teamService.ref(model.away), model.date, model.time, model.duration, mapInResult(model.result), model.subsidiary)
+  override protected def mapIn(model:Model) = Dom(model.id, model.description, venueService.refOption(model.venue), teamService.ref(model.home), teamService.ref(model.away), mapInResult(model.result))
   override protected def make() = ???
   
   override val venueService:VenuePutService
@@ -77,13 +72,13 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService{
   
   def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue], subsidiary:Boolean) = {
 
-    val dom = withKey(Dom(newId,fx.description, fx.parentDescription,venueService.refOption(venue),teamService.ref(home),teamService.ref(away),fx.date,fx.start,fx.duration, None,subsidiary), fx.key.key)
+    val dom = withKey(Dom(newId,fx.description, venueService.refOption(venue),teamService.ref(home),teamService.ref(away),None), fx.key.key)
     mapOutWithKey(dom)
   }
   
-  def copy(in:Fixture, parentDescription:String, subsidiary:Boolean):Fixture = {
+  def copy(in:Fixture):Fixture = {
     val fx = mapIn(in)
-    val dom = Dom(newId,fx.description, parentDescription,fx.venue,fx.home,fx.away,fx.date,fx.time,fx.duration,None,subsidiary)
+    val dom = Dom(newId,fx.description,fx.venue,fx.home,fx.away,None)
     save(dom)
     mapOutWithKey(dom)
   }
