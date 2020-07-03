@@ -55,9 +55,7 @@ object FixturesComponent extends CompetitionComponentConfig{
       <v-layout column>
         <v-text-field label="Date" v-model="fxs.date" type="date" required :rules=${valRequired("Date")}></v-text-field>
         <v-text-field label="Time" v-model="fxs.start" type="time" required :rules=${valRequired("Time")}></v-text-field>
-        <v-text-field label="Duration" v-model.number="fxs.duration" type="number" step=".5" required :rules=${valRequired("Duration")}></v-text-field>
         <v-text-field label="Description" v-model="fxs.description" type="text" required :rules=${valRequired("Description")}></v-text-field>
-        <v-text-field label="Parent Description" v-model="fxs.parentDescription" type="text"></v-text-field>
        </v-layout>
        <v-layout column>
         <h4>Fixture List</h4>

@@ -15,6 +15,7 @@ import quizleague.domain.command._
 import quizleague.domain.util._
 import java.util.UUID.{randomUUID => uuid}
 import java.util.logging.Logger
+
 import quizleague.rest._
 import io.circe._
 import com.google.appengine.api.taskqueue._
@@ -22,6 +23,8 @@ import com.google.appengine.api.taskqueue.TaskOptions.Builder._
 import javax.ws.rs.PathParam
 import quizleague.domain.notification._
 import java.time.LocalDateTime
+
+import quizleague.domain
 
 
 
@@ -52,15 +55,16 @@ class TaskEndpoint {
 
       result.fixtures.foreach(f => {
         val fixture = load[Fixture](f.fixtureKey)
+        val isSubsidiary = subsidiary(fixture)
         val leagueTables = tables(fixture)
         if (!leagueTables.isEmpty) {
           updateTables(leagueTables, fixture)
 
-          if (!fixture.subsidiary) {
+          if (!isSubsidiary) {
             fireStatsUpdate(fixture)
           }
         }
-        if (!fixture.subsidiary) {
+        if (!isSubsidiary) {
           Storage.save(Notification(
             uuid.toString(),
             NotificationTypeNames.result,
@@ -107,7 +111,15 @@ class TaskEndpoint {
     list[LeagueTable](fixture.key.map(_.parentKey).flatMap(_.flatMap(Key(_).parentKey)).map(Key(_)))
   }
   
- 
+ private def subsidiary(fixture: Fixture):Boolean = {
+   val key = fixture.key.map(_.parentKey).flatMap(_.flatMap(Key(_).parentKey)).map(Key(_)).getOrElse(throw new IllegalArgumentException)
+   val competition = Storage.load[Competition](key)
+   competition match {
+     case _:domain.SubsidiaryCompetition => true
+     case _ => false
+   }
+
+ }
   
   
   private def fireStatsUpdate(fixture:Fixture){
@@ -137,7 +149,7 @@ class TaskEndpoint {
   private def saveFixture(user:User,reportIn:Option[String])(result:ResultValues) = {
        
     val fixture = Storage.load[Fixture](result.fixtureKey)
-    val report = reportIn.filter(r => !r.trim.isEmpty && !fixture.subsidiary)
+    val report = reportIn.filter(r => !r.trim.isEmpty && subsidiary(fixture))
     
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
