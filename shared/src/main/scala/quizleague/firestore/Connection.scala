@@ -1,13 +1,13 @@
 package quizleague.firestore
 
-//object Connection{
-//  val apiKey = "AIzaSyBs6LpcOSpLMlKlzw0aPB6Ie-39mqlKrm8"
-//  val authDomain = "chiltern-ql-firestore.firebaseapp.com"
-//  val databaseURL = "https://chiltern-ql-firestore.firebaseio.com"
-//  val projectId = "chiltern-ql-firestore"
-//  val storageBucket  = "chiltern-ql-firestore.appspot.com"
-//  val messagingSenderId = "891716942638"
-//}
+object Connection{
+  val apiKey = "AIzaSyBs6LpcOSpLMlKlzw0aPB6Ie-39mqlKrm8"
+  val authDomain = "chiltern-ql-firestore.firebaseapp.com"
+  val databaseURL = "https://chiltern-ql-firestore.firebaseio.com"
+  val projectId = "chiltern-ql-firestore"
+  val storageBucket  = "chiltern-ql-firestore.appspot.com"
+  val messagingSenderId = "891716942638"
+}
 
 //object Connection{
 //  val apiKey = "AIzaSyCTnCW1euWGpRohoEBESIdNEASM7rQ5gkY"
@@ -28,15 +28,7 @@ package quizleague.firestore
 //  val appId= "1=415442183710=web=ae2f7f4f50a2c56d72700f"
 //}
 
-object Connection {
-  val apiKey = "AIzaSyBs6LpcOSpLMlKlzw0aPB6Ie-39mqlKrm8"
-  val authDomain = ""
-  val databaseURL= "https=localhost:8082"
-  val projectId= "chiltern-ql-firestore"
-  val storageBucket= ""
-  val messagingSenderId= ""
-  val appId= ""
-}
+
 
 
 
