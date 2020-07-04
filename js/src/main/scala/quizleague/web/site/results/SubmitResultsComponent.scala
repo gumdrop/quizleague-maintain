@@ -10,6 +10,7 @@ import quizleague.web.util.validation.Functions
 import quizleague.web.core.DialogComponentConfig
 import quizleague.web.core.DialogComponent
 import quizleague.web.site.login.{LoggedInUser, LoginService}
+import quizleague.web.util.Logging._
 
 @js.native
 trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with DialogComponent{
@@ -24,9 +25,7 @@ trait SubmitResultsComponent extends com.felstar.scalajs.vue.VueRxComponent with
 object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
   
   type facade = SubmitResultsComponent 
-  
-  val emailRegex = """^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"""
-  
+
   val template ="""
     <v-container>
     <ql-text-box>
@@ -34,9 +33,9 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
       <v-layout column>
       <div v-if="hasResults">This result has been submitted, but you can still add your match report.</div>
       <p></p>
-      <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>   
+      <v-flex align-center style="padding-left:48%;"><v-progress-circular v-if="showProgress" indeterminate color="primary"></v-progress-circular></v-flex>
       <v-flex v-for="fixture in fixtures" v-if="!hasResults">
-          {{fixture.parentDescription}} {{fixture.description}} - {{fixture.date | date("dd MMM yyyy")}}
+          {{async(async(fixture.parent).parent).name}} {{async(fixture.parent).description}} - {{async(fixture.parent).date | date("dd MMM yyyy")}}
           <v-text-field v-model.number="fixture.result.homeScore"  :rules="[required('Home Score')]" :label="async(fixture.home).name" type="number" ></v-text-field>
           <v-text-field v-model.number="fixture.result.awayScore"  :rules="[required('Away Score')]" :label="async(fixture.away).name" type="number" ></v-text-field>
       </v-flex>
@@ -105,7 +104,7 @@ object SubmitResultsComponent extends RouteComponent with DialogComponentConfig{
     c.hasResults = false
   }
   
- def mounted(c:facade) = LoginService.userProfile.filter(_ != null).subscribe(user => getFixtures(c,user))
+ def mounted(c:facade) =LoginService.userProfile.filter(_ != null).subscribe(user => getFixtures(c,user))
   
   
   subscription("appData")(c => ApplicationContextService.get)

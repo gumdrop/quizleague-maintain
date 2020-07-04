@@ -4,6 +4,7 @@ import scala.scalajs.js
 import quizleague.web.util.rx.RefObservable
 import quizleague.web.util.UUID
 import rxscalajs.Observable
+import quizleague.web.util.Logging._
 
 
 class Fixtures(
@@ -26,7 +27,6 @@ object Fixtures{
 
 class Fixture(
   val id:String,
-  val description:String,
   val venue: RefObservable[Venue],
   val home:RefObservable[Team],
   val away:RefObservable[Team],
@@ -36,15 +36,14 @@ class Fixture(
 
 object Fixture{
   def apply(  id:String,
-  description:String,
   venue: RefObservable[Venue],
   home:RefObservable[Team],
   away:RefObservable[Team],
   result:Result,
-  parent:Observable[Fixtures] = Observable.empty) = new Fixture(id,description, venue, home, away, result, parent)
+  parent:Observable[Fixtures] = Observable.empty) = new Fixture(id, venue, home, away, result, parent)
   
   def addBlankResult(f:Fixture) = {
-    val retval = Fixture(f.id,f.description, f.venue, f.home, f.away,
+    val retval = Fixture(f.id, f.venue, f.home, f.away,
         Result(null.asInstanceOf[Integer],null.asInstanceOf[Integer],null,null, Observable.just(js.Array())),f.parent)
     retval.key = f.key
     retval

@@ -40,7 +40,6 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 
   override protected def mapOutSparse(dom:Dom) = Model(
     dom.id,
-    dom.description,
     venueService.refObs(dom.venue),
     refObs(dom.home, teamService),
     refObs(dom.away, teamService),
@@ -64,7 +63,7 @@ trait FixtureGetService extends GetService[Fixture] with FixtureNames{
 }
 
 trait FixturePutService extends PutService[Fixture] with FixtureGetService{
-  override protected def mapIn(model:Model) = Dom(model.id, model.description, venueService.refOption(model.venue), teamService.ref(model.home), teamService.ref(model.away), mapInResult(model.result))
+  override protected def mapIn(model:Model) = Dom(model.id, venueService.refOption(model.venue), teamService.ref(model.home), teamService.ref(model.away), mapInResult(model.result))
   override protected def make() = ???
   
   override val venueService:VenuePutService
@@ -72,13 +71,13 @@ trait FixturePutService extends PutService[Fixture] with FixtureGetService{
   
   def instance(fx:Fixtures, home:RefObservable[Team], away:RefObservable[Team], venue:RefObservable[Venue], subsidiary:Boolean) = {
 
-    val dom = withKey(Dom(newId,fx.description, venueService.refOption(venue),teamService.ref(home),teamService.ref(away),None), fx.key.key)
+    val dom = withKey(Dom(newId, venueService.refOption(venue),teamService.ref(home),teamService.ref(away),None), fx.key.key)
     mapOutWithKey(dom)
   }
   
   def copy(in:Fixture):Fixture = {
     val fx = mapIn(in)
-    val dom = Dom(newId,fx.description,fx.venue,fx.home,fx.away,None)
+    val dom = Dom(newId, fx.venue,fx.home,fx.away,None)
     save(dom)
     mapOutWithKey(dom)
   }

@@ -12,7 +12,6 @@ case class Fixtures(
     
 case class Fixture(
   id:String,
-  description:String,
   venue: Option[Ref[Venue]],
   home: Ref[Team],
   away:Ref[Team],

@@ -53,7 +53,6 @@ object FixturesService extends FixturesGetService {
     fixtures.map(_.filter(f => now <= s"${f.date}T${f.start}").toSeq.sortBy(_.date).headOption.fold(js.Array[Fixtures]())(f => js.Array(f)))
   }
   def latestResults(seasonId:String): Observable[js.Array[Fixtures]] = {
-    val today = LocalDate.now.toString
 
     val now = LocalDateTime.now.toString
 
@@ -96,14 +95,6 @@ object FixtureService extends FixtureGetService with PostService{
   override val fixturesService = FixturesService
   override val reportService  = ReportService
 
-//  def recentTeamResults(teamId: String, take:Int = Integer.MAX_VALUE): Observable[js.Array[Fixture]] = {
-//    val q = groupQuery().where("date","<=", today.toString).orderBy("date","desc").limit(take)
-//    val home = query(q.where("home.id","==",teamId))
-//    val away = query(q.where("away.id","==",teamId))
-//
-//    Observable.combineLatest(Seq(home,away)).map(_.flatMap(x=>x).sortBy(_.date)(Desc).take(take).toJSArray)
-//  }
-
   def fixturesFrom(fixtures:Observable[js.Array[Fixtures]], teamId:String, take:Int = Integer.MAX_VALUE, sortOrder:Ordering[String] = Asc[String]) = {
     val tf = fixturesToFixtureList(fixtures.map(_.sortBy(_.date)(sortOrder)))
       .map(_.filter(f => f.home.id == teamId || f.away.id == teamId))
@@ -130,46 +121,29 @@ object FixtureService extends FixtureGetService with PostService{
 
 
   def fixturesForResultSubmission(teamId:String) = {
-    val today = LocalDate.now.toString()
-    val now = today + LocalTime.now().toString()
+    val now = LocalDateTime.now().toString
+
     val context = ApplicationContextService.get()
 
-    val comps = context
-      .flatMap(_.currentSeason)
-      .flatMap(_.competition)
+    val fixtures = context.flatMap(c => {
+      val fixturesSet = FixturesService
+        .competitionFixtures(CompetitionService.competitions(c.currentSeason.id).map(_.sortBy(_.subsidiary)))
+          .map(_
+            .filter(f => now >= s"${f.date}T${f.start}")
+            .sortBy(_.date)(Desc))
+      fixturesFrom(fixturesSet, teamId, 4, Desc)
+    })
 
-    val triples = comps
-      .map(
-        _.map(c =>
-          c.fixtures
-            .map(_.filter(f => f.date <= today && f.start <= now)
-              .map(f => (c,f))
-                .map{case(c,f) => f.fixture
-                  .map(fx => (c,f,fx.filter(x => x.home.id == teamId || x.away.id == teamId)))}
-
-        )
-
-      ))
-      .flatMap(x =>combineLatest(x.toSeq))
-        .map(_.toJSArray.flatten.toSeq)
-        .flatMap(x => combineLatest(x))
-        .map(_.toJSArray)
-
-
-
-    val fixtures =
-      triples.map(
-        _.groupBy{case(c,f,fxs) => f.date}
-          .toList
-          .sortBy(_._1)(Desc)
-          .take(1)
-          .map{case(c,v) => v}
-          .toJSArray.flatten.toJSArray)
-          .map(_.sortBy{case(c,f,fxs) => c.subsidiary})
-          .map(_.flatMap{case(c,f,fxs) => fxs})
-
-   fixtures
-
+    fixtures
+      .map(_.map(f => f.parent.map(fs => (fs,f))))
+      .flatMap(x => combineLatest(x.toSeq))
+      .map(_.groupBy(_._1.date)
+      .toList
+      .sortBy(_._1)(Desc)
+      .take(1)
+      .flatMap(_._2)
+      .map(_._2)
+      .toJSArray)
   }
   
 
