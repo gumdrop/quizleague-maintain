@@ -11,7 +11,8 @@ import reflect._
 import scala.collection.JavaConverters._
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.auth.Credentials
-import java.util.logging.Logger
+import java.util.logging.{Level, Logger}
+import Level._
 
 import com.google.cloud.TransportOptions
 import com.google.cloud.grpc.GrpcTransportOptions
@@ -44,7 +45,7 @@ object Storage extends StorageUtils {
 
      batchSets.foreach( l => {
 
-       log.warning(s"saving batch : $l" )
+       log.finest(s"saving batch : $l" )
 
        val batch = datastore.batch()
 
@@ -79,14 +80,14 @@ object Storage extends StorageUtils {
   def list[T <: Entity](parent:Option[Key] = None)(implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
     val key = makeKind(parent)
     val list = datastore.collection(key).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String, Any]], decoder).withKey(Key(d.getReference.getPath))).toList
-    log.info(s"key : $key \nlist:$list")
+    if(log.isLoggable(FINEST)) log.finest(s"key : $key \nlist:$list")
     list
   }
 
   def group[T <: Entity](implicit tag: ClassTag[T], decoder: Decoder[T]): List[T] = {
     val key = makeKind(None)
     val list = datastore.collectionGroup(key).get.get.getDocuments.asScala.map(d => entityToObj(d.getData.asInstanceOf[java.util.Map[String, Any]], decoder).withKey(Key(d.getReference.getPath))).toList
-    log.info(s"key : $key \nlist:$list")
+    if(log.isLoggable(FINEST))log.finest(s"key : $key \nlist:$list")
     list
   }
 
@@ -160,7 +161,7 @@ object Storage extends StorageUtils {
 
     val map = datastore.document(key.key).get.get.getData.asInstanceOf[util.Map[String, Any]]
 
-    log.info(s"key: $key\nmap: $map")
+    if(log.isLoggable(FINEST)) log.finest(s"key: $key\nmap: $map")
     entityToObj(map, decoder).withKey(key)
 
   }
