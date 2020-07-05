@@ -100,5 +100,5 @@ object NotificationService extends NotificationGetService {
         case p: ResultPayload => p
         case _ => throw new Exception("invalid payload")
       }
-    }).map(p => FixtureService.get(p.fixtureId))).map(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
+    }).map(p => FixtureService.get(p.fixtureKey))).map(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
 }

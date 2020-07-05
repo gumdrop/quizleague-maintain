@@ -1,8 +1,10 @@
 package quizleague.web.site
 
 import quizleague.web.core._
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
+
 import com.felstar.scalajs.vue.VueRxComponent
+
 import scalajs.js
 
 @js.native
@@ -30,9 +32,14 @@ object ResultNotificationsComponent extends Component {
           </v-snackbar>
 """
 
-  data("now", LocalDateTime.now)
+
+  private def utcDateTime = {
+    ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime
+  }
+
+  data("now", utcDateTime)
   data("messages", false)
   subscription("fixtures", "now")(c => NotificationService.messages(c.now).map(m => { c.messages = true; m }))
-  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = LocalDateTime.now })
+  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = utcDateTime })
 
 }

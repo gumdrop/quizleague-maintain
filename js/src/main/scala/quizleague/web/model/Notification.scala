@@ -13,5 +13,5 @@ class Notification(
 
 sealed trait Payload
 
-case class ResultPayload(val fixtureId:String) extends Payload
+case class ResultPayload(val fixtureKey:Key) extends Payload
 case class MaintainMessagePayload(val message:String) extends Payload

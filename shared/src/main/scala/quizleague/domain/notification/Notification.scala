@@ -25,5 +25,5 @@ case class Notification(
 @JsonCodec
 sealed trait Payload
 
-case class ResultPayload(fixtureId:String) extends Payload
+case class ResultPayload(fixtureKey:String) extends Payload
 case class MaintainMessagePayload(message:String) extends Payload

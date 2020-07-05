@@ -69,7 +69,7 @@ class TaskEndpoint {
             uuid.toString(),
             NotificationTypeNames.result,
             LocalDateTime.now(),
-            ResultPayload(fixture.id)))
+            ResultPayload(fixture.key.get.key)))
         }
       })
 
@@ -149,7 +149,7 @@ class TaskEndpoint {
   private def saveFixture(user:User,reportIn:Option[String])(result:ResultValues) = {
        
     val fixture = Storage.load[Fixture](result.fixtureKey)
-    val report = reportIn.filter(r => !r.trim.isEmpty && subsidiary(fixture))
+    val report = reportIn.filter(r => !r.trim.isEmpty && !subsidiary(fixture))
     
     logger.finest(() => s"entering saveFixture : \nuser : $user\nreport : $report\nresult:$result") 
     
