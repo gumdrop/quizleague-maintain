@@ -10,7 +10,7 @@ case class NestedDomainContainer(
     fixture:Map[String,Fixture],
     globaltext:Map[String,GlobalText],
     leaguetable:Map[String,LeagueTable],
-    reports:Map[String,Report],
+    report:Map[String,Report],
     season:Map[String,Season],
     team:Map[String,Team],
     text:Map[String,Text],

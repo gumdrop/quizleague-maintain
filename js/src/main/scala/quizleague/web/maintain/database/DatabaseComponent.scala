@@ -22,13 +22,10 @@ object DatabaseComponent extends RouteComponent{
     <v-container grid-list-lg>
       <v-layout column fluid>
        <div>
-        <v-btn text color="primary" v-on:click="nestedupload" :disabled="!uploadNestedFileSelected"><v-icon left>mdi-file-upload</v-icon>Upload Nested</v-btn>
-        <input type="file" id="upload-nested-text-field" label="Nested database dump file" v-on:change="(e) => uploadNestedFileSelected=e.isTrusted">
+        <v-btn text color="primary" v-on:click="nestedupload" :disabled="!uploadNestedFileSelected"><v-icon left>mdi-file-upload</v-icon>Upload</v-btn>
+        <input type="file" id="upload-nested-text-field" label="Database dump file" v-on:change="(e) => uploadNestedFileSelected=e.isTrusted">
        </div>
        <div>
-        <v-btn text color="primary" v-on:click="upload" :disabled="!uploadFileSelected"><v-icon left>mdi-file-upload</v-icon>Upload</v-btn>
-        <input type="file" id="upload-text-field" label="Database dump file" v-on:change="(e) => uploadFileSelected=e.isTrusted">
-        </div>
         <v-dialog v-model="uploadComplete" max-width="400px">
           <v-card>
             <v-card-text>{{uploadText}}</v-card-text>
@@ -40,13 +37,6 @@ object DatabaseComponent extends RouteComponent{
       </v-layout>
     </v-container>
     """
-  
-    def upload(c:facade){
-      val file = dom.document.getElementById("upload-text-field").asInstanceOf[HTMLInputElement].files(0)
-      
-      DatabaseService.upload(file).subscribe(x => {c.uploadText="Success!";c.uploadComplete = true},e => {c.uploadText=e.toString;c.uploadComplete=true})
-    
-  }
 
   def nestedupload(c:facade){
     val file = dom.document.getElementById("upload-nested-text-field").asInstanceOf[HTMLInputElement].files(0)
@@ -57,9 +47,7 @@ object DatabaseComponent extends RouteComponent{
   
   data("uploadComplete",false)
   data("uploadText","Not yet uploaded")
-  data("uploadFileSelected",false)
   data("uploadNestedFileSelected",false)
-  method("upload")({upload _}:js.ThisFunction)
   method("nestedupload")({nestedupload _}:js.ThisFunction)
   
 }
