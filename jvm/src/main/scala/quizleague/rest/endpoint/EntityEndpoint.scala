@@ -72,7 +72,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
     saveAll(container.fixtures)
     saveAll(container.globaltext)
     saveAll(container.leaguetable)
-    saveAll(container.reports)
+    saveAll(container.report)
     saveAll(container.season)
     saveAll(container.team)
     saveAll(container.text)
@@ -110,7 +110,7 @@ class EntityEndpoint extends MaintainPostEndpoints{
       user = list[User],
       fixtures = group[Fixtures],
       fixture = group[Fixture],
-      reports = group[Report],
+      report = group[Report],
       competitionStatistics = list[CompetitionStatistics]
     )
     
