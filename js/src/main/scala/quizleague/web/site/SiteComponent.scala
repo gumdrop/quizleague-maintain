@@ -97,6 +97,7 @@ object SiteComponent extends Component {
          </v-flex>
          </v-layout>
       <notifications></notifications>
+      <chat-notifications v-if="user" :user="user"></chat-notifications>
       </v-container>
     </v-content>
 
@@ -107,7 +108,7 @@ object SiteComponent extends Component {
       </v-bottom-navigation>
   </v-app>"""
 
-  components(ResultNotificationsComponent,TitleComponent, LoggedOnMenu)
+  components(ResultNotificationsComponent,ChatNotificationsComponent,TitleComponent, LoggedOnMenu)
 
   def drawerGet(c:facade) = (c.sidemenu && c.$vuetify.breakpoint.lgAndUp) || (c.showMenu && c.$vuetify.breakpoint.mdAndDown)
   def drawerSet(c:facade, showMenu:Boolean){c.showMenu = if(c.$vuetify.breakpoint.mdAndDown) showMenu else c.showMenu}

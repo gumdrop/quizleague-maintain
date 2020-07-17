@@ -1,13 +1,15 @@
 package quizleague.web.maintain
 
 import quizleague.web.core._
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
+
 import com.felstar.scalajs.vue.VueRxComponent
+
 import scalajs.js
 
 @js.native
 trait MaintainNotificationsComponent extends VueRxComponent {
-  var now: LocalDateTime
+  var now: ZonedDateTime
   var messages: Boolean
 }
 
@@ -29,9 +31,11 @@ object MaintainNotificationsComponent extends Component {
           </v-snackbar>
 """
 
-  data("now", LocalDateTime.now)
+  def now = ZonedDateTime.now
+
+  data("now",now)
   data("messages", false)
   subscription("notification", "now")(c => NotificationService.messages(c.now).map(m => { c.messages = true; m }))
-  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = LocalDateTime.now })
+  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = now })
 
 }

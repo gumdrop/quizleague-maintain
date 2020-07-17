@@ -9,7 +9,7 @@ import scalajs.js
 
 @js.native
 trait ResultNotificationsComponent extends VueRxComponent {
-  var now: LocalDateTime
+  var now: ZonedDateTime
   var messages: Boolean
 }
 
@@ -32,14 +32,11 @@ object ResultNotificationsComponent extends Component {
           </v-snackbar>
 """
 
+  def now = ZonedDateTime.now
 
-  private def utcDateTime = {
-    ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime
-  }
-
-  data("now", utcDateTime)
+  data("now", now)
   data("messages", false)
-  subscription("fixtures", "now")(c => NotificationService.messages(c.now).map(m => { c.messages = true; m }))
-  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = utcDateTime })
+  subscription("fixtures", "now")(c => NotificationService.resultMessages(c.now).map(m => { c.messages = true; m }))
+  watch("messages")((c: facade, value: js.Any) => if (!c.messages) { c.now = now })
 
 }

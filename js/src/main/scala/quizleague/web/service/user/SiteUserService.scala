@@ -1,5 +1,7 @@
 package quizleague.web.service.user
 
+import java.time.LocalDateTime
+
 import quizleague.web.service._
 import quizleague.web.model.{Key, SiteUser}
 import quizleague.domain.{SiteUser => Dom}
@@ -32,7 +34,13 @@ trait SiteUserPutService extends PutService[SiteUser] with SiteUserGetService {
 
   val userService: UserPutService
 
-  override protected def mapIn(user: SiteUser) = Dom(user.id, user.handle, user.avatar, userService.refOption(user.user), user.uid, user.retired)
+  override protected def mapIn(user: SiteUser) = Dom(
+    user.id,
+    user.handle,
+    user.avatar,
+    userService.refOption(user.user),
+    user.uid,
+    user.retired)
 
   override protected def make(): Dom = Dom(newId(), "", "",None,None,false)
 

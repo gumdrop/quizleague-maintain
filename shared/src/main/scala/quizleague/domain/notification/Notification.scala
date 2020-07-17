@@ -9,6 +9,7 @@ object NotificationTypeNames{
   
   val result = "result"
   val maintain = "maintain"
+  val chat = "chat"
   
 }
 
@@ -27,3 +28,4 @@ sealed trait Payload
 
 case class ResultPayload(fixtureKey:String) extends Payload
 case class MaintainMessagePayload(message:String) extends Payload
+case class ChatMessagePayload(chatMessageKey:String, siteUserKey:String) extends Payload

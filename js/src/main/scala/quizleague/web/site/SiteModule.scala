@@ -27,7 +27,7 @@ import quizleague.web.site.leaguetable.LeagueTableModule
 import quizleague.web.service.applicationcontext.ApplicationContextGetService
 import quizleague.web.service.globaltext.GlobalTextGetService
 import quizleague.web.site.text.TextService
-import quizleague.web.service.notification.NotificationGetService
+import quizleague.web.service.notification.{NotificationGetService, NotificationPutService}
 import quizleague.web.site.season._
 import quizleague.web.site.user.UserService
 import quizleague.web.site.text.GlobalTextService
@@ -37,13 +37,16 @@ import quizleague.web.site.calendar.CalendarModule
 import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
 import quizleague.web.site.common._
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZonedDateTime}
 
 import quizleague.web.shared.SharedModule
-import quizleague.web.site.chat.ChatModule
+import quizleague.web.site.chat.{ChatMessageService, ChatModule}
 import quizleague.web.site.competition.statistics.CompetitionStatisticsModule
 import quizleague.web.site.login.LoginModule
 import rxscalajs.Observable
+import quizleague.web.util.Logging.log
+
+
 
 
 
@@ -93,12 +96,22 @@ object SiteService {
   val sidemenu = BehaviorSubject[Boolean](false)
 }
 
-object NotificationService extends NotificationGetService {
-  def messages(threshold: LocalDateTime): Observable[Observable[js.Array[Fixture]]] = super.messages("result", threshold)
+object NotificationService extends NotificationPutService  {
+  def resultMessages(threshold: ZonedDateTime): Observable[Observable[js.Array[Fixture]]] = messages("result", threshold)
     .map(_.map(m => {
       m.payload match {
         case p: ResultPayload => p
         case _ => throw new Exception("invalid payload")
       }
     }).map(p => FixtureService.get(p.fixtureKey))).map(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
+
+  def chatMessages(threshold: ZonedDateTime, user:SiteUser): Observable[js.Array[ChatMessage]] = messages("chat", threshold)
+    .map(_.map(m => {
+      m.payload match {
+        case p: ChatMessagePayload => log(p)
+        case _ => throw new Exception("invalid payload")
+      }
+    })
+      .filter(_.siteUserKey.equals(user.key))
+      .map(p => ChatMessageService.get(p.chatMessageKey))).flatMap(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
 }

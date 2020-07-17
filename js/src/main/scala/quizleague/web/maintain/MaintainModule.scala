@@ -12,7 +12,7 @@ import quizleague.web.maintain.season.SeasonModule
 import quizleague.web.maintain.database.DatabaseModule
 import quizleague.web.maintain.stats.StatsModule
 import quizleague.web.service.notification.NotificationGetService
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZonedDateTime}
 
 import quizleague.web.maintain.competitionstatistics.CompetitionStatisticsModule
 import quizleague.web.model.MaintainMessagePayload
@@ -43,7 +43,7 @@ object MaintainModule extends Module {
 }
 
 object NotificationService extends NotificationGetService {
-  def messages(threshold: LocalDateTime): Observable[String] = super.messages("maintain", threshold)
+  def messages(threshold: ZonedDateTime): Observable[String] = super.messages("maintain", threshold)
     .map(_.map(m => {
       m.payload match {
         case p: MaintainMessagePayload => p

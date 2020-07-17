@@ -17,11 +17,18 @@ class Key(val parentKey:String, val entityName:String, val id:String) extends js
   def encode = key.replace('/','|')
 
   override def toString: String = key
-  override def hashCode():Int = key.hashCode
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Key =>
+        parentKey == that.parentKey &&
+        entityName == that.entityName &&
+        id == that.id
+    case _ => false
+  }
 }
 
 object Key{
-  def apply(domKey:DomKey):Key = new Key(domKey.parentKey.getOrElse(null), domKey.entityName, domKey.id)
+  def apply(domKey:DomKey):Key = new Key(domKey.parentKey.getOrElse(""), domKey.entityName, domKey.id)
   def apply(key:String):Key = {
     val parts = key.split('/')
     val length = parts.length

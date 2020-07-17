@@ -27,3 +27,4 @@ class SiteUser(
                 val retired: Boolean = false
 
               ) extends Model
+
