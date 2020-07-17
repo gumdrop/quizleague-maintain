@@ -106,7 +106,7 @@ object CalendarCalendarComponent extends Component{
                      v-on="on"
                    >
                     <v-icon class="white--text">{{icon([event])}}</v-icon>
-                    <span v-if="event.eventType === 'fixtures'">{{event.fixtures.parentDescription}} : {{event.fixtures.description}}</span>
+                    <span v-if="event.eventType === 'fixtures'">{{async(event.fixtures.parent).name}} : {{event.fixtures.description}}</span>
                     <span v-if="event.eventType === 'calendar'">{{event.event.description}}</span>
                     <span v-if="event.eventType === 'competition'">{{event.competition.name}}</span>
                   </div>
@@ -229,7 +229,7 @@ object FixturesEventComponent extends EventComponentConfig{
   val name = "ql-fixtures-event"
    val template = s"""
       <v-layout column align-start class="panel-component">
-          <v-flex align-start><b><router-link :to="'/competition/' + event.competition.key.encode + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{event.fixtures.parentDescription}} {{event.fixtures.description}}</router-link></b>
+          <v-flex align-start><b><router-link :to="'/competition/' + event.competition.key.encode + '/' + event.competition.typeName"><v-icon>{{event.competition.icon}}</v-icon>&nbsp;{{async(event.fixtures.parent).name}} {{event.fixtures.description}}</router-link></b>
             <v-btn icon v-on:click="togglePanel" class="#view-btn">
              <v-icon v-if="!panelVisible">mdi-eye</v-icon>
              <v-icon v-if="panelVisible">mdi-eye-off</v-icon>
