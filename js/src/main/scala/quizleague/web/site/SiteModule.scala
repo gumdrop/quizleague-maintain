@@ -37,7 +37,7 @@ import quizleague.web.site.calendar.CalendarModule
 import quizleague.web.site.other._
 import quizleague.web.maintain.MaintainModule
 import quizleague.web.site.common._
-import java.time.{LocalDateTime, ZonedDateTime}
+import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
 
 import quizleague.web.shared.SharedModule
 import quizleague.web.site.chat.{ChatMessageService, ChatModule}
@@ -45,6 +45,7 @@ import quizleague.web.site.competition.statistics.CompetitionStatisticsModule
 import quizleague.web.site.login.LoginModule
 import rxscalajs.Observable
 import quizleague.web.util.Logging.log
+import org.scalajs.dom.window.localStorage
 
 
 
@@ -105,13 +106,28 @@ object NotificationService extends NotificationPutService  {
       }
     }).map(p => FixtureService.get(p.fixtureKey))).map(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
 
-  def chatMessages(threshold: ZonedDateTime, user:SiteUser): Observable[js.Array[ChatMessage]] = messages("chat", threshold)
-    .map(_.map(m => {
-      m.payload match {
-        case p: ChatMessagePayload => log(p)
-        case _ => throw new Exception("invalid payload")
-      }
-    })
-      .filter(_.siteUserKey.equals(user.key))
-      .map(p => ChatMessageService.get(p.chatMessageKey))).flatMap(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
+  val chatMessageNotifications = ReplaySubject[js.Array[Key]]()
+
+  def chatMessages(user:SiteUser): Observable[js.Array[ChatMessage]] = {
+    messages("chat", ZonedDateTime.now)
+      .map(_.map(m => {
+        m.payload match {
+          case p: ChatMessagePayload => (p, m.key)
+          case _ => throw new Exception("invalid payload")
+        }
+      })
+        .filter(_._1.siteUserKey.equals(user.key))
+        .map(p => {
+          delete(p._2)
+          p._1.chatMessageKey
+        }
+        ))
+      .map( cmp => {
+        localStorage.setItem("chatNotifications",js.JSON.stringify(cmp))
+      }).subscribe(        chatMessageNotifications.next(cmp))
+
+        ChatMessageService.get(p.chatMessageKey)
+  })).flatMap(x => Observable.combineLatest(x.toSeq).map(_.toJSArray))
+
+
 }

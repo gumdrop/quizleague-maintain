@@ -48,6 +48,7 @@ trait PutService[T <: Model] {
   def getRef(item:T):Ref[U] = Ref(key(item.key).getOrElse(null))
   def delete(item:T):Observable[Unit] = doDelete(item.key)
   def delete(id:String):Observable[Unit] = doDelete(new ModelKey(null,uriRoot,id))
+  def delete(key:ModelKey) = doDelete(key)
   private[service] def doDelete(key:ModelKey) = {
     items -= key.id
     promiseToObs(db.doc(key.key).delete())

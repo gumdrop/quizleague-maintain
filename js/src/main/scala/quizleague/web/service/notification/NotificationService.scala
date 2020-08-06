@@ -45,4 +45,6 @@ trait NotificationPutService extends NotificationGetService with PutService[Noti
   override def make():U = ???
   override protected def enc(item:U) = item.asJson
   override protected def mapIn(model:Notification):U = ???
+
+
 }
