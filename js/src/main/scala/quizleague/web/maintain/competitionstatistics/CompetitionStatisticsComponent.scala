@@ -115,7 +115,7 @@ object CompetitionStatisticsResultComponent extends Component{
   val competitionService = CompetitionService
   def teams() = SelectUtils.model[Team](teamService)(_.name)
   def seasons() = SelectUtils.model[Season](seasonService)(_.toText)
-  def competitions(c:facade) = Observable.empty
+  def competitions(c:facade) = if(c.item.season!= null) c.item.season.flatMap(_.competition.map(_.filter(_.name == c.competitionName))) else Observable.empty
 
   prop("item")
   prop("competitionName")
