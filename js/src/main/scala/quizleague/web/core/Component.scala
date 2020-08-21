@@ -58,7 +58,7 @@ trait Component {
 
   val empty = new js.Object
   
-  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]|Observable[js.Dynamic]]) => {
+  private val commonMethods:Map[String, js.Function] = Map("async" -> (((c:facade, in:UndefOr[RefObservable[js.Dynamic]|Observable[js.Dynamic]], isArray:UndefOr[Boolean]) => {
 
     if (in.isDefined) {
 
@@ -80,7 +80,7 @@ trait Component {
       val retval = observables.get(obs.hashCode)
 
       def sub() = {
-        val a = js.Dictionary[Any]()
+        val a = isArray.fold(js.Dictionary[Any]():js.Any)(x => if(x)js.Array[Any]() else js.Dictionary[Any]())
         c.$subscribeTo(actual, (b: js.Dynamic) => c.$nextTick({ () => Vue.util.extend(a, b); c.$forceUpdate() }))
         observables += ((obs.hashCode, a))
         a

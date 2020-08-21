@@ -15,7 +15,7 @@ import quizleague.web.store.Firestore
 import quizleague.web.util.rx.RefObservable
 import rxscalajs._
 import rxscalajs.subjects._
-import quizleague.web.util.Logging.log
+import quizleague.web.util.Logging._
 
 trait GetService[T <: Model] {
   this: ComponentNames =>
@@ -32,6 +32,7 @@ trait GetService[T <: Model] {
   def get(id: String): Observable[T] = get(key(id))
   def get(key: ModKey): Observable[T] = items.get(key.id).fold(getFromStorage(key).map(mapOutWithKey _).map(postProcess _))(Observable.just(_))
   def getRO(id: String): RefObservable[T] =  getRefObs(id)
+  def getRO(key:Key) = getRefObs(key)
   def key(id:String):ModKey = key(null,id)
   def key(parentKey:String, id:String):ModKey = new ModKey(parentKey,uriRoot,id)
   def key(key:Option[Key]):ModKey = key.map(k => ModKey(k.key)).getOrElse(null)
@@ -89,17 +90,18 @@ trait GetService[T <: Model] {
 
   protected def decodeJson[X](obj: js.Any)(implicit dec: Decoder[X]) = convertJsToJson(obj).fold(t => null, dec.decodeJson(_))
 
-  protected[service] def getRefObs(id:String):RefObservable[T] = refObsCache.getOrElseUpdate(id, RefObservable(id, () => get(id)))
-  protected[service] def getRefObs(domKey:Key):RefObservable[T] = refObsCache.getOrElseUpdate(domKey.id, RefObservable(domKey.id, () => get(key(domKey))))
+  protected[service] def getRefObs(id:String):RefObservable[T] = refObsCache.getOrElseUpdate(key(id).toString, RefObservable(id, () => get(id)))
+  protected[service] def getRefObs(domKey:Key):RefObservable[T] = refObsCache.getOrElseUpdate(domKey.toString, RefObservable(key(domKey), () => get(key(domKey))))
 
   final def refObs(id: String): RefObservable[T] = getRefObs(id)
+  final def refObs(modKey:ModKey): RefObservable[T] = getRefObs(key(modKey).getOrElse(null))
   final def refObs(opt: Option[Ref[U]]): RefObservable[T] = opt.fold[RefObservable[T]](null)(ref => getRefObs(ref.getKey()))
   protected final def refObs[A <: Entity, B <: Model](ref: Ref[A], service: GetService[B]): RefObservable[B] = if(ref == null) null else service.getRefObs(ref.getKey())
 
   def ref(id: String): Ref[U] = Ref(typeName, id)
-  def ref(ro: RefObservable[T]): Ref[U] = if (ro == null) null else Ref(typeName, ro.id)
-  def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id))
-  def ref(dom: U): Ref[U] = ref(dom.id)
+  def ref(ro: RefObservable[T]): Ref[U] = if (ro == null) null else Ref(typeName, ro.id, key(ro.key))
+  def refOption(ro: RefObservable[T]): Option[Ref[U]] = if (ro == null) None else Some(Ref(typeName, ro.id, key(ro.key)))
+  def ref(dom: U): Ref[U] = Ref(typeName, dom.id, dom.key)
 
   protected final def mapOut(domain: U): Observable[T] = Observable.of(mapOutWithKey(domain))
   protected def mapOutSparse(domain: U): T

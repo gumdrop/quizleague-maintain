@@ -12,7 +12,7 @@ import quizleague.web.maintain.team.TeamService
 import quizleague.web.maintain.user.UserService
 import quizleague.web.maintain.venue._
 import quizleague.web.model._
-import quizleague.web.util.component.SelectUtils
+import quizleague.web.util.component.{SelectUtils, SelectWrapper}
 import quizleague.web.util.Logging._
 import quizleague.web.util.rx.RefObservable
 import rxscalajs.Observable
@@ -61,6 +61,7 @@ trait CompetitionStatisticsResultComponent extends VueRxComponent{
 
   val item:ResultEntry
   val competitionName:String
+  var competitions : js.Array[SelectWrapper[Competition]]
 }
 
 
@@ -99,15 +100,20 @@ object CompetitionStatisticsResultComponent extends Component{
             v-model="item.team"
             >
           </v-select>
-                 <v-select
-                   label="Competition"
-                   :items="competitions"
-                   v-model="item.competition"
-                   >
-                 </v-select>
+          <v-select v-if="competitions"
+            label="Competition"
+            :items="competitions"
+            v-model="item.competition"
+            >
+          </v-select>
+          <div v-if="!competitions && item.competition">
+          Competition : {{async(item.competition).name}}
+          </div>
+
         </v-layout>
       </v-layout>
     """
+
   
   
   val seasonService = SeasonService
@@ -115,14 +121,24 @@ object CompetitionStatisticsResultComponent extends Component{
   val competitionService = CompetitionService
   def teams() = SelectUtils.model[Team](teamService)(_.name)
   def seasons() = SelectUtils.model[Season](seasonService)(_.toText)
-  def competitions(c:facade) = if(c.item.season!= null) c.item.season.flatMap(_.competition.map(_.filter(_.name == c.competitionName))) else Observable.empty
+  def handleSeasonChange(c:facade) = {
+    if(c.item.season != null) {
+      c.item.season.obs.subscribe({
+        s => {
+          c.item.seasonText = s.toText
+          c.item.competition = null
+          SelectUtils
+            .model(s.competition.map(_.filter(_.name == c.competitionName)) , competitionService)(_.name).subscribe(cs => c.competitions = cs)
+        }
+      })}
+  }
 
   prop("item")
   prop("competitionName")
+  data("competitions",null)
   subscription("seasons"){c:facade => seasons()}
   subscription("teams"){c:facade => teams()}
-  subscription("competitions", "item.season")(competitions _ )
-  watch("item.season")((c:facade,x:Any) => if(c.item.season != null) {c.item.season.obs.subscribe({s => c.item.seasonText = s.toText;c.item.competition = null})})
+  watch("item.season")((c:facade,x:Any) => handleSeasonChange(c))
   watch("item.team")((c:facade,x:Any) => if(c.item.team != null){c.item.teamText = null})
 
 }

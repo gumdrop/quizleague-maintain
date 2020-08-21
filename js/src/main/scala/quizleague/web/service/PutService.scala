@@ -45,7 +45,7 @@ trait PutService[T <: Model] {
   }
 
   def copy(item:T, parentKey:ModelKey = null):T = mapOutWithKey(mapIn(item).withKey(Key(Option(parentKey).map(_.key),uriRoot,newId())))
-  def getRef(item:T):Ref[U] = Ref(typeName,getId(item))
+  def getRef(item:T):Ref[U] = Ref(key(item.key).getOrElse(null))
   def delete(item:T):Observable[Unit] = doDelete(item.key)
   def delete(id:String):Observable[Unit] = doDelete(new ModelKey(null,uriRoot,id))
   private[service] def doDelete(key:ModelKey) = {
