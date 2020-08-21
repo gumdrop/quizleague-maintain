@@ -32,8 +32,5 @@ class RefObservable[+T](val id: String, val obsf: () => Observable[T], val key:K
 }
 
 object RefObservable {
-  
-  def apply[T](ref: Ref[_], obsf: () => Observable[T]):RefObservable[T] = apply(ref.id, obsf)
-  def apply[T](id: String, obsf: () => Observable[T]):RefObservable[T] = new RefObservable(id, obsf)
   def apply[T](key:Key, obsf: () => Observable[T]):RefObservable[T] = new RefObservable(key.id, obsf,key)
 }

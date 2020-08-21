@@ -80,14 +80,4 @@ trait ItemListComponentConfig[T <: Model] extends Component{
 
 object ItemComponentConfig {
   import scala.language.implicitConversions
-
-  implicit def wrapArray[T](list: js.Array[RefObservable[T]]) = new ArrayWrapper(list)
-
-  class ArrayWrapper[T](list: js.Array[RefObservable[T]]) {
-    def ---=(id: String):js.Array[RefObservable[T]] = list --= list.filter(_.id == id)
-    def +++=(id:String, item:T):js.Array[RefObservable[T]] = {list.push(RefObservable(id, () => Observable.of(item)));list}
-  }
-  
-  
-
 }

@@ -22,7 +22,7 @@ object Statistics {
   def stub(season: Season) = new Statistics(
     UUID.randomUUID().toString(),
     null,
-    RefObservable(season.id, () => Observable.of(season)),
+    RefObservable(season.key, () => Observable.of(season)),
     null
   )
 
