@@ -59,7 +59,7 @@ trait CompetitionStatisticsPutService extends PutService[CompetitionStatistics] 
     s.position)
 
   protected def mapIn(s: CompetitionStatistics) = Dom(s.id, s.competitionName, s.results.map(toDom _).toList )
-  override protected def make() = Dom(newId(), "", List())
+  override protected def make() = withKey(Dom(newId(), "", List()), null)
 
   override def enc(item: Dom) = item.asJson
 }

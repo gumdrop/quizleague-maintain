@@ -39,7 +39,7 @@ trait TeamPutService extends PutService[Team] with TeamGetService {
   override val venueService: VenuePutService
 
   override protected def mapIn(team: Team) = Dom(team.id, team.name, team.shortName, venueService.ref(team.venue.id), textService.ref(team.text.id), team.users.map(u => userService.ref(u.id)).toList, team.retired)
-  override protected def make() = Dom(newId(), "", "", null, textService.getRef(textService.instance()))
+  override protected def make() = withKey(Dom(newId(), "", "", null, textService.getRef(textService.instance())), null)
   override def save(team: Team) = {textService.save(team.text);super.save(team) }
 
   override def enc(item: Dom) = item.asJson

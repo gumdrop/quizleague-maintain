@@ -36,7 +36,7 @@ trait GlobalTextPutService extends PutService[GlobalText] with GlobalTextGetServ
   
   override protected def mapIn(globalText:GlobalText) = Dom(globalText.id, globalText.name, globalText.text.map(_.name).zip(globalText.text.map(te =>DomRef[DomText](te.text.typeName, te.text.id))).toMap, globalText.retired)
   
-  override protected def make():Dom = Dom(newId(),"", Map())
+  override protected def make():Dom = withKey(Dom(newId(),"", Map()), null)
 
   override def save(globalText:GlobalText) = {
     textService.saveAllDirty
